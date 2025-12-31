@@ -185,12 +185,12 @@ final class PaymentTermsDocumentBuilder extends CSVDocumentBuilder {
         $metaHeader = new MetaHeaderLine($definition);
 
         // Setze PaymentTerms-spezifische Werte
-        $category = \CommonToolkit\Enums\DATEV\MetaFields\Format\Category::Zahlungsbedingungen;
+        $category = \CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category::Zahlungsbedingungen;
         $metaHeader->set(MetaHeaderField::Formatkategorie, $category->value);
         $metaHeader->set(MetaHeaderField::Formatname, $category->nameValue());
         $metaHeader->set(
             MetaHeaderField::Formatversion,
-            \CommonToolkit\Enums\DATEV\MetaFields\Format\Version::forCategory($category)->value
+            \CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Version::forCategory($category)->value
         );
 
         $metaHeader->set(

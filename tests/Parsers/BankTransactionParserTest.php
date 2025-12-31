@@ -312,7 +312,7 @@ class BankTransactionParserTest extends BaseTestCase {
         $document = BankTransactionParser::fromString($this->sampleCSV);
 
         // Erstelle Builder mit truncate-Strategie und verwende die vorhandenen Daten
-        $builder = new \CommonToolkit\Builders\DATEV\BankTransactionBuilder(';', '"', TruncationStrategy::TRUNCATE);
+        $builder = new \CommonToolkit\FinancialFormats\Builders\DATEV\BankTransactionBuilder(';', '"', TruncationStrategy::TRUNCATE);
         $builder->addLines($document->getRows());
         $datevDocument = $builder->build();
 
@@ -336,7 +336,7 @@ class BankTransactionParserTest extends BaseTestCase {
         $document = BankTransactionParser::fromString($this->sampleCSV);
 
         // Erstelle Builder mit ellipsis-Strategie und verwende die vorhandenen Daten
-        $builder = new \CommonToolkit\Builders\DATEV\BankTransactionBuilder(';', '"', TruncationStrategy::ELLIPSIS);
+        $builder = new \CommonToolkit\FinancialFormats\Builders\DATEV\BankTransactionBuilder(';', '"', TruncationStrategy::ELLIPSIS);
         $builder->addLines($document->getRows());
         $datevDocument = $builder->build();
 

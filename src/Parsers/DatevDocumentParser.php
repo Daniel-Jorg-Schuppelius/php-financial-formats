@@ -310,7 +310,7 @@ class DatevDocumentParser extends CSVDocumentParser {
             Category::NaturalStapel => 'NaturalStack',
         };
 
-        return "CommonToolkit\\Entities\\DATEV\\Documents\\{$formatName}";
+        return "CommonToolkit\\FinancialFormats\\Entities\\DATEV\\Documents\\{$formatName}";
     }
 
     /**
