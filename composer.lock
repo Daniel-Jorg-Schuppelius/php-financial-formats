@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f94d5564020b4e6d46fe9b14cf2ac19b",
+    "content-hash": "0831391e1c6403cad6378375a6c6cbc4",
     "packages": [
         {
             "name": "dschuppelius/php-common-toolkit",
-            "version": "v0.7.5",
+            "version": "v0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DSchuppelius/php-common-toolkit.git",
-                "reference": "8bd654e781b0cbd25ab5e7ab75ecf76c9f2c6f72"
+                "reference": "e931bf9972c4949f9bb03d8692b1ce0d75e8fb0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DSchuppelius/php-common-toolkit/zipball/8bd654e781b0cbd25ab5e7ab75ecf76c9f2c6f72",
-                "reference": "8bd654e781b0cbd25ab5e7ab75ecf76c9f2c6f72",
+                "url": "https://api.github.com/repos/DSchuppelius/php-common-toolkit/zipball/e931bf9972c4949f9bb03d8692b1ce0d75e8fb0a",
+                "reference": "e931bf9972c4949f9bb03d8692b1ce0d75e8fb0a",
                 "shasum": ""
             },
             "require": {
@@ -49,9 +49,9 @@
             "description": "Project description.",
             "support": {
                 "issues": "https://github.com/DSchuppelius/php-common-toolkit/issues",
-                "source": "https://github.com/DSchuppelius/php-common-toolkit/tree/v0.7.5"
+                "source": "https://github.com/DSchuppelius/php-common-toolkit/tree/v0.8"
             },
-            "time": "2025-12-30T14:37:57+00:00"
+            "time": "2025-12-31T00:49:32+00:00"
         },
         {
             "name": "dschuppelius/php-config-toolkit",
