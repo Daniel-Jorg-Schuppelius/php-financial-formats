@@ -5,8 +5,8 @@
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
  * Filename     : generate-camt-enums.php
- * License      : MIT License
- * License Uri  : https://opensource.org/license/mit
+ * License      : AGPL-3.0-or-later
+ * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
 
 declare(strict_types=1);
@@ -243,8 +243,8 @@ function generateEnumCode(string $enumName, string $xsdType, array $cases): stri
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
  * Filename     : {$enumName}.php
- * License      : MIT License
- * License Uri  : https://opensource.org/license/mit
+ * License      : AGPL-3.0-or-later
+ * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  * 
  * Auto-generated from XSD: {$xsdType}
  * Do not edit manually - regenerate with: php tools/generate-camt-enums.php

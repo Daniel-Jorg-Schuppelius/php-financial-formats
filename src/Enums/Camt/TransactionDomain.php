@@ -4,8 +4,8 @@
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
  * Filename     : TransactionDomain.php
- * License      : MIT License
- * License Uri  : https://opensource.org/license/mit
+ * License      : AGPL-3.0-or-later
+ * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  * 
  * Auto-generated from XSD: ISO_ExternalBankTransactionDomain1Code
  * Do not edit manually - regenerate with: php tools/generate-camt-enums.php

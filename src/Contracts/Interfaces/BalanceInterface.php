@@ -4,8 +4,8 @@
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
  * Filename     : BalanceInterface.php
- * License      : MIT License
- * License Uri  : https://opensource.org/license/mit
+ * License      : AGPL-3.0-or-later
+ * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
 
 namespace CommonToolkit\FinancialFormats\Contracts\Interfaces;

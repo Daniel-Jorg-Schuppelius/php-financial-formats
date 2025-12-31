@@ -7,8 +7,8 @@
         "*": {
             "author": "Daniel Jörg Schuppelius",
             "web": "https://schuppelius.org",
-            "license": "MIT License",
-            "licenseuri": "https://opensource.org/license/mit"
+            "license": "AGPL-3.0-or-later",
+            "licenseuri": "https://www.gnu.org/licenses/agpl-3.0.html"
         }
     },
     "fileHeaderComment.template": {
