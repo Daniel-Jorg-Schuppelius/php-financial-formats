@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.059.001.08">
+    <NtfctnToRcvStsRpt>
+        <GrpHdr>
+            <MsgId>STSRPT-2025-001</MsgId>
+            <CreDtTm>2025-01-17T08:00:00.000+01:00</CreDtTm>
+            <InitgPty>
+                <Nm>Commerzbank AG</Nm>
+            </InitgPty>
+            <MsgRcpt>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </MsgRcpt>
+        </GrpHdr>
+        <OrgnlNtfctnAndSts>
+            <OrgnlMsgId>NTFRCV-2025-001</OrgnlMsgId>
+            <OrgnlMsgNmId>camt.057.001.08</OrgnlMsgNmId>
+            <OrgnlCreDtTm>2025-01-15T09:00:00.000+01:00</OrgnlCreDtTm>
+            <OrgnlNtfctnSts>ACCP</OrgnlNtfctnSts>
+            <OrgnlItmAndSts>
+                <OrgnlItmId>NTF-001</OrgnlItmId>
+                <ItmSts>ACCP</ItmSts>
+            </OrgnlItmAndSts>
+            <OrgnlItmAndSts>
+                <OrgnlItmId>NTF-002</OrgnlItmId>
+                <ItmSts>RJCT</ItmSts>
+                <StsRsnInf>
+                    <Rsn>
+                        <Cd>AC01</Cd>
+                    </Rsn>
+                    <AddtlInf>Unbekanntes Debitorenkonto</AddtlInf>
+                </StsRsnInf>
+            </OrgnlItmAndSts>
+        </OrgnlNtfctnAndSts>
+    </NtfctnToRcvStsRpt>
+</Document>

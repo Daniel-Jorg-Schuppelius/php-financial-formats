@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.058.001.09">
+    <NtfctnToRcvCxlAdvc>
+        <GrpHdr>
+            <MsgId>CXLADVC-2025-001</MsgId>
+            <CreDtTm>2025-01-16T10:00:00.000+01:00</CreDtTm>
+            <InitgPty>
+                <Nm>Hauptkasse GmbH</Nm>
+            </InitgPty>
+            <MsgRcpt>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </MsgRcpt>
+        </GrpHdr>
+        <OrgnlNtfctn>
+            <OrgnlMsgId>NTFRCV-2025-001</OrgnlMsgId>
+            <OrgnlMsgNmId>camt.057.001.08</OrgnlMsgNmId>
+            <OrgnlCreDtTm>2025-01-15T09:00:00.000+01:00</OrgnlCreDtTm>
+            <OrgnlItm>
+                <OrgnlItmId>NTF-001</OrgnlItmId>
+                <CxlRsnInf>
+                    <Rsn>
+                        <Cd>CUST</Cd>
+                    </Rsn>
+                    <AddtlInf>Stornierung auf Kundenwunsch</AddtlInf>
+                </CxlRsnInf>
+            </OrgnlItm>
+        </OrgnlNtfctn>
+    </NtfctnToRcvCxlAdvc>
+</Document>

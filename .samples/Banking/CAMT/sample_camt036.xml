@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.036.001.06">
+    <DbtAuthstnRspn>
+        <Assgnmt>
+            <Id>DAR-2025-001</Id>
+            <CreDtTm>2025-01-15T16:00:00.000+01:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>DA-CASE-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Deutsche Bank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Conf>
+            <DbtAuthstn>true</DbtAuthstn>
+            <AmtToDbt Ccy="EUR">2500.00</AmtToDbt>
+            <ValDtToDbt>2025-01-20</ValDtToDbt>
+            <Rsn>Lastschrift genehmigt nach Kundenbestätigung</Rsn>
+        </Conf>
+    </DbtAuthstnRspn>
+</Document>

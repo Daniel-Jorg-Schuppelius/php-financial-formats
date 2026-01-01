@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.030.001.06">
+    <NtfctnOfCaseAssgnmt>
+        <Hdr>
+            <Id>NTFCTN-2025-001</Id>
+            <CreDtTm>2025-01-15T10:30:00.000+01:00</CreDtTm>
+        </Hdr>
+        <Case>
+            <Id>CASE-2025-ABC123</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Musterbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Assgnmt>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Justfn>
+            <Rsn>Weiterleitung zur Klärung an zuständiges Institut</Rsn>
+        </Justfn>
+    </NtfctnOfCaseAssgnmt>
+</Document>

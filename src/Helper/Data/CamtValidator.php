@@ -56,6 +56,15 @@ class CamtValidator {
         'camt.054' => [
             '13' => 'camt.054.001.13.xsd',
         ],
+        'camt.055' => [
+            '12' => 'camt.055.001.12.xsd',
+        ],
+        'camt.056' => [
+            '11' => 'camt.056.001.11.xsd',
+        ],
+        'camt.029' => [
+            '13' => 'camt.029.001.13.xsd',
+        ],
     ];
 
     /**
@@ -192,7 +201,10 @@ class CamtValidator {
         $typeKey = match ($type) {
             CamtType::CAMT052 => 'camt.052',
             CamtType::CAMT053 => 'camt.053',
-            CamtType::CAMT054 => null, // CAMT.054 nicht implementiert
+            CamtType::CAMT054 => 'camt.054',
+            CamtType::CAMT055 => 'camt.055',
+            CamtType::CAMT056 => 'camt.056',
+            CamtType::CAMT029 => 'camt.029',
         };
 
         if ($typeKey === null) {

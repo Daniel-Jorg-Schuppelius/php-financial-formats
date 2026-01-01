@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\Pain\Type002;
 
+use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\Pain\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\PainType;
 use DateTimeImmutable;
@@ -30,7 +31,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type002
  */
-final class Document {
+final class Document implements PainDocumentInterface {
     /** @var OriginalPaymentInformation[] */
     private array $originalPaymentInformations = [];
 

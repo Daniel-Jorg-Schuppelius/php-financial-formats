@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.038.001.05">
+    <CaseStsRptReq>
+        <ReqHdr>
+            <Id>CSRR-2025-001</Id>
+            <CreDtTm>2025-01-15T17:00:00.000+01:00</CreDtTm>
+            <Reqstr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Reqstr>
+            <Rspndr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Rspndr>
+        </ReqHdr>
+        <Case>
+            <Id>CASE-2025-PENDING-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+    </CaseStsRptReq>
+</Document>

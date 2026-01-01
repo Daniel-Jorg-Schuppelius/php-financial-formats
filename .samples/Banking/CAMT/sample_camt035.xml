@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.035.001.06">
+    <PrtryFrmtInvstgtn>
+        <Assgnmt>
+            <Id>PFI-2025-001</Id>
+            <CreDtTm>2025-01-15T15:00:00.000+01:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>PRTRY-CASE-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <PrtryData>
+            <Tp>INTERNAL_INVESTIGATION</Tp>
+            <Data><![CDATA[{
+    "investigation_type": "duplicate_payment_check",
+    "original_transaction": "TXN-2024-98765",
+    "suspected_duplicate": "TXN-2025-00123",
+    "investigation_date": "2025-01-15",
+    "notes": "Bitte pruefen Sie, ob es sich um eine Doppelzahlung handelt."
+}]]></Data>
+        </PrtryData>
+    </PrtryFrmtInvstgtn>
+</Document>

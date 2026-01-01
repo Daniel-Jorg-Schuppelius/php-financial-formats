@@ -32,9 +32,19 @@ enum CamtVersion: string {
     case V04 = '04';
 
     /**
+     * Version 05 - Zwischenversion (CAMT.038)
+     */
+    case V05 = '05';
+
+    /**
      * Version 06 - Zwischenversion (CAMT.052)
      */
     case V06 = '06';
+
+    /**
+     * Version 07 - Zwischenversion (CAMT.031, CAMT.033, CAMT.034)
+     */
+    case V07 = '07';
 
     /**
      * Version 08 - Aktuelle Standardversion
@@ -42,9 +52,19 @@ enum CamtVersion: string {
     case V08 = '08';
 
     /**
+     * Version 09 - Zwischenversion (CAMT.058, CAMT.087)
+     */
+    case V09 = '09';
+
+    /**
      * Version 10 - Neuere Erweiterungen
      */
     case V10 = '10';
+
+    /**
+     * Version 11 - Zwischenversion (CAMT.056)
+     */
+    case V11 = '11';
 
     /**
      * Version 12 - Aktuellste Version
@@ -93,9 +113,13 @@ enum CamtVersion: string {
         return match ($this) {
             self::V02 => 'ISO 20022 Version 02 (Initial)',
             self::V04 => 'ISO 20022 Version 04 (SEPA)',
+            self::V05 => 'ISO 20022 Version 05',
             self::V06 => 'ISO 20022 Version 06',
+            self::V07 => 'ISO 20022 Version 07',
             self::V08 => 'ISO 20022 Version 08 (Standard)',
+            self::V09 => 'ISO 20022 Version 09',
             self::V10 => 'ISO 20022 Version 10',
+            self::V11 => 'ISO 20022 Version 11',
             self::V12 => 'ISO 20022 Version 12',
             self::V13 => 'ISO 20022 Version 13 (Aktuell)',
         };

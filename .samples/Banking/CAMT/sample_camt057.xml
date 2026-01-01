@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.057.001.08">
+    <NtfctnToRcv>
+        <GrpHdr>
+            <MsgId>NTFRCV-2025-001</MsgId>
+            <CreDtTm>2025-01-15T09:00:00.000+01:00</CreDtTm>
+            <InitgPty>
+                <Nm>Hauptkasse GmbH</Nm>
+            </InitgPty>
+            <MsgRcpt>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </MsgRcpt>
+        </GrpHdr>
+        <Ntfctn>
+            <Id>NTF-001</Id>
+            <XpctdValDt>2025-01-20</XpctdValDt>
+            <Amt Ccy="EUR">50000.00</Amt>
+            <Dbtr>
+                <Nm>Lieferant ABC GmbH</Nm>
+            </Dbtr>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>DEUTDEFFXXX</BICFI>
+                </FinInstnId>
+            </DbtrAgt>
+            <RmtInf>
+                <Ustrd>Rechnung RE-2025-001</Ustrd>
+            </RmtInf>
+        </Ntfctn>
+        <Ntfctn>
+            <Id>NTF-002</Id>
+            <XpctdValDt>2025-01-21</XpctdValDt>
+            <Amt Ccy="EUR">25000.00</Amt>
+            <Dbtr>
+                <Nm>Kunde XYZ AG</Nm>
+            </Dbtr>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>GENODEFFXXX</BICFI>
+                </FinInstnId>
+            </DbtrAgt>
+            <RmtInf>
+                <Ustrd>Auftragsbestätigung AB-2025-002</Ustrd>
+            </RmtInf>
+        </Ntfctn>
+    </NtfctnToRcv>
+</Document>

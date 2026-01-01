@@ -34,8 +34,7 @@ use CommonToolkit\FinancialFormats\Entities\Pain\Type008\PaymentInstruction;
 use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
 use CommonToolkit\FinancialFormats\Enums\PainType;
 use CommonToolkit\FinancialFormats\Enums\SequenceType;
-use CommonToolkit\FinancialFormats\Parsers\Pain002Parser;
-use CommonToolkit\FinancialFormats\Parsers\Pain008Parser;
+use CommonToolkit\FinancialFormats\Parsers\PainParser;
 use DateTimeImmutable;
 
 /**
@@ -218,19 +217,19 @@ class PainStatusFormatsTest extends BaseTestCase {
     public function testPain002ParserIsValid(): void {
         $xml = '<?xml version="1.0"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.14"><CstmrPmtStsRpt><GrpHdr><MsgId>TEST</MsgId><CreDtTm>2025-01-01T12:00:00</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>ORIG</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.12</OrgnlMsgNmId></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>';
 
-        $this->assertTrue(Pain002Parser::isValid($xml));
+        $this->assertTrue(PainParser::isValid($xml, PainType::PAIN_002));
     }
 
     public function testPain002ParserIsValidInvalid(): void {
         $xml = '<?xml version="1.0"?><Document><CstmrCdtTrfInitn/></Document>';
 
-        $this->assertFalse(Pain002Parser::isValid($xml));
+        $this->assertFalse(PainParser::isValid($xml, PainType::PAIN_002));
     }
 
     public function testPain002ParserFromXml(): void {
         $xml = '<?xml version="1.0"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.14"><CstmrPmtStsRpt><GrpHdr><MsgId>PARSED-MSG</MsgId><CreDtTm>2025-01-15T14:30:00</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>ORIG-PARSED</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.12</OrgnlMsgNmId><GrpSts>ACSC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>';
 
-        $document = Pain002Parser::fromXml($xml);
+        $document = PainParser::parsePain002($xml);
 
         $this->assertEquals('PARSED-MSG', $document->getGroupHeader()->getMessageId());
         $this->assertEquals('ORIG-PARSED', $document->getOriginalGroupInformation()->getOriginalMessageId());
@@ -243,7 +242,7 @@ class PainStatusFormatsTest extends BaseTestCase {
         $generator = new Pain002Generator();
         $xml = $generator->generate($original);
 
-        $parsed = Pain002Parser::fromXml($xml);
+        $parsed = PainParser::parsePain002($xml);
 
         $this->assertEquals(
             $original->getGroupHeader()->getMessageId(),
@@ -482,13 +481,13 @@ class PainStatusFormatsTest extends BaseTestCase {
     public function testPain008ParserIsValid(): void {
         $xml = '<?xml version="1.0"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.11"><CstmrDrctDbtInitn><GrpHdr><MsgId>TEST</MsgId><CreDtTm>2025-01-01T12:00:00</CreDtTm><NbOfTxs>1</NbOfTxs><InitgPty><Nm>Test</Nm></InitgPty></GrpHdr></CstmrDrctDbtInitn></Document>';
 
-        $this->assertTrue(Pain008Parser::isValid($xml));
+        $this->assertTrue(PainParser::isValid($xml, PainType::PAIN_008));
     }
 
     public function testPain008ParserIsValidInvalid(): void {
         $xml = '<?xml version="1.0"?><Document><CstmrCdtTrfInitn/></Document>';
 
-        $this->assertFalse(Pain008Parser::isValid($xml));
+        $this->assertFalse(PainParser::isValid($xml, PainType::PAIN_008));
     }
 
     public function testPain008RoundtripGenerateAndParse(): void {
@@ -518,7 +517,7 @@ class PainStatusFormatsTest extends BaseTestCase {
         $generator = new Pain008Generator();
         $xml = $generator->generate($original);
 
-        $parsed = Pain008Parser::fromXml($xml);
+        $parsed = PainParser::parsePain008($xml);
 
         $this->assertEquals(
             $original->getGroupHeader()->getMessageId(),

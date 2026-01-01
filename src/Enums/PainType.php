@@ -172,4 +172,24 @@ enum PainType: string {
     public function isStatusReport(): bool {
         return in_array($this, [self::PAIN_002, self::PAIN_014]);
     }
+
+    /**
+     * Ermittelt den Pain-Typ aus einem XML-Dokument.
+     * 
+     * Sucht nach dem Namespace-Präfix im XML-Inhalt.
+     * Prüft spezifisch auf xmlns-Attribute, um Fehlmatches zu vermeiden.
+     */
+    public static function fromXml(string $xmlContent): ?self {
+        // Suche nach xmlns= oder xmlns: Deklarationen für Pain-Namespaces
+        // z.B. xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.12"
+        foreach (self::cases() as $case) {
+            // Prüfe auf Namespace-URI mit Version
+            // Muster: pain.XXX.YYY (z.B. pain.001.001, pain.002.001, etc.)
+            $pattern = 'xsd:' . preg_quote($case->value, '/') . '\.\d{3}';
+            if (preg_match('/' . $pattern . '/', $xmlContent)) {
+                return $case;
+            }
+        }
+        return null;
+    }
 }

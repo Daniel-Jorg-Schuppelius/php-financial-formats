@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.033.001.07">
+    <ReqForDplct>
+        <Assgnmt>
+            <Id>DPLCT-2025-001</Id>
+            <CreDtTm>2025-01-15T14:00:00.000+01:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-2025-XYZ789</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Undrlyg>
+            <Initn>
+                <OrgnlGrpInf>
+                    <OrgnlMsgId>PAIN001-2025-001</OrgnlMsgId>
+                    <OrgnlMsgNmId>pain.001.001.09</OrgnlMsgNmId>
+                </OrgnlGrpInf>
+                <OrgnlEndToEndId>E2E-2025-001</OrgnlEndToEndId>
+                <OrgnlTxId>TXN-2025-001</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">15000.00</OrgnlIntrBkSttlmAmt>
+            </Initn>
+        </Undrlyg>
+    </ReqForDplct>
+</Document>

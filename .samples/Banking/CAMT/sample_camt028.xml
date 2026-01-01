@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.028.001.12">
+    <AddtlPmtInf>
+        <Assgnmt>
+            <Id>ASGN-2025-API-001</Id>
+            <CreDtTm>2025-07-03T09:15:00.000+02:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-API-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Undrlyg>
+            <Initn>
+                <OrgnlGrpInf>
+                    <OrgnlMsgId>MSG-2025-003</OrgnlMsgId>
+                    <OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId>
+                </OrgnlGrpInf>
+                <OrgnlEndToEndId>E2E-2025-003</OrgnlEndToEndId>
+                <OrgnlTxId>TX-2025-003</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">3500.00</OrgnlIntrBkSttlmAmt>
+                <OrgnlIntrBkSttlmDt>2025-06-30</OrgnlIntrBkSttlmDt>
+            </Initn>
+        </Undrlyg>
+        <InfReqd>
+            <RmtInf>
+                <Ustrd>Rechnung Nr. 2025-12345 vom 15.06.2025</Ustrd>
+            </RmtInf>
+            <RmtInf>
+                <Ustrd>Kunde: Max Mustermann, Kundennr. 4711</Ustrd>
+            </RmtInf>
+        </InfReqd>
+    </AddtlPmtInf>
+</Document>

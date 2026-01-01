@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.026.001.10">
+    <UblToApply>
+        <Assgnmt>
+            <Id>ASGN-2025-UTA-001</Id>
+            <CreDtTm>2025-07-01T10:30:00.000+02:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-UTA-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Undrlyg>
+            <Initn>
+                <OrgnlGrpInf>
+                    <OrgnlMsgId>MSG-2025-001</OrgnlMsgId>
+                    <OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId>
+                </OrgnlGrpInf>
+                <OrgnlEndToEndId>E2E-2025-001</OrgnlEndToEndId>
+                <OrgnlTxId>TX-2025-001</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">1500.00</OrgnlIntrBkSttlmAmt>
+                <OrgnlIntrBkSttlmDt>2025-06-28</OrgnlIntrBkSttlmDt>
+            </Initn>
+        </Undrlyg>
+        <Justfn>
+            <MssngOrIncrrctInf>
+                <MssngInf>
+                    <Tp>MSSI</Tp>
+                </MssngInf>
+            </MssngOrIncrrctInf>
+            <MssngOrIncrrctInf>
+                <IncrrctInf>
+                    <Tp>INAM</Tp>
+                </IncrrctInf>
+            </MssngOrIncrrctInf>
+        </Justfn>
+    </UblToApply>
+</Document>

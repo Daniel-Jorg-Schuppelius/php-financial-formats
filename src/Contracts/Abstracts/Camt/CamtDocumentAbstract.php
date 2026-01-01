@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\Camt;
 
+use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 use CommonToolkit\Enums\CurrencyCode;
@@ -29,7 +30,7 @@ use InvalidArgumentException;
  * 
  * @package CommonToolkit\Entities\Common\Banking
  */
-abstract class CamtDocumentAbstract {
+abstract class CamtDocumentAbstract implements CamtDocumentInterface {
     protected string $id;
     protected DateTimeImmutable $creationDateTime;
     protected string $accountIdentifier;

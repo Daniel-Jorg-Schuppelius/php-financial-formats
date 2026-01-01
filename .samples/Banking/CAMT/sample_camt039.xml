@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.039.001.06">
+    <CaseStsRpt>
+        <Hdr>
+            <Id>CSR-2025-001</Id>
+            <CreDtTm>2025-01-15T18:00:00.000+01:00</CreDtTm>
+            <Fr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Fr>
+            <To>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </To>
+        </Hdr>
+        <Case>
+            <Id>CASE-2025-PENDING-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Sts>
+            <Conf>PDNG</Conf>
+            <StsRsn>
+                <Rsn>
+                    <Prtry>UNDER_INVESTIGATION</Prtry>
+                </Rsn>
+                <AddtlInf>Fall wird von der Compliance-Abteilung geprueft. Erwartete Bearbeitungszeit: 5 Werktage.</AddtlInf>
+            </StsRsn>
+        </Sts>
+    </CaseStsRpt>
+</Document>

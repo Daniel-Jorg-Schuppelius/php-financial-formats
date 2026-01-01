@@ -121,7 +121,14 @@ class Balance {
      * Prüft, ob es sich um einen Schlusssaldo handelt.
      */
     public function isClosingBalance(): bool {
-        return in_array($this->type, ['CLBD', 'CLAV'], true);
+        return $this->type === 'CLBD';
+    }
+
+    /**
+     * Prüft, ob es sich um einen verfügbaren Schlusssaldo handelt.
+     */
+    public function isClosingAvailable(): bool {
+        return $this->type === 'CLAV';
     }
 
     /**

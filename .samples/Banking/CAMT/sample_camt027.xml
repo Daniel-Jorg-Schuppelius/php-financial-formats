@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.027.001.10">
+    <ClmNonRcpt>
+        <Assgnmt>
+            <Id>ASGN-2025-CNR-001</Id>
+            <CreDtTm>2025-07-02T14:00:00.000+02:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-CNR-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Deutsche Bank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Undrlyg>
+            <Initn>
+                <OrgnlGrpInf>
+                    <OrgnlMsgId>MSG-2025-002</OrgnlMsgId>
+                    <OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId>
+                </OrgnlGrpInf>
+                <OrgnlEndToEndId>E2E-2025-002</OrgnlEndToEndId>
+                <OrgnlTxId>TX-2025-002</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">2500.00</OrgnlIntrBkSttlmAmt>
+                <OrgnlIntrBkSttlmDt>2025-06-25</OrgnlIntrBkSttlmDt>
+            </Initn>
+        </Undrlyg>
+        <CoverDtls>
+            <MssngCoverInd>true</MssngCoverInd>
+            <CoverDt>2025-06-25</CoverDt>
+        </CoverDtls>
+    </ClmNonRcpt>
+</Document>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.029.001.13">
+    <RsltnOfInvstgtn>
+        <Assgnmt>
+            <Id>RSLTN-001</Id>
+            <CreDtTm>2025-07-27T15:30:00+02:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-FI-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Sts>
+            <Conf>CNCL</Conf>
+        </Sts>
+        <CxlDtls>
+            <OrgnlGrpInfAndSts>
+                <OrgnlMsgId>PACS008-ORIG-001</OrgnlMsgId>
+                <OrgnlMsgNmId>pacs.008.001.10</OrgnlMsgNmId>
+                <OrgnlCreDtTm>2025-07-26T14:30:00+02:00</OrgnlCreDtTm>
+                <GrpCxlSts>ACCR</GrpCxlSts>
+            </OrgnlGrpInfAndSts>
+            <TxInfAndSts>
+                <CxlStsId>CXLSTS-001</CxlStsId>
+                <OrgnlEndToEndId>E2E-FI-001</OrgnlEndToEndId>
+                <OrgnlTxId>TX-FI-001</OrgnlTxId>
+                <TxCxlSts>CNCL</TxCxlSts>
+                <CxlStsRsnInf>
+                    <Rsn>
+                        <Cd>FRAD</Cd>
+                    </Rsn>
+                    <AddtlInf>Zahlung erfolgreich storniert wegen Betrugsverdacht</AddtlInf>
+                </CxlStsRsnInf>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">10000.00</OrgnlIntrBkSttlmAmt>
+                <OrgnlIntrBkSttlmDt>2025-07-26</OrgnlIntrBkSttlmDt>
+                <OrgnlTxRef>
+                    <Dbtr>
+                        <Nm>Verdächtiger Absender</Nm>
+                    </Dbtr>
+                    <DbtrAcct>
+                        <Id>
+                            <IBAN>DE89370400440532013000</IBAN>
+                        </Id>
+                    </DbtrAcct>
+                    <Cdtr>
+                        <Nm>Empfänger GmbH</Nm>
+                    </Cdtr>
+                    <CdtrAcct>
+                        <Id>
+                            <IBAN>DE27100777770209299700</IBAN>
+                        </Id>
+                    </CdtrAcct>
+                </OrgnlTxRef>
+            </TxInfAndSts>
+        </CxlDtls>
+    </RsltnOfInvstgtn>
+</Document>

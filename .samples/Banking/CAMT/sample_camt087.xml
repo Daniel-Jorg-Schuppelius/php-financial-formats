@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.087.001.09">
+    <ReqToModfyPmt>
+        <Assgnmt>
+            <Id>ASGN-2025-RMP-001</Id>
+            <CreDtTm>2025-07-04T11:45:00.000+02:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-RMP-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Deutsche Bank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Undrlyg>
+            <Initn>
+                <OrgnlGrpInf>
+                    <OrgnlMsgId>MSG-2025-004</OrgnlMsgId>
+                    <OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId>
+                </OrgnlGrpInf>
+                <OrgnlEndToEndId>E2E-2025-004</OrgnlEndToEndId>
+                <OrgnlTxId>TX-2025-004</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">5000.00</OrgnlIntrBkSttlmAmt>
+                <OrgnlIntrBkSttlmDt>2025-06-29</OrgnlIntrBkSttlmDt>
+            </Initn>
+        </Undrlyg>
+        <Mod>
+            <PmtModDtls>
+                <ReqdAmt Ccy="EUR">4500.00</ReqdAmt>
+            </PmtModDtls>
+            <CdtrDtls>
+                <Cdtr>
+                    <Nm>Musterfirma GmbH (korrigiert)</Nm>
+                </Cdtr>
+                <CdtrAcct>
+                    <Id>
+                        <IBAN>DE89370400440532013001</IBAN>
+                    </Id>
+                </CdtrAcct>
+            </CdtrDtls>
+            <RmtInf>
+                <Ustrd>Korrigierter Verwendungszweck: Rechnung 2025-99999</Ustrd>
+            </RmtInf>
+        </Mod>
+    </ReqToModfyPmt>
+</Document>

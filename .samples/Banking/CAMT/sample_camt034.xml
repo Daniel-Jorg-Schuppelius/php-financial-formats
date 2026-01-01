@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.034.001.07">
+    <Dplct>
+        <Assgnmt>
+            <Id>DPL-2025-001</Id>
+            <CreDtTm>2025-01-15T14:30:00.000+01:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-2025-12345</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Dplct>
+            <PrtryData>
+                <Tp>SWIFT_MT103</Tp>
+                <Data><![CDATA[{1:F01COBADEFFXXX0000000000}{2:O1031245250115DEUTDEFFXXXX00000000002501151245N}{4:
+:20:TXN-2025-001
+:23B:CRED
+:32A:250115EUR5000,00
+:50K:/DE89370400440532013000
+MUSTERMANN MAX
+MUSTERSTRASSE 1
+12345 BERLIN
+:59:/DE27100777770209299700
+EMPFAENGER GMBH
+EMPFAENGERWEG 42
+10115 BERLIN
+:70:RECHNUNGSNUMMER 2025-001
+:71A:SHA
+-}]]></Data>
+            </PrtryData>
+        </Dplct>
+    </Dplct>
+</Document>

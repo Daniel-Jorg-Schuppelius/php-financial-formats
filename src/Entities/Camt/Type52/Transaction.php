@@ -39,6 +39,10 @@ final class Transaction extends CamtTransactionAbstract {
     private ?TransactionFamily $familyCode;
     private ?TransactionSubFamily $subFamilyCode;
     private ?ReturnReason $returnReason;
+    private ?string $counterpartyName;
+    private ?string $counterpartyIban;
+    private ?string $counterpartyBic;
+    private ?string $remittanceInfo;
 
     public function __construct(
         DateTimeImmutable $bookingDate,
@@ -57,7 +61,11 @@ final class Transaction extends CamtTransactionAbstract {
         TransactionDomain|string|null $domainCode = null,
         TransactionFamily|string|null $familyCode = null,
         TransactionSubFamily|string|null $subFamilyCode = null,
-        ReturnReason|string|null $returnReason = null
+        ReturnReason|string|null $returnReason = null,
+        ?string $counterpartyName = null,
+        ?string $counterpartyIban = null,
+        ?string $counterpartyBic = null,
+        ?string $remittanceInfo = null
     ) {
         parent::__construct(
             $bookingDate,
@@ -79,6 +87,10 @@ final class Transaction extends CamtTransactionAbstract {
         $this->familyCode = $familyCode instanceof TransactionFamily ? $familyCode : TransactionFamily::tryFrom($familyCode ?? '');
         $this->subFamilyCode = $subFamilyCode instanceof TransactionSubFamily ? $subFamilyCode : TransactionSubFamily::tryFrom($subFamilyCode ?? '');
         $this->returnReason = $returnReason instanceof ReturnReason ? $returnReason : ReturnReason::tryFrom($returnReason ?? '');
+        $this->counterpartyName = $counterpartyName;
+        $this->counterpartyIban = $counterpartyIban;
+        $this->counterpartyBic = $counterpartyBic;
+        $this->remittanceInfo = $remittanceInfo;
     }
 
     public function getPurpose(): ?string {
@@ -111,6 +123,22 @@ final class Transaction extends CamtTransactionAbstract {
 
     public function getSubFamilyCode(): ?TransactionSubFamily {
         return $this->subFamilyCode;
+    }
+
+    public function getCounterpartyName(): ?string {
+        return $this->counterpartyName;
+    }
+
+    public function getCounterpartyIban(): ?string {
+        return $this->counterpartyIban;
+    }
+
+    public function getCounterpartyBic(): ?string {
+        return $this->counterpartyBic;
+    }
+
+    public function getRemittanceInfo(): ?string {
+        return $this->remittanceInfo;
     }
 
     /**

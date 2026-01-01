@@ -29,7 +29,7 @@ use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
 use CommonToolkit\FinancialFormats\Enums\PainType;
 use CommonToolkit\Enums\CountryCode;
 use CommonToolkit\Enums\CurrencyCode;
-use CommonToolkit\FinancialFormats\Parsers\Pain001Parser;
+use CommonToolkit\FinancialFormats\Parsers\PainParser;
 use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
 
@@ -301,7 +301,7 @@ class Pain001Test extends TestCase {
         $xml = $generator->generate($original);
 
         // Zurück parsen
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
 
         // Vergleichen
         $this->assertSame(
@@ -351,7 +351,7 @@ class Pain001Test extends TestCase {
         // Roundtrip
         $generator = new Pain001Generator();
         $xml = $generator->generate($document);
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
 
         $this->assertSame(2, count($parsed->getPaymentInstructions()));
         $this->assertSame(3, $parsed->countTransactions());
@@ -399,8 +399,8 @@ class Pain001Test extends TestCase {
         $generator = new Pain001Generator();
         $xml = $generator->generate($document);
 
-        $this->assertTrue(Pain001Parser::isValid($xml));
-        $this->assertFalse(Pain001Parser::isValid('<invalid>xml</invalid>'));
+        $this->assertTrue(PainParser::isValid($xml, PainType::PAIN_001));
+        $this->assertFalse(PainParser::isValid('<invalid>xml</invalid>', PainType::PAIN_001));
     }
 
     // ===== PainType Enum Tests =====
@@ -499,7 +499,7 @@ class Pain001Test extends TestCase {
         // Roundtrip
         $generator = new Pain001Generator();
         $xml = $generator->generate($document);
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
 
         $parsedAddress = $parsed->getAllTransactions()[0]->getCreditor()->getPostalAddress();
         $this->assertNotNull($parsedAddress);
@@ -534,7 +534,7 @@ class Pain001Test extends TestCase {
 
         $generator = new Pain001Generator();
         $xml = $generator->generate($document);
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
 
         $parsedAgent = $parsed->getAllTransactions()[0]->getCreditorAgent();
         $this->assertNotNull($parsedAgent);
@@ -572,7 +572,7 @@ class Pain001Test extends TestCase {
         $this->assertStringContainsString('Zeile 3', $xml);
 
         // Roundtrip
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
         $parsedRemittance = $parsed->getAllTransactions()[0]->getRemittanceInformation();
 
         $this->assertCount(3, $parsedRemittance->getUnstructured());
@@ -638,7 +638,7 @@ class Pain001Test extends TestCase {
         // Generator und Parser sollten auch große Batches handhaben
         $generator = new Pain001Generator();
         $xml = $generator->generate($document);
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
 
         $this->assertSame(50, $parsed->countTransactions());
     }
@@ -685,7 +685,7 @@ class Pain001Test extends TestCase {
         $this->assertStringContainsString('Ccy="USD"', $xml);
         $this->assertStringContainsString('Ccy="CHF"', $xml);
 
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
         $transactions = $parsed->getAllTransactions();
 
         $this->assertSame(CurrencyCode::Euro, $transactions[0]->getCurrency());
@@ -710,7 +710,7 @@ class Pain001Test extends TestCase {
 
         $generator = new Pain001Generator();
         $xml = $generator->generate($document);
-        $parsed = Pain001Parser::fromXml($xml);
+        $parsed = PainParser::parsePain001($xml);
 
         $parsedDate = $parsed->getPaymentInstructions()[0]->getRequestedExecutionDate();
         $this->assertSame($futureDate->format('Y-m-d'), $parsedDate->format('Y-m-d'));

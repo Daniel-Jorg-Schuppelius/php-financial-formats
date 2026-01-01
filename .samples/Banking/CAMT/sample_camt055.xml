@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.055.001.12">
+    <CstmrPmtCxlReq>
+        <Assgnmt>
+            <Id>CXLREQ-001</Id>
+            <CreDtTm>2025-07-27T10:30:00+02:00</CreDtTm>
+            <Assgnr>
+                <Pty>
+                    <Nm>Test Unternehmen GmbH</Nm>
+                    <Id>
+                        <OrgId>
+                            <Othr>
+                                <Id>DE123456789</Id>
+                            </Othr>
+                        </OrgId>
+                    </Id>
+                </Pty>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>CASE-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Test Unternehmen GmbH</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <CtrlData>
+            <NbOfTxs>2</NbOfTxs>
+            <CtrlSum>5000.00</CtrlSum>
+        </CtrlData>
+        <Undrlyg>
+            <OrgnlGrpInfAndCxl>
+                <OrgnlMsgId>PAIN001-ORIG-001</OrgnlMsgId>
+                <OrgnlMsgNmId>pain.001.001.09</OrgnlMsgNmId>
+                <OrgnlCreDtTm>2025-07-25T09:00:00+02:00</OrgnlCreDtTm>
+                <OrgnlNbOfTxs>2</OrgnlNbOfTxs>
+                <OrgnlCtrlSum>5000.00</OrgnlCtrlSum>
+            </OrgnlGrpInfAndCxl>
+            <OrgnlPmtInfAndCxl>
+                <OrgnlPmtInfId>PMTINF-001</OrgnlPmtInfId>
+                <OrgnlNbOfTxs>2</OrgnlNbOfTxs>
+                <OrgnlCtrlSum>5000.00</OrgnlCtrlSum>
+                <TxInf>
+                    <CxlId>CXL-TX-001</CxlId>
+                    <CxlRsnInf>
+                        <Rsn>
+                            <Cd>DUPL</Cd>
+                        </Rsn>
+                        <AddtlInf>Doppelte Zahlung erkannt</AddtlInf>
+                    </CxlRsnInf>
+                    <OrgnlInstrId>INSTR-001</OrgnlInstrId>
+                    <OrgnlEndToEndId>E2E-001</OrgnlEndToEndId>
+                    <OrgnlInstdAmt Ccy="EUR">2500.00</OrgnlInstdAmt>
+                    <OrgnlReqdExctnDt>
+                        <Dt>2025-07-26</Dt>
+                    </OrgnlReqdExctnDt>
+                    <OrgnlTxRef>
+                        <Dbtr>
+                            <Nm>Test Unternehmen GmbH</Nm>
+                        </Dbtr>
+                        <DbtrAcct>
+                            <Id>
+                                <IBAN>DE89370400440532013000</IBAN>
+                            </Id>
+                        </DbtrAcct>
+                        <DbtrAgt>
+                            <FinInstnId>
+                                <BICFI>COBADEFFXXX</BICFI>
+                            </FinInstnId>
+                        </DbtrAgt>
+                        <Cdtr>
+                            <Nm>Lieferant AG</Nm>
+                        </Cdtr>
+                        <CdtrAcct>
+                            <Id>
+                                <IBAN>DE27100777770209299700</IBAN>
+                            </Id>
+                        </CdtrAcct>
+                        <CdtrAgt>
+                            <FinInstnId>
+                                <BICFI>NORSDE51XXX</BICFI>
+                            </FinInstnId>
+                        </CdtrAgt>
+                        <RmtInf>
+                            <Ustrd>Rechnung 2025-123</Ustrd>
+                        </RmtInf>
+                    </OrgnlTxRef>
+                </TxInf>
+                <TxInf>
+                    <CxlId>CXL-TX-002</CxlId>
+                    <CxlRsnInf>
+                        <Rsn>
+                            <Cd>CUST</Cd>
+                        </Rsn>
+                        <AddtlInf>Auf Kundenwunsch</AddtlInf>
+                    </CxlRsnInf>
+                    <OrgnlInstrId>INSTR-002</OrgnlInstrId>
+                    <OrgnlEndToEndId>E2E-002</OrgnlEndToEndId>
+                    <OrgnlInstdAmt Ccy="EUR">2500.00</OrgnlInstdAmt>
+                </TxInf>
+            </OrgnlPmtInfAndCxl>
+        </Undrlyg>
+    </CstmrPmtCxlReq>
+</Document>

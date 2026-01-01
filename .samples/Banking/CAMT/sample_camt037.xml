@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.037.001.10">
+    <DbtAuthstnReq>
+        <Assgnmt>
+            <Id>DAREQ-2025-001</Id>
+            <CreDtTm>2025-01-14T10:00:00.000+01:00</CreDtTm>
+            <Assgnr>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>COBADEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgnr>
+            <Assgne>
+                <Agt>
+                    <FinInstnId>
+                        <BICFI>DEUTDEFFXXX</BICFI>
+                    </FinInstnId>
+                </Agt>
+            </Assgne>
+        </Assgnmt>
+        <Case>
+            <Id>DA-CASE-2025-001</Id>
+            <Cretr>
+                <Pty>
+                    <Nm>Commerzbank AG</Nm>
+                </Pty>
+            </Cretr>
+        </Case>
+        <Undrlyg>
+            <Initn>
+                <OrgnlGrpInf>
+                    <OrgnlMsgId>PAIN008-2025-001</OrgnlMsgId>
+                    <OrgnlMsgNmId>pain.008.001.02</OrgnlMsgNmId>
+                </OrgnlGrpInf>
+                <OrgnlEndToEndId>E2E-2025-001</OrgnlEndToEndId>
+                <OrgnlTxId>TXN-2025-DD-001</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">2500.00</OrgnlIntrBkSttlmAmt>
+                <OrgnlIntrBkSttlmDt>2025-01-15</OrgnlIntrBkSttlmDt>
+            </Initn>
+        </Undrlyg>
+        <Dtl>
+            <Dbtr>
+                <Nm>Mustermann GmbH</Nm>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <IBAN>DE89370400440532013000</IBAN>
+                </Id>
+            </DbtrAcct>
+            <Rsn>
+                <Prtry>Lastschriftautorisierung erforderlich wegen hohem Betrag</Prtry>
+            </Rsn>
+        </Dtl>
+    </DbtAuthstnReq>
+</Document>
