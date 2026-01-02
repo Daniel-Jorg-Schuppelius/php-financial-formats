@@ -26,7 +26,7 @@ class OriginalGroupInformationAndStatus {
     private ?string $originalMessageNameId;
     private ?DateTimeImmutable $originalCreationDateTime;
     private ?int $originalNumberOfTransactions;
-    private ?string $originalControlSum;
+    private ?float $originalControlSum;
     private ?string $groupCancellationStatus;
 
     /** @var CancellationStatus[] */
@@ -37,7 +37,7 @@ class OriginalGroupInformationAndStatus {
         ?string $originalMessageNameId = null,
         DateTimeImmutable|string|null $originalCreationDateTime = null,
         ?int $originalNumberOfTransactions = null,
-        ?string $originalControlSum = null,
+        float|string|null $originalControlSum = null,
         ?string $groupCancellationStatus = null
     ) {
         $this->originalMessageId = $originalMessageId;
@@ -46,7 +46,7 @@ class OriginalGroupInformationAndStatus {
             ? $originalCreationDateTime
             : ($originalCreationDateTime !== null ? new DateTimeImmutable($originalCreationDateTime) : null);
         $this->originalNumberOfTransactions = $originalNumberOfTransactions;
-        $this->originalControlSum = $originalControlSum;
+        $this->originalControlSum = is_string($originalControlSum) ? (float) $originalControlSum : $originalControlSum;
         $this->groupCancellationStatus = $groupCancellationStatus;
     }
 
@@ -66,7 +66,7 @@ class OriginalGroupInformationAndStatus {
         return $this->originalNumberOfTransactions;
     }
 
-    public function getOriginalControlSum(): ?string {
+    public function getOriginalControlSum(): ?float {
         return $this->originalControlSum;
     }
 

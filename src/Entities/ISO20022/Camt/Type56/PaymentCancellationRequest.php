@@ -32,7 +32,7 @@ class PaymentCancellationRequest {
     private ?string $originalEndToEndId;
     private ?string $originalInstructionId;
     private ?string $originalTransactionId;
-    private ?string $originalInterbankSettlementAmount;
+    private ?float $originalInterbankSettlementAmount;
     private ?CurrencyCode $originalCurrency;
     private ?DateTimeImmutable $originalInterbankSettlementDate;
     private ?string $cancellationReasonCode;
@@ -52,7 +52,7 @@ class PaymentCancellationRequest {
         ?string $originalEndToEndId = null,
         ?string $originalInstructionId = null,
         ?string $originalTransactionId = null,
-        ?string $originalInterbankSettlementAmount = null,
+        float|string|null $originalInterbankSettlementAmount = null,
         CurrencyCode|string|null $originalCurrency = null,
         DateTimeImmutable|string|null $originalInterbankSettlementDate = null,
         ?string $cancellationReasonCode = null,
@@ -73,7 +73,7 @@ class PaymentCancellationRequest {
         $this->originalEndToEndId = $originalEndToEndId;
         $this->originalInstructionId = $originalInstructionId;
         $this->originalTransactionId = $originalTransactionId;
-        $this->originalInterbankSettlementAmount = $originalInterbankSettlementAmount;
+        $this->originalInterbankSettlementAmount = is_string($originalInterbankSettlementAmount) ? (float) $originalInterbankSettlementAmount : $originalInterbankSettlementAmount;
         $this->originalCurrency = $originalCurrency instanceof CurrencyCode
             ? $originalCurrency
             : ($originalCurrency !== null ? CurrencyCode::from($originalCurrency) : null);
@@ -115,7 +115,7 @@ class PaymentCancellationRequest {
         return $this->originalTransactionId;
     }
 
-    public function getOriginalInterbankSettlementAmount(): ?string {
+    public function getOriginalInterbankSettlementAmount(): ?float {
         return $this->originalInterbankSettlementAmount;
     }
 

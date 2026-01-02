@@ -139,7 +139,7 @@ class Document implements CamtDocumentInterface {
             }
 
             if ($item->getAmount() !== null && $item->getCurrency() !== null) {
-                $amt = $dom->createElement('Amt', htmlspecialchars($item->getAmount()));
+                $amt = $dom->createElement('Amt', number_format($item->getAmount(), 2, '.', ''));
                 $amt->setAttribute('Ccy', $item->getCurrency()->value);
                 $ntfctn->appendChild($amt);
             }

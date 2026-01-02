@@ -27,7 +27,7 @@ use DateTimeImmutable;
 class NotificationItem {
     protected string $id;
     protected ?DateTimeImmutable $expectedValueDate = null;
-    protected ?string $amount = null;
+    protected ?float $amount = null;
     protected ?CurrencyCode $currency = null;
     protected ?string $debtorName = null;
     protected ?string $debtorAccountIban = null;
@@ -37,7 +37,7 @@ class NotificationItem {
     public function __construct(
         string $id,
         DateTimeImmutable|string|null $expectedValueDate = null,
-        ?string $amount = null,
+        float|string|null $amount = null,
         CurrencyCode|string|null $currency = null,
         ?string $debtorName = null,
         ?string $debtorAccountIban = null,
@@ -48,7 +48,7 @@ class NotificationItem {
         $this->expectedValueDate = $expectedValueDate instanceof DateTimeImmutable
             ? $expectedValueDate
             : ($expectedValueDate !== null ? new DateTimeImmutable($expectedValueDate) : null);
-        $this->amount = $amount;
+        $this->amount = is_string($amount) ? (float) $amount : $amount;
         $this->currency = $currency instanceof CurrencyCode
             ? $currency
             : ($currency !== null ? CurrencyCode::from($currency) : null);
@@ -66,7 +66,7 @@ class NotificationItem {
         return $this->expectedValueDate;
     }
 
-    public function getAmount(): ?string {
+    public function getAmount(): ?float {
         return $this->amount;
     }
 

@@ -29,7 +29,7 @@ class TransactionInformationAndStatus {
     private ?string $originalEndToEndId;
     private ?string $originalTransactionId;
     private ?string $transactionCancellationStatus;
-    private ?string $originalAmount;
+    private ?float $originalAmount;
     private ?CurrencyCode $originalCurrency;
     private ?DateTimeImmutable $originalInterbankSettlementDate;
     private ?string $debtorName;
@@ -46,7 +46,7 @@ class TransactionInformationAndStatus {
         ?string $originalEndToEndId = null,
         ?string $originalTransactionId = null,
         ?string $transactionCancellationStatus = null,
-        ?string $originalAmount = null,
+        float|string|null $originalAmount = null,
         CurrencyCode|string|null $originalCurrency = null,
         DateTimeImmutable|string|null $originalInterbankSettlementDate = null,
         ?string $debtorName = null,
@@ -59,7 +59,7 @@ class TransactionInformationAndStatus {
         $this->originalEndToEndId = $originalEndToEndId;
         $this->originalTransactionId = $originalTransactionId;
         $this->transactionCancellationStatus = $transactionCancellationStatus;
-        $this->originalAmount = $originalAmount;
+        $this->originalAmount = is_string($originalAmount) ? (float) $originalAmount : $originalAmount;
         $this->originalCurrency = $originalCurrency instanceof CurrencyCode
             ? $originalCurrency
             : ($originalCurrency !== null ? CurrencyCode::from($originalCurrency) : null);
@@ -92,7 +92,7 @@ class TransactionInformationAndStatus {
         return $this->transactionCancellationStatus;
     }
 
-    public function getOriginalAmount(): ?string {
+    public function getOriginalAmount(): ?float {
         return $this->originalAmount;
     }
 

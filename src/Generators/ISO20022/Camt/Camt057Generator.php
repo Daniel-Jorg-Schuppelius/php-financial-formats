@@ -74,9 +74,12 @@ class Camt057Generator extends CamtGeneratorAbstract {
 
         // MsgRcpt (Message Recipient)
         if ($document->getMessageRecipientBic() !== null) {
-            $this->builder->addElement('MsgRcpt');
-            $this->addAgentByBic('FinInstnId', $document->getMessageRecipientBic(), false);
-            $this->builder->end(); // MsgRcpt
+            $this->builder
+                ->addElement('MsgRcpt')
+                ->addElement('FinInstnId')
+                ->addChild('BICFI', $this->escape($document->getMessageRecipientBic()))
+                ->end() // FinInstnId
+                ->end(); // MsgRcpt
         }
 
         $this->builder->end(); // GrpHdr
@@ -110,9 +113,12 @@ class Camt057Generator extends CamtGeneratorAbstract {
 
         // DbtrAgt (Debtor Agent)
         if ($item->getDebtorAgentBic() !== null) {
-            $this->builder->addElement('DbtrAgt');
-            $this->addAgentByBic('FinInstnId', $item->getDebtorAgentBic(), false);
-            $this->builder->end(); // DbtrAgt
+            $this->builder
+                ->addElement('DbtrAgt')
+                ->addElement('FinInstnId')
+                ->addChild('BICFI', $this->escape($item->getDebtorAgentBic()))
+                ->end() // FinInstnId
+                ->end(); // DbtrAgt
         }
 
         // RmtInf (Remittance Information)
@@ -124,27 +130,5 @@ class Camt057Generator extends CamtGeneratorAbstract {
         }
 
         $this->builder->end(); // Ntfctn
-    }
-
-    /**
-     * Fügt eine FinInstnId-Struktur mit BIC hinzu.
-     * 
-     * @param string $elementName Name des Elements (z.B. 'FinInstnId')
-     * @param string $bic Der BIC-Code
-     * @param bool $wrapInElement Ob das Element gewrappt werden soll
-     */
-    private function addAgentByBic(string $elementName, string $bic, bool $wrapInElement = true): void {
-        if ($wrapInElement) {
-            $this->builder->addElement($elementName);
-        }
-
-        $this->builder
-            ->addElement('FinInstnId')
-            ->addChild('BICFI', $this->escape($bic))
-            ->end();
-
-        if ($wrapInElement) {
-            $this->builder->end();
-        }
     }
 }

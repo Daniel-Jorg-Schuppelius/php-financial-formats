@@ -24,7 +24,7 @@ use DateTimeImmutable;
  */
 class ModificationRequest {
     private ?string $requestedExecutionDate = null;
-    private ?string $requestedSettlementAmount = null;
+    private ?float $requestedSettlementAmount = null;
     private ?CurrencyCode $requestedCurrency = null;
     private ?string $debtorName = null;
     private ?string $debtorAccount = null;
@@ -35,7 +35,7 @@ class ModificationRequest {
 
     public function __construct(
         ?string $requestedExecutionDate = null,
-        ?string $requestedSettlementAmount = null,
+        float|string|null $requestedSettlementAmount = null,
         CurrencyCode|string|null $requestedCurrency = null,
         ?string $debtorName = null,
         ?string $debtorAccount = null,
@@ -45,7 +45,7 @@ class ModificationRequest {
         ?string $purpose = null
     ) {
         $this->requestedExecutionDate = $requestedExecutionDate;
-        $this->requestedSettlementAmount = $requestedSettlementAmount;
+        $this->requestedSettlementAmount = is_string($requestedSettlementAmount) ? (float) $requestedSettlementAmount : $requestedSettlementAmount;
         $this->requestedCurrency = $requestedCurrency instanceof CurrencyCode
             ? $requestedCurrency
             : ($requestedCurrency !== null ? CurrencyCode::from($requestedCurrency) : null);
@@ -61,7 +61,7 @@ class ModificationRequest {
         return $this->requestedExecutionDate;
     }
 
-    public function getRequestedSettlementAmount(): ?string {
+    public function getRequestedSettlementAmount(): ?float {
         return $this->requestedSettlementAmount;
     }
 

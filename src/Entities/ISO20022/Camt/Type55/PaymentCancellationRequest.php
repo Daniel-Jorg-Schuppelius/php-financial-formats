@@ -28,7 +28,7 @@ class PaymentCancellationRequest {
     private ?string $originalInstructionId;
     private ?string $originalEndToEndId;
     private ?string $originalTransactionId;
-    private ?string $originalAmount;
+    private ?float $originalAmount;
     private ?CurrencyCode $originalCurrency;
     private ?DateTimeImmutable $requestedExecutionDate;
     private ?string $cancellationReasonCode;
@@ -47,7 +47,7 @@ class PaymentCancellationRequest {
         ?string $originalInstructionId = null,
         ?string $originalEndToEndId = null,
         ?string $originalTransactionId = null,
-        ?string $originalAmount = null,
+        float|string|null $originalAmount = null,
         CurrencyCode|string|null $originalCurrency = null,
         DateTimeImmutable|string|null $requestedExecutionDate = null,
         ?string $cancellationReasonCode = null,
@@ -65,7 +65,7 @@ class PaymentCancellationRequest {
         $this->originalInstructionId = $originalInstructionId;
         $this->originalEndToEndId = $originalEndToEndId;
         $this->originalTransactionId = $originalTransactionId;
-        $this->originalAmount = $originalAmount;
+        $this->originalAmount = is_string($originalAmount) ? (float) $originalAmount : $originalAmount;
         $this->originalCurrency = $originalCurrency instanceof CurrencyCode
             ? $originalCurrency
             : ($originalCurrency !== null ? CurrencyCode::from($originalCurrency) : null);
@@ -100,7 +100,7 @@ class PaymentCancellationRequest {
         return $this->originalTransactionId;
     }
 
-    public function getOriginalAmount(): ?string {
+    public function getOriginalAmount(): ?float {
         return $this->originalAmount;
     }
 

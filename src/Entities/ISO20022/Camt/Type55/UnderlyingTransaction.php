@@ -27,7 +27,7 @@ class UnderlyingTransaction {
     private ?string $originalGroupInformationMessageNameId;
     private ?DateTimeImmutable $originalGroupInformationCreationDateTime;
     private ?int $originalNumberOfTransactions;
-    private ?string $originalControlSum;
+    private ?float $originalControlSum;
     private ?string $groupCancellationStatus;
 
     /** @var OriginalPaymentInformation[] */
@@ -41,7 +41,7 @@ class UnderlyingTransaction {
         ?string $originalGroupInformationMessageNameId = null,
         DateTimeImmutable|string|null $originalGroupInformationCreationDateTime = null,
         ?int $originalNumberOfTransactions = null,
-        ?string $originalControlSum = null,
+        float|string|null $originalControlSum = null,
         ?string $groupCancellationStatus = null
     ) {
         $this->originalGroupInformationMessageId = $originalGroupInformationMessageId;
@@ -50,7 +50,7 @@ class UnderlyingTransaction {
             ? $originalGroupInformationCreationDateTime
             : ($originalGroupInformationCreationDateTime !== null ? new DateTimeImmutable($originalGroupInformationCreationDateTime) : null);
         $this->originalNumberOfTransactions = $originalNumberOfTransactions;
-        $this->originalControlSum = $originalControlSum;
+        $this->originalControlSum = is_string($originalControlSum) ? (float) $originalControlSum : $originalControlSum;
         $this->groupCancellationStatus = $groupCancellationStatus;
     }
 
@@ -70,7 +70,7 @@ class UnderlyingTransaction {
         return $this->originalNumberOfTransactions;
     }
 
-    public function getOriginalControlSum(): ?string {
+    public function getOriginalControlSum(): ?float {
         return $this->originalControlSum;
     }
 

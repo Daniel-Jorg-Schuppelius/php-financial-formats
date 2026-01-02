@@ -45,7 +45,7 @@ class Document implements CamtDocumentInterface {
 
     // Confirmation
     protected bool $debitAuthorised = false;
-    protected ?string $authorisedAmount = null;
+    protected ?float $authorisedAmount = null;
     protected ?CurrencyCode $authorisedCurrency = null;
     protected ?DateTimeImmutable $valueDate = null;
     protected ?string $reason = null;
@@ -60,7 +60,7 @@ class Document implements CamtDocumentInterface {
         ?string $assigneePartyName = null,
         ?string $caseId = null,
         ?string $caseCreator = null,
-        ?string $authorisedAmount = null,
+        float|string|null $authorisedAmount = null,
         CurrencyCode|string|null $authorisedCurrency = null,
         DateTimeImmutable|string|null $valueDate = null,
         ?string $reason = null
@@ -76,7 +76,7 @@ class Document implements CamtDocumentInterface {
         $this->assigneePartyName = $assigneePartyName;
         $this->caseId = $caseId;
         $this->caseCreator = $caseCreator;
-        $this->authorisedAmount = $authorisedAmount;
+        $this->authorisedAmount = is_string($authorisedAmount) ? (float) $authorisedAmount : $authorisedAmount;
         $this->authorisedCurrency = $authorisedCurrency instanceof CurrencyCode
             ? $authorisedCurrency
             : ($authorisedCurrency !== null ? CurrencyCode::from($authorisedCurrency) : null);
@@ -126,7 +126,7 @@ class Document implements CamtDocumentInterface {
         return $this->debitAuthorised;
     }
 
-    public function getAuthorisedAmount(): ?string {
+    public function getAuthorisedAmount(): ?float {
         return $this->authorisedAmount;
     }
 
@@ -222,7 +222,7 @@ class Document implements CamtDocumentInterface {
         $conf->appendChild($dom->createElement('DbtAuthstn', $this->debitAuthorised ? 'true' : 'false'));
 
         if ($this->authorisedAmount !== null && $this->authorisedCurrency !== null) {
-            $amtToDbt = $dom->createElement('AmtToDbt', htmlspecialchars($this->authorisedAmount));
+            $amtToDbt = $dom->createElement('AmtToDbt', number_format($this->authorisedAmount, 2, '.', ''));
             $amtToDbt->setAttribute('Ccy', $this->authorisedCurrency->value);
             $conf->appendChild($amtToDbt);
         }

@@ -35,7 +35,7 @@ class Document implements CamtDocumentInterface {
     protected string $messageId;
     protected DateTimeImmutable $creationDateTime;
     protected ?string $numberOfTransactions = null;
-    protected ?string $controlSum = null;
+    protected ?float $controlSum = null;
     protected ?string $initiatingPartyName = null;
     protected ?string $initiatingPartyId = null;
     protected ?string $caseId = null;
@@ -48,7 +48,7 @@ class Document implements CamtDocumentInterface {
         string $messageId,
         DateTimeImmutable|string $creationDateTime,
         ?string $numberOfTransactions = null,
-        ?string $controlSum = null,
+        float|string|null $controlSum = null,
         ?string $initiatingPartyName = null,
         ?string $initiatingPartyId = null,
         ?string $caseId = null,
@@ -59,7 +59,7 @@ class Document implements CamtDocumentInterface {
             ? $creationDateTime
             : new DateTimeImmutable($creationDateTime);
         $this->numberOfTransactions = $numberOfTransactions;
-        $this->controlSum = $controlSum;
+        $this->controlSum = is_string($controlSum) ? (float) $controlSum : $controlSum;
         $this->initiatingPartyName = $initiatingPartyName;
         $this->initiatingPartyId = $initiatingPartyId;
         $this->caseId = $caseId;
@@ -82,7 +82,7 @@ class Document implements CamtDocumentInterface {
         return $this->numberOfTransactions;
     }
 
-    public function getControlSum(): ?string {
+    public function getControlSum(): ?float {
         return $this->controlSum;
     }
 
@@ -204,7 +204,7 @@ class Document implements CamtDocumentInterface {
             $cstmrPmtCxlReq->appendChild($ctrlData);
             $ctrlData->appendChild($dom->createElement('NbOfTxs', htmlspecialchars($this->numberOfTransactions)));
             if ($this->controlSum !== null) {
-                $ctrlData->appendChild($dom->createElement('CtrlSum', htmlspecialchars($this->controlSum)));
+                $ctrlData->appendChild($dom->createElement('CtrlSum', number_format($this->controlSum, 2, '.', '')));
             }
         }
 
@@ -253,7 +253,7 @@ class Document implements CamtDocumentInterface {
 
                 if ($pmtInf->getOriginalControlSum() !== null) {
                     $orgnlPmtInfAndCxl->appendChild(
-                        $dom->createElement('OrgnlCtrlSum', htmlspecialchars($pmtInf->getOriginalControlSum()))
+                        $dom->createElement('OrgnlCtrlSum', number_format($pmtInf->getOriginalControlSum(), 2, '.', ''))
                     );
                 }
 
@@ -317,7 +317,7 @@ class Document implements CamtDocumentInterface {
         }
 
         if ($txInfo->getOriginalAmount() !== null && $txInfo->getOriginalCurrency() !== null) {
-            $amtElement = $dom->createElement('OrgnlInstdAmt', htmlspecialchars($txInfo->getOriginalAmount()));
+            $amtElement = $dom->createElement('OrgnlInstdAmt', number_format($txInfo->getOriginalAmount(), 2, '.', ''));
             $amtElement->setAttribute('Ccy', $txInfo->getOriginalCurrency()->value);
             $txInfElement->appendChild($amtElement);
         }

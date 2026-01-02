@@ -24,7 +24,7 @@ use DateTimeImmutable;
 class OriginalPaymentInformation {
     private ?string $originalPaymentInformationId;
     private ?int $originalNumberOfTransactions;
-    private ?string $originalControlSum;
+    private ?float $originalControlSum;
     private ?string $paymentInformationCancellationStatus;
     private bool $cancelAllTransactions = false;
 
@@ -34,13 +34,13 @@ class OriginalPaymentInformation {
     public function __construct(
         ?string $originalPaymentInformationId = null,
         ?int $originalNumberOfTransactions = null,
-        ?string $originalControlSum = null,
+        float|string|null $originalControlSum = null,
         ?string $paymentInformationCancellationStatus = null,
         bool $cancelAllTransactions = false
     ) {
         $this->originalPaymentInformationId = $originalPaymentInformationId;
         $this->originalNumberOfTransactions = $originalNumberOfTransactions;
-        $this->originalControlSum = $originalControlSum;
+        $this->originalControlSum = is_string($originalControlSum) ? (float) $originalControlSum : $originalControlSum;
         $this->paymentInformationCancellationStatus = $paymentInformationCancellationStatus;
         $this->cancelAllTransactions = $cancelAllTransactions;
     }
@@ -53,7 +53,7 @@ class OriginalPaymentInformation {
         return $this->originalNumberOfTransactions;
     }
 
-    public function getOriginalControlSum(): ?string {
+    public function getOriginalControlSum(): ?float {
         return $this->originalControlSum;
     }
 

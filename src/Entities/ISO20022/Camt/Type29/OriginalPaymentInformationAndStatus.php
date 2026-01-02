@@ -22,7 +22,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29;
 class OriginalPaymentInformationAndStatus {
     private ?string $originalPaymentInformationId;
     private ?int $originalNumberOfTransactions;
-    private ?string $originalControlSum;
+    private ?float $originalControlSum;
     private ?string $paymentInformationCancellationStatus;
 
     /** @var CancellationStatus[] */
@@ -34,12 +34,12 @@ class OriginalPaymentInformationAndStatus {
     public function __construct(
         ?string $originalPaymentInformationId = null,
         ?int $originalNumberOfTransactions = null,
-        ?string $originalControlSum = null,
+        float|string|null $originalControlSum = null,
         ?string $paymentInformationCancellationStatus = null
     ) {
         $this->originalPaymentInformationId = $originalPaymentInformationId;
         $this->originalNumberOfTransactions = $originalNumberOfTransactions;
-        $this->originalControlSum = $originalControlSum;
+        $this->originalControlSum = is_string($originalControlSum) ? (float) $originalControlSum : $originalControlSum;
         $this->paymentInformationCancellationStatus = $paymentInformationCancellationStatus;
     }
 
@@ -51,7 +51,7 @@ class OriginalPaymentInformationAndStatus {
         return $this->originalNumberOfTransactions;
     }
 
-    public function getOriginalControlSum(): ?string {
+    public function getOriginalControlSum(): ?float {
         return $this->originalControlSum;
     }
 

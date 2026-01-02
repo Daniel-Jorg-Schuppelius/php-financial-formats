@@ -49,7 +49,7 @@ class Document implements CamtDocumentInterface {
     protected ?string $originalMessageNameId = null;
     protected ?string $originalEndToEndId = null;
     protected ?string $originalTransactionId = null;
-    protected ?string $originalInterbankSettlementAmount = null;
+    protected ?float $originalInterbankSettlementAmount = null;
     protected ?CurrencyCode $originalCurrency = null;
     protected ?DateTimeImmutable $originalInterbankSettlementDate = null;
 
@@ -71,7 +71,7 @@ class Document implements CamtDocumentInterface {
         ?string $originalMessageNameId = null,
         ?string $originalEndToEndId = null,
         ?string $originalTransactionId = null,
-        ?string $originalInterbankSettlementAmount = null,
+        float|string|null $originalInterbankSettlementAmount = null,
         CurrencyCode|string|null $originalCurrency = null,
         DateTimeImmutable|string|null $originalInterbankSettlementDate = null,
         ?string $debtorName = null,
@@ -92,7 +92,7 @@ class Document implements CamtDocumentInterface {
         $this->originalMessageNameId = $originalMessageNameId;
         $this->originalEndToEndId = $originalEndToEndId;
         $this->originalTransactionId = $originalTransactionId;
-        $this->originalInterbankSettlementAmount = $originalInterbankSettlementAmount;
+        $this->originalInterbankSettlementAmount = is_string($originalInterbankSettlementAmount) ? (float) $originalInterbankSettlementAmount : $originalInterbankSettlementAmount;
         $this->originalCurrency = $originalCurrency instanceof CurrencyCode
             ? $originalCurrency
             : ($originalCurrency !== null ? CurrencyCode::from($originalCurrency) : null);
@@ -156,7 +156,7 @@ class Document implements CamtDocumentInterface {
         return $this->originalTransactionId;
     }
 
-    public function getOriginalInterbankSettlementAmount(): ?string {
+    public function getOriginalInterbankSettlementAmount(): ?float {
         return $this->originalInterbankSettlementAmount;
     }
 
@@ -279,7 +279,7 @@ class Document implements CamtDocumentInterface {
             }
 
             if ($this->originalInterbankSettlementAmount !== null && $this->originalCurrency !== null) {
-                $amtElement = $dom->createElement('OrgnlIntrBkSttlmAmt', htmlspecialchars($this->originalInterbankSettlementAmount));
+                $amtElement = $dom->createElement('OrgnlIntrBkSttlmAmt', number_format($this->originalInterbankSettlementAmount, 2, '.', ''));
                 $amtElement->setAttribute('Ccy', $this->originalCurrency->value);
                 $initn->appendChild($amtElement);
             }
