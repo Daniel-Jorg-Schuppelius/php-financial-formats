@@ -14,13 +14,12 @@ namespace CommonToolkit\FinancialFormats\Builders\DATEV\V700;
 
 use CommonToolkit\Builders\CSVDocumentBuilder;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\MetaHeaderLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\GLAccountDescription;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\V700\MetaHeaderDefinition;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\GLAccountDescriptionHeaderLine;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\{MetaHeaderField, GLAccountDescriptionHeaderField};
-use ERRORToolkit\Traits\ErrorLog;
 use RuntimeException;
 use DateTimeImmutable;
 
@@ -29,7 +28,6 @@ use DateTimeImmutable;
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und Kontenbeschriftungen.
  */
 final class GLAccountDescriptionDocumentBuilder extends CSVDocumentBuilder {
-    use ErrorLog;
 
     private ?MetaHeaderLine $metaHeader = null;
     private ?GLAccountDescriptionHeaderLine $fieldHeader = null;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\DATEV\Header;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\HeaderLineAbstract;
-use CommonToolkit\Contracts\Interfaces\Common\CSV\FieldInterface;
+use CommonToolkit\Contracts\Interfaces\CSV\FieldInterface;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\BookingBatchHeaderField;
 

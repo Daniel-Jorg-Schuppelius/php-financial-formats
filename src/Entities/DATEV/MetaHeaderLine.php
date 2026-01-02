@@ -14,10 +14,10 @@ namespace CommonToolkit\FinancialFormats\Entities\DATEV;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\MetaHeaderFieldInterface;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\MetaHeaderDefinitionInterface;
-use CommonToolkit\Contracts\Interfaces\Common\CSV\FieldInterface;
+use CommonToolkit\Contracts\Interfaces\CSV\FieldInterface;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
-use CommonToolkit\Entities\Common\CSV\DataLine;
-use CommonToolkit\Entities\Common\CSV\DataField;
+use CommonToolkit\Entities\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataField;
 use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 use InvalidArgumentException;
 

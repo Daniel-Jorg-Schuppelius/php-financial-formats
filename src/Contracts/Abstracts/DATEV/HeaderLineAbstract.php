@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV;
 
-use CommonToolkit\Contracts\Interfaces\Common\CSV\FieldInterface;
+use CommonToolkit\Contracts\Interfaces\CSV\FieldInterface;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\FieldHeaderInterface;
-use CommonToolkit\Entities\Common\CSV\{HeaderField, HeaderLine};
+use CommonToolkit\Entities\CSV\{HeaderField, HeaderLine};
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\Enums\CountryCode;
 use InvalidArgumentException;

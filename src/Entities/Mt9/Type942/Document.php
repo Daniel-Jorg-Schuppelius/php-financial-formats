@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type942;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Enums\MtType;
-use CommonToolkit\Enums\CurrencyCode;
+use CommonToolkit\FinancialFormats\Generators\Mt\Mt942Generator;
 use DateTimeImmutable;
 
 /**
@@ -163,48 +163,6 @@ class Document extends MtDocumentAbstract {
     }
 
     public function __toString(): string {
-        $lines = [
-            ':20:' . $this->referenceId,
-            ':25:' . $this->accountId,
-            ':28C:' . $this->statementNumber,
-        ];
-
-        // DateTime Indicator (optional)
-        if ($this->dateTimeIndicator !== null) {
-            $lines[] = ':13D:' . $this->dateTimeIndicator->format('ymdHi') . '+0000';
-        }
-
-        // Floor Limit Indicator (optional)
-        if ($this->floorLimitIndicator !== null) {
-            $lines[] = ':34F:' . $this->currency->value . number_format($this->floorLimitIndicator, 2, ',', '');
-        }
-
-        // Opening Balance (optional, Interim)
-        if ($this->openingBalance !== null) {
-            $lines[] = ':60M:' . (string) $this->openingBalance;
-        }
-
-        // Transactions
-        foreach ($this->transactions as $txn) {
-            $lines[] = (string) $txn;
-        }
-
-        // Summary fields
-        $debitCount = $this->countDebitEntries();
-        $creditCount = $this->countCreditEntries();
-
-        if ($debitCount > 0) {
-            $lines[] = sprintf(':90D:%d%s%s', $debitCount, $this->currency->value, number_format($this->getTotalDebit(), 2, ',', ''));
-        }
-        if ($creditCount > 0) {
-            $lines[] = sprintf(':90C:%d%s%s', $creditCount, $this->currency->value, number_format($this->getTotalCredit(), 2, ',', ''));
-        }
-
-        // Closing Balance (Interim)
-        $lines[] = ':62M:' . (string) $this->closingBalance;
-
-        $lines[] = '-';
-
-        return implode("\r\n", $lines) . "\r\n";
+        return (new Mt942Generator())->generate($this);
     }
 }

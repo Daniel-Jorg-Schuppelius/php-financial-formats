@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\DATEV\Documents;
 
-use CommonToolkit\Entities\Common\CSV\ColumnWidthConfig;
-use CommonToolkit\Entities\Common\CSV\HeaderLine;
+use CommonToolkit\Entities\CSV\ColumnWidthConfig;
+use CommonToolkit\Entities\CSV\HeaderLine;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\FinancialFormats\Entities\DATEV\MetaHeaderLine;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;

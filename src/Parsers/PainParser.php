@@ -14,35 +14,35 @@ namespace CommonToolkit\FinancialFormats\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
-use CommonToolkit\FinancialFormats\Entities\Pain\AccountIdentification;
-use CommonToolkit\FinancialFormats\Entities\Pain\FinancialInstitution;
-use CommonToolkit\FinancialFormats\Entities\Pain\Mandate\Mandate;
-use CommonToolkit\FinancialFormats\Entities\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Entities\Pain\PaymentIdentification;
-use CommonToolkit\FinancialFormats\Entities\Pain\RemittanceInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type001\CreditTransferTransaction;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type001\Document as Pain001Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type001\GroupHeader as Pain001GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type001\PaymentInstruction as Pain001PaymentInstruction;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\Document as Pain002Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\GroupHeader as Pain002GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\OriginalGroupInformation as Pain002OriginalGroupInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\OriginalPaymentInformation as Pain002OriginalPaymentInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\StatusReason;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\TransactionInformationAndStatus;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\TransactionStatus;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\Document as Pain007Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\GroupHeader as Pain007GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\OriginalGroupInformation as Pain007OriginalGroupInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\OriginalPaymentInformation as Pain007OriginalPaymentInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\ReversalReason;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\TransactionInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type008\DirectDebitTransaction;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type008\Document as Pain008Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type008\GroupHeader as Pain008GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type008\MandateInformation;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type008\PaymentInstruction as Pain008PaymentInstruction;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type009\Document as Pain009Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PaymentIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\CreditTransferTransaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document as Pain001Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader as Pain001GroupHeader;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstruction as Pain001PaymentInstruction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\Document as Pain002Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\GroupHeader as Pain002GroupHeader;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalGroupInformation as Pain002OriginalGroupInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalPaymentInformation as Pain002OriginalPaymentInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionInformationAndStatus;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document as Pain007Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\GroupHeader as Pain007GroupHeader;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\OriginalGroupInformation as Pain007OriginalGroupInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\OriginalPaymentInformation as Pain007OriginalPaymentInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\ReversalReason;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\TransactionInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\DirectDebitTransaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain008Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\GroupHeader as Pain008GroupHeader;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\MandateInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\PaymentInstruction as Pain008PaymentInstruction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
 use CommonToolkit\FinancialFormats\Enums\ChargesCode;
 use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
 use CommonToolkit\FinancialFormats\Enums\PainType;
@@ -228,15 +228,11 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException Bei ungültigem XML oder fehlendem Content
      */
     public static function parsePain001(string $xmlContent): Pain001Document {
-        ['xpath' => $xpath, 'prefix' => $prefix] = self::createIso20022XPath($xmlContent, 'pain.001', self::PAIN001_NAMESPACES);
+        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.001', self::PAIN001_NAMESPACES);
+        $xpath = $doc->getXPath();
 
         // Prefix-Variante für Namespace-Suche
         $nsPrefix = !empty($prefix) ? 'ns:' : '';
-        if (!empty($prefix)) {
-            // Re-registrieren mit 'ns' für den speziellen Lookup
-            $namespace = self::detectIso20022Namespace($xpath->document, 'pain.001', self::PAIN001_NAMESPACES);
-            $xpath->registerNamespace('ns', $namespace ?? '');
-        }
 
         // Customer Credit Transfer Initiation Block finden
         $cstmrCdtTrfInitnNode = $xpath->query("//{$nsPrefix}CstmrCdtTrfInitn")->item(0);
@@ -412,7 +408,8 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException Bei ungültigem XML
      */
     public static function parsePain002(string $xmlContent): Pain002Document {
-        ['xpath' => $xpath, 'prefix' => $prefix] = self::createIso20022XPath($xmlContent, 'pain.002');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.002');
+        $xpath = $doc->getXPath();
 
         // GroupHeader parsen
         $grpHdrNode = $xpath->query("//{$prefix}GrpHdr")->item(0);
@@ -576,7 +573,8 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException Bei ungültigem XML
      */
     public static function parsePain007(string $xmlContent): Pain007Document {
-        ['xpath' => $xpath, 'prefix' => $prefix] = self::createIso20022XPath($xmlContent, 'pain.007');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.007');
+        $xpath = $doc->getXPath();
 
         // GroupHeader parsen
         $grpHdrNode = $xpath->query("//{$prefix}GrpHdr")->item(0);
@@ -732,7 +730,8 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException Bei ungültigem XML
      */
     public static function parsePain008(string $xmlContent): Pain008Document {
-        ['xpath' => $xpath, 'prefix' => $prefix] = self::createIso20022XPath($xmlContent, 'pain.008');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.008');
+        $xpath = $doc->getXPath();
 
         // GroupHeader parsen
         $grpHdrNode = $xpath->query("//{$prefix}GrpHdr")->item(0);
@@ -921,7 +920,8 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException Bei ungültigem XML
      */
     public static function parsePain009(string $xmlContent): Pain009Document {
-        ['xpath' => $xpath, 'prefix' => $prefix] = self::createIso20022XPath($xmlContent, 'pain.009');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.009');
+        $xpath = $doc->getXPath();
 
         // Header parsen
         $msgId = $xpath->query("//{$prefix}GrpHdr/{$prefix}MsgId")->item(0)?->textContent ?? 'UNKNOWN';

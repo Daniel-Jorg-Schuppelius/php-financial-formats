@@ -1,0 +1,75 @@
+<?php
+/*
+ * Created on   : Mon Dec 30 2025
+ * Author       : Daniel Jörg Schuppelius
+ * Author Uri   : https://schuppelius.org
+ * Filename     : GroupHeader.php
+ * License      : AGPL-3.0-or-later
+ * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
+declare(strict_types=1);
+
+namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8;
+
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
+use DateTimeImmutable;
+
+/**
+ * Group Header für pain.008 Customer Direct Debit Initiation (GrpHdr).
+ * 
+ * @package CommonToolkit\Entities\Common\Banking\Pain\Type8
+ */
+final readonly class GroupHeader {
+    public function __construct(
+        private string $messageId,
+        private DateTimeImmutable $creationDateTime,
+        private int $numberOfTransactions,
+        private ?float $controlSum,
+        private PartyIdentification $initiatingParty,
+        private ?string $forwardingAgent = null
+    ) {
+    }
+
+    /**
+     * Factory-Methode.
+     */
+    public static function create(
+        string $messageId,
+        PartyIdentification $initiatingParty,
+        int $numberOfTransactions = 0,
+        ?float $controlSum = null
+    ): self {
+        return new self(
+            messageId: $messageId,
+            creationDateTime: new DateTimeImmutable(),
+            numberOfTransactions: $numberOfTransactions,
+            controlSum: $controlSum,
+            initiatingParty: $initiatingParty
+        );
+    }
+
+    public function getMessageId(): string {
+        return $this->messageId;
+    }
+
+    public function getCreationDateTime(): DateTimeImmutable {
+        return $this->creationDateTime;
+    }
+
+    public function getNumberOfTransactions(): int {
+        return $this->numberOfTransactions;
+    }
+
+    public function getControlSum(): ?float {
+        return $this->controlSum;
+    }
+
+    public function getInitiatingParty(): PartyIdentification {
+        return $this->initiatingParty;
+    }
+
+    public function getForwardingAgent(): ?string {
+        return $this->forwardingAgent;
+    }
+}

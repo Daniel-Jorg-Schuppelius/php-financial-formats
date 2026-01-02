@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Tests\Converters\DATEV;
 
-use CommonToolkit\FinancialFormats\Builders\Camt053DocumentBuilder;
+use CommonToolkit\FinancialFormats\Builders\ISO20022\Camt\Camt053DocumentBuilder;
 use CommonToolkit\FinancialFormats\Converters\DATEV\Camt053ToBankTransactionConverter;
-use CommonToolkit\FinancialFormats\Entities\Camt\Balance;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Reference;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Reference;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;

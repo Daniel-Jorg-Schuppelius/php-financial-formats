@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV;
 
-use CommonToolkit\Entities\Common\CSV\DataField;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataField;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField as F;

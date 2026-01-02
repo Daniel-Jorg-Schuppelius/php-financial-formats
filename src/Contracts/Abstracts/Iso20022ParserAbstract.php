@@ -12,15 +12,18 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts;
 
+use CommonToolkit\Contracts\Abstracts\XML\XmlParserAbstract;
+use CommonToolkit\Entities\XML\ExtendedDOMDocument;
 use CommonToolkit\Enums\CountryCode;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
-use CommonToolkit\FinancialFormats\Entities\Pain\AccountIdentification;
-use CommonToolkit\FinancialFormats\Entities\Pain\FinancialInstitution;
-use CommonToolkit\FinancialFormats\Entities\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Entities\Pain\PaymentIdentification;
-use CommonToolkit\FinancialFormats\Entities\Pain\PostalAddress;
-use CommonToolkit\FinancialFormats\Entities\Pain\RemittanceInformation;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PaymentIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PostalAddress;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
+use CommonToolkit\Parsers\ExtendedDOMDocumentParser;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
@@ -53,6 +56,37 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
+     * Erstellt ein ExtendedDOMDocument für ein ISO 20022 Dokument.
+     * 
+     * @param string $xmlContent Der XML-Inhalt
+     * @param string $formatType Der Format-Typ für Namespace-Erkennung (z.B. 'camt.053', 'pain.001')
+     * @param array<string> $knownNamespaces Optional: Liste bekannter Namespaces für diesen Typ
+     * @return array{doc: ExtendedDOMDocument, prefix: string}
+     * @throws RuntimeException Bei ungültigem XML
+     */
+    protected static function createIso20022Document(
+        string $xmlContent,
+        string $formatType,
+        array $knownNamespaces = []
+    ): array {
+        $doc = ExtendedDOMDocumentParser::fromString($xmlContent);
+
+        // Namespace erkennen und registrieren
+        $namespace = static::detectIso20022Namespace($doc, $formatType, $knownNamespaces);
+        $prefix = '';
+
+        if (!empty($namespace)) {
+            $doc->registerXPathNamespace('ns', $namespace);
+            $prefix = 'ns:';
+        }
+
+        return [
+            'doc' => $doc,
+            'prefix' => $prefix
+        ];
+    }
+
+    /**
      * Erstellt DOM und XPath für ein ISO 20022 Dokument mit Namespace-Handling.
      * 
      * @param string $xmlContent Der XML-Inhalt
@@ -60,37 +94,25 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @param array<string> $knownNamespaces Optional: Liste bekannter Namespaces für diesen Typ
      * @return array{dom: DOMDocument, xpath: DOMXPath, namespace: ?string, prefix: string}
      * @throws RuntimeException Bei ungültigem XML
+     * @deprecated Nutze createIso20022Document() für ExtendedDOMDocument
      */
     protected static function createIso20022XPath(
         string $xmlContent,
         string $formatType,
         array $knownNamespaces = []
     ): array {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException(
-                "Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler')
-            );
-        }
-
-        libxml_clear_errors();
-
-        $xpath = new DOMXPath($dom);
-        $namespace = static::detectIso20022Namespace($dom, $formatType, $knownNamespaces);
+        $doc = ExtendedDOMDocumentParser::fromString($xmlContent);
+        $namespace = static::detectIso20022Namespace($doc, $formatType, $knownNamespaces);
         $prefix = '';
 
         if (!empty($namespace)) {
-            $xpath->registerNamespace('ns', $namespace);
+            $doc->registerXPathNamespace('ns', $namespace);
             $prefix = 'ns:';
         }
 
         return [
-            'dom' => $dom,
-            'xpath' => $xpath,
+            'dom' => $doc,
+            'xpath' => $doc->getXPath(),
             'namespace' => $namespace,
             'prefix' => $prefix
         ];
@@ -160,11 +182,25 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     /**
      * Initialisiert XPath mit optionalem Namespace (Rückwärtskompatibel).
      * 
-     * @param DOMDocument $dom Das DOM-Dokument
+     * @param DOMDocument $dom Das DOM-Dokument (oder ExtendedDOMDocument)
      * @param string $formatType Der Format-Typ (z.B. 'camt.053', 'pain.001')
      * @return array{0: DOMXPath, 1: string} [XPath-Objekt, Namespace-Präfix]
+     * @deprecated Nutze createIso20022Document() für ExtendedDOMDocument
      */
     protected static function initializeXPath(DOMDocument $dom, string $formatType = ''): array {
+        // Wenn bereits ein ExtendedDOMDocument, nutze dessen XPath
+        if ($dom instanceof ExtendedDOMDocument) {
+            $namespace = static::detectIso20022Namespace($dom, $formatType);
+            $prefix = '';
+
+            if (!empty($namespace)) {
+                $dom->registerXPathNamespace('ns', $namespace);
+                $prefix = 'ns:';
+            }
+
+            return [$dom->getXPath(), $prefix];
+        }
+
         $xpath = new DOMXPath($dom);
         $namespace = static::detectIso20022Namespace($dom, $formatType);
 
@@ -574,16 +610,16 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
-     * Alias für createIso20022XPath - Pain-Kompatibilität.
+     * Alias für createIso20022Document - Pain-Kompatibilität.
      * 
-     * @deprecated Verwende createIso20022XPath
+     * @deprecated Verwende createIso20022Document
      */
     protected static function createDomXPath(string $xmlContent, string $painType, array $knownNamespaces = []): array {
-        $result = static::createIso20022XPath($xmlContent, $painType, $knownNamespaces);
+        $result = static::createIso20022Document($xmlContent, $painType, $knownNamespaces);
         // Pain erwartet 'dom', 'xpath', 'prefix' - namespace nicht enthalten im alten Interface
         return [
-            'dom' => $result['dom'],
-            'xpath' => $result['xpath'],
+            'dom' => $result['doc'],
+            'xpath' => $result['doc']->getXPath(),
             'prefix' => $result['prefix']
         ];
     }

@@ -14,30 +14,32 @@ namespace CommonToolkit\FinancialFormats\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
-use CommonToolkit\FinancialFormats\Entities\Camt\Balance as CamtBalance;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type29\CancellationDetails as Camt029CancellationDetails;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type29\CancellationStatus as Camt029CancellationStatus;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type29\Document as Camt029Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type29\OriginalGroupInformationAndStatus as Camt029GroupStatus;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type29\TransactionInformationAndStatus as Camt029TxStatus;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type52\Document as Camt052Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type52\Transaction as Camt052Transaction;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Document as Camt053Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Reference as Camt053Reference;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Transaction as Camt053Transaction;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type54\Document as Camt054Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type54\Transaction as Camt054Transaction;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type55\Document as Camt055Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type55\PaymentCancellationRequest as Camt055CancellationRequest;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type55\UnderlyingTransaction as Camt055UnderlyingTransaction;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type56\Document as Camt056Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type56\PaymentCancellationRequest as Camt056CancellationRequest;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type56\UnderlyingTransaction as Camt056UnderlyingTransaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance as CamtBalance;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationDetails as Camt029CancellationDetails;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationStatus as Camt029CancellationStatus;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document as Camt029Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\OriginalGroupInformationAndStatus as Camt029GroupStatus;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\TransactionInformationAndStatus as Camt029TxStatus;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Document as Camt052Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Transaction as Camt052Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document as Camt053Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Reference as Camt053Reference;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction as Camt053Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document as Camt054Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Transaction as Camt054Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\Document as Camt055Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\PaymentCancellationRequest as Camt055CancellationRequest;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\UnderlyingTransaction as Camt055UnderlyingTransaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document as Camt056Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\PaymentCancellationRequest as Camt056CancellationRequest;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\UnderlyingTransaction as Camt056UnderlyingTransaction;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Helper\Data\CamtValidator;
 use CommonToolkit\FinancialFormats\Registries\CamtParserRegistry;
+use CommonToolkit\Entities\XML\ExtendedDOMDocument;
+use CommonToolkit\Parsers\ExtendedDOMDocumentParser;
 use CommonToolkit\Helper\FileSystem\File;
 use DateTimeImmutable;
 use DOMDocument;
@@ -115,16 +117,8 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.053 Dokument.
      */
     public static function parseCamt053(string $xmlContent): Camt053Document {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler'));
-        }
-
-        [$xpath, $p] = static::initializeXPath($dom, 'camt.053');
+        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.053');
+        $xpath = $doc->getXPath();
 
         // Statement-Block finden
         $stmtNode = $xpath->query("//{$p}Stmt")->item(0);
@@ -133,7 +127,7 @@ class CamtParser extends Iso20022ParserAbstract {
         }
 
         // Basisdaten
-        $currency = $xpath->evaluate("string({$p}Acct/{$p}Ccy)", $stmtNode) ?: 'EUR';
+        $currency = $doc->xpathString("{$p}Acct/{$p}Ccy", $stmtNode) ?? 'EUR';
 
         // Salden parsen
         $openingBalance = null;
@@ -182,16 +176,8 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.052 Dokument.
      */
     public static function parseCamt052(string $xmlContent): Camt052Document {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler'));
-        }
-
-        [$xpath, $p] = static::initializeXPath($dom, 'camt.052');
+        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.052');
+        $xpath = $doc->getXPath();
 
         // Report-Block finden
         $rptNode = $xpath->query("//{$p}Rpt")->item(0);
@@ -200,7 +186,7 @@ class CamtParser extends Iso20022ParserAbstract {
         }
 
         // Basisdaten
-        $currency = $xpath->evaluate("string({$p}Acct/{$p}Ccy)", $rptNode) ?: 'EUR';
+        $currency = $doc->xpathString("{$p}Acct/{$p}Ccy", $rptNode) ?? 'EUR';
 
         // Salden parsen
         $openingBalance = null;
@@ -248,16 +234,8 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.054 Dokument.
      */
     public static function parseCamt054(string $xmlContent): Camt054Document {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler'));
-        }
-
-        [$xpath, $p] = static::initializeXPath($dom, 'camt.054');
+        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.054');
+        $xpath = $doc->getXPath();
 
         // Notification-Block finden
         $ntfctnNode = $xpath->query("//{$p}Ntfctn")->item(0);
@@ -266,7 +244,7 @@ class CamtParser extends Iso20022ParserAbstract {
         }
 
         // Basisdaten
-        $currency = $xpath->evaluate("string({$p}Acct/{$p}Ccy)", $ntfctnNode) ?: 'EUR';
+        $currency = $doc->xpathString("{$p}Acct/{$p}Ccy", $ntfctnNode) ?? 'EUR';
 
         $document = new Camt054Document(
             id: $xpath->evaluate("string({$p}Id)", $ntfctnNode),
@@ -334,49 +312,89 @@ class CamtParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Parst einen Entry-Block für CAMT.053 mit dynamischem Präfix.
+     * Parst gemeinsame Entry-Basisdaten für CAMT 052/053/054.
+     * 
+     * @param DOMXPath $xpath XPath-Objekt
+     * @param DOMNode $entry Entry-Node
+     * @param string $defaultCurrency Standard-Währung
+     * @param string $p Namespace-Präfix
+     * @return array{amount: float, currency: CurrencyCode, creditDebit: CreditDebit, bookingDate: ?DateTimeImmutable, valutaDate: ?DateTimeImmutable, status: string, isReversal: bool, entryRef: ?string, acctSvcrRef: ?string, bankTxCode: ?string, domainCode: ?string, familyCode: ?string, subFamilyCode: ?string, txDtls: ?DOMNode}|null
      */
-    private static function parseTransaction053WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt053Transaction {
+    private static function parseEntryBasics(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?array {
         $amountStr = $xpath->evaluate("string({$p}Amt)", $entry);
         if (empty($amountStr)) {
             return null;
         }
 
-        $amount = (float) str_replace(',', '.', $amountStr);
+        $amount = static::parseAmountValue($amountStr);
         $entryCcy = $xpath->evaluate("string({$p}Amt/@Ccy)", $entry) ?: $defaultCurrency;
         $creditDebitStr = $xpath->evaluate("string({$p}CdtDbtInd)", $entry);
         $reversalIndicator = $xpath->evaluate("string({$p}RvslInd)", $entry);
         $status = $xpath->evaluate("string({$p}Sts/{$p}Cd)", $entry) ?: 'BOOK';
 
-        $bookingDateStr = $xpath->evaluate("string({$p}BookgDt/{$p}Dt)", $entry)
-            ?: $xpath->evaluate("string({$p}BookgDt/{$p}DtTm)", $entry);
-        $valutaDateStr = $xpath->evaluate("string({$p}ValDt/{$p}Dt)", $entry)
-            ?: $xpath->evaluate("string({$p}ValDt/{$p}DtTm)", $entry);
+        // Buchungs- und Valutadatum (Reihenfolge: DtTm vor Dt für genauere Zeitangaben)
+        $bookingDateStr = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}BookgDt/{$p}DtTm",
+            "{$p}BookgDt/{$p}Dt"
+        ], $entry);
+        $valutaDateStr = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}ValDt/{$p}DtTm",
+            "{$p}ValDt/{$p}Dt"
+        ], $entry);
 
         if (empty($bookingDateStr)) {
             return null;
         }
 
-        $isReversal = strtolower($reversalIndicator) === 'true';
-        $creditDebit = match (strtoupper($creditDebitStr)) {
-            'CRDT' => $isReversal ? CreditDebit::DEBIT : CreditDebit::CREDIT,
-            'DBIT' => $isReversal ? CreditDebit::CREDIT : CreditDebit::DEBIT,
-            default => CreditDebit::CREDIT
-        };
+        $isReversal = static::isReversalIndicator($reversalIndicator);
+        $creditDebit = static::parseCreditDebitIndicator($creditDebitStr);
+
+        // Bei Storno wird CreditDebit invertiert
+        if ($isReversal) {
+            $creditDebit = $creditDebit === CreditDebit::CREDIT ? CreditDebit::DEBIT : CreditDebit::CREDIT;
+        }
 
         $currency = CurrencyCode::tryFrom(strtoupper($entryCcy)) ?? CurrencyCode::Euro;
 
-        $entryRef = $xpath->evaluate("string({$p}NtryRef)", $entry) ?: null;
-        $acctSvcrRef = $xpath->evaluate("string({$p}AcctSvcrRef)", $entry) ?: null;
+        // Referenzen
+        $entryRef = static::xpathStringStatic($xpath, "{$p}NtryRef", $entry);
+        $acctSvcrRef = static::xpathStringStatic($xpath, "{$p}AcctSvcrRef", $entry);
 
-        // Bank Transaction Code
-        $bankTxCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Prtry/{$p}Cd)", $entry) ?: null;
-        $domainCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Cd)", $entry) ?: null;
-        $familyCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Fmly/{$p}Cd)", $entry) ?: null;
-        $subFamilyCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Fmly/{$p}SubFmlyCd)", $entry) ?: null;
+        // Bank Transaction Codes
+        $bankTxCode = static::parseBankTxCode($xpath, $entry, $p);
 
-        // TxDtls Block - CAMT.053 spezifisch
+        // TxDtls Block
         $txDtls = $xpath->query("{$p}NtryDtls/{$p}TxDtls", $entry)->item(0);
+
+        return [
+            'amount' => $amount,
+            'currency' => $currency,
+            'creditDebit' => $creditDebit,
+            'bookingDate' => new DateTimeImmutable($bookingDateStr),
+            'valutaDate' => !empty($valutaDateStr) ? new DateTimeImmutable($valutaDateStr) : null,
+            'status' => $status,
+            'isReversal' => $isReversal,
+            'entryRef' => $entryRef,
+            'acctSvcrRef' => $acctSvcrRef,
+            'bankTxCode' => $bankTxCode['code'],
+            'domainCode' => $bankTxCode['domain'],
+            'familyCode' => $bankTxCode['family'],
+            'subFamilyCode' => $bankTxCode['subFamily'],
+            'txDtls' => $txDtls,
+        ];
+    }
+
+    /**
+     * Parst einen Entry-Block für CAMT.053 mit dynamischem Präfix.
+     */
+    private static function parseTransaction053WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt053Transaction {
+        $basics = self::parseEntryBasics($xpath, $entry, $defaultCurrency, $p);
+        if ($basics === null) {
+            return null;
+        }
+
+        // CAMT.053 spezifische Felder aus TxDtls
+        $txDtls = $basics['txDtls'];
         $purpose = null;
         $purposeCode = null;
         $additionalInfo = null;
@@ -392,46 +410,38 @@ class CamtParser extends Iso20022ParserAbstract {
 
         if ($txDtls) {
             // Referenzen parsen
-            $endToEndId = $xpath->evaluate("string({$p}Refs/{$p}EndToEndId)", $txDtls) ?: null;
-            $mandateId = $xpath->evaluate("string({$p}Refs/{$p}MndtId)", $txDtls) ?: null;
-            $paymentInformationId = $xpath->evaluate("string({$p}Refs/{$p}PmtInfId)", $txDtls) ?: null;
-            $instructionId = $xpath->evaluate("string({$p}Refs/{$p}InstrId)", $txDtls) ?: null;
+            $endToEndId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}EndToEndId", $txDtls);
+            $mandateId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}MndtId", $txDtls);
+            $paymentInformationId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}PmtInfId", $txDtls);
+            $instructionId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}InstrId", $txDtls);
 
             // Gläubiger-ID kann im RmtInf/Strd/CdtrRefInf stehen
-            $creditorId = $xpath->evaluate("string({$p}RltdPties/{$p}Cdtr/{$p}Id/{$p}PrvtId/{$p}Othr/{$p}Id)", $txDtls) ?: null;
-            if (empty($creditorId)) {
-                $creditorId = $xpath->evaluate("string({$p}RmtInf/{$p}Strd/{$p}CdtrRefInf/{$p}Ref)", $txDtls) ?: null;
-            }
+            $creditorId = static::xpathStringWithFallbackStatic($xpath, [
+                "{$p}RltdPties/{$p}Cdtr/{$p}Id/{$p}PrvtId/{$p}Othr/{$p}Id",
+                "{$p}RmtInf/{$p}Strd/{$p}CdtrRefInf/{$p}Ref"
+            ], $txDtls);
 
             // Purpose
-            $purpose = $xpath->evaluate("string({$p}Purp/{$p}Prtry)", $txDtls) ?: null;
-            $purposeCode = $xpath->evaluate("string({$p}Purp/{$p}Cd)", $txDtls) ?: null;
+            $purpose = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Prtry", $txDtls);
+            $purposeCode = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Cd", $txDtls);
 
             // Remittance Info
-            $additionalInfo = $xpath->evaluate("string({$p}RmtInf/{$p}Ustrd)", $txDtls) ?: null;
+            $additionalInfo = static::xpathStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
 
             // Return Reason
-            $returnReason = $xpath->evaluate("string({$p}RtrInf/{$p}Rsn/{$p}Cd)", $txDtls) ?: null;
+            $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
 
-            // Counterparty - je nach Credit/Debit
-            if ($creditDebit === CreditDebit::CREDIT) {
-                // Bei Gutschrift ist die Gegenseite der Debtor
-                $counterpartyName = $xpath->evaluate("string({$p}RltdPties/{$p}Dbtr/{$p}Nm)", $txDtls) ?: null;
-                $counterpartyIban = $xpath->evaluate("string({$p}RltdPties/{$p}DbtrAcct/{$p}Id/{$p}IBAN)", $txDtls) ?: null;
-                $counterpartyBic = $xpath->evaluate("string({$p}RltdAgts/{$p}DbtrAgt/{$p}FinInstnId/{$p}BICFI)", $txDtls)
-                    ?: $xpath->evaluate("string({$p}RltdAgts/{$p}DbtrAgt/{$p}FinInstnId/{$p}BIC)", $txDtls) ?: null;
-            } else {
-                // Bei Lastschrift ist die Gegenseite der Creditor
-                $counterpartyName = $xpath->evaluate("string({$p}RltdPties/{$p}Cdtr/{$p}Nm)", $txDtls) ?: null;
-                $counterpartyIban = $xpath->evaluate("string({$p}RltdPties/{$p}CdtrAcct/{$p}Id/{$p}IBAN)", $txDtls) ?: null;
-                $counterpartyBic = $xpath->evaluate("string({$p}RltdAgts/{$p}CdtrAgt/{$p}FinInstnId/{$p}BICFI)", $txDtls)
-                    ?: $xpath->evaluate("string({$p}RltdAgts/{$p}CdtrAgt/{$p}FinInstnId/{$p}BIC)", $txDtls) ?: null;
-            }
+            // Counterparty - je nach Credit/Debit via Hilfsmethode
+            $partyType = $basics['creditDebit'] === CreditDebit::CREDIT ? 'Dbtr' : 'Cdtr';
+            $counterparty = static::parsePartyInfo($xpath, $txDtls, $partyType, $p);
+            $counterpartyName = $counterparty['name'];
+            $counterpartyIban = $counterparty['iban'];
+            $counterpartyBic = $counterparty['bic'];
         }
 
         // Fallback für Additional Info
         if ($additionalInfo === null) {
-            $additionalInfo = $xpath->evaluate("string({$p}AddtlNtryInf)", $entry) ?: null;
+            $additionalInfo = static::xpathStringStatic($xpath, "{$p}AddtlNtryInf", $entry);
         }
 
         // Reference-Objekt erstellen
@@ -439,30 +449,30 @@ class CamtParser extends Iso20022ParserAbstract {
             endToEndId: $endToEndId,
             mandateId: $mandateId,
             creditorId: $creditorId,
-            entryReference: $entryRef,
-            accountServicerReference: $acctSvcrRef,
+            entryReference: $basics['entryRef'],
+            accountServicerReference: $basics['acctSvcrRef'],
             paymentInformationId: $paymentInformationId,
             instructionId: $instructionId
         );
 
         return new Camt053Transaction(
-            bookingDate: new DateTimeImmutable($bookingDateStr),
-            valutaDate: !empty($valutaDateStr) ? new DateTimeImmutable($valutaDateStr) : null,
-            amount: $amount,
-            currency: $currency,
-            creditDebit: $creditDebit,
+            bookingDate: $basics['bookingDate'],
+            valutaDate: $basics['valutaDate'],
+            amount: $basics['amount'],
+            currency: $basics['currency'],
+            creditDebit: $basics['creditDebit'],
             reference: $reference,
-            entryReference: $entryRef,
-            accountServicerReference: $acctSvcrRef,
-            status: $status,
-            isReversal: $isReversal,
+            entryReference: $basics['entryRef'],
+            accountServicerReference: $basics['acctSvcrRef'],
+            status: $basics['status'],
+            isReversal: $basics['isReversal'],
             purpose: $purpose,
             purposeCode: $purposeCode,
             additionalInfo: $additionalInfo,
-            transactionCode: $bankTxCode,
-            domainCode: $domainCode,
-            familyCode: $familyCode,
-            subFamilyCode: $subFamilyCode,
+            transactionCode: $basics['bankTxCode'],
+            domainCode: $basics['domainCode'],
+            familyCode: $basics['familyCode'],
+            subFamilyCode: $basics['subFamilyCode'],
             returnReason: $returnReason,
             counterpartyName: $counterpartyName,
             counterpartyIban: $counterpartyIban,
@@ -474,79 +484,46 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst einen Entry-Block für CAMT.052 mit dynamischem Präfix.
      */
     private static function parseTransaction052WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt052Transaction {
-        $amountStr = $xpath->evaluate("string({$p}Amt)", $entry);
-        if (empty($amountStr)) {
+        $basics = self::parseEntryBasics($xpath, $entry, $defaultCurrency, $p);
+        if ($basics === null) {
             return null;
         }
 
-        $amount = (float) str_replace(',', '.', $amountStr);
-        $entryCcy = $xpath->evaluate("string({$p}Amt/@Ccy)", $entry) ?: $defaultCurrency;
-        $creditDebitStr = $xpath->evaluate("string({$p}CdtDbtInd)", $entry);
-        $reversalIndicator = $xpath->evaluate("string({$p}RvslInd)", $entry);
-        $status = $xpath->evaluate("string({$p}Sts/{$p}Cd)", $entry) ?: 'BOOK';
-
-        $bookingDateStr = $xpath->evaluate("string({$p}BookgDt/{$p}Dt)", $entry)
-            ?: $xpath->evaluate("string({$p}BookgDt/{$p}DtTm)", $entry);
-        $valutaDateStr = $xpath->evaluate("string({$p}ValDt/{$p}Dt)", $entry)
-            ?: $xpath->evaluate("string({$p}ValDt/{$p}DtTm)", $entry);
-
-        if (empty($bookingDateStr)) {
-            return null;
-        }
-
-        $isReversal = strtolower($reversalIndicator) === 'true';
-        $creditDebit = match (strtoupper($creditDebitStr)) {
-            'CRDT' => $isReversal ? CreditDebit::DEBIT : CreditDebit::CREDIT,
-            'DBIT' => $isReversal ? CreditDebit::CREDIT : CreditDebit::DEBIT,
-            default => CreditDebit::CREDIT
-        };
-
-        $currency = CurrencyCode::tryFrom(strtoupper($entryCcy)) ?? CurrencyCode::Euro;
-
-        $entryRef = $xpath->evaluate("string({$p}NtryRef)", $entry) ?: null;
-        $acctSvcrRef = $xpath->evaluate("string({$p}AcctSvcrRef)", $entry) ?: null;
-
-        // Bank Transaction Code
-        $bankTxCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Prtry/{$p}Cd)", $entry) ?: null;
-        $domainCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Cd)", $entry) ?: null;
-        $familyCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Fmly/{$p}Cd)", $entry) ?: null;
-        $subFamilyCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Fmly/{$p}SubFmlyCd)", $entry) ?: null;
-
-        // Purpose und Additional Info
-        $txDtls = $xpath->query("{$p}NtryDtls/{$p}TxDtls", $entry)->item(0);
+        // CAMT.052 spezifische Felder aus TxDtls
+        $txDtls = $basics['txDtls'];
         $purpose = null;
         $purposeCode = null;
         $additionalInfo = null;
         $returnReason = null;
 
         if ($txDtls) {
-            $purpose = $xpath->evaluate("string({$p}Purp/{$p}Prtry)", $txDtls) ?: null;
-            $purposeCode = $xpath->evaluate("string({$p}Purp/{$p}Cd)", $txDtls) ?: null;
-            $additionalInfo = $xpath->evaluate("string({$p}AddtlTxInf)", $txDtls) ?: null;
-            $returnReason = $xpath->evaluate("string({$p}RtrInf/{$p}Rsn/{$p}Cd)", $txDtls) ?: null;
+            $purpose = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Prtry", $txDtls);
+            $purposeCode = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Cd", $txDtls);
+            $additionalInfo = static::xpathStringStatic($xpath, "{$p}AddtlTxInf", $txDtls);
+            $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
         }
 
         if ($additionalInfo === null) {
-            $additionalInfo = $xpath->evaluate("string({$p}AddtlNtryInf)", $entry) ?: null;
+            $additionalInfo = static::xpathStringStatic($xpath, "{$p}AddtlNtryInf", $entry);
         }
 
         return new Camt052Transaction(
-            bookingDate: new DateTimeImmutable($bookingDateStr),
-            valutaDate: !empty($valutaDateStr) ? new DateTimeImmutable($valutaDateStr) : null,
-            amount: $amount,
-            currency: $currency,
-            creditDebit: $creditDebit,
-            entryReference: $entryRef,
-            accountServicerReference: $acctSvcrRef,
-            status: $status,
-            isReversal: $isReversal,
+            bookingDate: $basics['bookingDate'],
+            valutaDate: $basics['valutaDate'],
+            amount: $basics['amount'],
+            currency: $basics['currency'],
+            creditDebit: $basics['creditDebit'],
+            entryReference: $basics['entryRef'],
+            accountServicerReference: $basics['acctSvcrRef'],
+            status: $basics['status'],
+            isReversal: $basics['isReversal'],
             purpose: $purpose,
             purposeCode: $purposeCode,
             additionalInfo: $additionalInfo,
-            bankTransactionCode: $bankTxCode,
-            domainCode: $domainCode,
-            familyCode: $familyCode,
-            subFamilyCode: $subFamilyCode,
+            bankTransactionCode: $basics['bankTxCode'],
+            domainCode: $basics['domainCode'],
+            familyCode: $basics['familyCode'],
+            subFamilyCode: $basics['subFamilyCode'],
             returnReason: $returnReason
         );
     }
@@ -555,48 +532,13 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst einen Entry-Block für CAMT.054 mit dynamischem Präfix.
      */
     private static function parseTransaction054WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt054Transaction {
-        $amountStr = $xpath->evaluate("string({$p}Amt)", $entry);
-        if (empty($amountStr)) {
+        $basics = self::parseEntryBasics($xpath, $entry, $defaultCurrency, $p);
+        if ($basics === null) {
             return null;
         }
 
-        $amount = (float) str_replace(',', '.', $amountStr);
-        $entryCcy = $xpath->evaluate("string({$p}Amt/@Ccy)", $entry) ?: $defaultCurrency;
-        $creditDebitStr = $xpath->evaluate("string({$p}CdtDbtInd)", $entry);
-        $reversalIndicator = $xpath->evaluate("string({$p}RvslInd)", $entry);
-        $status = $xpath->evaluate("string({$p}Sts/{$p}Cd)", $entry) ?: 'BOOK';
-
-        $bookingDateStr = $xpath->evaluate("string({$p}BookgDt/{$p}DtTm)", $entry)
-            ?: $xpath->evaluate("string({$p}BookgDt/{$p}Dt)", $entry);
-        $valutaDateStr = $xpath->evaluate("string({$p}ValDt/{$p}Dt)", $entry)
-            ?: $xpath->evaluate("string({$p}ValDt/{$p}DtTm)", $entry);
-
-        if (empty($bookingDateStr)) {
-            return null;
-        }
-
-        $isReversal = strtolower($reversalIndicator) === 'true';
-        $creditDebit = match (strtoupper($creditDebitStr)) {
-            'CRDT' => $isReversal ? CreditDebit::DEBIT : CreditDebit::CREDIT,
-            'DBIT' => $isReversal ? CreditDebit::CREDIT : CreditDebit::DEBIT,
-            default => CreditDebit::CREDIT
-        };
-
-        $currency = CurrencyCode::tryFrom(strtoupper($entryCcy)) ?? CurrencyCode::Euro;
-
-        $entryRef = $xpath->evaluate("string({$p}NtryRef)", $entry) ?: null;
-        $acctSvcrRef = $xpath->evaluate("string({$p}AcctSvcrRef)", $entry) ?: null;
-
-        // Bank Transaction Code (proprietär)
-        $bankTxCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Prtry/{$p}Cd)", $entry) ?: null;
-
-        // ISO 20022 Domain/Family/SubFamily Codes
-        $domainCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Cd)", $entry) ?: null;
-        $familyCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Fmly/{$p}Cd)", $entry) ?: null;
-        $subFamilyCode = $xpath->evaluate("string({$p}BkTxCd/{$p}Domn/{$p}Fmly/{$p}SubFmlyCd)", $entry) ?: null;
-
-        // TxDtls
-        $txDtls = $xpath->query("{$p}NtryDtls/{$p}TxDtls", $entry)->item(0);
+        // CAMT.054 spezifische Felder aus TxDtls
+        $txDtls = $basics['txDtls'];
         $instructionId = null;
         $endToEndId = null;
         $remittanceInfo = null;
@@ -609,38 +551,41 @@ class CamtParser extends Iso20022ParserAbstract {
         $creditorAgentBic = null;
 
         if ($txDtls) {
-            $instructionId = $xpath->evaluate("string({$p}Refs/{$p}InstrId)", $txDtls) ?: null;
-            $endToEndId = $xpath->evaluate("string({$p}Refs/{$p}EndToEndId)", $txDtls) ?: null;
-            $remittanceInfo = $xpath->evaluate("string({$p}RmtInf/{$p}Ustrd)", $txDtls) ?: null;
-            $purposeCode = $xpath->evaluate("string({$p}Purp/{$p}Cd)", $txDtls) ?: null;
-            $returnReason = $xpath->evaluate("string({$p}RtrInf/{$p}Rsn/{$p}Cd)", $txDtls) ?: null;
-            $localInstrumentCode = $xpath->evaluate("string({$p}LclInstrm/{$p}Prtry)", $txDtls)
-                ?: $xpath->evaluate("string({$p}LclInstrm/{$p}Cd)", $txDtls) ?: null;
+            $instructionId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}InstrId", $txDtls);
+            $endToEndId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}EndToEndId", $txDtls);
+            $remittanceInfo = static::xpathStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
+            $purposeCode = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Cd", $txDtls);
+            $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
+            $localInstrumentCode = static::xpathStringWithFallbackStatic($xpath, [
+                "{$p}LclInstrm/{$p}Prtry",
+                "{$p}LclInstrm/{$p}Cd"
+            ], $txDtls);
 
-            $instructingAgentBic = $xpath->evaluate("string({$p}RltdAgts/{$p}InstgAgt/{$p}FinInstnId/{$p}BICFI)", $txDtls) ?: null;
-            $instructedAgentBic = $xpath->evaluate("string({$p}RltdAgts/{$p}InstdAgt/{$p}FinInstnId/{$p}BICFI)", $txDtls) ?: null;
-            $debtorAgentBic = $xpath->evaluate("string({$p}RltdAgts/{$p}DbtrAgt/{$p}FinInstnId/{$p}BICFI)", $txDtls) ?: null;
-            $creditorAgentBic = $xpath->evaluate("string({$p}RltdAgts/{$p}CdtrAgt/{$p}FinInstnId/{$p}BICFI)", $txDtls) ?: null;
+            // Agent BICs via Hilfsmethode
+            $instructingAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}InstgAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
+            $instructedAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}InstdAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
+            $debtorAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}DbtrAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
+            $creditorAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}CdtrAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
         }
 
         return new Camt054Transaction(
-            bookingDate: new DateTimeImmutable($bookingDateStr),
-            valutaDate: !empty($valutaDateStr) ? new DateTimeImmutable($valutaDateStr) : null,
-            amount: $amount,
-            currency: $currency,
-            creditDebit: $creditDebit,
-            entryReference: $entryRef,
-            accountServicerReference: $acctSvcrRef,
-            status: $status,
-            isReversal: $isReversal,
+            bookingDate: $basics['bookingDate'],
+            valutaDate: $basics['valutaDate'],
+            amount: $basics['amount'],
+            currency: $basics['currency'],
+            creditDebit: $basics['creditDebit'],
+            entryReference: $basics['entryRef'],
+            accountServicerReference: $basics['acctSvcrRef'],
+            status: $basics['status'],
+            isReversal: $basics['isReversal'],
             instructionId: $instructionId,
             endToEndId: $endToEndId,
             remittanceInfo: $remittanceInfo,
             purposeCode: $purposeCode,
-            bankTransactionCode: $bankTxCode,
-            domainCode: $domainCode,
-            familyCode: $familyCode,
-            subFamilyCode: $subFamilyCode,
+            bankTransactionCode: $basics['bankTxCode'],
+            domainCode: $basics['domainCode'],
+            familyCode: $basics['familyCode'],
+            subFamilyCode: $basics['subFamilyCode'],
             returnReason: $returnReason,
             localInstrumentCode: $localInstrumentCode,
             instructingAgentBic: $instructingAgentBic,
@@ -653,16 +598,8 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.029 Dokument (Resolution of Investigation).
      */
     public static function parseCamt029(string $xmlContent): Camt029Document {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler'));
-        }
-
-        [$xpath, $p] = static::initializeXPath($dom, 'camt.029');
+        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.029');
+        $xpath = $doc->getXPath();
 
         // Assignment parsen
         $assignmentId = $xpath->evaluate("string(//{$p}Assgnmt/{$p}Id)");
@@ -774,16 +711,8 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.055 Dokument (Customer Payment Cancellation Request).
      */
     public static function parseCamt055(string $xmlContent): Camt055Document {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler'));
-        }
-
-        [$xpath, $p] = static::initializeXPath($dom, 'camt.055');
+        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.055');
+        $xpath = $doc->getXPath();
 
         // Assignment (enthält messageId und creationDateTime)
         $msgId = $xpath->evaluate("string(//{$p}Assgnmt/{$p}Id)");
@@ -878,16 +807,8 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.056 Dokument (FI To FI Payment Cancellation Request).
      */
     public static function parseCamt056(string $xmlContent): Camt056Document {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML-Dokument: " . ($errors[0]->message ?? 'Unbekannter Fehler'));
-        }
-
-        [$xpath, $p] = static::initializeXPath($dom, 'camt.056');
+        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.056');
+        $xpath = $doc->getXPath();
 
         // Assignment (enthält messageId und creationDateTime)
         $msgId = $xpath->evaluate("string(//{$p}Assgnmt/{$p}Id)");

@@ -14,6 +14,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt1\Type101;
 
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Generators\Mt\Mt101Generator;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
@@ -180,41 +181,6 @@ class Document {
      * Generiert die SWIFT MT101 Nachricht.
      */
     public function __toString(): string {
-        $lines = [];
-
-        // Sequence A - General Information
-        $lines[] = ':20:' . $this->sendersReference;
-
-        if ($this->customerReference !== null) {
-            $lines[] = ':21R:' . $this->customerReference;
-        }
-
-        $lines[] = ':28D:' . $this->messageIndex;
-
-        // Ordering Customer
-        if ($this->orderingCustomer->hasAccount()) {
-            $lines[] = ':50H:' . $this->orderingCustomer->toOptionK();
-        } else {
-            $lines[] = ':50K:' . $this->orderingCustomer->toOptionK();
-        }
-
-        // Ordering Institution
-        if ($this->orderingInstitution !== null) {
-            if ($this->orderingInstitution->isBicOnly()) {
-                $lines[] = ':52A:' . $this->orderingInstitution->toOptionA();
-            } else {
-                $lines[] = ':52C:' . $this->orderingInstitution->toOptionK();
-            }
-        }
-
-        // Requested Execution Date
-        $lines[] = ':30:' . $this->requestedExecutionDate->format('ymd');
-
-        // Sequence B - Transaction Details
-        foreach ($this->transactions as $txn) {
-            $lines[] = (string) $txn;
-        }
-
-        return implode("\r\n", $lines);
+        return (new Mt101Generator())->generate($this);
     }
 }

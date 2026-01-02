@@ -15,8 +15,10 @@ namespace CommonToolkit\FinancialFormats\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\Entities\XML\ExtendedDOMDocument;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
+use CommonToolkit\Parsers\ExtendedDOMDocumentParser;
 use DateTimeImmutable;
 use DOMDocument;
 use DOMNode;
@@ -305,28 +307,17 @@ class CamtReflectionParser {
      * Initialisiert DOM und XPath für ein XML-Dokument.
      */
     private static function initXPath(string $xmlContent): array {
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        if (!$dom->loadXML($xmlContent)) {
-            $errors = libxml_get_errors();
-            libxml_clear_errors();
-            throw new RuntimeException("Ungültiges XML: " . ($errors[0]->message ?? 'Unbekannt'));
-        }
-
-        $xpath = new DOMXPath($dom);
-        $namespace = self::detectNamespace($dom);
+        $doc = ExtendedDOMDocumentParser::fromString($xmlContent);
+        $namespace = self::detectNamespace($doc);
         $useNamespace = !empty($namespace);
 
         if ($useNamespace) {
-            $xpath->registerNamespace('ns', $namespace);
+            $doc->registerXPathNamespace('ns', $namespace);
         }
 
-        libxml_clear_errors();
-
         return [
-            'dom' => $dom,
-            'xpath' => $xpath,
+            'dom' => $doc,
+            'xpath' => $doc->getXPath(),
             'namespace' => $namespace,
             'prefix' => $useNamespace ? 'ns:' : ''
         ];

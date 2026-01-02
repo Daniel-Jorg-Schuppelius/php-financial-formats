@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Converters\Banking;
 
-use CommonToolkit\FinancialFormats\Entities\Camt\Balance as CamtBalance;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type52\Document as Camt052Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type52\Transaction as Camt052Transaction;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Document as Camt053Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Transaction as Camt053Transaction;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type54\Document as Camt054Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type54\Transaction as Camt054Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance as CamtBalance;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Document as Camt052Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Transaction as Camt052Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document as Camt053Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction as Camt053Transaction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document as Camt054Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Transaction as Camt054Transaction;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance as Mt9Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference as Mt9Reference;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;

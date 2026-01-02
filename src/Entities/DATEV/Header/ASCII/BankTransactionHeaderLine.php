@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII;
 
-use CommonToolkit\Entities\Common\CSV\HeaderField;
-use CommonToolkit\Entities\Common\CSV\HeaderLine;
+use CommonToolkit\Entities\CSV\HeaderField;
+use CommonToolkit\Entities\CSV\HeaderLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderDefinition;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 

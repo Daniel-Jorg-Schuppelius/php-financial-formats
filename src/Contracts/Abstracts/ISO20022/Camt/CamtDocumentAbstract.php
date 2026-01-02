@@ -1,0 +1,224 @@
+<?php
+/*
+ * Created on   : Sun Jul 27 2025
+ * Author       : Daniel Jörg Schuppelius
+ * Author Uri   : https://schuppelius.org
+ * Filename     : CamtDocumentAbstract.php
+ * License      : AGPL-3.0-or-later
+ * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
+declare(strict_types=1);
+
+namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt;
+
+use CommonToolkit\Contracts\Abstracts\XML\DomainXmlDocumentAbstract;
+use CommonToolkit\Entities\XML\Document as XmlDocument;
+use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
+use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\Enums\CurrencyCode;
+use DateTimeImmutable;
+use InvalidArgumentException;
+
+/**
+ * Abstrakte Basisklasse für alle CAMT-Dokumente (052, 053, 054).
+ * 
+ * Enthält gemeinsame Eigenschaften und Methoden für:
+ * - CAMT.052: BankToCustomerAccountReport (Intraday)
+ * - CAMT.053: BankToCustomerStatement (End of Day)
+ * - CAMT.054: BankToCustomerDebitCreditNotification
+ * 
+ * Erbt von DomainXmlDocumentAbstract für XmlDocumentInterface-Implementierung.
+ * 
+ * @package CommonToolkit\Entities\Common\Banking
+ */
+abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements CamtDocumentInterface {
+    protected string $id;
+    protected DateTimeImmutable $creationDateTime;
+    protected string $accountIdentifier;
+    protected CurrencyCode $currency;
+    protected ?string $accountOwner;
+    protected ?string $servicerBic;
+    protected ?string $messageId;
+    protected ?string $sequenceNumber;
+
+    /** @var CamtTransactionAbstract[] */
+    protected array $entries = [];
+
+    /**
+     * @param string $id Statement/Report/Notification ID
+     * @param DateTimeImmutable|string $creationDateTime Erstellungszeitpunkt
+     * @param string $accountIdentifier IBAN oder andere Kontoidentifikation
+     * @param CurrencyCode|string $currency Kontowährung
+     * @param string|null $accountOwner Kontoinhaber
+     * @param string|null $servicerBic BIC der kontoführenden Bank
+     * @param string|null $messageId Nachrichten-ID (aus GrpHdr)
+     * @param string|null $sequenceNumber Sequenznummer
+     */
+    public function __construct(
+        string $id,
+        DateTimeImmutable|string $creationDateTime,
+        string $accountIdentifier,
+        CurrencyCode|string $currency,
+        ?string $accountOwner = null,
+        ?string $servicerBic = null,
+        ?string $messageId = null,
+        ?string $sequenceNumber = null
+    ) {
+        $this->id = $id;
+
+        $this->creationDateTime = $creationDateTime instanceof DateTimeImmutable
+            ? $creationDateTime
+            : new DateTimeImmutable($creationDateTime);
+
+        $this->accountIdentifier = $accountIdentifier;
+
+        $this->currency = $currency instanceof CurrencyCode
+            ? $currency
+            : CurrencyCode::tryFrom(strtoupper($currency))
+            ?? throw new InvalidArgumentException("Ungültige Währung: $currency");
+
+        $this->accountOwner = $accountOwner;
+        $this->servicerBic = $servicerBic;
+        $this->messageId = $messageId;
+        $this->sequenceNumber = $sequenceNumber;
+    }
+
+    /**
+     * Gibt den CAMT-Typ dieses Dokuments zurück.
+     */
+    abstract public function getCamtType(): CamtType;
+
+    public function getId(): string {
+        return $this->id;
+    }
+
+    public function getCreationDateTime(): DateTimeImmutable {
+        return $this->creationDateTime;
+    }
+
+    public function getAccountIdentifier(): string {
+        return $this->accountIdentifier;
+    }
+
+    /**
+     * Gibt die IBAN zurück (Alias für getAccountIdentifier bei IBAN-Konten).
+     */
+    public function getAccountIban(): string {
+        return $this->accountIdentifier;
+    }
+
+    public function getCurrency(): CurrencyCode {
+        return $this->currency;
+    }
+
+    public function getAccountOwner(): ?string {
+        return $this->accountOwner;
+    }
+
+    public function getServicerBic(): ?string {
+        return $this->servicerBic;
+    }
+
+    public function getMessageId(): ?string {
+        return $this->messageId;
+    }
+
+    public function getSequenceNumber(): ?string {
+        return $this->sequenceNumber;
+    }
+
+    /**
+     * @return CamtTransactionAbstract[]
+     */
+    public function getEntries(): array {
+        return $this->entries;
+    }
+
+    public function countEntries(): int {
+        return count($this->entries);
+    }
+
+    /**
+     * Berechnet die Summe aller Haben-Buchungen.
+     */
+    public function getTotalCredits(): float {
+        $sum = 0.0;
+        foreach ($this->entries as $entry) {
+            if ($entry->isCredit()) {
+                $sum += $entry->getAmount();
+            }
+        }
+        return round($sum, 2);
+    }
+
+    /**
+     * Berechnet die Summe aller Soll-Buchungen.
+     */
+    public function getTotalDebits(): float {
+        $sum = 0.0;
+        foreach ($this->entries as $entry) {
+            if ($entry->isDebit()) {
+                $sum += $entry->getAmount();
+            }
+        }
+        return round($sum, 2);
+    }
+
+    /**
+     * Berechnet den Netto-Umsatz (Haben - Soll).
+     */
+    public function getNetAmount(): float {
+        return round($this->getTotalCredits() - $this->getTotalDebits(), 2);
+    }
+
+    /**
+     * Generiert XML-Ausgabe für dieses Dokument.
+     */
+    abstract public function toXml(CamtVersion $version = CamtVersion::V02): string;
+
+    // =========================================================================
+    // DomainXmlDocumentAbstract Implementation
+    // =========================================================================
+
+    /**
+     * Version für das gecachte Dokument.
+     */
+    private ?CamtVersion $cachedVersion = null;
+
+    /**
+     * @inheritDoc
+     */
+    protected function getDefaultXml(): string {
+        return $this->toXml();
+    }
+
+    /**
+     * Gibt das Dokument als CommonToolkit XmlDocument zurück.
+     * 
+     * Überschreibt die Basisimplementierung um versionsbasiertes Caching zu ermöglichen.
+     * 
+     * @param CamtVersion $version CAMT-Version für die XML-Generierung
+     */
+    public function toXmlDocument(CamtVersion $version = CamtVersion::V02): XmlDocument {
+        if ($this->cachedVersion !== $version) {
+            $this->invalidateCache();
+            $this->cachedVersion = $version;
+        }
+
+        // Temporär die Version setzen für getDefaultXml()
+        $originalVersion = $this->cachedVersion;
+        $xml = $this->toXml($version);
+
+        return XmlDocument::fromString($xml);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function invalidateCache(): void {
+        parent::invalidateCache();
+        $this->cachedVersion = null;
+    }
+}

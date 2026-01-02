@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Tests\Converters\DATEV;
 
-use CommonToolkit\FinancialFormats\Builders\Mt940DocumentBuilder;
+use CommonToolkit\FinancialFormats\Builders\Mt\Mt940DocumentBuilder;
 use CommonToolkit\FinancialFormats\Converters\DATEV\Mt940ToBankTransactionConverter;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Registries\DATEV;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\{FieldHeaderInterface, MetaHeaderDefinitionInterface};
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 use RuntimeException;
 

@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Parsers;
 
-use CommonToolkit\Entities\Common\CSV\{DataLine, HeaderField};
+use CommonToolkit\Contracts\Abstracts\HelperAbstract;
+use CommonToolkit\Entities\CSV\{DataLine, HeaderField};
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderDefinition;
@@ -29,16 +30,10 @@ use RuntimeException;
  * 
  * @see https://help-center.apps.datev.de/documents/9226961
  */
-class BankTransactionParser {
+class BankTransactionParser extends HelperAbstract {
 
     /**
-     * Einfache Error-Logging Methode.
-     */
-    private static function logError(string $message): void {
-        error_log('[BankTransactionParser] ' . $message);
-    }
 
-    /**
      * Parst eine ASCII-Weiterverarbeitungsdatei aus einem String.
      *
      * @param string $csv Der CSV-Inhalt

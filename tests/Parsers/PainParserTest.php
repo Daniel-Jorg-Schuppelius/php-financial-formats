@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace Tests\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type001\Document as Pain001Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type002\Document as Pain002Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type007\Document as Pain007Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type008\Document as Pain008Document;
-use CommonToolkit\FinancialFormats\Entities\Pain\Type009\Document as Pain009Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document as Pain001Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\Document as Pain002Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document as Pain007Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain008Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
 use CommonToolkit\FinancialFormats\Enums\PainType;
 use CommonToolkit\FinancialFormats\Parsers\PainParser;
 use RuntimeException;

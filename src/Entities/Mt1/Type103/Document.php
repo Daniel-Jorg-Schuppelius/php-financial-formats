@@ -18,6 +18,7 @@ use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
 use CommonToolkit\FinancialFormats\Enums\BankOperationCode;
 use CommonToolkit\FinancialFormats\Enums\ChargesCode;
 use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Generators\Mt\Mt103Generator;
 use DateTimeImmutable;
 
 /**
@@ -195,101 +196,6 @@ class Document extends MtDocumentAbstract {
      * Generiert die SWIFT MT103 Nachricht.
      */
     public function __toString(): string {
-        $lines = [];
-
-        // Pflichtfelder
-        $lines[] = ':20:' . $this->sendersReference;
-        $lines[] = ':23B:' . $this->bankOperationCode->value;
-
-        // Transaction Type Code (optional)
-        if ($this->transactionTypeCode !== null) {
-            $lines[] = ':26T:' . $this->transactionTypeCode;
-        }
-
-        // Value Date, Currency, Amount
-        $lines[] = ':32A:' . $this->transferDetails->toField32A();
-
-        // Instructed Amount (bei Währungsumrechnung)
-        if ($this->transferDetails->hasCurrencyConversion()) {
-            $originalCurrency = $this->transferDetails->getOriginalCurrency();
-            $originalAmount = $this->transferDetails->getOriginalAmount();
-            if ($originalCurrency && $originalAmount) {
-                $lines[] = ':33B:' . $originalCurrency->value . str_replace('.', ',', number_format($originalAmount, 2, '.', ''));
-            }
-
-            // Exchange Rate
-            $exchangeRate = $this->transferDetails->getExchangeRate();
-            if ($exchangeRate !== null) {
-                $lines[] = ':36:' . number_format($exchangeRate, 6, ',', '');
-            }
-        }
-
-        // Ordering Customer
-        if ($this->orderingCustomer->hasAccount()) {
-            $lines[] = ':50K:' . $this->orderingCustomer->toOptionK();
-        } else {
-            $lines[] = ':50K:' . $this->orderingCustomer->toOptionK();
-        }
-
-        // Ordering Institution
-        if ($this->orderingInstitution !== null) {
-            if ($this->orderingInstitution->isBicOnly()) {
-                $lines[] = ':52A:' . $this->orderingInstitution->toOptionA();
-            } else {
-                $lines[] = ':52D:' . $this->orderingInstitution->toOptionK();
-            }
-        }
-
-        // Sender's Correspondent
-        if ($this->sendersCorrespondent !== null) {
-            if ($this->sendersCorrespondent->isBicOnly()) {
-                $lines[] = ':53A:' . $this->sendersCorrespondent->toOptionA();
-            } else {
-                $lines[] = ':53B:' . $this->sendersCorrespondent->toOptionK();
-            }
-        }
-
-        // Intermediary Institution
-        if ($this->intermediaryInstitution !== null) {
-            if ($this->intermediaryInstitution->isBicOnly()) {
-                $lines[] = ':56A:' . $this->intermediaryInstitution->toOptionA();
-            } else {
-                $lines[] = ':56D:' . $this->intermediaryInstitution->toOptionK();
-            }
-        }
-
-        // Account With Institution
-        if ($this->accountWithInstitution !== null) {
-            if ($this->accountWithInstitution->isBicOnly()) {
-                $lines[] = ':57A:' . $this->accountWithInstitution->toOptionA();
-            } else {
-                $lines[] = ':57D:' . $this->accountWithInstitution->toOptionK();
-            }
-        }
-
-        // Beneficiary
-        $lines[] = ':59:' . $this->beneficiary->toOptionK();
-
-        // Remittance Information
-        if ($this->remittanceInfo !== null) {
-            $lines[] = ':70:' . $this->remittanceInfo;
-        }
-
-        // Details of Charges
-        if ($this->chargesCode !== null) {
-            $lines[] = ':71A:' . $this->chargesCode->value;
-        }
-
-        // Sender to Receiver Information
-        if ($this->senderToReceiverInfo !== null) {
-            $lines[] = ':72:' . $this->senderToReceiverInfo;
-        }
-
-        // Regulatory Reporting
-        if ($this->regulatoryReporting !== null) {
-            $lines[] = ':77B:' . $this->regulatoryReporting;
-        }
-
-        return implode("\r\n", $lines);
+        return (new Mt103Generator())->generate($this);
     }
 }

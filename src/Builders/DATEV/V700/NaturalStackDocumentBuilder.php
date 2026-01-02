@@ -14,13 +14,12 @@ namespace CommonToolkit\FinancialFormats\Builders\DATEV\V700;
 
 use CommonToolkit\Builders\CSVDocumentBuilder;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\MetaHeaderLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\NaturalStack;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\V700\MetaHeaderDefinition;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\NaturalStackHeaderLine;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\{MetaHeaderField, NaturalStackHeaderField};
-use ERRORToolkit\Traits\ErrorLog;
 use RuntimeException;
 use DateTimeImmutable;
 
@@ -30,7 +29,6 @@ use DateTimeImmutable;
  * Natural-Buchungsdaten für Land-/Forstwirtschaft (SKR14).
  */
 final class NaturalStackDocumentBuilder extends CSVDocumentBuilder {
-    use ErrorLog;
 
     private ?MetaHeaderLine $metaHeader = null;
     private ?NaturalStackHeaderLine $fieldHeader = null;

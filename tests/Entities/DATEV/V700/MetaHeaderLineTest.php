@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Tests\CommonToolkit\Entities\DATEV\V700;
 
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\MetaHeaderLine;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\MetaHeaderField;
 use CommonToolkit\FinancialFormats\Registries\DATEV\HeaderRegistry;

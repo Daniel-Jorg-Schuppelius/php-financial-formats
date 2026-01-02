@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Tests\Parsers;
 
-use CommonToolkit\FinancialFormats\Entities\Camt\Type31\Document as Camt031Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type34\Document as Camt034Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type35\Document as Camt035Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type31\Document as Camt031Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type34\Document as Camt034Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type35\Document as Camt035Document;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Parsers\CamtReflectionParser;
 use CommonToolkit\FinancialFormats\Registries\CamtParserRegistry;

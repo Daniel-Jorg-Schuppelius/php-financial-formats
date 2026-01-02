@@ -12,28 +12,28 @@ declare(strict_types=1);
 
 namespace Tests\Parsers;
 
-use CommonToolkit\FinancialFormats\Entities\Camt\Type26\Document as Camt026Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type27\Document as Camt027Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type28\Document as Camt028Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type29\Document as Camt029Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type30\Document as Camt030Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type31\Document as Camt031Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type33\Document as Camt033Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type34\Document as Camt034Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type35\Document as Camt035Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type36\Document as Camt036Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type37\Document as Camt037Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type38\Document as Camt038Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type39\Document as Camt039Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type52\Document as Camt052Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Document as Camt053Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type54\Document as Camt054Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type55\Document as Camt055Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type56\Document as Camt056Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type57\Document as Camt057Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type58\Document as Camt058Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type59\Document as Camt059Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type87\Document as Camt087Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type26\Document as Camt026Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type27\Document as Camt027Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type28\Document as Camt028Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document as Camt029Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type30\Document as Camt030Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type31\Document as Camt031Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type33\Document as Camt033Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type34\Document as Camt034Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type35\Document as Camt035Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type36\Document as Camt036Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type37\Document as Camt037Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type38\Document as Camt038Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type39\Document as Camt039Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Document as Camt052Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document as Camt053Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document as Camt054Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\Document as Camt055Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document as Camt056Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57\Document as Camt057Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58\Document as Camt058Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\Document as Camt059Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type87\Document as Camt087Document;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\FinancialFormats\Parsers\CamtParser;
@@ -83,7 +83,7 @@ class CamtParserTest extends BaseTestCase {
         // Entries
         $this->assertGreaterThan(0, $document->countEntries());
 
-        /** @var \CommonToolkit\FinancialFormats\Entities\Camt\Type52\Transaction $firstEntry */
+        /** @var \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Transaction $firstEntry */
         $firstEntry = $document->getEntries()[0];
         $this->assertEquals(100000.0, $firstEntry->getAmount());
         $this->assertTrue($firstEntry->isCredit());
@@ -208,7 +208,7 @@ class CamtParserTest extends BaseTestCase {
 
         $this->assertGreaterThan(0, $document->countEntries());
 
-        /** @var \CommonToolkit\FinancialFormats\Entities\Camt\Type54\Transaction $firstEntry */
+        /** @var \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Transaction $firstEntry */
         $firstEntry = $document->getEntries()[0];
         $this->assertEquals(258808.98, $firstEntry->getAmount());
         $this->assertTrue($firstEntry->isDebit());
@@ -414,7 +414,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt055Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type55\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\Document::class, $document);
         $this->assertEquals(CamtType::CAMT055, $document->getCamtType());
         $this->assertEquals('CXLREQ-001', $document->getMessageId());
         $this->assertEquals('Test Unternehmen GmbH', $document->getInitiatingPartyName());
@@ -472,7 +472,7 @@ class CamtParserTest extends BaseTestCase {
     }
 
     public function testCamt055ToXml(): void {
-        $document = new \CommonToolkit\FinancialFormats\Entities\Camt\Type55\Document(
+        $document = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\Document(
             messageId: 'TEST-CXL-001',
             creationDateTime: '2025-07-27T10:00:00+02:00',
             numberOfTransactions: '1',
@@ -480,15 +480,15 @@ class CamtParserTest extends BaseTestCase {
             initiatingPartyName: 'Test AG'
         );
 
-        $underlying = new \CommonToolkit\FinancialFormats\Entities\Camt\Type55\UnderlyingTransaction(
+        $underlying = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\UnderlyingTransaction(
             originalGroupInformationMessageId: 'ORIG-MSG-001'
         );
 
-        $pmtInf = new \CommonToolkit\FinancialFormats\Entities\Camt\Type55\OriginalPaymentInformation(
+        $pmtInf = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\OriginalPaymentInformation(
             originalPaymentInformationId: 'PMTINF-001'
         );
 
-        $txInfo = new \CommonToolkit\FinancialFormats\Entities\Camt\Type55\PaymentCancellationRequest(
+        $txInfo = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\PaymentCancellationRequest(
             cancellationId: 'CXL-001',
             originalEndToEndId: 'E2E-001',
             originalAmount: '100.00',
@@ -521,7 +521,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt056Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type56\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document::class, $document);
         $this->assertEquals(CamtType::CAMT056, $document->getCamtType());
         $this->assertEquals('FITOFICXL-001', $document->getMessageId());
         $this->assertEquals('COBADEFFXXX', $document->getInstructingAgentBic());
@@ -557,7 +557,7 @@ class CamtParserTest extends BaseTestCase {
     }
 
     public function testCamt056ToXml(): void {
-        $document = new \CommonToolkit\FinancialFormats\Entities\Camt\Type56\Document(
+        $document = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document(
             messageId: 'TEST-FITOFI-001',
             creationDateTime: '2025-07-27T11:00:00+02:00',
             numberOfTransactions: '1',
@@ -565,11 +565,11 @@ class CamtParserTest extends BaseTestCase {
             instructedAgentBic: 'DEUTDEFFXXX'
         );
 
-        $underlying = new \CommonToolkit\FinancialFormats\Entities\Camt\Type56\UnderlyingTransaction(
+        $underlying = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\UnderlyingTransaction(
             originalGroupInformationMessageId: 'PACS008-001'
         );
 
-        $txInfo = new \CommonToolkit\FinancialFormats\Entities\Camt\Type56\PaymentCancellationRequest(
+        $txInfo = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\PaymentCancellationRequest(
             originalEndToEndId: 'E2E-001',
             originalTransactionId: 'TX-001',
             originalInterbankSettlementAmount: '5000.00',
@@ -601,7 +601,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt029Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type29\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document::class, $document);
         $this->assertEquals(CamtType::CAMT029, $document->getCamtType());
         $this->assertEquals('RSLTN-001', $document->getAssignmentId());
         $this->assertEquals('DEUTDEFFXXX', $document->getAssignerAgentBic());
@@ -675,7 +675,7 @@ class CamtParserTest extends BaseTestCase {
     }
 
     public function testCamt029ToXml(): void {
-        $document = new \CommonToolkit\FinancialFormats\Entities\Camt\Type29\Document(
+        $document = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document(
             assignmentId: 'TEST-RSLTN-001',
             creationDateTime: '2025-07-27T15:00:00+02:00',
             assignerAgentBic: 'DEUTDEFFXXX',
@@ -683,24 +683,24 @@ class CamtParserTest extends BaseTestCase {
             investigationStatus: 'CNCL'
         );
 
-        $grpInfAndSts = new \CommonToolkit\FinancialFormats\Entities\Camt\Type29\OriginalGroupInformationAndStatus(
+        $grpInfAndSts = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\OriginalGroupInformationAndStatus(
             originalMessageId: 'ORIG-MSG-001',
             groupCancellationStatus: 'ACCR'
         );
 
-        $txInfAndSts = new \CommonToolkit\FinancialFormats\Entities\Camt\Type29\TransactionInformationAndStatus(
+        $txInfAndSts = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\TransactionInformationAndStatus(
             cancellationStatusId: 'CXLSTS-001',
             originalEndToEndId: 'E2E-001',
             transactionCancellationStatus: 'CNCL'
         );
 
-        $cxlStatus = new \CommonToolkit\FinancialFormats\Entities\Camt\Type29\CancellationStatus(
+        $cxlStatus = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationStatus(
             statusCode: 'FRAD',
             additionalInformation: 'Betrugsverdacht bestätigt'
         );
         $txInfAndSts->addCancellationStatusReasonInformation($cxlStatus);
 
-        $details = new \CommonToolkit\FinancialFormats\Entities\Camt\Type29\CancellationDetails($grpInfAndSts);
+        $details = new \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationDetails($grpInfAndSts);
         $details->addTransactionInformationAndStatus($txInfAndSts);
         $document->addCancellationDetails($details);
 
@@ -771,7 +771,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt026Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type26\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type26\Document::class, $document);
         $this->assertEquals(CamtType::CAMT026, $document->getCamtType());
         $this->assertEquals('ASGN-2025-UTA-001', $document->getAssignmentId());
         $this->assertEquals('COBADEFFXXX', $document->getAssignerAgentBic());
@@ -845,7 +845,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt027Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type27\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type27\Document::class, $document);
         $this->assertEquals(CamtType::CAMT027, $document->getCamtType());
         $this->assertEquals('ASGN-2025-CNR-001', $document->getAssignmentId());
         $this->assertEquals('DEUTDEFFXXX', $document->getAssignerAgentBic());
@@ -908,7 +908,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt028Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type28\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type28\Document::class, $document);
         $this->assertEquals(CamtType::CAMT028, $document->getCamtType());
         $this->assertEquals('ASGN-2025-API-001', $document->getAssignmentId());
         $this->assertEquals('COBADEFFXXX', $document->getAssignerAgentBic());
@@ -972,7 +972,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt087Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type87\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type87\Document::class, $document);
         $this->assertEquals(CamtType::CAMT087, $document->getCamtType());
         $this->assertEquals('ASGN-2025-RMP-001', $document->getAssignmentId());
         $this->assertEquals('DEUTDEFFXXX', $document->getAssignerAgentBic());
@@ -1109,7 +1109,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt030Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type30\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type30\Document::class, $document);
         $this->assertEquals(CamtType::CAMT030, $document->getCamtType());
         $this->assertEquals('NTFCTN-2025-001', $document->getHeaderMessageId());
         $this->assertEquals('CASE-2025-ABC123', $document->getCaseId());
@@ -1162,7 +1162,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt031Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type31\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type31\Document::class, $document);
         $this->assertEquals(CamtType::CAMT031, $document->getCamtType());
         $this->assertEquals('RJCT-2025-001', $document->getAssignmentId());
         $this->assertEquals('CASE-2025-ABC123', $document->getCaseId());
@@ -1214,7 +1214,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt033Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type33\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type33\Document::class, $document);
         $this->assertEquals(CamtType::CAMT033, $document->getCamtType());
         $this->assertEquals('DPLCT-2025-001', $document->getAssignmentId());
         $this->assertEquals('CASE-2025-XYZ789', $document->getCaseId());
@@ -1269,7 +1269,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt057Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type57\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57\Document::class, $document);
         $this->assertEquals(CamtType::CAMT057, $document->getCamtType());
         $this->assertEquals('NTFRCV-2025-001', $document->getGroupHeaderMessageId());
         $this->assertEquals('Hauptkasse GmbH', $document->getInitiatingPartyName());
@@ -1337,7 +1337,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt058Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type58\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58\Document::class, $document);
         $this->assertEquals(CamtType::CAMT058, $document->getCamtType());
         $this->assertEquals('CXLADVC-2025-001', $document->getGroupHeaderMessageId());
         $this->assertEquals('Hauptkasse GmbH', $document->getInitiatingPartyName());
@@ -1397,7 +1397,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt059Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type59\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\Document::class, $document);
         $this->assertEquals(CamtType::CAMT059, $document->getCamtType());
         $this->assertEquals('STSRPT-2025-001', $document->getGroupHeaderMessageId());
         $this->assertEquals('Commerzbank AG', $document->getInitiatingPartyName());
@@ -1464,7 +1464,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt034Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type34\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type34\Document::class, $document);
         $this->assertEquals(CamtType::CAMT034, $document->getCamtType());
         $this->assertEquals('DPL-2025-001', $document->getAssignmentId());
         $this->assertEquals('COBADEFFXXX', $document->getAssignerAgentBic());
@@ -1518,7 +1518,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt035Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type35\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type35\Document::class, $document);
         $this->assertEquals(CamtType::CAMT035, $document->getCamtType());
         $this->assertEquals('PFI-2025-001', $document->getAssignmentId());
         $this->assertEquals('COBADEFFXXX', $document->getAssignerAgentBic());
@@ -1570,7 +1570,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt036Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type36\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type36\Document::class, $document);
         $this->assertEquals(CamtType::CAMT036, $document->getCamtType());
         $this->assertEquals('DAR-2025-001', $document->getAssignmentId());
         $this->assertEquals('DEUTDEFFXXX', $document->getAssignerAgentBic());
@@ -1626,7 +1626,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt037Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type37\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type37\Document::class, $document);
         $this->assertEquals(CamtType::CAMT037, $document->getCamtType());
         $this->assertEquals('DAREQ-2025-001', $document->getAssignmentId());
         $this->assertEquals('COBADEFFXXX', $document->getAssignerAgentBic());
@@ -1686,7 +1686,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt038Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type38\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type38\Document::class, $document);
         $this->assertEquals(CamtType::CAMT038, $document->getCamtType());
         $this->assertEquals('CSRR-2025-001', $document->getRequestId());
         $this->assertEquals('COBADEFFXXX', $document->getRequesterAgentBic());
@@ -1738,7 +1738,7 @@ class CamtParserTest extends BaseTestCase {
         /** @var Camt039Document $document */
         $document = CamtParser::parseFile($file);
 
-        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\Camt\Type39\Document::class, $document);
+        $this->assertInstanceOf(\CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type39\Document::class, $document);
         $this->assertEquals(CamtType::CAMT039, $document->getCamtType());
         $this->assertEquals('CSR-2025-001', $document->getReportId());
         $this->assertEquals('DEUTDEFFXXX', $document->getReporterAgentBic());

@@ -2,6 +2,10 @@
 
 PHP library for parsing, validating and processing financial and banking file formats such as **CAMT**, **MT (SWIFT)**, **PAIN** and **DATEV-FORMATS**.
 
+[![Tests](https://img.shields.io/badge/tests-1066%20passed-brightgreen)](tests/)
+[![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue)](https://php.net)
+[![License](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
+
 ---
 
 ## Scope
@@ -10,10 +14,10 @@ This library provides structured building blocks for working with banking and fi
 
 - **ISO 20022 CAMT** (camt.026-039, camt.052, camt.053, camt.054, camt.055, camt.056, camt.057-059, camt.087)
 - **SWIFT MT formats** (MT940, MT941, MT942, MT101, MT103)
-- **SEPA PAIN formats** (pain.001, pain.002, pain.007, pain.008, pain.009)
+- **SEPA PAIN formats** (pain.001, pain.002, pain.007, pain.008, pain.009-014, pain.017, pain.018)
 - **DATEV accounting formats** with dynamic version discovery (V700+)
 - Strongly typed value objects and domain models
-- Parsers, builders and converters with clear responsibilities
+- Parsers, builders, generators and converters with clear responsibilities
 
 ---
 
@@ -28,6 +32,7 @@ src/
 ├── Converters/         # Format converters (Camt053ToMt940, DATEV↔BankTransaction)
 ├── Entities/           # Immutable domain models
 ├── Enums/              # Typed enums with factory methods
+├── Generators/         # XML/SWIFT output generators (CAMT, MT, Pain)
 ├── Helper/             # Validators and file handlers
 ├── Parsers/            # Document parsers (CamtParser, PainParser, Mt940DocumentParser)
 ├── Registries/         # DATEV version discovery
@@ -90,7 +95,7 @@ $mt940 = Camt053ToMt940Converter::convert($camt053Document);
 ### Building a Pain.001 Document
 
 ```php
-use CommonToolkit\FinancialFormats\Builders\Pain001DocumentBuilder;
+use CommonToolkit\FinancialFormats\Builders\Pain\Pain001DocumentBuilder;
 
 $builder = new Pain001DocumentBuilder();
 $document = $builder
@@ -98,6 +103,62 @@ $document = $builder
     ->setInitiatingPartyName('Company GmbH')
     ->addPayment(...)
     ->build();
+```
+
+### Building a Pain.008 Direct Debit
+
+```php
+use CommonToolkit\FinancialFormats\Builders\Pain\Pain008DocumentBuilder;
+use CommonToolkit\FinancialFormats\Enums\SequenceType;
+
+$document = Pain008DocumentBuilder::createSepaDirectDebit(
+    messageId: 'DD-001',
+    creditorName: 'Company GmbH',
+    creditorIban: 'DE89370400440532013000',
+    creditorBic: 'COBADEFFXXX',
+    creditorSchemeId: 'DE98ZZZ09999999999',
+    debtorName: 'Max Mustermann',
+    debtorIban: 'DE91100000000123456789',
+    amount: 100.00,
+    mandateId: 'MANDATE-001',
+    mandateDate: new DateTimeImmutable('2024-01-01'),
+    reference: 'Rechnung 2024-001',
+    sequenceType: SequenceType::FIRST
+);
+```
+
+### Building an MT101 Batch Payment
+
+```php
+use CommonToolkit\FinancialFormats\Builders\Mt\Mt101DocumentBuilder;
+use CommonToolkit\Enums\CurrencyCode;
+
+$document = Mt101DocumentBuilder::create('BATCH-001')
+    ->orderingCustomer('DE89370400440532013000', 'Company GmbH')
+    ->requestedExecutionDate(new DateTimeImmutable('2025-03-15'))
+    ->beginTransaction('TXN-001')
+    ->amount(1000.00, CurrencyCode::Euro, new DateTimeImmutable('2025-03-15'))
+    ->beneficiary('DE91100000000123456789', 'Max Mustermann')
+    ->remittanceInfo('Payment for Invoice 2025-001')
+    ->done()
+    ->build();
+```
+
+### Building an MT103 Single Transfer
+
+```php
+use CommonToolkit\FinancialFormats\Builders\Mt\Mt103DocumentBuilder;
+
+$document = Mt103DocumentBuilder::createSimple(
+    sendersReference: 'REF-001',
+    orderingAccount: 'DE89370400440532013000',
+    orderingName: 'Company GmbH',
+    beneficiaryAccount: 'DE91100000000123456789',
+    beneficiaryName: 'Max Mustermann',
+    amount: 1500.00,
+    valueDate: new DateTimeImmutable('2025-03-15'),
+    remittanceInfo: 'Payment for services'
+);
 ```
 
 ---
@@ -117,25 +178,32 @@ composer require dschuppelius/php-financial-formats
 
 ## Supported Formats
 
-| Format | Type | Parser | Builder |
-|--------|------|--------|---------|
-| CAMT.052 | Bank to Customer Account Report | ✅ | ✅ |
-| CAMT.053 | Bank to Customer Statement | ✅ | ✅ |
-| CAMT.054 | Bank to Customer Debit/Credit Notification | ✅ | ✅ |
-| CAMT.026-039 | Exception & Investigation Messages | ✅ | ❌ |
-| CAMT.055-059 | Payment Cancellation/Status | ✅ | ❌ |
-| CAMT.087 | Request to Modify Payment | ✅ | ❌ |
-| MT940 | Customer Statement | ✅ | ✅ |
-| MT941 | Balance Report | ✅ | ✅ |
-| MT942 | Interim Transaction Report | ✅ | ✅ |
-| MT101 | Request for Transfer | ✅ | ❌ |
-| MT103 | Single Customer Credit Transfer | ✅ | ❌ |
-| Pain.001 | Customer Credit Transfer Initiation | ✅ | ✅ |
-| Pain.002 | Payment Status Report | ✅ | ❌ |
-| Pain.007 | Customer Payment Reversal | ✅ | ❌ |
-| Pain.008 | Customer Direct Debit Initiation | ✅ | ✅ |
-| Pain.009 | Mandate Initiation Request | ✅ | ❌ |
-| DATEV | Accounting Export (V700+) | ✅ | ✅ |
+| Format | Type | Parser | Builder | Generator |
+|--------|------|--------|---------|-----------|
+| CAMT.052 | Bank to Customer Account Report | ✅ | ✅ | ✅ |
+| CAMT.053 | Bank to Customer Statement | ✅ | ✅ | ✅ |
+| CAMT.054 | Bank to Customer Debit/Credit Notification | ✅ | ✅ | ✅ |
+| CAMT.026-039 | Exception & Investigation Messages | ✅ | ❌ | ❌ |
+| CAMT.055-059 | Payment Cancellation/Status | ✅ | ❌ | ❌ |
+| CAMT.087 | Request to Modify Payment | ✅ | ❌ | ❌ |
+| MT940 | Customer Statement | ✅ | ✅ | ✅ |
+| MT941 | Balance Report | ✅ | ✅ | ✅ |
+| MT942 | Interim Transaction Report | ✅ | ✅ | ✅ |
+| MT101 | Request for Transfer | ✅ | ✅ | ✅ |
+| MT103 | Single Customer Credit Transfer | ✅ | ✅ | ✅ |
+| Pain.001 | Customer Credit Transfer Initiation | ✅ | ✅ | ✅ |
+| Pain.002 | Payment Status Report | ✅ | ✅ | ✅ |
+| Pain.007 | Customer Payment Reversal | ✅ | ✅ | ✅ |
+| Pain.008 | Customer Direct Debit Initiation | ✅ | ✅ | ✅ |
+| Pain.009 | Mandate Initiation Request | ✅ | ✅ | ✅ |
+| Pain.010 | Mandate Amendment Request | ✅ | ✅ | ✅ |
+| Pain.011 | Mandate Cancellation Request | ✅ | ✅ | ✅ |
+| Pain.012 | Mandate Acceptance Report | ✅ | ✅ | ✅ |
+| Pain.013 | Creditor Payment Activation Request | ✅ | ✅ | ✅ |
+| Pain.014 | Creditor Payment Activation Status | ✅ | ✅ | ✅ |
+| Pain.017 | Mandate Copy Request | ✅ | ✅ | ✅ |
+| Pain.018 | Mandate Suspension Request | ✅ | ✅ | ✅ |
+| DATEV | Accounting Export (V700+) | ✅ | ✅ | - |
 
 ---
 

@@ -12,18 +12,20 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Interfaces;
 
+use CommonToolkit\Contracts\Interfaces\XML\XmlDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
  * Interface für alle CAMT-Dokumente.
  * 
+ * Erweitert XmlDocumentInterface um CAMT-spezifische Funktionalität.
  * Ermöglicht einheitliche Handhabung aller CAMT-Formate
  * (052, 053, 054, 055, 056, 026-039, 057-059, 087).
  * 
  * @package CommonToolkit\FinancialFormats\Contracts\Interfaces
  */
-interface CamtDocumentInterface {
+interface CamtDocumentInterface extends XmlDocumentInterface {
     /**
      * Gibt den CAMT-Typ des Dokuments zurück.
      */

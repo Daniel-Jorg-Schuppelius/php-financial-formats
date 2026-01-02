@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Parsers;
 
-use CommonToolkit\Entities\Common\CSV\{DataLine, HeaderLine};
+use CommonToolkit\Entities\CSV\{DataLine, HeaderLine};
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\FinancialFormats\Entities\DATEV\MetaHeaderLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\{
@@ -37,7 +37,7 @@ use CommonToolkit\FinancialFormats\Registries\DATEV\HeaderRegistry;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\MetaHeaderDefinitionInterface;
 use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 use CommonToolkit\Helper\FileSystem\File;
-use CommonToolkit\Entities\Common\CSV\Document as CSVDocument;
+use CommonToolkit\Entities\CSV\Document as CSVDocument;
 use CommonToolkit\Helper\Data\StringHelper;
 use CommonToolkit\Parsers\CSVDocumentParser;
 use Exception;

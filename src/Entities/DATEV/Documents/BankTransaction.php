@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\DATEV\Documents;
 
-use CommonToolkit\Entities\Common\CSV\{HeaderField, DataLine, Document as CSVDocument, ColumnWidthConfig};
+use CommonToolkit\Entities\CSV\{HeaderField, DataLine, Document as CSVDocument, ColumnWidthConfig};
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderLine;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;

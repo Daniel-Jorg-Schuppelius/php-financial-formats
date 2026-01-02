@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Converters\DATEV;
 
-use CommonToolkit\FinancialFormats\Builders\Mt940DocumentBuilder;
+use CommonToolkit\FinancialFormats\Builders\Mt\Mt940DocumentBuilder;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\BankTransactionConverterAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction as Mt940Transaction;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;

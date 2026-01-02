@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Tests\Builders\DATEV\V700;
 
 use CommonToolkit\FinancialFormats\Builders\DATEV\V700\BookingDocumentBuilder;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BookingBatch;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\BookingBatchHeaderLine;
 use CommonToolkit\FinancialFormats\Parsers\DatevDocumentParser;

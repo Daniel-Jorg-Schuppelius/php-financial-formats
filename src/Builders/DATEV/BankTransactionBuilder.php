@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Builders\DATEV;
 
 use CommonToolkit\Builders\CSVDocumentBuilder;
-use CommonToolkit\Entities\Common\CSV\ColumnWidthConfig;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\ColumnWidthConfig;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;

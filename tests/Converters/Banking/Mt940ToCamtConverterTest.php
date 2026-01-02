@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace Tests\Converters\Banking;
 
 use CommonToolkit\FinancialFormats\Converters\Banking\Mt940ToCamtConverter;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type52\Document as Camt052Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Document as Camt053Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type54\Document as Camt054Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Document as Camt052Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document as Camt053Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document as Camt054Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;

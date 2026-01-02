@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Converters\DATEV;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\BankTransactionConverterAbstract;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Document as Camt053Document;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Transaction as Camt053Transaction;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document as Camt053Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction as Camt053Transaction;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField as F;
 use Throwable;

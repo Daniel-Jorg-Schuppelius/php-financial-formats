@@ -14,7 +14,7 @@ namespace Tests\Converters\DATEV;
 
 use CommonToolkit\FinancialFormats\Builders\DATEV\BankTransactionBuilder;
 use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToCamt053Converter;
-use CommonToolkit\FinancialFormats\Entities\Camt\Type53\Document as Camt053Document;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document as Camt053Document;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;

@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Converters\DATEV;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\BankTransactionConverterAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction as Mt940Transaction;
-use CommonToolkit\Entities\Common\CSV\DataLine;
+use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField as F;
 use Throwable;

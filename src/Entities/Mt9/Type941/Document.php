@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type941;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Enums\MtType;
-use CommonToolkit\Enums\CurrencyCode;
+use CommonToolkit\FinancialFormats\Generators\Mt\Mt941Generator;
 use DateTimeImmutable;
 
 /**
@@ -129,24 +129,6 @@ class Document extends MtDocumentAbstract {
     }
 
     public function __toString(): string {
-        $lines = [
-            ':20:' . $this->referenceId,
-            ':25:' . $this->accountId,
-            ':28C:' . $this->statementNumber,
-            ':60F:' . (string) $this->openingBalance,
-            ':62F:' . (string) $this->closingBalance,
-        ];
-
-        if ($this->closingAvailableBalance !== null) {
-            $lines[] = ':64:' . (string) $this->closingAvailableBalance;
-        }
-
-        foreach ($this->forwardAvailableBalances as $balance) {
-            $lines[] = ':65:' . (string) $balance;
-        }
-
-        $lines[] = '-';
-
-        return implode("\r\n", $lines) . "\r\n";
+        return (new Mt941Generator())->generate($this);
     }
 }
