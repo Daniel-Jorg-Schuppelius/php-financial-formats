@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58\CancellationItem;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58\Document;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
-use InvalidArgumentException;
 
 /**
  * Generator für CAMT.058 XML (Notification to Receive Cancellation Advice).
@@ -34,13 +32,7 @@ class Camt058Generator extends CamtGeneratorAbstract {
         return CamtType::CAMT058;
     }
 
-    /**
-     * @param Document $document
-     */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V09): string {
-        if (!$document instanceof Document) {
-            throw new InvalidArgumentException('Camt058Generator erwartet ein Camt.058 Document.');
-        }
+    public function generate(Document $document, CamtVersion $version = CamtVersion::V09): string {
 
         $this->initCamtDocument('NtfctnToRcvCxlAdvc', $version);
 

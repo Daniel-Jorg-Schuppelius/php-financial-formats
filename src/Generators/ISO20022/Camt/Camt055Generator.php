@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\OriginalPaymentInformation;
@@ -20,7 +19,6 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\PaymentCancella
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\UnderlyingTransaction;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
-use InvalidArgumentException;
 
 /**
  * Generator für CAMT.055 XML (Customer Payment Cancellation Request).
@@ -36,13 +34,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
         return CamtType::CAMT055;
     }
 
-    /**
-     * @param Document $document
-     */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V12): string {
-        if (!$document instanceof Document) {
-            throw new InvalidArgumentException('Camt055Generator erwartet ein Camt.055 Document.');
-        }
+    public function generate(Document $document, CamtVersion $version = CamtVersion::V12): string {
 
         $this->initCamtDocument('CstmrPmtCxlReq', $version);
 
@@ -131,7 +123,9 @@ class Camt055Generator extends CamtGeneratorAbstract {
         $this->builder->addElement('CtrlData');
         $this->builder->addChild('NbOfTxs', $this->escape($document->getNumberOfTransactions()));
 
-        $this->addChildIfNotEmpty('CtrlSum', $document->getControlSum());
+        if ($document->getControlSum() !== null) {
+            $this->builder->addChild('CtrlSum', $this->formatAmount($document->getControlSum()));
+        }
 
         $this->builder->end(); // CtrlData
     }

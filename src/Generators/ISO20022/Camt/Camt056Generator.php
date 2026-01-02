@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\PaymentCancellationRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\UnderlyingTransaction;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
-use InvalidArgumentException;
 
 /**
  * Generator für CAMT.056 XML (FI To FI Payment Cancellation Request).
@@ -35,13 +33,7 @@ class Camt056Generator extends CamtGeneratorAbstract {
         return CamtType::CAMT056;
     }
 
-    /**
-     * @param Document $document
-     */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V11): string {
-        if (!$document instanceof Document) {
-            throw new InvalidArgumentException('Camt056Generator erwartet ein Camt.056 Document.');
-        }
+    public function generate(Document $document, CamtVersion $version = CamtVersion::V11): string {
 
         $this->initCamtDocument('FIToFIPmtCxlReq', $version);
 

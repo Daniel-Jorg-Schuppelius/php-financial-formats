@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt;
 
-use CommonToolkit\Entities\XML\Document as XmlDocument;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Iso20022GeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
@@ -36,11 +36,6 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
      * Gibt den CAMT-Typ dieses Generators zurück.
      */
     abstract public function getCamtType(): CamtType;
-
-    /**
-     * Generiert das XML aus einem CAMT-Dokument.
-     */
-    abstract public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V02): string;
 
     /**
      * Initialisiert das CAMT-Dokument mit Root-Element.
@@ -233,14 +228,6 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     protected function endEntry(): self {
         $this->builder->end(); // Ntry
         return $this;
-    }
-
-    /**
-     * Gibt das generierte Dokument als CommonToolkit XmlDocument zurück.
-     */
-    public function toXmlDocument(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V02): XmlDocument {
-        $this->generate($document, $version);
-        return XmlDocument::fromDomDocument($this->builder->build());
     }
 
     /**

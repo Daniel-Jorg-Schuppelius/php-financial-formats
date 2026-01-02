@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57\NotificationItem;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
-use InvalidArgumentException;
 
 /**
  * Generator für CAMT.057 XML (Notification to Receive).
@@ -34,13 +32,7 @@ class Camt057Generator extends CamtGeneratorAbstract {
         return CamtType::CAMT057;
     }
 
-    /**
-     * @param Document $document
-     */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V08): string {
-        if (!$document instanceof Document) {
-            throw new InvalidArgumentException('Camt057Generator erwartet ein Camt.057 Document.');
-        }
+    public function generate(Document $document, CamtVersion $version = CamtVersion::V08): string {
 
         $this->initCamtDocument('NtfctnToRcv', $version);
 

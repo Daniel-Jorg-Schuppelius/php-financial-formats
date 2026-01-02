@@ -2,7 +2,6 @@
 
 PHP library for parsing, validating and processing financial and banking file formats such as **CAMT**, **MT (SWIFT)**, **PAIN** and **DATEV-FORMATS**.
 
-[![Tests](https://img.shields.io/badge/tests-1066%20passed-brightgreen)](tests/)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue)](https://php.net)
 [![License](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
 
@@ -161,6 +160,45 @@ $document = Mt103DocumentBuilder::createSimple(
 );
 ```
 
+### DATEV Buchungsstapel erstellen
+
+```php
+use CommonToolkit\FinancialFormats\Builders\DATEV\V700\BookingDocumentBuilder;
+use CommonToolkit\Enums\CurrencyCode;
+
+$builder = new BookingDocumentBuilder();
+$document = $builder
+    ->setConsultantNumber(12345)
+    ->setClientNumber(1)
+    ->setFiscalYearBegin(new DateTimeImmutable('2025-01-01'))
+    ->setAccountLength(4)
+    ->addBooking(
+        amount: 1190.00,
+        offsetAccount: 8400,
+        bookingDate: new DateTimeImmutable('2025-01-15'),
+        bookingText: 'Warenverkauf',
+        account: 1200,
+        currency: CurrencyCode::Euro
+    )
+    ->build();
+```
+
+### DATEV Version Discovery
+
+```php
+use CommonToolkit\FinancialFormats\Registries\DATEV\VersionDiscovery;
+use CommonToolkit\FinancialFormats\Registries\DATEV\HeaderRegistry;
+use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
+
+// Verfügbare Versionen abrufen
+$versions = VersionDiscovery::getAvailableVersions(); // [700, ...]
+
+// Format-Unterstützung prüfen
+if (VersionDiscovery::isFormatSupported(Category::Buchungsstapel, 700)) {
+    $definition = HeaderRegistry::getFormatDefinition(Category::Buchungsstapel, 700);
+}
+```
+
 ---
 
 ## Installation
@@ -180,17 +218,33 @@ composer require dschuppelius/php-financial-formats
 
 | Format | Type | Parser | Builder | Generator |
 |--------|------|--------|---------|-----------|
-| CAMT.052 | Bank to Customer Account Report | ✅ | ✅ | ✅ |
-| CAMT.053 | Bank to Customer Statement | ✅ | ✅ | ✅ |
-| CAMT.054 | Bank to Customer Debit/Credit Notification | ✅ | ✅ | ✅ |
-| CAMT.026-039 | Exception & Investigation Messages | ✅ | ❌ | ❌ |
-| CAMT.055-059 | Payment Cancellation/Status | ✅ | ❌ | ❌ |
-| CAMT.087 | Request to Modify Payment | ✅ | ❌ | ❌ |
+| MT101 | Request for Transfer | ✅ | ✅ | ✅ |
+| MT103 | Single Customer Credit Transfer | ✅ | ✅ | ✅ |
 | MT940 | Customer Statement | ✅ | ✅ | ✅ |
 | MT941 | Balance Report | ✅ | ✅ | ✅ |
 | MT942 | Interim Transaction Report | ✅ | ✅ | ✅ |
-| MT101 | Request for Transfer | ✅ | ✅ | ✅ |
-| MT103 | Single Customer Credit Transfer | ✅ | ✅ | ✅ |
+| CAMT.026 | Unable to Apply | ✅ | ✅ | ✅ |
+| CAMT.027 | Claim Non Receipt | ✅ | ✅ | ✅ |
+| CAMT.028 | Additional Payment Information | ✅ | ✅ | ✅ |
+| CAMT.029 | Resolution of Investigation | ✅ | ✅ | ✅ |
+| CAMT.030 | Notification of Case Assignment | ✅ | ✅ | ✅ |
+| CAMT.031 | Reject Investigation | ✅ | ✅ | ✅ |
+| CAMT.033 | Request for Duplicate | ✅ | ✅ | ✅ |
+| CAMT.034 | Duplicate | ✅ | ✅ | ✅ |
+| CAMT.035 | Proprietary Format Investigation | ✅ | ✅ | ✅ |
+| CAMT.036 | Debit Authorisation Response | ✅ | ✅ | ✅ |
+| CAMT.037 | Debit Authorisation Request | ✅ | ✅ | ✅ |
+| CAMT.038 | Case Status Report Request | ✅ | ✅ | ✅ |
+| CAMT.039 | Case Status Report | ✅ | ✅ | ✅ |
+| CAMT.052 | Bank to Customer Account Report | ✅ | ✅ | ✅ |
+| CAMT.053 | Bank to Customer Statement | ✅ | ✅ | ✅ |
+| CAMT.054 | Bank to Customer Debit/Credit Notification | ✅ | ✅ | ✅ |
+| CAMT.055 | Customer Payment Cancellation Request | ✅ | ✅ | ✅ |
+| CAMT.056 | FI to FI Payment Cancellation Request | ✅ | ✅ | ✅ |
+| CAMT.057 | Notification To Receive | ✅ | ✅ | ✅ |
+| CAMT.058 | Notification To Receive Cancellation Advice | ✅ | ✅ | ✅ |
+| CAMT.059 | Notification To Receive Status Report | ✅ | ✅ | ✅ |
+| CAMT.087 | Request to Modify Payment | ✅ | ✅ | ✅ |
 | Pain.001 | Customer Credit Transfer Initiation | ✅ | ✅ | ✅ |
 | Pain.002 | Payment Status Report | ✅ | ✅ | ✅ |
 | Pain.007 | Customer Payment Reversal | ✅ | ✅ | ✅ |
@@ -203,7 +257,21 @@ composer require dschuppelius/php-financial-formats
 | Pain.014 | Creditor Payment Activation Status | ✅ | ✅ | ✅ |
 | Pain.017 | Mandate Copy Request | ✅ | ✅ | ✅ |
 | Pain.018 | Mandate Suspension Request | ✅ | ✅ | ✅ |
-| DATEV | Accounting Export (V700+) | ✅ | ✅ | - |
+
+### DATEV Formate (V700+)
+
+Das System unterstützt dynamische Versionserkennung für alle DATEV-Formate. Neue Versionen werden automatisch erkannt.
+
+| Format | Kategorie | Beschreibung | Parser | Builder | Generator |
+|--------|-----------|--------------|--------|---------|-----------|
+| Buchungsstapel | 21 | Buchungsstapel für Finanzbuchhaltung | ✅ | ✅ | ✅ |
+| Debitoren/Kreditoren | 16 | Stammdaten für Debitoren und Kreditoren | ✅ | ✅ | ✅ |
+| Kontenbeschriftungen | 20 | Sachkontenbeschriftungen (SKR) | ✅ | ✅ | ✅ |
+| Zahlungsbedingungen | 46 | Zahlungsbedingungen und Skontoregeln | ✅ | ✅ | ✅ |
+| Diverse Adressen | 48 | Zusätzliche Adressdaten | ✅ | ✅ | ✅ |
+| Wiederkehrende Buchungen | 65 | Daueraufträge und wiederkehrende Buchungen | ✅ | ✅ | ✅ |
+| Natural-Stapel | 66 | Land-/Forstwirtschaftliche Buchungen | ✅ | ✅ | ✅ |
+| ASCII-Banktransaktionen | - | ASCII-Weiterverarbeitungsdatei (ohne MetaHeader) | ✅ | ✅ | ✅ |
 
 ---
 

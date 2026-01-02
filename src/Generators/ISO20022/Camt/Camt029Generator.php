@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationDetails;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\TransactionInformationAndStatus;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
-use InvalidArgumentException;
 
 /**
  * Generator für CAMT.029 XML (Resolution of Investigation).
@@ -34,13 +32,7 @@ class Camt029Generator extends CamtGeneratorAbstract {
         return CamtType::CAMT029;
     }
 
-    /**
-     * @param Document $document
-     */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V13): string {
-        if (!$document instanceof Document) {
-            throw new InvalidArgumentException('Camt029Generator erwartet ein Camt.029 Document.');
-        }
+    public function generate(Document $document, CamtVersion $version = CamtVersion::V13): string {
 
         $this->initCamtDocument('RsltnOfInvstgtn', $version);
 

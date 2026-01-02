@@ -16,10 +16,9 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt057Generator;
 use CommonToolkit\FinancialFormats\Traits\XmlDocumentExportTrait;
-use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
-use DOMDocument;
 
 /**
  * CAMT.057 Document (Notification to Receive).
@@ -96,75 +95,6 @@ class Document implements CamtDocumentInterface {
     }
 
     public function toXml(CamtVersion $version = CamtVersion::V08): string {
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        $dom->formatOutput = true;
-
-        $namespace = $version->getNamespace($this->getCamtType());
-        $root = $dom->createElementNS($namespace, 'Document');
-        $dom->appendChild($root);
-
-        $ntfctnToRcv = $dom->createElement('NtfctnToRcv');
-        $root->appendChild($ntfctnToRcv);
-
-        // GrpHdr (Group Header)
-        $grpHdr = $dom->createElement('GrpHdr');
-        $ntfctnToRcv->appendChild($grpHdr);
-
-        $grpHdr->appendChild($dom->createElement('MsgId', htmlspecialchars($this->groupHeaderMessageId)));
-        $grpHdr->appendChild($dom->createElement('CreDtTm', $this->creationDateTime->format('Y-m-d\TH:i:s.vP')));
-
-        if ($this->initiatingPartyName !== null) {
-            $initgPty = $dom->createElement('InitgPty');
-            $grpHdr->appendChild($initgPty);
-            $initgPty->appendChild($dom->createElement('Nm', htmlspecialchars($this->initiatingPartyName)));
-        }
-
-        if ($this->messageRecipientBic !== null) {
-            $msgRcpt = $dom->createElement('MsgRcpt');
-            $grpHdr->appendChild($msgRcpt);
-            $finInstnId = $dom->createElement('FinInstnId');
-            $msgRcpt->appendChild($finInstnId);
-            $finInstnId->appendChild($dom->createElement('BICFI', htmlspecialchars($this->messageRecipientBic)));
-        }
-
-        // Ntfctn (Notification Items)
-        foreach ($this->items as $item) {
-            $ntfctn = $dom->createElement('Ntfctn');
-            $ntfctnToRcv->appendChild($ntfctn);
-
-            $ntfctn->appendChild($dom->createElement('Id', htmlspecialchars($item->getId())));
-
-            if ($item->getExpectedValueDate() !== null) {
-                $ntfctn->appendChild($dom->createElement('XpctdValDt', $item->getExpectedValueDate()->format('Y-m-d')));
-            }
-
-            if ($item->getAmount() !== null && $item->getCurrency() !== null) {
-                $amt = $dom->createElement('Amt', number_format($item->getAmount(), 2, '.', ''));
-                $amt->setAttribute('Ccy', $item->getCurrency()->value);
-                $ntfctn->appendChild($amt);
-            }
-
-            if ($item->getDebtorName() !== null) {
-                $dbtr = $dom->createElement('Dbtr');
-                $ntfctn->appendChild($dbtr);
-                $dbtr->appendChild($dom->createElement('Nm', htmlspecialchars($item->getDebtorName())));
-            }
-
-            if ($item->getDebtorAgentBic() !== null) {
-                $dbtrAgt = $dom->createElement('DbtrAgt');
-                $ntfctn->appendChild($dbtrAgt);
-                $finInstnId = $dom->createElement('FinInstnId');
-                $dbtrAgt->appendChild($finInstnId);
-                $finInstnId->appendChild($dom->createElement('BICFI', htmlspecialchars($item->getDebtorAgentBic())));
-            }
-
-            if ($item->getRemittanceInformation() !== null) {
-                $rmtInf = $dom->createElement('RmtInf');
-                $ntfctn->appendChild($rmtInf);
-                $rmtInf->appendChild($dom->createElement('Ustrd', htmlspecialchars($item->getRemittanceInformation())));
-            }
-        }
-
-        return $dom->saveXML() ?: '';
+        return (new Camt057Generator())->generate($this, $version);
     }
 }

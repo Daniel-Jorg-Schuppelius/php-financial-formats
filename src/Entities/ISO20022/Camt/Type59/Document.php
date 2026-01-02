@@ -16,9 +16,9 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt059Generator;
 use CommonToolkit\FinancialFormats\Traits\XmlDocumentExportTrait;
 use DateTimeImmutable;
-use DOMDocument;
 
 /**
  * CAMT.059 Document (Notification to Receive Status Report).
@@ -127,84 +127,6 @@ class Document implements CamtDocumentInterface {
     }
 
     public function toXml(CamtVersion $version = CamtVersion::V08): string {
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        $dom->formatOutput = true;
-
-        $namespace = $version->getNamespace($this->getCamtType());
-        $root = $dom->createElementNS($namespace, 'Document');
-        $dom->appendChild($root);
-
-        $ntfctnToRcvStsRpt = $dom->createElement('NtfctnToRcvStsRpt');
-        $root->appendChild($ntfctnToRcvStsRpt);
-
-        // GrpHdr (Group Header)
-        $grpHdr = $dom->createElement('GrpHdr');
-        $ntfctnToRcvStsRpt->appendChild($grpHdr);
-
-        $grpHdr->appendChild($dom->createElement('MsgId', htmlspecialchars($this->groupHeaderMessageId)));
-        $grpHdr->appendChild($dom->createElement('CreDtTm', $this->creationDateTime->format('Y-m-d\TH:i:s.vP')));
-
-        if ($this->initiatingPartyName !== null) {
-            $initgPty = $dom->createElement('InitgPty');
-            $grpHdr->appendChild($initgPty);
-            $initgPty->appendChild($dom->createElement('Nm', htmlspecialchars($this->initiatingPartyName)));
-        }
-
-        if ($this->messageRecipientBic !== null) {
-            $msgRcpt = $dom->createElement('MsgRcpt');
-            $grpHdr->appendChild($msgRcpt);
-            $finInstnId = $dom->createElement('FinInstnId');
-            $msgRcpt->appendChild($finInstnId);
-            $finInstnId->appendChild($dom->createElement('BICFI', htmlspecialchars($this->messageRecipientBic)));
-        }
-
-        // OrgnlNtfctnAndSts (Original Notification and Status)
-        $orgnlNtfctnAndSts = $dom->createElement('OrgnlNtfctnAndSts');
-        $ntfctnToRcvStsRpt->appendChild($orgnlNtfctnAndSts);
-
-        if ($this->originalMessageId !== null) {
-            $orgnlNtfctnAndSts->appendChild($dom->createElement('OrgnlMsgId', htmlspecialchars($this->originalMessageId)));
-        }
-        if ($this->originalMessageNameId !== null) {
-            $orgnlNtfctnAndSts->appendChild($dom->createElement('OrgnlMsgNmId', htmlspecialchars($this->originalMessageNameId)));
-        }
-        if ($this->originalCreationDateTime !== null) {
-            $orgnlNtfctnAndSts->appendChild($dom->createElement('OrgnlCreDtTm', $this->originalCreationDateTime->format('Y-m-d\TH:i:s.vP')));
-        }
-        if ($this->originalGroupStatusCode !== null) {
-            $orgnlNtfctnAndSts->appendChild($dom->createElement('OrgnlNtfctnSts', htmlspecialchars($this->originalGroupStatusCode)));
-        }
-
-        // Status Items
-        foreach ($this->items as $item) {
-            $orgnlItmAndSts = $dom->createElement('OrgnlItmAndSts');
-            $orgnlNtfctnAndSts->appendChild($orgnlItmAndSts);
-
-            $orgnlItmAndSts->appendChild($dom->createElement('OrgnlItmId', htmlspecialchars($item->getOriginalItemId())));
-
-            if ($item->getItemStatus() !== null) {
-                $orgnlItmAndSts->appendChild($dom->createElement('ItmSts', htmlspecialchars($item->getItemStatus())));
-            }
-
-            if ($item->getReasonCode() !== null || $item->getReasonProprietary() !== null) {
-                $stsRsnInf = $dom->createElement('StsRsnInf');
-                $orgnlItmAndSts->appendChild($stsRsnInf);
-
-                $rsn = $dom->createElement('Rsn');
-                $stsRsnInf->appendChild($rsn);
-
-                if ($item->getReasonCode() !== null) {
-                    $rsn->appendChild($dom->createElement('Cd', htmlspecialchars($item->getReasonCode())));
-                } elseif ($item->getReasonProprietary() !== null) {
-                    $rsn->appendChild($dom->createElement('Prtry', htmlspecialchars($item->getReasonProprietary())));
-                }
-
-                if ($item->getAdditionalInformation() !== null) {
-                    $stsRsnInf->appendChild($dom->createElement('AddtlInf', htmlspecialchars($item->getAdditionalInformation())));
-                }
-            }
-        }
-
-        return $dom->saveXML() ?: '';
+        return (new Camt059Generator())->generate($this, $version);
     }
 }

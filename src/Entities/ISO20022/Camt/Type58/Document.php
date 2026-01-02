@@ -16,9 +16,9 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt058Generator;
 use CommonToolkit\FinancialFormats\Traits\XmlDocumentExportTrait;
 use DateTimeImmutable;
-use DOMDocument;
 
 /**
  * CAMT.058 Document (Notification to Receive Cancellation Advice).
@@ -119,71 +119,6 @@ class Document implements CamtDocumentInterface {
     }
 
     public function toXml(CamtVersion $version = CamtVersion::V09): string {
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        $dom->formatOutput = true;
-
-        $namespace = $version->getNamespace($this->getCamtType());
-        $root = $dom->createElementNS($namespace, 'Document');
-        $dom->appendChild($root);
-
-        $ntfctnToRcvCxlAdvc = $dom->createElement('NtfctnToRcvCxlAdvc');
-        $root->appendChild($ntfctnToRcvCxlAdvc);
-
-        // GrpHdr (Group Header)
-        $grpHdr = $dom->createElement('GrpHdr');
-        $ntfctnToRcvCxlAdvc->appendChild($grpHdr);
-
-        $grpHdr->appendChild($dom->createElement('MsgId', htmlspecialchars($this->groupHeaderMessageId)));
-        $grpHdr->appendChild($dom->createElement('CreDtTm', $this->creationDateTime->format('Y-m-d\TH:i:s.vP')));
-
-        if ($this->initiatingPartyName !== null) {
-            $initgPty = $dom->createElement('InitgPty');
-            $grpHdr->appendChild($initgPty);
-            $initgPty->appendChild($dom->createElement('Nm', htmlspecialchars($this->initiatingPartyName)));
-        }
-
-        if ($this->messageRecipientBic !== null) {
-            $msgRcpt = $dom->createElement('MsgRcpt');
-            $grpHdr->appendChild($msgRcpt);
-            $finInstnId = $dom->createElement('FinInstnId');
-            $msgRcpt->appendChild($finInstnId);
-            $finInstnId->appendChild($dom->createElement('BICFI', htmlspecialchars($this->messageRecipientBic)));
-        }
-
-        // OrgnlNtfctn (Original Notification Reference)
-        $orgnlNtfctn = $dom->createElement('OrgnlNtfctn');
-        $ntfctnToRcvCxlAdvc->appendChild($orgnlNtfctn);
-
-        if ($this->originalMessageId !== null) {
-            $orgnlNtfctn->appendChild($dom->createElement('OrgnlMsgId', htmlspecialchars($this->originalMessageId)));
-        }
-        if ($this->originalMessageNameId !== null) {
-            $orgnlNtfctn->appendChild($dom->createElement('OrgnlMsgNmId', htmlspecialchars($this->originalMessageNameId)));
-        }
-        if ($this->originalCreationDateTime !== null) {
-            $orgnlNtfctn->appendChild($dom->createElement('OrgnlCreDtTm', $this->originalCreationDateTime->format('Y-m-d\TH:i:s.vP')));
-        }
-
-        // Cxl Items (Cancellation Items)
-        foreach ($this->items as $item) {
-            $orgnlItm = $dom->createElement('OrgnlItm');
-            $orgnlNtfctn->appendChild($orgnlItm);
-
-            $orgnlItm->appendChild($dom->createElement('OrgnlItmId', htmlspecialchars($item->getOriginalItemId())));
-
-            if ($item->getCancellationReasonCode() !== null) {
-                $cxlRsnInf = $dom->createElement('CxlRsnInf');
-                $orgnlItm->appendChild($cxlRsnInf);
-                $rsn = $dom->createElement('Rsn');
-                $cxlRsnInf->appendChild($rsn);
-                $rsn->appendChild($dom->createElement('Cd', htmlspecialchars($item->getCancellationReasonCode())));
-
-                if ($item->getCancellationAdditionalInfo() !== null) {
-                    $cxlRsnInf->appendChild($dom->createElement('AddtlInf', htmlspecialchars($item->getCancellationAdditionalInfo())));
-                }
-            }
-        }
-
-        return $dom->saveXML() ?: '';
+        return (new Camt058Generator())->generate($this, $version);
     }
 }

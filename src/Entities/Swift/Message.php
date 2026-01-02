@@ -16,6 +16,7 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\MtDocumentAbstract as
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract as Mt9DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Document as Mt101Document;
 use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Generators\Swift\SwiftMessageGenerator;
 use CommonToolkit\FinancialFormats\Parsers\Mt10xParser;
 use CommonToolkit\FinancialFormats\Parsers\Mt940DocumentParser;
 use RuntimeException;
@@ -177,26 +178,6 @@ final class Message {
      * Gibt die vollständige SWIFT-Nachricht als String zurück
      */
     public function __toString(): string {
-        $result = (string) $this->basicHeader;
-        $result .= (string) $this->applicationHeader;
-
-        if ($this->userHeader !== null) {
-            $userHeaderStr = (string) $this->userHeader;
-            if ($userHeaderStr !== '') {
-                $result .= $userHeaderStr;
-            }
-        }
-
-        // Text Block mit Zeilenumbrüchen
-        $result .= "{4:\n" . $this->textBlock . "\n-}";
-
-        if ($this->trailer !== null) {
-            $trailerStr = (string) $this->trailer;
-            if ($trailerStr !== '') {
-                $result .= $trailerStr;
-            }
-        }
-
-        return $result;
+        return (new SwiftMessageGenerator())->generate($this);
     }
 }

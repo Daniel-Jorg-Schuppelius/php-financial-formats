@@ -15,8 +15,8 @@ use CommonToolkit\Entities\CSV\ColumnWidthConfig;
 use CommonToolkit\Entities\CSV\Document as CSVDocument;
 use CommonToolkit\Entities\CSV\HeaderLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\{DataLine, MetaHeaderLine};
+use CommonToolkit\FinancialFormats\Generators\DATEV\DatevDocumentGenerator;
 use CommonToolkit\FinancialFormats\Traits\DATEV\DatevEnumConversionTrait;
-use CommonToolkit\Helper\Data\StringHelper;
 use RuntimeException;
 
 /**
@@ -106,31 +106,13 @@ abstract class Document extends CSVDocument {
      * @return string
      */
     public function toString(?string $delimiter = null, ?string $enclosure = null, ?int $enclosureRepeat = null, ?string $targetEncoding = null): string {
-        $delimiter ??= $this->delimiter;
-        $enclosure ??= $this->enclosure;
-        $targetEncoding ??= $this->encoding;
-
-        $lines = [];
-
-        // MetaHeader als erste Zeile
-        if ($this->metaHeader) {
-            $lines[] = $this->metaHeader->toString($delimiter, $enclosure);
-        }
-
-        // Parent-Logik für Header und Datenzeilen (immer UTF-8, Konvertierung am Ende)
-        $parentContent = parent::toString($delimiter, $enclosure, $enclosureRepeat, CSVDocument::DEFAULT_ENCODING);
-        if ($parentContent !== '') {
-            $lines[] = $parentContent;
-        }
-
-        $result = implode("\n", $lines);
-
-        // Encoding-Konvertierung falls nötig - nutze StringHelper
-        if ($targetEncoding !== CSVDocument::DEFAULT_ENCODING) {
-            return StringHelper::convertEncoding($result, CSVDocument::DEFAULT_ENCODING, $targetEncoding);
-        }
-
-        return $result;
+        return (new DatevDocumentGenerator())->generate(
+            $this,
+            $delimiter ?? $this->delimiter,
+            $enclosure ?? $this->enclosure,
+            $enclosureRepeat,
+            $targetEncoding ?? $this->encoding
+        );
     }
 
     /**

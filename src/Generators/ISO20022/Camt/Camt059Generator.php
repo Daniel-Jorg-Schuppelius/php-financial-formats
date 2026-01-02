@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\StatusItem;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
-use InvalidArgumentException;
 
 /**
  * Generator für CAMT.059 XML (Notification to Receive Status Report).
@@ -34,13 +32,7 @@ class Camt059Generator extends CamtGeneratorAbstract {
         return CamtType::CAMT059;
     }
 
-    /**
-     * @param Document $document
-     */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V08): string {
-        if (!$document instanceof Document) {
-            throw new InvalidArgumentException('Camt059Generator erwartet ein Camt.059 Document.');
-        }
+    public function generate(Document $document, CamtVersion $version = CamtVersion::V08): string {
 
         $this->initCamtDocument('NtfctnToRcvStsRpt', $version);
 
