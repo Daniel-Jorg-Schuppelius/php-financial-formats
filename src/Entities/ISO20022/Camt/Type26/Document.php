@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.026 Document (Unable to Apply).
  * 
- * Repräsentiert eine Anfrage zur Klärung einer nicht zuordenbaren Zahlung
- * gemäß ISO 20022 camt.026.001.xx Standard.
+ * Represents a request to clarify an unmatched payment
+ * according to ISO 20022 camt.026.001.xx Standard.
  * 
- * Wird verwendet, wenn eine Zahlung eingegangen ist, aber nicht korrekt
+ * Used when a payment has been received but cannot be correctly
  * verarbeitet werden kann (z.B. fehlende oder fehlerhafte Referenzen).
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type26

@@ -1661,7 +1661,7 @@ enum TransactionPurpose: string {
     case WTER = 'WTER';
 
     /**
-     * Gibt den Namen/Titel des Codes zurück.
+     * Returns the name/title of the code.
      */
     public function name(): string {
         return match ($this) {
@@ -1942,7 +1942,7 @@ enum TransactionPurpose: string {
     }
 
     /**
-     * Gibt die Definition/Beschreibung des Codes zurück.
+     * Returns the definition/description of the code.
      */
     public function definition(): string {
         return match ($this) {
@@ -2230,7 +2230,7 @@ enum TransactionPurpose: string {
     }
 
     /**
-     * Prüft ob der Wert ein gültiger Code ist.
+     * Checks if the value is a valid code.
      */
     public static function isValid(string $value): bool {
         return self::tryFrom(strtoupper(trim($value))) !== null;

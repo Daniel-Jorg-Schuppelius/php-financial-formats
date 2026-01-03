@@ -17,7 +17,7 @@ enum Mark: string {
     case DTVF = 'DTVF'; // Export aus DATEV App
 
     /**
-     * DATEV-Metaheader Regex-Muster für dieses Enum.
+     * DATEV meta header regex pattern for this enum.
      */
     public static function pattern(): string {
         return '^(EXTF|DTVF)$';

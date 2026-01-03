@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Währungssteuerung für Debitoren/Kreditoren (Feld 107).
+ * DATEV Currency control for debitors/creditors (Field 107).
  *
- * 0 = Zahlungen in Eingabewährung
+ * 0 = Payments in input currency
  * 2 = Ausgabe in EUR
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
@@ -27,7 +27,7 @@ enum CurrencyControl: int {
     case OUTPUT_EUR     = 2; // Ausgabe in EUR
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -37,7 +37,7 @@ enum CurrencyControl: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -48,7 +48,7 @@ enum CurrencyControl: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value);
@@ -59,7 +59,7 @@ enum CurrencyControl: int {
     }
 
     /**
-     * Prüft, ob EUR als Ausgabewährung verwendet wird.
+     * Checks if EUR is used as output currency.
      */
     public function isEuroOutput(): bool {
         return $this === self::OUTPUT_EUR;

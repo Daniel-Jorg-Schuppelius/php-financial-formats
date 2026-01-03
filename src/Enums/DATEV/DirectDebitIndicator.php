@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Lastschrift-Kennzeichen für Debitoren/Kreditoren (Feld 133).
+ * DATEV Direct debit indicator for debitors/creditors (Field 133).
  *
- * Leer bzw. 0 = keine Angaben, es gilt die Stammdaten-Schlüsselung
+ * Empty or 0 = no specification, master data keying applies
  * 7 = SEPA-Lastschrift mit einer Rechnung
  * 8 = SEPA-Lastschrift mit mehreren Rechnungen
  * 9 = kein Lastschriftverfahren bei diesem Debitor
@@ -31,7 +31,7 @@ enum DirectDebitIndicator: int {
     case DISABLED            = 9; // kein Lastschriftverfahren bei diesem Debitor
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -43,7 +43,7 @@ enum DirectDebitIndicator: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -56,7 +56,7 @@ enum DirectDebitIndicator: int {
     }
 
     /**
-     * Factory für String-Werte (quoted in DATEV-Format).
+     * Factory for string values (quoted in DATEV-Format).
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');
@@ -67,14 +67,14 @@ enum DirectDebitIndicator: int {
     }
 
     /**
-     * Prüft, ob SEPA-Lastschrift aktiv ist.
+     * Checks if SEPA direct debit is active.
      */
     public function isSepaDirectDebit(): bool {
         return $this === self::SEPA_SINGLE_INVOICE || $this === self::SEPA_MULTI_INVOICE;
     }
 
     /**
-     * Prüft, ob Lastschrift explizit deaktiviert ist.
+     * Checks if direct debit is explicitly disabled.
      */
     public function isDisabled(): bool {
         return $this === self::DISABLED;

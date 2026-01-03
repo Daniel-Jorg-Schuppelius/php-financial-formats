@@ -24,10 +24,10 @@ use DOMDocument;
 /**
  * CAMT.036 Document (Debit Authorisation Response).
  *
- * Repräsentiert die Antwort auf eine Belastungsautorisierungsanfrage (CAMT.037)
- * gemäß ISO 20022 camt.036.001.xx Standard.
+ * Represents the response to a debit authorisation request (CAMT.037)
+ * according to ISO 20022 camt.036.001.xx Standard.
  *
- * Wird verwendet, um eine Belastung zu genehmigen oder abzulehnen.
+ * Used to approve or reject a debit.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type36
  */

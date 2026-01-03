@@ -21,8 +21,8 @@ use DateTimeImmutable;
 /**
  * pain.002 Document - Customer Payment Status Report.
  * 
- * Statusrückmeldung der Bank zu eingereichten Zahlungsaufträgen.
- * Antwort auf pain.001 (Überweisungen) oder pain.008 (Lastschriften).
+ * Status feedback from the bank on submitted payment orders.
+ * Response to pain.001 (credit transfers) or pain.008 (direct debits).
  * 
  * Struktur:
  * - CstmrPmtStsRpt (Customer Payment Status Report)
@@ -61,7 +61,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Erstellt einen vollständig akzeptierten Status.
+     * Creates a fully accepted status.
      */
     public static function allAccepted(
         string $messageId,
@@ -79,7 +79,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt den Nachrichtentyp zurück.
+     * Returns the message type.
      */
     public function getType(): PainType {
         return PainType::PAIN_002;
@@ -101,7 +101,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Fügt eine Payment Information hinzu.
+     * Adds a payment information entry.
      */
     public function addOriginalPaymentInformation(OriginalPaymentInformation $info): self {
         $clone = clone $this;
@@ -110,7 +110,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Prüft, ob alle Transaktionen akzeptiert wurden.
+     * Checks if all transactions were accepted.
      */
     public function isFullyAccepted(): bool {
         // Gruppen-Status prüfen
@@ -133,7 +133,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Prüft, ob es Ablehnungen gibt.
+     * Checks if there are rejections.
      */
     public function hasRejections(): bool {
         if ($this->originalGroupInformation->isGroupRejected()) {
@@ -150,7 +150,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt alle abgelehnten Transaktionen zurück.
+     * Returns all rejected transactions.
      */
     public function getRejectedTransactions(): array {
         $rejected = [];
@@ -163,7 +163,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Zählt alle Transaktionsstatus.
+     * Counts all transaction statuses.
      */
     public function countTransactionStatuses(): int {
         $count = 0;
@@ -184,11 +184,11 @@ final class Document extends PainDocumentAbstract {
         $errors = [];
 
         if (strlen($this->groupHeader->getMessageId()) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (strlen($this->originalGroupInformation->getOriginalMessageId()) > 35) {
-            $errors[] = 'OrgnlMsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'OrgnlMsgId must not exceed 35 characters';
         }
 
         return [
@@ -198,7 +198,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

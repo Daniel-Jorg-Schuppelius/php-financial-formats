@@ -15,10 +15,10 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 use CommonToolkit\Enums\CurrencyCode;
 
 /**
- * Account Identification für pain-Nachrichten.
+ * Account identification for pain messages.
  * 
- * Repräsentiert eine Kontoidentifikation gemäß ISO 20022.
- * Unterstützt sowohl IBAN als auch proprietäre Kontonummern.
+ * Represents an account identification according to ISO 20022.
+ * Supports both IBAN and proprietary account numbers.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain
  */
@@ -32,56 +32,56 @@ final readonly class AccountIdentification {
     }
 
     /**
-     * Gibt die IBAN zurück.
+     * Returns the IBAN.
      */
     public function getIban(): ?string {
         return $this->iban;
     }
 
     /**
-     * Gibt die alternative Kontonummer zurück.
+     * Returns the alternative account number.
      */
     public function getOther(): ?string {
         return $this->other;
     }
 
     /**
-     * Gibt die Währung zurück.
+     * Returns the currency.
      */
     public function getCurrency(): ?CurrencyCode {
         return $this->currency;
     }
 
     /**
-     * Gibt den Kontonamen zurück.
+     * Returns the account name.
      */
     public function getName(): ?string {
         return $this->name;
     }
 
     /**
-     * Gibt die Kontoidentifikation zurück (IBAN oder Other).
+     * Returns the account identification (IBAN or Other).
      */
     public function getIdentification(): ?string {
         return $this->iban ?? $this->other;
     }
 
     /**
-     * Prüft ob es sich um eine IBAN handelt.
+     * Checks if this is an IBAN.
      */
     public function isIban(): bool {
         return $this->iban !== null;
     }
 
     /**
-     * Erstellt eine Kontoidentifikation aus IBAN.
+     * Creates an account identification from IBAN.
      */
     public static function fromIban(string $iban, ?CurrencyCode $currency = null): self {
         return new self(iban: $iban, currency: $currency);
     }
 
     /**
-     * Erstellt eine Kontoidentifikation aus proprietärer Kontonummer.
+     * Creates an account identification from proprietary account number.
      */
     public static function fromOther(string $other, ?CurrencyCode $currency = null): self {
         return new self(other: $other, currency: $currency);

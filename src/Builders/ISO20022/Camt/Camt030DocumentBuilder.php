@@ -17,11 +17,11 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.030 Documents (Notification of Case Assignment).
+ * Builder for CAMT.030 Documents (Notification of Case Assignment).
  * 
- * Erstellt Benachrichtigungen über die Zuweisung eines Falls.
- * Wird verwendet, um einen Teilnehmer darüber zu informieren, dass
- * ihm ein Untersuchungsfall zugewiesen wurde.
+ * Creates notifications about case assignments.
+ * Used to inform a participant that an investigation case
+ * has been assigned to them.
  * 
  * Verwendung:
  * ```php
@@ -48,21 +48,21 @@ final class Camt030DocumentBuilder {
 
     private function __construct(string $headerMessageId) {
         if (strlen($headerMessageId) > 35) {
-            throw new InvalidArgumentException('HeaderMessageId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('HeaderMessageId must not exceed 35 characters');
         }
         $this->headerMessageId = $headerMessageId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Message-ID.
+     * Creates a new builder with message ID.
      */
     public static function create(string $headerMessageId): self {
         return new self($headerMessageId);
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -71,7 +71,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Agent (sendende Bank).
+     * Sets the assigner agent (sending bank).
      */
     public function withAssignerAgent(string $bic): self {
         $clone = clone $this;
@@ -80,7 +80,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Party Name.
+     * Sets the assigner party name.
      */
     public function withAssignerPartyName(string $name): self {
         $clone = clone $this;
@@ -89,7 +89,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Agent (empfangende Bank).
+     * Sets the assignee agent (receiving bank).
      */
     public function withAssigneeAgent(string $bic): self {
         $clone = clone $this;
@@ -98,7 +98,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Party Name.
+     * Sets the assignee party name.
      */
     public function withAssigneePartyName(string $name): self {
         $clone = clone $this;
@@ -107,7 +107,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Setzt die Case-Referenz.
+     * Sets the case reference.
      */
     public function forCase(string $caseId, ?string $caseCreator = null): self {
         $clone = clone $this;
@@ -117,7 +117,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Setzt die Begründung für die Benachrichtigung.
+     * Sets the justification for the notification.
      */
     public function withNotificationJustification(string $justification): self {
         $clone = clone $this;
@@ -126,7 +126,7 @@ final class Camt030DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.030 Document.
+     * Creates the CAMT.030 document.
      */
     public function build(): Document {
         return new Document(

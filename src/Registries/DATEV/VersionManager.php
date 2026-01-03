@@ -16,14 +16,14 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 use CommonToolkit\FinancialFormats\Entities\DATEV\DocumentInfo;
 
 /**
- * Zentrale Verwaltung für DATEV-Versionen und Format-Informationen.
- * Bietet High-Level-Funktionen für die Abfrage von Versionen und Formaten.
+ * Central management for DATEV versions and format information.
+ * Provides high-level functions for querying versions and formats.
  * Nutzt das VersionDiscovery-System zur automatischen Erkennung.
  */
 final class VersionManager {
 
     /**
-     * Gibt Informationen zu allen verfügbaren DATEV-Versionen zurück (dynamisch).
+     * Returns information about all available DATEV versions (dynamically).
      * 
      * @return array<int, array{version: int, supported: bool, formats: string[]}>
      */
@@ -54,7 +54,7 @@ final class VersionManager {
     }
 
     /**
-     * Gibt eine Matrix aller Format-Version-Kombinationen zurück (dynamisch).
+     * Returns a matrix of all format-version combinations (dynamically).
      * 
      * @return array<string, array<string, bool>>
      */
@@ -78,10 +78,10 @@ final class VersionManager {
     }
 
     /**
-     * Ermittelt die beste verfügbare Version für ein Format (dynamisch).
+     * Determines the best available version for a format (dynamically).
      * 
-     * @param Category $category Das gewünschte Format
-     * @return int|null Die beste verfügbare Version oder null
+     * @param Category $category The desired format
+     * @return int|null The best available version or null
      */
     public static function getBestVersionForFormat(Category $category): ?int {
         // Sortiere Versionen absteigend (neueste zuerst)
@@ -98,14 +98,14 @@ final class VersionManager {
     }
 
     /**
-     * Prüft, ob ein Format in einer spezifischen Version verfügbar ist (dynamisch).
+     * Checks if a format is available in a specific version (dynamically).
      */
     public static function isAvailable(Category $category, int $version): bool {
         return VersionDiscovery::isFormatSupported($category, $version);
     }
 
     /**
-     * Erstellt DocumentInfo für ein Format und eine Version.
+     * Creates DocumentInfo for a format and version.
      */
     public static function createDocumentInfo(Category $category, int $version): DocumentInfo {
         $definitionClass = null;
@@ -118,7 +118,7 @@ final class VersionManager {
     }
 
     /**
-     * Gibt alle unterstützten Formate für die neueste Version zurück (dynamisch).
+     * Returns all supported formats for the latest version (dynamically).
      * 
      * @return Category[]
      */
@@ -133,7 +133,7 @@ final class VersionManager {
     }
 
     /**
-     * Migration-Hilfe: Zeigt, welche Formate von einer alten Version in eine neue migriert werden können (dynamisch).
+     * Migration help: Shows which formats can be migrated from an old version to a new one (dynamically).
      * 
      * @param int $fromVersion Alte Version
      * @param int $toVersion Neue Version
@@ -171,7 +171,7 @@ final class VersionManager {
     }
 
     /**
-     * Gibt eine Human-readable Übersicht über alle Versionen aus (dynamisch).
+     * Returns a human-readable overview of all versions (dynamically).
      */
     public static function getVersionSummary(): string {
         $overview = self::getVersionOverview();
@@ -224,7 +224,7 @@ final class VersionManager {
     }
 
     /**
-     * Gibt detaillierte Validation-Informationen für alle Versionen zurück.
+     * Returns detailed validation information for all versions.
      * 
      * @return array<int, array{valid: bool, missing: string[], issues: string[]}>
      */

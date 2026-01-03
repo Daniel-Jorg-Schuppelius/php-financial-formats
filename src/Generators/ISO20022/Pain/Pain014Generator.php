@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type14\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type14\PaymentActivationStatus;
 
 /**
- * Generiert pain.014 XML-Dokumente (Creditor Payment Activation Request Status Report).
+ * Generates pain.014 XML documents (Creditor Payment Activation Request Status Report).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.014.001.11 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.014.001.11 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain014Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.014 Dokument.
+     * Generates XML from a pain.014 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('CdtrPmtActvtnReqStsRpt');

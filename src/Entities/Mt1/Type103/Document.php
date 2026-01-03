@@ -24,8 +24,8 @@ use DateTimeImmutable;
 /**
  * MT103 Document - Single Customer Credit Transfer.
  * 
- * Einzelüberweisung gemäß SWIFT-Standard. Der häufigste Nachrichtentyp
- * für Kundenzahlungen im internationalen Zahlungsverkehr.
+ * Single transfer according to SWIFT standard. The most common message type
+ * for customer payments in international payment transactions.
  * 
  * Pflichtfelder:
  * - :20:  Sender's Reference
@@ -36,7 +36,7 @@ use DateTimeImmutable;
  * - :71A: Details of Charges
  * 
  * Optionale Felder:
- * - :33B: Currency/Instructed Amount (bei Währungsumrechnung)
+ * - :33B: Currency/Instructed Amount (for currency conversion)
  * - :36:  Exchange Rate
  * - :52a: Ordering Institution
  * - :53a: Sender's Correspondent
@@ -100,14 +100,14 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Bank Operation Code zurück (Feld :23B:).
+     * Returns the Bank Operation Code (Field :23B:).
      */
     public function getBankOperationCode(): BankOperationCode {
         return $this->bankOperationCode;
     }
 
     /**
-     * Gibt die Ordering Institution zurück (Feld :52a:).
+     * Returns the Ordering Institution (Field :52a:).
      * Die Bank des Auftraggebers.
      */
     public function getOrderingInstitution(): ?Party {
@@ -115,7 +115,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Sender's Correspondent zurück (Feld :53a:).
+     * Returns the Sender's Correspondent (Field :53a:).
      * Die Korrespondenzbank des Senders.
      */
     public function getSendersCorrespondent(): ?Party {
@@ -123,7 +123,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt die Intermediary Institution zurück (Feld :56a:).
+     * Returns the Intermediary Institution (Field :56a:).
      * Zwischenbank im Zahlungsweg.
      */
     public function getIntermediaryInstitution(): ?Party {
@@ -131,36 +131,36 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt die Account With Institution zurück (Feld :57a:).
-     * Die Bank des Begünstigten.
+     * Returns the Account With Institution (Field :57a:).
+     * The beneficiary's bank.
      */
     public function getAccountWithInstitution(): ?Party {
         return $this->accountWithInstitution;
     }
 
     /**
-     * Gibt die Sender to Receiver Information zurück (Feld :72:).
+     * Returns the Sender to Receiver Information (Field :72:).
      */
     public function getSenderToReceiverInfo(): ?string {
         return $this->senderToReceiverInfo;
     }
 
     /**
-     * Gibt die Regulatory Reporting Information zurück (Feld :77B:).
+     * Returns the Regulatory Reporting Information (Field :77B:).
      */
     public function getRegulatoryReporting(): ?string {
         return $this->regulatoryReporting;
     }
 
     /**
-     * Gibt den Transaction Type Code zurück (Feld :26T:).
+     * Returns the Transaction Type Code (Field :26T:).
      */
     public function getTransactionTypeCode(): ?string {
         return $this->transactionTypeCode;
     }
 
     /**
-     * Prüft ob es sich um eine STP-fähige Nachricht handelt.
+     * Checks if this is an STP-capable message.
      * (Straight Through Processing)
      */
     public function isStpCapable(): bool {
@@ -170,7 +170,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Erstellt eine Kopie mit geänderten Gebühren.
+     * Creates a copy with changed charges.
      */
     public function withChargesCode(ChargesCode $chargesCode): self {
         return new self(

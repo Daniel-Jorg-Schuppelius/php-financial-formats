@@ -31,7 +31,7 @@ enum PostingLock: string {
     }
 
     /**
-     * Factory für CSV/DATEV-Parsing.
+     * Factory for CSV/DATEV parsing.
      */
     public static function fromStringValue(?string $value): self {
         $value = trim((string)$value);

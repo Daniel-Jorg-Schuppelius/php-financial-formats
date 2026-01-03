@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 
 /**
- * Transaction Status für pain.002 (TxSts).
+ * Transaction status for pain.002 (TxSts).
  * 
  * ISO 20022 Transaktionsstatus.
  * 
@@ -34,7 +34,7 @@ enum TransactionStatus: string {
     case CANCELLED = 'CANC';
 
     /**
-     * Prüft, ob die Transaktion erfolgreich war.
+     * Checks if the transaction was successful.
      */
     public function isSuccessful(): bool {
         return match ($this) {
@@ -50,14 +50,14 @@ enum TransactionStatus: string {
     }
 
     /**
-     * Prüft, ob die Transaktion abgelehnt wurde.
+     * Checks if the transaction was rejected.
      */
     public function isRejected(): bool {
         return $this === self::REJECTED;
     }
 
     /**
-     * Prüft, ob die Transaktion noch in Bearbeitung ist.
+     * Checks if the transaction is still being processed.
      */
     public function isPending(): bool {
         return match ($this) {
@@ -69,7 +69,7 @@ enum TransactionStatus: string {
     }
 
     /**
-     * Gibt eine Beschreibung zurück.
+     * Returns a description.
      */
     public function description(): string {
         return match ($this) {

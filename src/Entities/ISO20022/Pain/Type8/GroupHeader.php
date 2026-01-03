@@ -16,7 +16,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use DateTimeImmutable;
 
 /**
- * Group Header für pain.008 Customer Direct Debit Initiation (GrpHdr).
+ * Group header for pain.008 Customer Direct Debit Initiation (GrpHdr).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type8
  */

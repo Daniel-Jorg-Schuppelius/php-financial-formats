@@ -20,8 +20,8 @@ use CommonToolkit\Enums\CountryCode;
 use InvalidArgumentException;
 
 /**
- * Abstrakte Basisklasse für DATEV Header-Zeilen (Spaltenbeschreibungen).
- * Kapselt die gemeinsame Funktionalität aller DATEV-Header-Zeilen.
+ * Abstract base class for DATEV header lines (column descriptions).
+ * Encapsulates the common functionality of all DATEV header lines.
  * 
  * Arbeitet direkt mit den HeaderField-Enums, die FieldHeaderInterface implementieren.
  */
@@ -64,7 +64,7 @@ abstract class HeaderLineAbstract extends HeaderLine {
     }
 
     /**
-     * Factory-Methode für minimalen Header (nur Pflichtfelder).
+     * Factory method for minimal header (required fields only).
      * 
      * @param class-string<FieldHeaderInterface> $fieldEnumClass
      */
@@ -102,7 +102,7 @@ abstract class HeaderLineAbstract extends HeaderLine {
     }
 
     /**
-     * Liefert die Enum-Klasse für die Header-Felder.
+     * Returns the enum class for header fields.
      * 
      * @return class-string<FieldHeaderInterface>
      */
@@ -111,7 +111,7 @@ abstract class HeaderLineAbstract extends HeaderLine {
     }
 
     /**
-     * Prüft, ob ein Feld in diesem Header vorhanden ist.
+     * Checks if a field is present in this header.
      */
     public function hasField(FieldHeaderInterface|string $field): bool {
         $fieldName = $field instanceof FieldHeaderInterface ? $field->value : $field;
@@ -145,7 +145,7 @@ abstract class HeaderLineAbstract extends HeaderLine {
     }
 
     /**
-     * Prüft, ob dieser Header zu einem bestimmten DATEV-Format passt.
+     * Checks if this header matches a specific DATEV format.
      */
     public function isCompatibleWithEnum(string $enumClass): bool {
         if (!enum_exists($enumClass)) {
@@ -167,7 +167,7 @@ abstract class HeaderLineAbstract extends HeaderLine {
     /**
      * Ermittelt zu welchem DATEV-Format dieser Header passt.
      * 
-     * @param string[] $candidateEnums Liste der zu prüfenden Enum-Klassen
+     * @param string[] $candidateEnums List of enum classes to check
      * @return string|null Erste passende Enum-Klasse oder null
      */
     public function detectFormat(array $candidateEnums): ?string {
@@ -180,8 +180,8 @@ abstract class HeaderLineAbstract extends HeaderLine {
     }
 
     /**
-     * Liefert den Namen des Formats für Kompatibilitätsprüfungen.
-     * Kann von konkreten Implementierungen überschrieben werden.
+     * Returns the format name for compatibility checks.
+     * Can be overridden by concrete implementations.
      */
     protected function getFormatName(): string {
         $className = static::class;

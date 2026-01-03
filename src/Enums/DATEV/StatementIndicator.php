@@ -15,11 +15,11 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Kontoauszugs-Kennzeichen für Debitoren/Kreditoren (Feld 122).
+ * DATEV Statement indicator for debitors/creditors (Field 122).
  *
- * 1 = Kontoauszug für alle Posten
- * 2 = Auszug nur dann, wenn ein Posten mahnfähig ist
- * 3 = Auszug für alle mahnfälligen Posten
+ * 1 = Statement for all items
+ * 2 = Statement only if an item is dunnable
+ * 3 = Statement for all items due for dunning
  * 9 = kein Kontoauszug
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
@@ -31,7 +31,7 @@ enum StatementIndicator: int {
     case DISABLED         = 9; // kein Kontoauszug
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -43,7 +43,7 @@ enum StatementIndicator: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -56,7 +56,7 @@ enum StatementIndicator: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value);
@@ -67,14 +67,14 @@ enum StatementIndicator: int {
     }
 
     /**
-     * Prüft, ob Kontoauszug aktiviert ist.
+     * Checks if statement is enabled.
      */
     public function isEnabled(): bool {
         return $this !== self::DISABLED;
     }
 
     /**
-     * Prüft, ob es sich um einen mahnungsbezogenen Auszug handelt.
+     * Checks if this is a dunning-related statement.
      */
     public function isDunningRelated(): bool {
         return $this === self::DUNNABLE_ONLY || $this === self::ALL_DUNNABLE;

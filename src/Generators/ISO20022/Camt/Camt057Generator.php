@@ -19,11 +19,11 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.057 XML (Notification to Receive).
+ * Generator for CAMT.057 XML (Notification to Receive).
  * 
- * Generiert Benachrichtigungen über erwartete Zahlungseingänge
- * gemäß ISO 20022 camt.057.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates notifications about expected payment receipts
+ * according to ISO 20022 camt.057.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -48,7 +48,7 @@ class Camt057Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt den Group Header mit optionalen Party-Informationen hinzu.
+     * Adds the group header with optional party information.
      */
     private function addGroupHeaderWithParties(Document $document): void {
         $this->builder->addElement('GrpHdr');
@@ -78,7 +78,7 @@ class Camt057Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt ein Notification Item hinzu.
+     * Adds a notification item.
      */
     private function addNotificationItem(NotificationItem $item): void {
         $this->builder->addElement('Ntfctn');

@@ -15,8 +15,8 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Zeitintervallart für wiederkehrende Buchungen (Feld 81).
- * Definiert, ob täglich oder monatlich gebucht wird.
+ * DATEV Time interval type for recurring bookings (Field 81).
+ * Defines whether booking is daily or monthly.
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/recurring-bookings
  */
@@ -25,7 +25,7 @@ enum TimeIntervalType: string {
     case MONTHLY = 'MON';
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -35,7 +35,7 @@ enum TimeIntervalType: string {
     }
 
     /**
-     * Factory für String-Werte (case-insensitive).
+     * Factory for string values (case-insensitive).
      */
     public static function fromString(string $value): self {
         $normalized = strtoupper(trim($value, '" '));
@@ -47,7 +47,7 @@ enum TimeIntervalType: string {
     }
 
     /**
-     * Factory mit null-Rückgabe bei ungültigen Werten.
+     * Factory with null return for invalid values.
      */
     public static function tryFromString(string $value): ?self {
         try {
@@ -58,21 +58,21 @@ enum TimeIntervalType: string {
     }
 
     /**
-     * Prüft, ob täglich.
+     * Checks if daily.
      */
     public function isDaily(): bool {
         return $this === self::DAILY;
     }
 
     /**
-     * Prüft, ob monatlich.
+     * Checks if monthly.
      */
     public function isMonthly(): bool {
         return $this === self::MONTHLY;
     }
 
     /**
-     * Gibt den CSV-Wert zurück (umschlossen in Anführungszeichen).
+     * Returns the CSV value (enclosed in quotes).
      */
     public function toCsvValue(): string {
         return '"' . $this->value . '"';

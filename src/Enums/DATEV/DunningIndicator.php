@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Mahnungs-Kennzeichen für Debitoren/Kreditoren (Feld 121).
+ * DATEV Dunning indicator for debitors/creditors (Field 121).
  *
  * 0 = Keine Angaben
  * 1 = 1. Mahnung
@@ -41,7 +41,7 @@ enum DunningIndicator: int {
     case DISABLED    = 9; // keine Mahnung
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -57,7 +57,7 @@ enum DunningIndicator: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -74,7 +74,7 @@ enum DunningIndicator: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value);
@@ -85,28 +85,28 @@ enum DunningIndicator: int {
     }
 
     /**
-     * Prüft, ob Mahnung(en) aktiv ist/sind.
+     * Checks if dunning is active.
      */
     public function hasDunning(): bool {
         return $this !== self::NONE && $this !== self::DISABLED;
     }
 
     /**
-     * Prüft, ob 1. Mahnung enthalten ist.
+     * Checks if 1st dunning is included.
      */
     public function hasFirstLevel(): bool {
         return in_array($this, [self::LEVEL_1, self::LEVEL_1_2, self::LEVEL_1_2_3], true);
     }
 
     /**
-     * Prüft, ob 2. Mahnung enthalten ist.
+     * Checks if 2nd dunning is included.
      */
     public function hasSecondLevel(): bool {
         return in_array($this, [self::LEVEL_2, self::LEVEL_1_2, self::LEVEL_2_3, self::LEVEL_1_2_3], true);
     }
 
     /**
-     * Prüft, ob 3. Mahnung enthalten ist.
+     * Checks if 3rd dunning is included.
      */
     public function hasThirdLevel(): bool {
         return in_array($this, [self::LEVEL_3, self::LEVEL_2_3, self::LEVEL_1_2_3], true);

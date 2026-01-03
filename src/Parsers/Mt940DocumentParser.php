@@ -15,7 +15,6 @@ namespace CommonToolkit\FinancialFormats\Parsers;
 use CommonToolkit\FinancialFormats\Builders\Mt\Mt940DocumentBuilder;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
-use CommonToolkit\FinancialFormats\Entities\Mt9\Purpose;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\Enums\CreditDebit;

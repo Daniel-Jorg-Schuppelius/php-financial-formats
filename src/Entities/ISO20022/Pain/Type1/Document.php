@@ -21,8 +21,8 @@ use DateTimeImmutable;
 /**
  * pain.001 Document - Customer Credit Transfer Initiation.
  * 
- * Überweisungsauftrag gemäß ISO 20022.
- * Äquivalent zu SWIFT MT101/MT103.
+ * Credit transfer order according to ISO 20022.
+ * Equivalent to SWIFT MT101/MT103.
  * 
  * Struktur:
  * - CstmrCdtTrfInitn (Customer Credit Transfer Initiation)
@@ -43,21 +43,21 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt den Nachrichten-Typ zurück.
+     * Returns the message type.
      */
     public function getType(): PainType {
         return PainType::PAIN_001;
     }
 
     /**
-     * Gibt den Group Header zurück.
+     * Returns the group header.
      */
     public function getGroupHeader(): GroupHeader {
         return $this->groupHeader;
     }
 
     /**
-     * Gibt alle Payment Instructions zurück.
+     * Returns all payment instructions.
      * @return PaymentInstruction[]
      */
     public function getPaymentInstructions(): array {
@@ -65,7 +65,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Fügt eine Payment Instruction hinzu.
+     * Adds a payment instruction.
      */
     public function addPaymentInstruction(PaymentInstruction $instruction): void {
         $this->paymentInstructions[] = $instruction;
@@ -73,7 +73,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt die Gesamtanzahl der Transaktionen zurück.
+     * Returns the total number of transactions.
      */
     public function countTransactions(): int {
         return array_reduce(
@@ -95,7 +95,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt alle Transaktionen als flache Liste zurück.
+     * Returns all transactions as a flat list.
      * @return CreditTransferTransaction[]
      */
     public function getAllTransactions(): array {
@@ -156,7 +156,7 @@ final class Document extends PainDocumentAbstract {
 
         // GroupHeader Validierung
         if (strlen($this->groupHeader->getMessageId()) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (!$this->groupHeader->getInitiatingParty()->isValid()) {
@@ -170,7 +170,7 @@ final class Document extends PainDocumentAbstract {
 
         foreach ($this->paymentInstructions as $index => $instruction) {
             if (strlen($instruction->getPaymentInstructionId()) > 35) {
-                $errors[] = "PmtInf[$index]/PmtInfId darf maximal 35 Zeichen lang sein";
+                $errors[] = "PmtInf[$index]/PmtInfId must not exceed 35 characters";
             }
 
             if (empty($instruction->getTransactions())) {
@@ -208,7 +208,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace (Default: pain.001.001.12)
      * @return string Das generierte XML

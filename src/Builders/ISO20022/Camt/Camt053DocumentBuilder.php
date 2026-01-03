@@ -29,10 +29,10 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Builder für CAMT.053 Documents (Bank to Customer Statement).
+ * Builder for CAMT.053 Documents (Bank to Customer Statement).
  * 
- * CAMT.053 enthält Tagesauszüge mit Opening- und Closing-Balance.
- * Äquivalent zu MT940 im SWIFT-Format.
+ * CAMT.053 contains end-of-day statements with Opening and Closing Balance.
+ * Equivalent to MT940 in SWIFT format.
  * 
  * @package CommonToolkit\Builders
  */
@@ -123,7 +123,7 @@ final class Camt053DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Transaktionen hinzu.
+     * Adds multiple transactions.
      * 
      * @param Transaction[] $entries
      * @throws InvalidArgumentException Wenn ein Element kein Transaction-Objekt ist
@@ -140,9 +140,9 @@ final class Camt053DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.053 Document.
+     * Creates the CAMT.053 Document.
      * 
-     * Bei CAMT.053 (Tagesauszug) sind Opening- und Closing-Balance üblich,
+     * For CAMT.053 (end-of-day statement), Opening and Closing Balance are typical,
      * aber nicht strikt erforderlich.
      * 
      * @throws RuntimeException Wenn Pflichtfelder fehlen
@@ -227,7 +227,7 @@ final class Camt053DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.053 Dokument aus einem MT940 Dokument.
+     * Creates ein CAMT.053 Dokument aus einem MT940 Dokument.
      *
      * @param Mt940Document $mt940 Das MT940 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -238,7 +238,7 @@ final class Camt053DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.053 Dokument aus einem MT941 Dokument.
+     * Creates ein CAMT.053 Dokument aus einem MT941 Dokument.
      *
      * @param Mt941Document $mt941 Das MT941 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -249,7 +249,7 @@ final class Camt053DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.053 Dokument aus einem MT942 Dokument.
+     * Creates ein CAMT.053 Dokument aus einem MT942 Dokument.
      *
      * @param Mt942Document $mt942 Das MT942 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -260,7 +260,7 @@ final class Camt053DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.053 Dokument aus einem DATEV BankTransaction-Dokument.
+     * Creates ein CAMT.053 Dokument aus einem DATEV BankTransaction-Dokument.
      *
      * @param BankTransaction $document DATEV ASCII-Weiterverarbeitungsdokument
      * @param float|null $openingBalanceAmount Anfangssaldo (optional, wird sonst auf 0 gesetzt)

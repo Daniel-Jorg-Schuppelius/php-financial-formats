@@ -23,11 +23,11 @@ use DateTimeImmutable;
 /**
  * CAMT.057 Document (Notification to Receive).
  *
- * Repräsentiert eine Benachrichtigung über einen erwarteten Zahlungseingang
- * gemäß ISO 20022 camt.057.001.xx Standard.
+ * Represents a notification about an expected incoming payment
+ * according to ISO 20022 camt.057.001.xx Standard.
  *
- * Wird von einer Bank verwendet, um einen Kunden oder ein anderes Finanzinstitut
- * über einen erwarteten Zahlungseingang zu informieren.
+ * Used by a bank to inform a customer or another financial institution
+ * about an expected payment receipt zu informieren.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type57
  */

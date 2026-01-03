@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.030 XML (Notification of Case Assignment).
+ * Generator for CAMT.030 XML (Notification of Case Assignment).
  * 
- * Generiert Benachrichtigungen über die Zuweisung eines Falls
- * gemäß ISO 20022 camt.030.001.xx Standard.
+ * Generates notifications about case assignments
+ * according to ISO 20022 camt.030.001.xx Standard.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -49,7 +49,7 @@ class Camt030Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt den Header hinzu.
+     * Adds the header.
      */
     private function addHeader(Document $document): void {
         $this->builder->addElement('Hdr');
@@ -61,7 +61,7 @@ class Camt030Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu.
+     * Adds the case structure.
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -84,7 +84,7 @@ class Camt030Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -125,7 +125,7 @@ class Camt030Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Notification hinzu.
+     * Adds the notification.
      */
     private function addNotification(Document $document): void {
         if ($document->getNotificationJustification() === null) {

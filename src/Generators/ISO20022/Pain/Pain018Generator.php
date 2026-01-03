@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18\MandateSuspensionRequest;
 
 /**
- * Generiert pain.018 XML-Dokumente (Mandate Suspension Request).
+ * Generates pain.018 XML documents (Mandate Suspension Request).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.018.001.04 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.018.001.04 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain018Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.018 Dokument.
+     * Generates XML from a pain.018 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('MndtSspnsnReq');

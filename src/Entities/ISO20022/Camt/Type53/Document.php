@@ -23,9 +23,9 @@ use DateTimeImmutable;
 /**
  * CAMT.053 Document (Bank to Customer Statement).
  * 
- * Repräsentiert einen Tagesauszug gemäß ISO 20022 camt.053.001.02/08 Standard.
+ * Represents a daily statement according to ISO 20022 camt.053.001.02/08 Standard.
  * 
- * Verwendet <BkToCstmrStmt> als Root und <Stmt> für Statements.
+ * Uses <BkToCstmrStmt> as root and <Stmt> for statements.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt053
  */
@@ -103,7 +103,7 @@ class Document extends CamtDocumentAbstract {
     }
 
     /**
-     * Gibt das Dokument als XML-String zurück.
+     * Returns the document as XML string.
      */
     public function __toString(): string {
         return $this->toXml();

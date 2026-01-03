@@ -21,13 +21,13 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PostalAddress;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
 
 /**
- * Abstrakte Basisklasse für Pain-XML-Generatoren.
+ * Abstract base class for Pain XML generators.
  * 
- * Stellt gemeinsame Funktionalität für alle pain.xxx Generatoren bereit:
+ * Provides common functionality for all pain.xxx generators:
  * - DOM-Dokument Initialisierung via ExtendedDOMDocumentBuilder
  * - Gemeinsame Strukturen (PartyIdentification, PostalAddress, etc.)
  * 
- * Erweitert Iso20022GeneratorAbstract für gemeinsame ISO 20022 Funktionalität.
+ * Extends Iso20022GeneratorAbstract for common ISO 20022 functionality.
  * 
  * @package CommonToolkit\Contracts\Abstracts\ISO20022\Pain
  */
@@ -49,7 +49,7 @@ abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine PartyIdentification hinzu (Pain-spezifisch mit PostalAddress).
+     * Adds a PartyIdentification (Pain-specific with PostalAddress).
      */
     protected function addPainPartyIdentification(string $elementName, PartyIdentification $party): void {
         $this->builder->addElement($elementName);
@@ -85,7 +85,7 @@ abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine AccountIdentification hinzu (Pain-spezifisch).
+     * Adds an AccountIdentification (Pain-specific).
      */
     protected function addPainAccountIdentification(string $elementName, AccountIdentification $account): void {
         $this->builder
@@ -111,7 +111,7 @@ abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine FinancialInstitution hinzu (Pain-spezifisch mit LEI/MemberId).
+     * Adds a FinancialInstitution (Pain-specific with LEI/MemberId).
      */
     protected function addPainFinancialInstitution(string $elementName, FinancialInstitution $institution): void {
         $this->builder
@@ -135,7 +135,7 @@ abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt RemittanceInformation hinzu (Pain-spezifisch mit strukturierter Referenz).
+     * Adds RemittanceInformation (Pain-specific with structured reference).
      */
     protected function addPainRemittanceInformation(RemittanceInformation $info): void {
         $this->builder->addElement('RmtInf');
@@ -158,7 +158,7 @@ abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt einen Betrag mit Währungsattribut hinzu.
+     * Adds an amount with currency attribute.
      */
     protected function addInstructedAmount(float $amount, string $currency): void {
         $this->builder

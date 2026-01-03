@@ -40,8 +40,8 @@ use RuntimeException;
  * - Felder 8-9: Auftraggeber-Name → counterpartyName
  * - Felder 10-11: BLZ/Kontonummer Auftraggeber → counterpartyIban
  * - Felder 12-14: Verwendungszweck 1-3 → purpose
- * - Feld 16: Geschäftsvorgangscode → transactionCode
- * - Feld 17: Währung → currency
+ * - Field 16: Business transaction code → transactionCode
+ * - Field 17: Currency → currency
  * 
  * Das Ausgabeformat entspricht ISO 20022 camt.053.001.02.
  * 
@@ -153,7 +153,7 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
      * Konvertiert mehrere DATEV-Dokumente in CAMT.053-Dokumente.
      * 
      * @param BankTransaction[] $documents Liste der DATEV-Dokumente
-     * @param float $startingBalance Anfangssaldo für das erste Dokument
+     * @param float $startingBalance Starting balance for the first document
      * @return Camt053Document[]
      */
     public static function convertMultiple(array $documents, float $startingBalance = 0.0): array {

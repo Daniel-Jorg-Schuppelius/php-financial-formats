@@ -15,12 +15,12 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Zinsberechnungs-Kennzeichen für Debitoren/Kreditoren (Feld 129).
+ * DATEV Interest calculation indicator for debitors/creditors (Field 129).
  *
- * 0 = MPD-Schlüsselung gilt
+ * 0 = MPD keying applies
  * 1 = Fester Zinssatz
- * 2 = Zinssatz über Staffel
- * 9 = Keine Berechnung für diesen Debitor
+ * 2 = Interest rate via scale
+ * 9 = No calculation for this debitor
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
  */
@@ -31,7 +31,7 @@ enum InterestCalculationIndicator: int {
     case DISABLED         = 9; // Keine Berechnung für diesen Debitor
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -43,7 +43,7 @@ enum InterestCalculationIndicator: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -56,7 +56,7 @@ enum InterestCalculationIndicator: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value);
@@ -67,7 +67,7 @@ enum InterestCalculationIndicator: int {
     }
 
     /**
-     * Prüft, ob Zinsberechnung aktiv ist.
+     * Checks if interest calculation is active.
      */
     public function isEnabled(): bool {
         return $this !== self::DISABLED;

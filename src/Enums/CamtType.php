@@ -13,26 +13,26 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * CAMT Nachrichtentypen gemäß ISO 20022.
+ * CAMT message types according to ISO 20022.
  * 
  * @package CommonToolkit\Enums\Common\Banking
  */
 enum CamtType: string {
     /**
      * CAMT.052 - Bank to Customer Account Report (Intraday)
-     * Untertägige Kontobewegungsinformation
+     * Intraday account movement information
      */
     case CAMT052 = 'camt.052';
 
     /**
      * CAMT.053 - Bank to Customer Statement (End of Day)
-     * Täglicher Kontoauszug
+     * Daily account statement
      */
     case CAMT053 = 'camt.053';
 
     /**
      * CAMT.054 - Bank to Customer Debit Credit Notification
-     * Soll/Haben-Avis (Einzelumsatzbenachrichtigung)
+     * Debit/Credit notification (individual transaction notification)
      */
     case CAMT054 = 'camt.054';
 
@@ -50,7 +50,7 @@ enum CamtType: string {
 
     /**
      * CAMT.029 - Resolution of Investigation
-     * Klärungsantwort auf Reklamation
+     * Clarification response to claim
      */
     case CAMT029 = 'camt.029';
 
@@ -68,19 +68,19 @@ enum CamtType: string {
 
     /**
      * CAMT.028 - Additional Payment Information
-     * Zusätzliche Zahlungsinformationen
+     * Additional payment information
      */
     case CAMT028 = 'camt.028';
 
     /**
      * CAMT.087 - Request to Modify Payment
-     * Änderungsanfrage für Zahlung
+     * Payment modification request
      */
     case CAMT087 = 'camt.087';
 
     /**
      * CAMT.030 - Notification of Case Assignment
-     * Benachrichtigung über Fallzuweisung
+     * Case assignment notification
      */
     case CAMT030 = 'camt.030';
 
@@ -92,13 +92,13 @@ enum CamtType: string {
 
     /**
      * CAMT.033 - Request for Duplicate
-     * Anfrage für ein Duplikat
+     * Request for duplicate
      */
     case CAMT033 = 'camt.033';
 
     /**
      * CAMT.057 - Notification to Receive
-     * Benachrichtigung über erwarteten Zahlungseingang
+     * Notification about expected payment receipt
      */
     case CAMT057 = 'camt.057';
 
@@ -122,7 +122,7 @@ enum CamtType: string {
 
     /**
      * CAMT.035 - Proprietary Format Investigation
-     * Proprietäre Untersuchungsanfrage
+     * Proprietary investigation request
      */
     case CAMT035 = 'camt.035';
 
@@ -151,37 +151,37 @@ enum CamtType: string {
     case CAMT039 = 'camt.039';
 
     /**
-     * Gibt den deutschen Beschreibungstext zurück.
+     * Returns the German description text.
      */
     public function getDescription(): string {
         return match ($this) {
-            self::CAMT052 => 'Untertägige Kontobewegungsinformation',
-            self::CAMT053 => 'Täglicher Kontoauszug',
-            self::CAMT054 => 'Soll/Haben-Avis',
-            self::CAMT055 => 'Kundenseitige Stornoanforderung',
-            self::CAMT056 => 'Bank-zu-Bank Zahlungsstornierung',
-            self::CAMT029 => 'Klärungsantwort auf Reklamation',
-            self::CAMT026 => 'Nicht zuordenbare Zahlung',
-            self::CAMT027 => 'Einfordern einer nicht erhaltenen Zahlung',
-            self::CAMT028 => 'Zusätzliche Zahlungsinformationen',
-            self::CAMT087 => 'Änderungsanfrage für Zahlung',
-            self::CAMT030 => 'Benachrichtigung über Fallzuweisung',
-            self::CAMT031 => 'Ablehnung einer Untersuchung',
-            self::CAMT033 => 'Anfrage für ein Duplikat',
-            self::CAMT057 => 'Benachrichtigung über erwarteten Zahlungseingang',
-            self::CAMT058 => 'Stornierungshinweis einer Empfangsbenachrichtigung',
-            self::CAMT059 => 'Statusbericht einer Empfangsbenachrichtigung',
-            self::CAMT034 => 'Duplikatantwort',
-            self::CAMT035 => 'Proprietäre Untersuchungsanfrage',
-            self::CAMT036 => 'Belastungsautorisierungsantwort',
-            self::CAMT037 => 'Belastungsautorisierungsanfrage',
-            self::CAMT038 => 'Fallstatusabfrage',
-            self::CAMT039 => 'Fallstatusbericht',
+            self::CAMT052 => 'Intraday account movement information',
+            self::CAMT053 => 'Daily account statement',
+            self::CAMT054 => 'Debit/Credit Notification',
+            self::CAMT055 => 'Customer payment cancellation request',
+            self::CAMT056 => 'Bank-to-bank payment cancellation',
+            self::CAMT029 => 'Clarification response to claim',
+            self::CAMT026 => 'Unable to apply payment',
+            self::CAMT027 => 'Claim non-receipt of payment',
+            self::CAMT028 => 'Additional payment information',
+            self::CAMT087 => 'Payment modification request',
+            self::CAMT030 => 'Case assignment notification',
+            self::CAMT031 => 'Rejection of investigation',
+            self::CAMT033 => 'Request for duplicate',
+            self::CAMT057 => 'Notification about expected payment receipt',
+            self::CAMT058 => 'Cancellation notice of receipt notification',
+            self::CAMT059 => 'Status report of receipt notification',
+            self::CAMT034 => 'Duplicate response',
+            self::CAMT035 => 'Proprietary investigation request',
+            self::CAMT036 => 'Debit authorization response',
+            self::CAMT037 => 'Debit authorization request',
+            self::CAMT038 => 'Case status query',
+            self::CAMT039 => 'Case status report',
         };
     }
 
     /**
-     * Gibt den ISO 20022 Nachrichtennamen zurück.
+     * Returns the ISO 20022 message name.
      */
     public function getMessageName(): string {
         return match ($this) {
@@ -211,7 +211,7 @@ enum CamtType: string {
     }
 
     /**
-     * Gibt das Root-Element im XML zurück.
+     * Returns the root element in XML.
      */
     public function getRootElement(): string {
         return match ($this) {
@@ -241,7 +241,7 @@ enum CamtType: string {
     }
 
     /**
-     * Gibt das Statement/Report/Notification Element zurück.
+     * Returns the Statement/Report/Notification element.
      */
     public function getStatementElement(): string {
         return match ($this) {
@@ -271,7 +271,7 @@ enum CamtType: string {
     }
 
     /**
-     * Prüft ob es sich um einen Auszugstyp handelt (052, 053, 054).
+     * Checks if this is a statement type (052, 053, 054).
      */
     public function isStatementType(): bool {
         return match ($this) {
@@ -281,7 +281,7 @@ enum CamtType: string {
     }
 
     /**
-     * Prüft ob es sich um einen Stornierungstyp handelt (055, 056, 029).
+     * Checks if this is a cancellation type (055, 056, 029).
      */
     public function isCancellationType(): bool {
         return match ($this) {
@@ -291,7 +291,7 @@ enum CamtType: string {
     }
 
     /**
-     * Prüft ob es sich um einen Investigation/Claim-Typ handelt (026, 027, 028, 030, 031, 033, 034, 035, 036, 037, 038, 039, 087).
+     * Checks if this is an investigation/claim type (026, 027, 028, 030, 031, 033, 034, 035, 036, 037, 038, 039, 087).
      */
     public function isInvestigationType(): bool {
         return match ($this) {
@@ -302,7 +302,7 @@ enum CamtType: string {
     }
 
     /**
-     * Prüft ob es sich um einen Notification-Typ handelt (057, 058, 059).
+     * Checks if this is a notification type (057, 058, 059).
      */
     public function isNotificationType(): bool {
         return match ($this) {
@@ -454,7 +454,7 @@ enum CamtType: string {
     }
 
     /**
-     * Gibt die unterstützten Versionen für diesen CAMT-Typ zurück.
+     * Returns the supported versions for this CAMT type.
      * @return CamtVersion[]
      */
     public function getSupportedVersions(): array {
@@ -541,21 +541,21 @@ enum CamtType: string {
     }
 
     /**
-     * Gibt den Namespace für eine bestimmte Version zurück.
+     * Returns the namespace for a specific version.
      */
     public function getNamespace(CamtVersion $version): string {
         return $version->getNamespace($this);
     }
 
     /**
-     * Prüft ob eine Version für diesen CAMT-Typ unterstützt wird.
+     * Checks if a version is supported for this CAMT type.
      */
     public function supportsVersion(CamtVersion $version): bool {
         return in_array($version, $this->getSupportedVersions(), true);
     }
 
     /**
-     * Gibt die unterstützten Namespace-URIs zurück.
+     * Returns the supported namespace URIs.
      * @return array<string, string> Version => Namespace-URI
      * @deprecated Verwende getSupportedVersions() und getNamespace() stattdessen
      */

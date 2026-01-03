@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type28;
 /**
  * CAMT.028 Additional Payment Information Entry.
  * 
- * Enthält zusätzliche Informationen zu einer Zahlung.
+ * Contains additional information about a payment.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type28
  */

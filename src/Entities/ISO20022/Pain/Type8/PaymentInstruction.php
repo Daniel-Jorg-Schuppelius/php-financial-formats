@@ -22,14 +22,14 @@ use CommonToolkit\FinancialFormats\Enums\SequenceType;
 use DateTimeImmutable;
 
 /**
- * Payment Instruction für pain.008 (PmtInf).
+ * Payment instruction for pain.008 (PmtInf).
  * 
- * Gruppiert Lastschriften mit gemeinsamen Gläubiger-Daten:
+ * Groups direct debits with common creditor data:
  * - PmtInfId: Payment Instruction ID
  * - PmtMtd: Zahlungsmethode (DD=Lastschrift)
- * - Cdtr: Gläubiger (Creditor)
- * - CdtrAcct: Konto des Gläubigers
- * - CdtrAgt: Bank des Gläubigers
+ * - Cdtr: Creditor
+ * - CdtrAcct: Creditor account
+ * - CdtrAgt: Creditor bank
  * - DrctDbtTxInf: Einzelne Lastschriften
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type8
@@ -58,7 +58,7 @@ final class PaymentInstruction {
     }
 
     /**
-     * Factory für SEPA Core Lastschrift.
+     * Factory for SEPA Core direct debit.
      */
     public static function sepaCore(
         string $paymentInstructionId,
@@ -87,7 +87,7 @@ final class PaymentInstruction {
     }
 
     /**
-     * Factory für SEPA B2B Lastschrift.
+     * Factory for SEPA B2B direct debit.
      */
     public static function sepaB2B(
         string $paymentInstructionId,
@@ -175,7 +175,7 @@ final class PaymentInstruction {
     }
 
     /**
-     * Fügt eine Transaktion hinzu.
+     * Adds a transaction.
      */
     public function addTransaction(DirectDebitTransaction $transaction): self {
         $clone = clone $this;
@@ -194,7 +194,7 @@ final class PaymentInstruction {
     }
 
     /**
-     * Zählt die Transaktionen.
+     * Counts the transactions.
      */
     public function countTransactions(): int {
         return count($this->transactions);

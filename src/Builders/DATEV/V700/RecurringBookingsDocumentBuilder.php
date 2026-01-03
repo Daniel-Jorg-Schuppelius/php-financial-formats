@@ -24,7 +24,7 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV Wiederkehrende Buchungen-Dokumente (V700).
+ * Builder for DATEV Recurring Bookings documents (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und wiederkehrenden Buchungen.
  */
 final class RecurringBookingsDocumentBuilder extends CSVDocumentBuilder {
@@ -55,7 +55,7 @@ final class RecurringBookingsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Datenzeile hinzu.
+     * Adds a data line.
      */
     public function addDataLine(DataLine $dataLine): self {
         $this->dataLines[] = $dataLine;
@@ -63,7 +63,7 @@ final class RecurringBookingsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen einer wiederkehrenden Buchung.
+     * Convenience method for adding a recurring booking.
      */
     public function addRecurringBooking(
         float $amount,
@@ -170,7 +170,7 @@ final class RecurringBookingsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für RecurringBookings.
+     * Creates a standard MetaHeader for RecurringBookings.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -185,7 +185,7 @@ final class RecurringBookingsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

@@ -18,11 +18,11 @@ use CommonToolkit\Helper\Data\CurrencyHelper;
 use DateTimeImmutable;
 
 /**
- * Abstrakte Basisklasse für MT9xx-Transaktionen (SWIFT Cash Management).
+ * Abstract base class for MT9xx transactions (SWIFT Cash Management).
  * 
  * Gemeinsame Eigenschaften aller MT9-Transaktionstypen:
  * - Buchungsdatum / Valutadatum
- * - Betrag und Währung
+ * - Amount and currency
  * - Soll/Haben-Kennzeichen
  * 
  * Entspricht Feld :61: in SWIFT-Notation.
@@ -51,77 +51,77 @@ abstract class MtTransactionAbstract {
     }
 
     /**
-     * Gibt das Buchungsdatum zurück.
+     * Returns the booking date.
      */
     public function getBookingDate(): DateTimeImmutable {
         return $this->bookingDate;
     }
 
     /**
-     * Alias für getBookingDate() - Kompatibilität mit MT940-Konventionen.
+     * Alias for getBookingDate() - compatibility with MT940 conventions.
      */
     public function getDate(): DateTimeImmutable {
         return $this->bookingDate;
     }
 
     /**
-     * Gibt das Valutadatum (Wertstellung) zurück.
+     * Returns the value date.
      */
     public function getValutaDate(): ?DateTimeImmutable {
         return $this->valutaDate;
     }
 
     /**
-     * Gibt den Betrag zurück (immer positiv).
+     * Returns the amount (immer positiv).
      */
     public function getAmount(): float {
         return $this->amount;
     }
 
     /**
-     * Gibt den vorzeichenbehafteten Betrag zurück.
+     * Returns the signed amount.
      */
     public function getSignedAmount(): float {
         return $this->creditDebit === CreditDebit::DEBIT ? -$this->amount : $this->amount;
     }
 
     /**
-     * Gibt das Soll/Haben-Kennzeichen zurück.
+     * Returns the debit/credit indicator.
      */
     public function getCreditDebit(): CreditDebit {
         return $this->creditDebit;
     }
 
     /**
-     * Gibt die Währung zurück.
+     * Returns the currency.
      */
     public function getCurrency(): CurrencyCode {
         return $this->currency;
     }
 
     /**
-     * Prüft ob es sich um eine Soll-Buchung handelt.
+     * Checks if this is a debit entry.
      */
     public function isDebit(): bool {
         return $this->creditDebit === CreditDebit::DEBIT;
     }
 
     /**
-     * Prüft ob es sich um eine Haben-Buchung handelt.
+     * Checks if this is a credit entry.
      */
     public function isCredit(): bool {
         return $this->creditDebit === CreditDebit::CREDIT;
     }
 
     /**
-     * Gibt das Vorzeichen als String zurück.
+     * Returns the sign as string.
      */
     public function getSign(): string {
         return $this->creditDebit->getSymbol();
     }
 
     /**
-     * Gibt den formatierten Betrag zurück.
+     * Returns the formatted amount.
      */
     public function getFormattedAmount(?string $locale = null): string {
         return CurrencyHelper::format($this->amount, $this->currency, $locale);

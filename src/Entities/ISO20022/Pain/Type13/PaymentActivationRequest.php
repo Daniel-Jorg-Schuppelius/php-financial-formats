@@ -19,7 +19,7 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Payment Activation Request für pain.013.
+ * Payment activation request for pain.013.
  * 
  * Einzelne Zahlungsaktivierungsanfrage vom Kreditor.
  * 

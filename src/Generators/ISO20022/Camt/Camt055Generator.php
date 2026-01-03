@@ -21,11 +21,11 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.055 XML (Customer Payment Cancellation Request).
+ * Generator for CAMT.055 XML (Customer Payment Cancellation Request).
  * 
- * Generiert Stornierungsanfragen vom Kunden an die Bank
- * gemäß ISO 20022 camt.055.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates Stornierungsanfragen vom Kunden an die Bank
+ * according to ISO 20022 camt.055.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -56,7 +56,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -90,7 +90,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu (optional).
+     * Adds the case structure (optional).
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -113,7 +113,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die CtrlData-Struktur hinzu (optional).
+     * Adds the CtrlData structure (optional).
      */
     private function addControlData(Document $document): void {
         if ($document->getNumberOfTransactions() === null) {
@@ -131,7 +131,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt eine Underlying Transaction hinzu.
+     * Adds an underlying transaction.
      */
     private function addUnderlyingTransaction(UnderlyingTransaction $underlying): void {
         $this->builder->addElement('Undrlyg');
@@ -164,7 +164,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt Original Payment Information And Cancellation hinzu.
+     * Adds original payment information and cancellation.
      */
     private function addOriginalPaymentInformationAndCancellation(OriginalPaymentInformation $pmtInf): void {
         $this->builder->addElement('OrgnlPmtInfAndCxl');
@@ -190,7 +190,7 @@ class Camt055Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt Transaction Information hinzu.
+     * Adds transaction information.
      */
     private function addTransactionInfo(PaymentCancellationRequest $txInfo): void {
         $this->builder->addElement('TxInf');

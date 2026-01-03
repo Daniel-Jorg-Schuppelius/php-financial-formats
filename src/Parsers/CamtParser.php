@@ -38,23 +38,20 @@ use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Helper\Data\CamtValidator;
 use CommonToolkit\FinancialFormats\Registries\CamtParserRegistry;
-use CommonToolkit\Entities\XML\ExtendedDOMDocument;
-use CommonToolkit\Parsers\ExtendedDOMDocumentParser;
 use CommonToolkit\Helper\FileSystem\File;
 use DateTimeImmutable;
-use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use RuntimeException;
 
 /**
- * Generischer Parser für CAMT-Dokumente.
+ * Generic parser for CAMT documents.
  * 
  * Erkennt automatisch den CAMT-Typ und gibt das entsprechende
- * Document-Objekt zurück. Unterstützt CAMT 052, 053, 054 direkt
+ * Document object. Supports CAMT 052, 053, 054 directly
  * und delegiert andere Typen an den CamtReflectionParser.
  * 
- * Nutzt CamtParserHelper für gemeinsame XML-Parsing-Funktionalität.
+ * Uses CamtParserHelper for common XML parsing functionality.
  * 
  * @package CommonToolkit\Parsers
  */
@@ -64,9 +61,9 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein beliebiges CAMT-Dokument.
      * 
      * @param string $xmlContent XML-Inhalt
-     * @param bool $validate Optional: XSD-Validierung durchführen
+     * @param bool $validate Optional: Perform XSD validation
      * @return CamtDocumentInterface Geparstes Dokument
-     * @throws RuntimeException Bei ungültigem XML oder unbekanntem Typ
+     * @throws RuntimeException On invalid XML oder unbekanntem Typ
      */
     public static function parse(string $xmlContent, bool $validate = false): CamtDocumentInterface {
         $type = CamtType::fromXml($xmlContent);
@@ -104,7 +101,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst eine CAMT-Datei.
      * 
      * @param string $filePath Pfad zur Datei
-     * @param bool $validate Optional: XSD-Validierung durchführen
+     * @param bool $validate Optional: Perform XSD validation
      * @return CamtDocumentInterface Geparstes Dokument
      * @throws RuntimeException Bei Lesefehlern
      */
@@ -273,12 +270,12 @@ class CamtParser extends Iso20022ParserAbstract {
     // =========================================================================
 
     /**
-     * Parst einen Balance-Block mit dynamischem Präfix.
+     * Parses a balance block with dynamic prefix.
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $balNode Der Balance-Node
-     * @param string $defaultCurrency Standard-Währung
-     * @param string $p Namespace-Präfix
+     * @param string $defaultCurrency Default currency
+     * @param string $p Namespace prefix
      * @return CamtBalance|null Der geparste Saldo oder null
      */
     private static function parseBalanceWithPrefix(DOMXPath $xpath, DOMNode $balNode, string $defaultCurrency, string $p): ?CamtBalance {
@@ -312,12 +309,12 @@ class CamtParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Parst gemeinsame Entry-Basisdaten für CAMT 052/053/054.
+     * Parses common entry base data for CAMT 052/053/054.
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $entry Entry-Node
-     * @param string $defaultCurrency Standard-Währung
-     * @param string $p Namespace-Präfix
+     * @param string $defaultCurrency Default currency
+     * @param string $p Namespace prefix
      * @return array{amount: float, currency: CurrencyCode, creditDebit: CreditDebit, bookingDate: ?DateTimeImmutable, valutaDate: ?DateTimeImmutable, status: string, isReversal: bool, entryRef: ?string, acctSvcrRef: ?string, bankTxCode: ?string, domainCode: ?string, familyCode: ?string, subFamilyCode: ?string, txDtls: ?DOMNode}|null
      */
     private static function parseEntryBasics(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?array {
@@ -385,7 +382,7 @@ class CamtParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Parst einen Entry-Block für CAMT.053 mit dynamischem Präfix.
+     * Parses an entry block for CAMT.053 with dynamic prefix.
      */
     private static function parseTransaction053WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt053Transaction {
         $basics = self::parseEntryBasics($xpath, $entry, $defaultCurrency, $p);
@@ -481,7 +478,7 @@ class CamtParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Parst einen Entry-Block für CAMT.052 mit dynamischem Präfix.
+     * Parses an entry block for CAMT.052 with dynamic prefix.
      */
     private static function parseTransaction052WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt052Transaction {
         $basics = self::parseEntryBasics($xpath, $entry, $defaultCurrency, $p);
@@ -529,7 +526,7 @@ class CamtParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Parst einen Entry-Block für CAMT.054 mit dynamischem Präfix.
+     * Parses an entry block for CAMT.054 with dynamic prefix.
      */
     private static function parseTransaction054WithPrefix(DOMXPath $xpath, DOMNode $entry, string $defaultCurrency, string $p): ?Camt054Transaction {
         $basics = self::parseEntryBasics($xpath, $entry, $defaultCurrency, $p);
@@ -893,7 +890,7 @@ class CamtParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Gibt den erkannten CAMT-Typ zurück.
+     * Returns the detected CAMT type.
      */
     public static function detectType(string $xmlContent): ?CamtType {
         return CamtType::fromXml($xmlContent);

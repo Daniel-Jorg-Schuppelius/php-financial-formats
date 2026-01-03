@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document;
 
 /**
- * Generiert pain.009 XML-Dokumente (Mandate Initiation Request).
+ * Generates pain.009 XML documents (Mandate Initiation Request).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.009.001.08 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.009.001.08 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain009Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.009 Dokument.
+     * Generates XML from a pain.009 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('MndtInitnReq');

@@ -16,9 +16,9 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Transaction Information für pain.007 (TxInf).
+ * Transaction information for pain.007 (TxInf).
  * 
- * Details zur ursprünglichen Transaktion, die storniert werden soll.
+ * Details about the original transaction to be reversed.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type7
  */

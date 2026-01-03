@@ -111,7 +111,7 @@ final class ApplicationHeader {
     }
 
     /**
-     * Gibt den vollständigen Block 2 String zurück
+     * Returns the complete Block 2 string
      */
     public function __toString(): string {
         if ($this->isOutput) {

@@ -24,7 +24,7 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV Sachkontenbeschriftungen-Dokumente (V700).
+ * Builder for DATEV GL Account Description documents (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und Kontenbeschriftungen.
  */
 final class GLAccountDescriptionDocumentBuilder extends CSVDocumentBuilder {
@@ -55,7 +55,7 @@ final class GLAccountDescriptionDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Datenzeile hinzu.
+     * Adds a data line.
      */
     public function addDataLine(DataLine $dataLine): self {
         $this->dataLines[] = $dataLine;
@@ -63,7 +63,7 @@ final class GLAccountDescriptionDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen einer Sachkontenbeschriftung.
+     * Convenience method for adding a GL account description.
      */
     public function addGLAccount(
         string $account,
@@ -164,7 +164,7 @@ final class GLAccountDescriptionDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für GLAccountDescription.
+     * Creates a standard MetaHeader for GLAccountDescription.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -179,7 +179,7 @@ final class GLAccountDescriptionDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

@@ -26,10 +26,10 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Builder für MT941 Documents (Balance Report).
+ * Builder for MT941 Documents (Balance Report).
  * 
- * MT941 enthält nur Saldeninformationen ohne Transaktionsdetails.
- * Verwendet für schnelle Saldenabfragen im Treasury/Cash Management.
+ * MT941 contains only balance information without transaction details.
+ * Used for quick balance queries in Treasury/Cash Management.
  * 
  * @package CommonToolkit\Builders
  */

@@ -16,7 +16,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
 
 /**
- * Payment Activation Status für pain.014.
+ * Payment activation status for pain.014.
  * 
  * Status einer einzelnen Zahlungsaktivierung.
  * 

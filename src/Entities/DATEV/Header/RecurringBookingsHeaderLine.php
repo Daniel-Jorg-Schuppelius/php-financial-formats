@@ -24,7 +24,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\RecurringBookin
  */
 final class RecurringBookingsHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 RecurringBookings Header.
+     * Factory method for V700 RecurringBookings header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,7 +34,7 @@ final class RecurringBookingsHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 RecurringBookings passt.
+     * Checks if this header matches V700 RecurringBookings.
      */
     public function isV700RecurringBookingsHeader(): bool {
         return $this->isCompatibleWithEnum(RecurringBookingsHeaderField::class);

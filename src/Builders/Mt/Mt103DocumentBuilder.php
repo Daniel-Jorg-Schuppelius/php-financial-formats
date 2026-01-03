@@ -22,10 +22,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für MT103 Single Customer Credit Transfer.
+ * Builder for MT103 Single Customer Credit Transfer.
  * 
- * Erstellt Einzelüberweisungen gemäß SWIFT-Standard. Der häufigste
- * Nachrichtentyp für Kundenzahlungen im internationalen Zahlungsverkehr.
+ * Creates single transfers according to SWIFT standard. The most common
+ * Nachrichtentyp for customer payments in international payment transactions.
  * 
  * Verwendung:
  * ```php
@@ -82,7 +82,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt Betrag, Währung und Valutadatum (Feld :32A:).
+     * Sets amount, currency and value date (Field :32A:).
      */
     public function amount(float $amount, CurrencyCode $currency, DateTimeImmutable $valueDate): self {
         $clone = clone $this;
@@ -95,7 +95,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt Betrag mit Währungsumrechnung (Felder :32A:, :33B:, :36:).
+     * Sets amount with currency conversion (Fields :32A:, :33B:, :36:).
      */
     public function amountWithConversion(
         float $amount,
@@ -118,7 +118,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt die TransferDetails mit vollständigem Objekt.
+     * Sets the TransferDetails with complete object.
      */
     public function transferDetails(TransferDetails $details): self {
         $clone = clone $this;
@@ -141,7 +141,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt den Auftraggeber mit vollständiger Party.
+     * Sets the ordering party with complete Party.
      */
     public function orderingCustomerParty(Party $party): self {
         $clone = clone $this;
@@ -150,7 +150,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt den Begünstigten (Feld :59a:).
+     * Sets the beneficiary (Field :59a:).
      */
     public function beneficiary(string $account, string $name, ?string $bic = null, ?string $address = null): self {
         $clone = clone $this;
@@ -164,7 +164,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt den Begünstigten mit vollständiger Party.
+     * Sets the beneficiary with complete Party.
      */
     public function beneficiaryParty(Party $party): self {
         $clone = clone $this;
@@ -173,7 +173,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt den Gebührencode (Feld :71A:).
+     * Sets the charges code (Field :71A:).
      */
     public function chargesCode(ChargesCode $code): self {
         $clone = clone $this;
@@ -182,21 +182,21 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt Gebühren auf SHA (geteilt).
+     * Sets charges to SHA (shared).
      */
     public function chargesShared(): self {
         return $this->chargesCode(ChargesCode::SHA);
     }
 
     /**
-     * Setzt Gebühren auf OUR (Auftraggeber trägt alle).
+     * Sets charges to OUR (sender bears all).
      */
     public function chargesOur(): self {
         return $this->chargesCode(ChargesCode::OUR);
     }
 
     /**
-     * Setzt Gebühren auf BEN (Begünstigter trägt alle).
+     * Sets charges to BEN (beneficiary bears all).
      */
     public function chargesBen(): self {
         return $this->chargesCode(ChargesCode::BEN);
@@ -221,7 +221,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Setzt die Ordering Institution mit vollständiger Party.
+     * Sets the Ordering Institution with complete Party.
      */
     public function orderingInstitutionParty(Party $party): self {
         $clone = clone $this;
@@ -333,7 +333,7 @@ final class Mt103DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache EUR-Überweisung.
+     * Creates a simple EUR transfer.
      */
     public static function createSimple(
         string $sendersReference,
@@ -355,7 +355,7 @@ final class Mt103DocumentBuilder {
     }
 
     /**
-     * Erstellt eine internationale Überweisung.
+     * Creates an international transfer.
      */
     public static function createInternational(
         string $sendersReference,

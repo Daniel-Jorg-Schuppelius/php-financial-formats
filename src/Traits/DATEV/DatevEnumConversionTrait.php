@@ -39,28 +39,28 @@ use CommonToolkit\Enums\{CreditDebit, CurrencyCode, CountryCode, LanguageCode};
 use InvalidArgumentException;
 
 /**
- * Trait für DATEV-Enum-Konvertierungen.
+ * Trait for DATEV enum conversions.
  * 
  * Stellt Methoden zum Lesen und Schreiben von DATEV-spezifischen Enum-Werten
- * in CSV-Feldern bereit.
+ * in CSV fields.
  * 
  * Erfordert, dass die verwendende Klasse die Methoden getFieldValue() und setFieldValue() implementiert.
  */
 trait DatevEnumConversionTrait {
     /**
-     * Gibt den rohen Feldwert zurück.
+     * Returns the raw field value.
      */
     abstract protected function getFieldValue(int $rowIndex, int $fieldIndex): ?string;
 
     /**
-     * Setzt den rohen Feldwert.
+     * Sets the raw field value.
      */
     abstract protected function setFieldValue(int $rowIndex, int $fieldIndex, string $value): void;
 
     // ==================== GRUNDLEGENDE ENUMS ====================
 
     /**
-     * Gibt einen Feldwert als CreditDebit-Enum zurück.
+     * Returns a field value as CreditDebit enum.
      */
     protected function getCreditDebit(int $rowIndex, int $fieldIndex): ?CreditDebit {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -77,7 +77,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem CreditDebit-Enum.
+     * Sets a field value from a CreditDebit enum.
      */
     protected function setCreditDebit(int $rowIndex, int $fieldIndex, CreditDebit $creditDebit): void {
         $datevValue = match ($creditDebit) {
@@ -88,7 +88,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Gibt einen Feldwert als CurrencyCode-Enum zurück.
+     * Returns a field value as CurrencyCode enum.
      */
     protected function getCurrencyCode(int $rowIndex, int $fieldIndex): ?CurrencyCode {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -105,7 +105,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem CurrencyCode-Enum.
+     * Sets a field value from a CurrencyCode enum.
      */
     protected function setCurrencyCode(int $rowIndex, int $fieldIndex, CurrencyCode $currencyCode): void {
         $datevValue = '"' . $currencyCode->value . '"';
@@ -113,7 +113,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Gibt einen Feldwert als CountryCode-Enum zurück.
+     * Returns a field value as CountryCode enum.
      */
     protected function getCountryCode(int $rowIndex, int $fieldIndex): ?CountryCode {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -130,7 +130,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem CountryCode-Enum.
+     * Sets a field value from a CountryCode enum.
      */
     protected function setCountryCode(int $rowIndex, int $fieldIndex, CountryCode $countryCode): void {
         $datevValue = '"' . $countryCode->value . '"';
@@ -140,7 +140,7 @@ trait DatevEnumConversionTrait {
     // ==================== SPERR-ENUMS ====================
 
     /**
-     * Gibt einen Feldwert als PostingLock-Enum zurück.
+     * Returns a field value as PostingLock enum.
      */
     protected function getPostingLock(int $rowIndex, int $fieldIndex): ?PostingLock {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -156,14 +156,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem PostingLock-Enum.
+     * Sets a field value from a PostingLock enum.
      */
     protected function setPostingLock(int $rowIndex, int $fieldIndex, PostingLock $postingLock): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $postingLock->value);
     }
 
     /**
-     * Gibt einen Feldwert als InterestLock-Enum zurück.
+     * Returns a field value as InterestLock enum.
      */
     protected function getInterestLock(int $rowIndex, int $fieldIndex): ?InterestLock {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -180,14 +180,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem InterestLock-Enum.
+     * Sets a field value from an InterestLock enum.
      */
     protected function setInterestLock(int $rowIndex, int $fieldIndex, InterestLock $interestLock): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $interestLock->value);
     }
 
     /**
-     * Gibt einen Feldwert als DiscountLock-Enum zurück.
+     * Returns a field value as DiscountLock enum.
      */
     protected function getDiscountLock(int $rowIndex, int $fieldIndex): ?DiscountLock {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -204,14 +204,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem DiscountLock-Enum.
+     * Sets a field value from a DiscountLock enum.
      */
     protected function setDiscountLock(int $rowIndex, int $fieldIndex, DiscountLock $discountLock): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $discountLock->value);
     }
 
     /**
-     * Gibt einen Feldwert als ItemLock-Enum zurück (0/1-Sperre).
+     * Returns a field value as ItemLock enum (0/1 lock).
      */
     protected function getItemLock(int $rowIndex, int $fieldIndex): ?ItemLock {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -228,7 +228,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem ItemLock-Enum.
+     * Sets a field value from an ItemLock enum.
      */
     protected function setItemLock(int $rowIndex, int $fieldIndex, ItemLock $itemLock): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $itemLock->value);
@@ -237,7 +237,7 @@ trait DatevEnumConversionTrait {
     // ==================== ZAHLUNGS-ENUMS ====================
 
     /**
-     * Gibt einen Feldwert als DiscountType-Enum zurück.
+     * Returns a field value as DiscountType enum.
      */
     protected function getDiscountType(int $rowIndex, int $fieldIndex): ?DiscountType {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -258,14 +258,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem DiscountType-Enum.
+     * Sets a field value from a DiscountType enum.
      */
     protected function setDiscountType(int $rowIndex, int $fieldIndex, DiscountType $discountType): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $discountType->value);
     }
 
     /**
-     * Gibt einen Feldwert als PaymentMethod-Enum zurück.
+     * Returns a field value as PaymentMethod enum.
      */
     protected function getPaymentMethod(int $rowIndex, int $fieldIndex): ?PaymentMethod {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -286,7 +286,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem PaymentMethod-Enum.
+     * Sets a field value from a PaymentMethod enum.
      */
     protected function setPaymentMethod(int $rowIndex, int $fieldIndex, PaymentMethod $paymentMethod): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $paymentMethod->value);
@@ -295,7 +295,7 @@ trait DatevEnumConversionTrait {
     // ==================== DEBITOREN/KREDITOREN-SPEZIFISCHE ENUMS ====================
 
     /**
-     * Gibt einen Feldwert als AddresseeType-Enum zurück.
+     * Returns a field value as AddresseeType enum.
      */
     protected function getAddresseeType(int $rowIndex, int $fieldIndex): ?AddresseeType {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -307,14 +307,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem AddresseeType-Enum.
+     * Sets a field value from an AddresseeType enum.
      */
     protected function setAddresseeType(int $rowIndex, int $fieldIndex, AddresseeType $addresseeType): void {
         $this->setFieldValue($rowIndex, $fieldIndex, '"' . $addresseeType->value . '"');
     }
 
     /**
-     * Gibt einen Feldwert als Language-Enum zurück.
+     * Returns a field value as Language enum.
      */
     protected function getLanguage(int $rowIndex, int $fieldIndex): ?Language {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -326,14 +326,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem Language-Enum.
+     * Sets a field value from a Language enum.
      */
     protected function setLanguage(int $rowIndex, int $fieldIndex, Language $language): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $language->value);
     }
 
     /**
-     * Gibt einen Feldwert als OutputTarget-Enum zurück.
+     * Returns a field value as OutputTarget enum.
      */
     protected function getOutputTarget(int $rowIndex, int $fieldIndex): ?OutputTarget {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -345,14 +345,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem OutputTarget-Enum.
+     * Sets a field value from an OutputTarget enum.
      */
     protected function setOutputTarget(int $rowIndex, int $fieldIndex, OutputTarget $outputTarget): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $outputTarget->value);
     }
 
     /**
-     * Gibt einen Feldwert als AddressType-Enum zurück.
+     * Returns a field value as AddressType enum.
      */
     protected function getAddressType(int $rowIndex, int $fieldIndex): ?AddressType {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -364,14 +364,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem AddressType-Enum.
+     * Sets a field value from an AddressType enum.
      */
     protected function setAddressType(int $rowIndex, int $fieldIndex, AddressType $addressType): void {
         $this->setFieldValue($rowIndex, $fieldIndex, '"' . $addressType->value . '"');
     }
 
     /**
-     * Gibt einen Feldwert als DirectDebitIndicator-Enum zurück.
+     * Returns a field value as DirectDebitIndicator enum.
      */
     protected function getDirectDebitIndicator(int $rowIndex, int $fieldIndex): ?DirectDebitIndicator {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -383,14 +383,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem DirectDebitIndicator-Enum.
+     * Sets a field value from a DirectDebitIndicator enum.
      */
     protected function setDirectDebitIndicator(int $rowIndex, int $fieldIndex, DirectDebitIndicator $indicator): void {
         $this->setFieldValue($rowIndex, $fieldIndex, '"' . $indicator->value . '"');
     }
 
     /**
-     * Gibt einen Feldwert als PaymentCarrierIndicator-Enum zurück.
+     * Returns a field value as PaymentCarrierIndicator enum.
      */
     protected function getPaymentCarrierIndicator(int $rowIndex, int $fieldIndex): ?PaymentCarrierIndicator {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -402,14 +402,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem PaymentCarrierIndicator-Enum.
+     * Sets a field value from a PaymentCarrierIndicator enum.
      */
     protected function setPaymentCarrierIndicator(int $rowIndex, int $fieldIndex, PaymentCarrierIndicator $indicator): void {
         $this->setFieldValue($rowIndex, $fieldIndex, '"' . $indicator->value . '"');
     }
 
     /**
-     * Gibt einen Feldwert als DunningIndicator-Enum zurück.
+     * Returns a field value as DunningIndicator enum.
      */
     protected function getDunningIndicator(int $rowIndex, int $fieldIndex): ?DunningIndicator {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -421,14 +421,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem DunningIndicator-Enum.
+     * Sets a field value from a DunningIndicator enum.
      */
     protected function setDunningIndicator(int $rowIndex, int $fieldIndex, DunningIndicator $indicator): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $indicator->value);
     }
 
     /**
-     * Gibt einen Feldwert als StatementIndicator-Enum zurück.
+     * Returns a field value as StatementIndicator enum.
      */
     protected function getStatementIndicator(int $rowIndex, int $fieldIndex): ?StatementIndicator {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -440,14 +440,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem StatementIndicator-Enum.
+     * Sets a field value from a StatementIndicator enum.
      */
     protected function setStatementIndicator(int $rowIndex, int $fieldIndex, StatementIndicator $indicator): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $indicator->value);
     }
 
     /**
-     * Gibt einen Feldwert als InterestCalculationIndicator-Enum zurück.
+     * Returns a field value as InterestCalculationIndicator enum.
      */
     protected function getInterestCalculationIndicator(int $rowIndex, int $fieldIndex): ?InterestCalculationIndicator {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -459,14 +459,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem InterestCalculationIndicator-Enum.
+     * Sets a field value from an InterestCalculationIndicator enum.
      */
     protected function setInterestCalculationIndicator(int $rowIndex, int $fieldIndex, InterestCalculationIndicator $indicator): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $indicator->value);
     }
 
     /**
-     * Gibt einen Feldwert als CurrencyControl-Enum zurück.
+     * Returns a field value as CurrencyControl enum.
      */
     protected function getCurrencyControl(int $rowIndex, int $fieldIndex): ?CurrencyControl {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -478,14 +478,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem CurrencyControl-Enum.
+     * Sets a field value from a CurrencyControl enum.
      */
     protected function setCurrencyControl(int $rowIndex, int $fieldIndex, CurrencyControl $currencyControl): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $currencyControl->value);
     }
 
     /**
-     * Gibt einen Feldwert als LanguageCode-Enum zurück (String-basierte Sprach-ID).
+     * Returns a field value as LanguageCode enum (string-based language ID).
      */
     protected function getLanguageCode(int $rowIndex, int $fieldIndex): ?LanguageCode {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -497,7 +497,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem LanguageCode-Enum.
+     * Sets a field value from a LanguageCode enum.
      */
     protected function setLanguageCode(int $rowIndex, int $fieldIndex, LanguageCode $languageCode): void {
         $this->setFieldValue($rowIndex, $fieldIndex, $languageCode->toCsvValue());
@@ -506,7 +506,7 @@ trait DatevEnumConversionTrait {
     // ==================== WIEDERKEHRENDE BUCHUNGEN-SPEZIFISCHE ENUMS ====================
 
     /**
-     * Gibt einen Feldwert als ReceiptFieldHandling-Enum zurück.
+     * Returns a field value as ReceiptFieldHandling enum.
      */
     protected function getReceiptFieldHandling(int $rowIndex, int $fieldIndex): ?ReceiptFieldHandling {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -518,14 +518,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem ReceiptFieldHandling-Enum.
+     * Sets a field value from a ReceiptFieldHandling enum.
      */
     protected function setReceiptFieldHandling(int $rowIndex, int $fieldIndex, ReceiptFieldHandling $handling): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $handling->value);
     }
 
     /**
-     * Gibt einen Feldwert als DunningSubject-Enum zurück.
+     * Returns a field value as DunningSubject enum.
      */
     protected function getDunningSubject(int $rowIndex, int $fieldIndex): ?DunningSubject {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -537,7 +537,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem DunningSubject-Enum.
+     * Sets a field value from a DunningSubject enum.
      */
     protected function setDunningSubject(int $rowIndex, int $fieldIndex, DunningSubject $subject): void {
         $value = $subject->value === 0 ? '' : (string) $subject->value;
@@ -545,7 +545,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Gibt einen Feldwert als TimeIntervalType-Enum zurück.
+     * Returns a field value as TimeIntervalType enum.
      */
     protected function getTimeIntervalType(int $rowIndex, int $fieldIndex): ?TimeIntervalType {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -557,14 +557,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem TimeIntervalType-Enum.
+     * Sets a field value from a TimeIntervalType enum.
      */
     protected function setTimeIntervalType(int $rowIndex, int $fieldIndex, TimeIntervalType $intervalType): void {
         $this->setFieldValue($rowIndex, $fieldIndex, $intervalType->toCsvValue());
     }
 
     /**
-     * Gibt einen Feldwert als Wochentag-Bitmaske zurück (Weekday::toBitmask()).
+     * Returns a field value as weekday bitmask (Weekday::toBitmask()).
      */
     protected function getWeekdayMask(int $rowIndex, int $fieldIndex): ?int {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -581,14 +581,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einer Wochentag-Bitmaske (Weekday::createMask()).
+     * Sets a field value from a weekday bitmask (Weekday::createMask()).
      */
     protected function setWeekdayMask(int $rowIndex, int $fieldIndex, int $mask): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $mask);
     }
 
     /**
-     * Gibt einen Feldwert als WeekdayOrdinal-Enum zurück.
+     * Returns a field value as WeekdayOrdinal enum.
      */
     protected function getWeekdayOrdinal(int $rowIndex, int $fieldIndex): ?WeekdayOrdinal {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -600,14 +600,14 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem WeekdayOrdinal-Enum.
+     * Sets a field value from a WeekdayOrdinal enum.
      */
     protected function setWeekdayOrdinal(int $rowIndex, int $fieldIndex, WeekdayOrdinal $ordinal): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $ordinal->value);
     }
 
     /**
-     * Gibt einen Feldwert als EndType-Enum zurück.
+     * Returns a field value as EndType enum.
      */
     protected function getEndType(int $rowIndex, int $fieldIndex): ?EndType {
         $value = $this->getFieldValue($rowIndex, $fieldIndex);
@@ -619,7 +619,7 @@ trait DatevEnumConversionTrait {
     }
 
     /**
-     * Setzt einen Feldwert aus einem EndType-Enum.
+     * Sets a field value from an EndType enum.
      */
     protected function setEndType(int $rowIndex, int $fieldIndex, EndType $endType): void {
         $this->setFieldValue($rowIndex, $fieldIndex, (string) $endType->value);

@@ -17,10 +17,10 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Notification Item für CAMT.057.
+ * Notification item for CAMT.057.
  *
- * Repräsentiert ein einzelnes Element einer Benachrichtigung
- * über einen erwarteten Zahlungseingang.
+ * Represents a single element of a notification
+ * about an expected payment receipt.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type57
  */

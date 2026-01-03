@@ -16,19 +16,19 @@ use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\{MetaHeaderFieldIn
 use InvalidArgumentException;
 
 /**
- * Abstrakte Basisklasse für DATEV MetaHeader-Definitionen.
- * Implementiert gemeinsame Logik für alle DATEV-Versionen.
+ * Abstract base class for DATEV MetaHeader definitions.
+ * Implements common logic for all DATEV versions.
  */
 abstract class MetaHeaderDefinitionAbstract implements MetaHeaderDefinitionInterface {
     /**
-     * DATEV-Versionsnummer - muss in Kindklassen als Konstante definiert werden.
+     * DATEV version number - must be defined as constant in child classes.
      */
     protected const VERSION = null;
 
     public function getVersion(): int {
         $version = static::VERSION;
         if ($version === null) {
-            throw new InvalidArgumentException('VERSION-Konstante muss in ' . static::class . ' definiert werden');
+            throw new InvalidArgumentException('VERSION constant must be defined in ' . static::class . ' be defined');
         }
         return $version;
     }
@@ -38,15 +38,15 @@ abstract class MetaHeaderDefinitionAbstract implements MetaHeaderDefinitionInter
     }
 
     /**
-     * Regex-Pattern für ein Feld aus der Felddefinition.
-     * Standardimplementierung delegiert an das Feld selbst.
+     * Regex pattern for a field from the field definition.
+     * Default implementation delegates to the field itself.
      */
     public function getValidationPattern(MetaHeaderFieldInterface $field): ?string {
         return $field->pattern();
     }
 
     /**
-     * Abstrakte Methoden - müssen in Kindklassen implementiert werden.
+     * Abstract methods - must be implemented in child classes.
      */
 
     /** @return class-string<MetaHeaderFieldInterface> */

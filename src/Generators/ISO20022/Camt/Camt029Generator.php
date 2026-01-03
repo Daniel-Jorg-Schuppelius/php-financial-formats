@@ -20,10 +20,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.029 XML (Resolution of Investigation).
+ * Generator for CAMT.029 XML (Resolution of Investigation).
  * 
- * Generiert Antworten auf Untersuchungsanfragen gemäß ISO 20022 camt.029.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates Antworten auf Untersuchungsanfragen according to ISO 20022 camt.029.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -54,7 +54,7 @@ class Camt029Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -98,7 +98,7 @@ class Camt029Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu (optional).
+     * Adds the case structure (optional).
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -121,7 +121,7 @@ class Camt029Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Status-Struktur hinzu.
+     * Adds the status structure.
      */
     private function addStatus(Document $document): void {
         if ($document->getInvestigationStatus() === null && $document->getInvestigationStatusProprietary() === null) {
@@ -143,7 +143,7 @@ class Camt029Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt Cancellation Details hinzu.
+     * Adds cancellation details.
      */
     private function addCancellationDetails(CancellationDetails $details): void {
         $this->builder->addElement('CxlDtls');
@@ -174,7 +174,7 @@ class Camt029Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt Transaction Information and Status hinzu.
+     * Adds transaction information and status.
      */
     private function addTransactionInformationAndStatus(TransactionInformationAndStatus $txInfAndSts): void {
         $this->builder->addElement('TxInfAndSts');

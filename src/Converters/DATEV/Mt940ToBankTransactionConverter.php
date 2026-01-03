@@ -21,7 +21,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactio
 use Throwable;
 
 /**
- * Konvertiert MT940 SWIFT-Kontoauszüge in das DATEV ASCII-Weiterverarbeitungsformat.
+ * Converts MT940 SWIFT account statements to the DATEV ASCII processing format.
  * 
  * Die Konvertierung mappt MT940-Felder auf die DATEV BankTransaction-Struktur:
  * - accountId → Feld 1 (BLZ/BIC) + Feld 2 (Kontonummer/IBAN)
@@ -31,8 +31,8 @@ use Throwable;
  * - Transaction.bookingDate → Feld 6 (Buchungsdatum)
  * - Transaction.amount → Feld 7 (Umsatz mit +/- Vorzeichen)
  * - Transaction.purpose → Felder 12-14, 19-24 (Verwendungszweck)
- * - Transaction.reference → Feld 16 (Geschäftsvorgangscode)
- * - currency → Feld 17 (Währung)
+ * - Transaction.reference → Field 16 (Business transaction code)
+ * - currency → Field 17 (Currency)
  * 
  * @package CommonToolkit\Converters\DATEV
  */
@@ -85,7 +85,7 @@ final class Mt940ToBankTransactionConverter extends BankTransactionConverterAbst
         $purpose = $txn->getPurpose() ?? '';
         $purpose = preg_replace('/\?[\d]{2}/', ' ', $purpose) ?? $purpose;
         $purposeLines = self::splitPurpose($purpose);
-        self::fillVerwendungszweckFelder($values, $purposeLines);
+        self::fillPurposeFields($values, $purposeLines);
 
         // Geschäftsvorgangscode und Metadaten
         $values[F::GESCHAEFTSVORGANGSCODE->index()] = $txn->getReference()->getTransactionCode();

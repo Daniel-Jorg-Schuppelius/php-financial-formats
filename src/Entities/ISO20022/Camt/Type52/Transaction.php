@@ -25,8 +25,8 @@ use DateTimeImmutable;
 /**
  * CAMT.052 Transaction Entry.
  * 
- * Repräsentiert einen einzelnen Buchungseintrag (Ntry) im
- * untertägigen Kontobericht.
+ * Represents a single booking entry (Ntry) in
+ * intraday account report.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt052
  */
@@ -142,7 +142,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt den vollständigen Transaktionscode zurück (Domain/Family/SubFamily).
+     * Returns the complete transaction code (Domain/Family/SubFamily).
      */
     public function getFullTransactionCode(): ?string {
         if ($this->domainCode === null) {
@@ -161,7 +161,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Erstellt eine zusammenfassende Beschreibung der Transaktion.
+     * Creates a summary description of the transaction.
      */
     public function getSummary(): string {
         $parts = [];
@@ -177,7 +177,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt eine String-Repräsentation der Transaktion zurück.
+     * Returns a string representation of the transaction.
      */
     public function __toString(): string {
         return $this->getSummary();

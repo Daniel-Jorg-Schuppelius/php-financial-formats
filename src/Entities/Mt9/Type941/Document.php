@@ -21,12 +21,12 @@ use DateTimeImmutable;
 /**
  * MT941 Document - Balance Report.
  * 
- * Saldeninformation ohne Umsatzdetails gemäß SWIFT-Standard.
- * Enthält nur Opening und Closing Balance sowie optionale Available Balances.
+ * Balance information without transaction details according to SWIFT standard.
+ * Contains only Opening and Closing Balance as well as optional Available Balances.
  * 
  * Verwendung:
- * - Schnelle Saldenabfrage ohne vollständige Umsatzliste
- * - Kontostand-Übersicht für Treasury/Cash Management
+ * - Quick balance query without complete transaction list
+ * - Account balance overview for Treasury/Cash Management
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type941
  */
@@ -67,7 +67,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Opening Balance zurück.
+     * Returns the Opening Balance.
      * Feld :60F: in SWIFT-Notation.
      */
     public function getOpeningBalance(): Balance {
@@ -75,7 +75,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Closing Balance zurück.
+     * Returns the Closing Balance.
      * Feld :62F: in SWIFT-Notation.
      */
     public function getClosingBalance(): Balance {
@@ -83,7 +83,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Closing Available Balance zurück.
+     * Returns the Closing Available Balance.
      * Feld :64: in SWIFT-Notation (optional).
      */
     public function getClosingAvailableBalance(): ?Balance {
@@ -91,7 +91,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt die Forward Available Balances zurück.
+     * Returns the Forward Available Balances.
      * Feld :65: in SWIFT-Notation (kann mehrfach vorkommen).
      * @return Balance[]
      */
@@ -100,14 +100,14 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Fügt einen Forward Available Balance hinzu.
+     * Adds a Forward Available Balance.
      */
     public function addForwardAvailableBalance(Balance $balance): void {
         $this->forwardAvailableBalances[] = $balance;
     }
 
     /**
-     * MT941 enthält keine Transaktionen.
+     * MT941 contains no transactions.
      */
     public function countEntries(): int {
         return 0;

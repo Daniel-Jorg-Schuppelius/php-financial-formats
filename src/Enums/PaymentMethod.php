@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * Zahlungsmethode für pain-Nachrichten (PmtMtd).
+ * Payment method for pain messages (PmtMtd).
  * 
  * @package CommonToolkit\Enums\Common\Banking
  */
@@ -28,7 +28,7 @@ enum PaymentMethod: string {
     case DIRECT_DEBIT = 'DD';
 
     /**
-     * Gibt die deutsche Beschreibung zurück.
+     * Returns the German description.
      */
     public function description(): string {
         return match ($this) {
@@ -51,21 +51,21 @@ enum PaymentMethod: string {
     }
 
     /**
-     * Prüft, ob die Methode für pain.001 geeignet ist.
+     * Checks if the method is suitable for pain.001.
      */
     public function isPain001(): bool {
         return in_array($this, [self::TRANSFER, self::CHEQUE]);
     }
 
     /**
-     * Prüft, ob die Methode für pain.008 geeignet ist.
+     * Checks if the method is suitable for pain.008.
      */
     public function isPain008(): bool {
         return $this === self::DIRECT_DEBIT;
     }
 
     /**
-     * Gibt den Standard für SEPA-Überweisungen zurück.
+     * Returns the default for SEPA transfers.
      */
     public static function defaultSepa(): self {
         return self::TRANSFER;

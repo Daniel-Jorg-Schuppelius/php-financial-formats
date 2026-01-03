@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 use CommonToolkit\Enums\CountryCode;
 
 /**
- * Postal Address für pain-Nachrichten.
+ * Postal address for pain messages.
  * 
- * Repräsentiert eine Postadresse gemäß ISO 20022 PostalAddress-Schema.
+ * Represents a postal address according to ISO 20022 PostalAddress schema.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain
  */
@@ -73,7 +73,7 @@ final readonly class PostalAddress {
     }
 
     /**
-     * Gibt die formatierte Adresse als String zurück.
+     * Returns the formatted address as string.
      */
     public function format(): string {
         $lines = [];

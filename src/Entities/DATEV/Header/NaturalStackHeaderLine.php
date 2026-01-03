@@ -18,13 +18,13 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\NaturalStackHeaderField;
 
 /**
- * DATEV Natürliche Personen Header-Zeile (Spaltenbeschreibungen).
+ * DATEV Natural Persons header line (column descriptions).
  * Zweite Zeile im DATEV-Format nach dem MetaHeader.
  * Arbeitet mit FieldHeaderInterface Enums.
  */
 final class NaturalStackHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 NaturalStack Header.
+     * Factory method for V700 NaturalStack header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,7 +34,7 @@ final class NaturalStackHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 NaturalStack passt.
+     * Checks if this header matches V700 NaturalStack.
      */
     public function isV700NaturalStackHeader(): bool {
         return $this->isCompatibleWithEnum(NaturalStackHeaderField::class);

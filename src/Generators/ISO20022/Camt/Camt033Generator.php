@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.033 XML (Request for Duplicate).
+ * Generator for CAMT.033 XML (Request for Duplicate).
  * 
- * Generiert Anfragen für Duplikate von Dokumenten
- * gemäß ISO 20022 camt.033.001.xx Standard.
+ * Generates requests for duplicates of documents
+ * according to ISO 20022 camt.033.001.xx Standard.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -46,7 +46,7 @@ class Camt033Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -90,7 +90,7 @@ class Camt033Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu.
+     * Adds the case structure.
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -113,7 +113,7 @@ class Camt033Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Underlying Transaction Reference hinzu.
+     * Adds the underlying transaction reference.
      */
     private function addUnderlying(Document $document): void {
         if ($document->getOriginalMessageId() === null && $document->getOriginalEndToEndId() === null) {

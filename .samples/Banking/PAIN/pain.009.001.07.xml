@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.009.001.07">
+  <MndtInitnReq>
+    <GrpHdr>
+      <MsgId>MNDT-001</MsgId>
+      <CreDtTm>2026-01-01T12:00:00</CreDtTm>
+      <InitgPty>
+        <Nm>Mandate Initiator GmbH</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <Mndt>
+      <MndtId>MANDATE-NEW-001</MndtId>
+      <DtOfSgntr>2026-01-01</DtOfSgntr>
+      <Cdtr>
+        <Nm>Creditor AG</Nm>
+      </Cdtr>
+      <CdtrAcct>
+        <Id>
+          <IBAN>DE89370400440532013000</IBAN>
+        </Id>
+      </CdtrAcct>
+      <CdtrAgt>
+        <FinInstnId>
+          <BICFI>COBADEFFXXX</BICFI>
+        </FinInstnId>
+      </CdtrAgt>
+      <Dbtr>
+        <Nm>Debtor GmbH</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>DE89370400440532013001</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BICFI>GENODEF1XXX</BICFI>
+        </FinInstnId>
+      </DbtrAgt>
+    </Mndt>
+  </MndtInitnReq>
+</Document>

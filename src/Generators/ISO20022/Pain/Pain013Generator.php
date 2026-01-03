@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type13\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type13\PaymentActivationRequest;
 
 /**
- * Generiert pain.013 XML-Dokumente (Creditor Payment Activation Request).
+ * Generates pain.013 XML documents (Creditor Payment Activation Request).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.013.001.11 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.013.001.11 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain013Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.013 Dokument.
+     * Generates XML from a pain.013 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('CdtrPmtActvtnReq');

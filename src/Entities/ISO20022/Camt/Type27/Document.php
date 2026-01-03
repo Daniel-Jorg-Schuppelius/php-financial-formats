@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.027 Document (Claim Non Receipt).
  * 
- * Repräsentiert eine Anfrage zum Nachweis einer nicht erhaltenen Zahlung
- * gemäß ISO 20022 camt.027.001.xx Standard.
+ * Represents a request for proof of a payment not received
+ * according to ISO 20022 camt.027.001.xx Standard.
  * 
- * Wird vom Begünstigten verwendet, um eine Zahlung einzufordern, die
+ * Used by the beneficiary to claim a payment that
  * angeblich gesendet, aber nicht empfangen wurde.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type27
@@ -186,7 +186,7 @@ class Document implements CamtDocumentInterface {
     }
 
     /**
-     * Prüft ob die Zahlung nicht gedeckt ist.
+     * Checks if the payment is not covered.
      */
     public function isMissingCover(): bool {
         return $this->missingCoverIndicator === true;

@@ -17,10 +17,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.039 Documents (Case Status Report).
+ * Builder for CAMT.039 Documents (Case Status Report).
  * 
- * Erstellt Fallstatus-Berichte als Antwort auf CAMT.038 Anfragen.
- * Enthält den aktuellen Status eines Untersuchungsfalles.
+ * Creates case status reports in response to CAMT.038 requests.
+ * Contains the current status of an investigation case.
  * 
  * @package CommonToolkit\FinancialFormats\Builders\Camt
  */
@@ -39,7 +39,7 @@ final class Camt039DocumentBuilder {
 
     private function __construct(string $reportId) {
         if (strlen($reportId) > 35) {
-            throw new InvalidArgumentException('ReportId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('ReportId must not exceed 35 characters');
         }
         $this->reportId = $reportId;
         $this->creationDateTime = new DateTimeImmutable();

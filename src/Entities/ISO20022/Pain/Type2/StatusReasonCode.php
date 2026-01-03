@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 
 /**
- * Status Reason Code für pain.002 Payment Status Report.
+ * Status reason code for pain.002 Payment Status Report.
  * 
  * ISO 20022 External Status Reason Codes.
  * 
@@ -59,7 +59,7 @@ enum StatusReasonCode: string {
     case CUT_OFF_TIME = 'TS01';
 
     /**
-     * Prüft, ob der Status akzeptiert wurde.
+     * Checks if the status was accepted.
      */
     public function isAccepted(): bool {
         return match ($this) {
@@ -72,21 +72,21 @@ enum StatusReasonCode: string {
     }
 
     /**
-     * Prüft, ob der Status abgelehnt wurde.
+     * Checks if the status was rejected.
      */
     public function isRejected(): bool {
         return $this === self::REJECTED;
     }
 
     /**
-     * Prüft, ob der Status ausstehend ist.
+     * Checks if the status is pending.
      */
     public function isPending(): bool {
         return $this === self::PENDING;
     }
 
     /**
-     * Gibt eine Beschreibung zurück.
+     * Returns a description.
      */
     public function description(): string {
         return match ($this) {

@@ -15,65 +15,65 @@ namespace CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV;
 use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 
 /**
- * Interface für DATEV Feldheader-Definitionen.
- * Definiert die Spaltenbeschreibungen für verschiedene DATEV-Formate.
+ * Interface for DATEV field header definitions.
+ * Defines column descriptions for various DATEV formats.
  */
 interface FieldHeaderInterface {
     /**
-     * Liefert alle Felder in der korrekten Reihenfolge.
+     * Returns all fields in the correct order.
      * 
      * @return static[]
      */
     public static function ordered(): array;
 
     /**
-     * Liefert die verpflichtenden Felder.
+     * Returns the required fields.
      * 
      * @return static[]
      */
     public static function required(): array;
 
     /**
-     * Prüft, ob das Feld verpflichtend ist.
+     * Checks if the field is required.
      */
     public function isRequired(): bool;
 
     /**
-     * Liefert die DATEV-Kategorie für dieses Header-Format.
+     * Returns the DATEV category for this header format.
      */
     public static function getCategory(): Category;
 
     /**
-     * Liefert die DATEV-Version für dieses Header-Format.
+     * Returns the DATEV version for this header format.
      */
     public static function getVersion(): int;
 
     /**
-     * Liefert die Anzahl der definierten Felder.
+     * Returns the number of defined fields.
      */
     public static function getFieldCount(): int;
 
     /**
-     * Prüft, ob ein Feldwert gültig ist (im Enum enthalten).
+     * Checks if a field value is valid (contained in enum).
      */
     public static function isValidFieldValue(string $value): bool;
 
     /**
-     * Gibt an, ob das Feld im FieldHeader gequotet werden soll.
-     * Standardmäßig false - DATEV FieldHeader sind nicht gequotet.
+     * Indicates whether the field should be quoted in the FieldHeader.
+     * Default false - DATEV FieldHeaders are not quoted.
      */
     public function isQuotedHeader(): bool;
 
     /**
-     * Gibt an, ob Datenwerte für dieses Feld gequotet werden sollen.
-     * Basiert auf dem Datentyp: Text-Felder = gequotet, numerische Felder = nicht gequotet.
+     * Indicates whether data values for this field should be quoted.
+     * Based on the data type: text fields = quoted, numeric fields = not quoted.
      */
     public function isQuotedValue(): bool;
 
     /**
-     * Liefert den tatsächlichen Header-Namen für die CSV-Ausgabe.
+     * Returns the actual header name for CSV output.
      * Kann vom Enum-Wert abweichen, wenn die DATEV-Sample-Dateien andere Namen verwenden.
-     * Standardmäßig wird der Enum-Wert zurückgegeben.
+     * By default, the enum value is returned.
      */
     public function headerName(): string;
 }

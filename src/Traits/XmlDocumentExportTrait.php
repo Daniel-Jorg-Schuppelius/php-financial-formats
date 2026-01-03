@@ -19,27 +19,27 @@ use DOMDocument;
 use DOMNode;
 
 /**
- * Trait für XML-Dokument-Export.
+ * Trait for XML document export.
  * 
- * Implementiert XmlDocumentInterface-Methoden für CAMT/Pain Dokumente.
+ * Implements XmlDocumentInterface methods for CAMT/Pain documents.
  * 
- * Voraussetzung: Die Klasse muss eine getDefaultXml(): string Methode bereitstellen,
+ * Prerequisite: The class must provide a getDefaultXml(): string method,
  * die das XML mit Standard-Parametern generiert.
  */
 trait XmlDocumentExportTrait {
     /**
-     * Gecachtes XmlDocument für Interface-Methoden.
+     * Cached XmlDocument for interface methods.
      */
     private ?XmlDocument $cachedXmlDocument = null;
 
     /**
-     * Muss von der implementierenden Klasse bereitgestellt werden.
-     * Generiert das XML mit den Standard-Parametern.
+     * Must be provided by the implementing class.
+     * Generates the XML with default parameters.
      */
     abstract protected function getDefaultXml(): string;
 
     /**
-     * Gibt das Dokument als CommonToolkit XmlDocument zurück.
+     * Returns the document as CommonToolkit XmlDocument.
      */
     public function toXmlDocument(): XmlDocument {
         if ($this->cachedXmlDocument === null) {

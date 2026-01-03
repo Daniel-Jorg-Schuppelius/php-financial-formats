@@ -25,7 +25,7 @@ use RuntimeException;
 
 /**
  * DATEV-BookingBatch-Dokument.
- * Spezielle Document-Klasse für BookingBatch-Format (Kategorie 21).
+ * Special document class for BookingBatch format (Category 21).
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus BookingBatchHeaderField::getMaxLength() angewendet.
@@ -37,9 +37,9 @@ final class BookingBatch extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus BookingBatchHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from BookingBatchHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -56,14 +56,14 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::Buchungsstapel->nameValue();
     }
 
     /**
-     * Gibt die Format-Informationen zurück.
+     * Returns the format information.
      */
     public function getDocumentInfo(): DocumentInfo {
         return new DocumentInfo(Category::Buchungsstapel, 700);
@@ -88,7 +88,7 @@ final class BookingBatch extends Document {
     // ==== BOOKINGBATCH-SPEZIFISCHE ENUM GETTER/SETTER ====
 
     /**
-     * Gibt das Soll/Haben-Kennzeichen einer Buchung zurück.
+     * Returns the debit/credit indicator of a booking.
      */
     public function getSollHabenKennzeichen(int $rowIndex): ?CreditDebit {
         return $this->getCreditDebit($rowIndex, BookingBatchHeaderField::SollHabenKennzeichen->getPosition());
@@ -102,35 +102,35 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt die Basiswährung einer Buchung zurück.
+     * Returns the base currency of a booking.
      */
     public function getWKZBasisUmsatz(int $rowIndex): ?CurrencyCode {
         return $this->getCurrencyCode($rowIndex, BookingBatchHeaderField::WKZBasisUmsatz->getPosition());
     }
 
     /**
-     * Setzt die Basiswährung einer Buchung.
+     * Sets the base currency of a booking.
      */
     public function setWKZBasisUmsatz(int $rowIndex, CurrencyCode $currencyCode): void {
         $this->setCurrencyCode($rowIndex, BookingBatchHeaderField::WKZBasisUmsatz->getPosition(), $currencyCode);
     }
 
     /**
-     * Gibt die Umsatzwährung einer Buchung zurück.
+     * Returns the transaction currency of a booking.
      */
     public function getWKZUmsatz(int $rowIndex): ?CurrencyCode {
         return $this->getCurrencyCode($rowIndex, BookingBatchHeaderField::WKZUmsatz->getPosition());
     }
 
     /**
-     * Setzt die Umsatzwährung einer Buchung.
+     * Sets the transaction currency of a booking.
      */
     public function setWKZUmsatz(int $rowIndex, CurrencyCode $currencyCode): void {
         $this->setCurrencyCode($rowIndex, BookingBatchHeaderField::WKZUmsatz->getPosition(), $currencyCode);
     }
 
     /**
-     * Gibt das EU-Land einer Buchung zurück.
+     * Returns the EU country of a booking.
      */
     public function getEULandUStID(int $rowIndex): ?CountryCode {
         return $this->getCountryCode($rowIndex, BookingBatchHeaderField::EULandUStID->getPosition());
@@ -144,7 +144,7 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt das Land einer Buchung zurück.
+     * Returns the country of a booking.
      */
     public function getLand(int $rowIndex): ?CountryCode {
         return $this->getCountryCode($rowIndex, BookingBatchHeaderField::Land->getPosition());
@@ -161,7 +161,7 @@ final class BookingBatch extends Document {
     // ==== CONVENIENCE METHODS ====
 
     /**
-     * Prüft, ob eine Buchung ein EU-Land hat.
+     * Checks if a booking has an EU country.
      */
     public function isEUBooking(int $rowIndex): bool {
         $country = $this->getEULandUStID($rowIndex) ?? $this->getLand($rowIndex);
@@ -169,7 +169,7 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Prüft, ob eine Buchung Euro als Währung nutzt.
+     * Checks if a booking uses Euro as currency.
      */
     public function isEuroCurrency(int $rowIndex): bool {
         $currency = $this->getWKZUmsatz($rowIndex) ?? $this->getWKZBasisUmsatz($rowIndex);
@@ -177,7 +177,7 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt die Zinssperre einer Buchung zurück.
+     * Returns the interest lock of a booking.
      */
     public function getZinssperre(int $rowIndex): ?InterestLock {
         return $this->getInterestLock($rowIndex, BookingBatchHeaderField::Zinssperre->getPosition());
@@ -191,7 +191,7 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt die Skontosperre einer Buchung zurück.
+     * Returns the discount lock of a booking.
      */
     public function getSkontosperre(int $rowIndex): ?DiscountLock {
         return $this->getDiscountLock($rowIndex, BookingBatchHeaderField::Skontosperre->getPosition());
@@ -205,7 +205,7 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt den Skontotyp einer Buchung zurück.
+     * Returns the discount type of a booking.
      */
     public function getSkontoTyp(int $rowIndex): ?DiscountType {
         return $this->getDiscountType($rowIndex, BookingBatchHeaderField::SkontoTyp->getPosition());
@@ -219,7 +219,7 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Gibt die Festschreibung einer Buchung zurück.
+     * Returns the lock status of a booking.
      */
     public function getFestschreibung(int $rowIndex): ?PostingLock {
         return $this->getPostingLock($rowIndex, BookingBatchHeaderField::Festschreibung->getPosition());
@@ -233,14 +233,14 @@ final class BookingBatch extends Document {
     }
 
     /**
-     * Prüft, ob eine Buchung festgeschrieben ist.
+     * Checks if a booking is locked.
      */
     public function isLocked(int $rowIndex): bool {
         return $this->getFestschreibung($rowIndex)?->isLocked() ?? false;
     }
 
     /**
-     * Gibt alle Buchungen mit einem bestimmten Soll/Haben-Kennzeichen zurück.
+     * Returns all bookings with a specific debit/credit indicator.
      */
     public function getRowsByCreditDebit(CreditDebit $creditDebit): array {
         $result = [];

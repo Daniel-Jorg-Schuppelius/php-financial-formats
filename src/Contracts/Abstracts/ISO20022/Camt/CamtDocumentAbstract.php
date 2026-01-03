@@ -22,14 +22,14 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Abstrakte Basisklasse für alle CAMT-Dokumente (052, 053, 054).
+ * Abstract base class for all CAMT documents (052, 053, 054).
  * 
- * Enthält gemeinsame Eigenschaften und Methoden für:
+ * Contains common properties and methods for:
  * - CAMT.052: BankToCustomerAccountReport (Intraday)
  * - CAMT.053: BankToCustomerStatement (End of Day)
  * - CAMT.054: BankToCustomerDebitCreditNotification
  * 
- * Erbt von DomainXmlDocumentAbstract für XmlDocumentInterface-Implementierung.
+ * Inherits from DomainXmlDocumentAbstract for XmlDocumentInterface implementation.
  * 
  * @package CommonToolkit\Entities\Common\Banking
  */
@@ -50,9 +50,9 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
      * @param string $id Statement/Report/Notification ID
      * @param DateTimeImmutable|string $creationDateTime Erstellungszeitpunkt
      * @param string $accountIdentifier IBAN oder andere Kontoidentifikation
-     * @param CurrencyCode|string $currency Kontowährung
+     * @param CurrencyCode|string $currency Account currency
      * @param string|null $accountOwner Kontoinhaber
-     * @param string|null $servicerBic BIC der kontoführenden Bank
+     * @param string|null $servicerBic BIC of the account-holding bank
      * @param string|null $messageId Nachrichten-ID (aus GrpHdr)
      * @param string|null $sequenceNumber Sequenznummer
      */
@@ -86,7 +86,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     }
 
     /**
-     * Gibt den CAMT-Typ dieses Dokuments zurück.
+     * Returns the CAMT type of this document.
      */
     abstract public function getCamtType(): CamtType;
 
@@ -103,7 +103,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     }
 
     /**
-     * Gibt die IBAN zurück (Alias für getAccountIdentifier bei IBAN-Konten).
+     * Returns the IBAN (alias for getAccountIdentifier for IBAN accounts).
      */
     public function getAccountIban(): string {
         return $this->accountIdentifier;
@@ -174,7 +174,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      */
     abstract public function toXml(CamtVersion $version = CamtVersion::V02): string;
 
@@ -183,7 +183,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     // =========================================================================
 
     /**
-     * Version für das gecachte Dokument.
+     * Version for the cached document.
      */
     private ?CamtVersion $cachedVersion = null;
 
@@ -195,11 +195,11 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     }
 
     /**
-     * Gibt das Dokument als CommonToolkit XmlDocument zurück.
+     * Returns the document as CommonToolkit XmlDocument.
      * 
-     * Überschreibt die Basisimplementierung um versionsbasiertes Caching zu ermöglichen.
+     * Overrides the base implementation to enable version-based caching.
      * 
-     * @param CamtVersion $version CAMT-Version für die XML-Generierung
+     * @param CamtVersion $version CAMT version for XML generation
      */
     public function toXmlDocument(CamtVersion $version = CamtVersion::V02): XmlDocument {
         if ($this->cachedVersion !== $version) {

@@ -17,7 +17,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Swift;
  * 
  * Format: {5:{CHK:123456789ABC}{TNG:}{PDE:1348120811BANKFRPPAXXX2222123456}}
  * 
- * Mögliche Felder:
+ * Possible fields:
  * - CHK: Checksum (12 hex Zeichen)
  * - TNG: Training Message Flag
  * - PDE: Possible Duplicate Emission
@@ -36,7 +36,7 @@ final class Trailer {
     }
 
     /**
-     * Gibt alle Felder zurück
+     * Returns all fields
      * 
      * @return array<string, string>
      */
@@ -45,63 +45,63 @@ final class Trailer {
     }
 
     /**
-     * Gibt ein bestimmtes Feld zurück
+     * Returns a specific field
      */
     public function getField(string $tag): ?string {
         return $this->fields[$tag] ?? null;
     }
 
     /**
-     * Gibt die Checksum zurück
+     * Returns the checksum
      */
     public function getChecksum(): ?string {
         return $this->getField('CHK');
     }
 
     /**
-     * Prüft ob es sich um eine Training-Nachricht handelt
+     * Checks if this is a training message
      */
     public function isTraining(): bool {
         return $this->hasField('TNG');
     }
 
     /**
-     * Prüft ob es sich um eine mögliche Duplikatemission handelt
+     * Checks if this is a possible duplicate emission
      */
     public function isPossibleDuplicateEmission(): bool {
         return $this->hasField('PDE');
     }
 
     /**
-     * Prüft ob es sich um eine mögliche Duplikatnachricht handelt
+     * Checks if this is a possible duplicate message
      */
     public function isPossibleDuplicateMessage(): bool {
         return $this->hasField('PDM');
     }
 
     /**
-     * Prüft ob es sich um eine verzögerte Nachricht handelt
+     * Checks if this is a delayed message
      */
     public function isDelayed(): bool {
         return $this->hasField('DLM');
     }
 
     /**
-     * Prüft ob es sich um eine System-generierte Nachricht handelt
+     * Checks if this is a system-generated message
      */
     public function isSystemOriginated(): bool {
         return $this->hasField('SYS');
     }
 
     /**
-     * Prüft ob ein bestimmtes Feld vorhanden ist
+     * Checks if a specific field is present
      */
     public function hasField(string $tag): bool {
         return isset($this->fields[$tag]);
     }
 
     /**
-     * Gibt den vollständigen Block 5 String zurück
+     * Returns the complete Block 5 string
      */
     public function __toString(): string {
         if (empty($this->fields)) {

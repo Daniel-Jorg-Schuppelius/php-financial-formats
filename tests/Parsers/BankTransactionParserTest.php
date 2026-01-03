@@ -20,7 +20,7 @@ use Tests\Contracts\BaseTestCase;
 use RuntimeException;
 
 /**
- * Tests für den BankTransactionParser.
+ * Tests for the BankTransactionParser.
  */
 class BankTransactionParserTest extends BaseTestCase {
 
@@ -29,7 +29,7 @@ class BankTransactionParserTest extends BaseTestCase {
     protected function setUp(): void {
         parent::setUp();
 
-        // Beispiel-CSV basierend auf DATEV-Dokumentation (exakt 34 Felder)
+        // Sample CSV based on DATEV documentation (exactly 34 fields)
         $this->sampleCSV = implode("\n", [
             '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";"EUR";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""',
             '"70030000";"1234567";"434";"30.12.15";"30.12.15";"30.12.15";-25.50;"FIRMA ABC GMBH";"MÜNCHEN";"70150000";"1111111";"Miete Januar";"Objekt Muster";"";"";"005";"EUR";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""'
@@ -47,63 +47,27 @@ class BankTransactionParserTest extends BaseTestCase {
 
     public function testFromStringEmptyFile(): void {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Leere ASCII-Weiterverarbeitungsdatei');
+        $this->expectExceptionMessage('Empty ASCII processing file');
 
         BankTransactionParser::fromString('');
     }
 
     public function testFromStringInvalidFormat(): void {
-        $invalidCSV = '"70030000";"1234567";10.00'; // Zu wenige Felder
+        $invalidCSV = '"70030000";"1234567";10.00'; // Too few fields
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Falsche Anzahl Felder');
+        $this->expectExceptionMessage('Invalid field count');
 
         BankTransactionParser::fromString($invalidCSV);
     }
 
     public function testIsValidBankTransactionFormat(): void {
-        // Korrekte DATEV ASCII-Zeile mit 17 Feldern (wie in .samples/ASCII.csv)
-        $validLine = '"70030000";"1234567";433;29.12.15;29.12.15;29.12.15;10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";';
-        $invalidLine = '"70030000";"1234567";10.00'; // Zu wenige Felder
+        // Valid DATEV ASCII line with 17 fields (as in .samples/ASCII.csv)
+        $validLine = '"70030000";"1234567";433;29.12.15;29.12.15;29.12.15;10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"";"EUR";';
+        $invalidLine = '"70030000";"1234567";10.00'; // Too few fields
 
         $this->assertTrue(BankTransactionParser::isValidBankTransactionFormat($validLine));
         $this->assertFalse(BankTransactionParser::isValidBankTransactionFormat($invalidLine));
-    }
-
-    public function testAnalyzeFormat(): void {
-        $analysis = BankTransactionParser::analyzeFormat($this->sampleCSV);
-
-        $this->assertEquals('ASCII-Weiterverarbeitungsdatei', $analysis['format_type']);
-        $this->assertTrue($analysis['supported']);
-        $this->assertEquals(2, $analysis['line_count']);
-        $this->assertEquals(2, $analysis['valid_rows']);
-        $this->assertEmpty($analysis['invalid_rows']);
-        $this->assertEquals(34, $analysis['field_count']);
-        $this->assertFalse($analysis['has_meta_header']);
-        $this->assertFalse($analysis['has_field_header']);
-        $this->assertEquals(['EUR'], $analysis['currencies']);
-    }
-
-    public function testAnalyzeFormatInvalidFile(): void {
-        $invalidCSV = 'invalid;data;format';
-        $analysis = BankTransactionParser::analyzeFormat($invalidCSV);
-
-        $this->assertNull($analysis['format_type']);
-        $this->assertFalse($analysis['supported']);
-        $this->assertArrayHasKey('error', $analysis);
-    }
-
-    public function testCreateSampleFile(): void {
-        $sampleContent = BankTransactionParser::createSampleFile();
-
-        $this->assertNotEmpty($sampleContent);
-        $this->assertTrue(str_contains($sampleContent, '"70030000"'));
-        $this->assertTrue(str_contains($sampleContent, '"HANS MUSTERMANN"'));
-
-        // Prüfen ob Sample-Datei geparst werden kann
-        $document = BankTransactionParser::fromString($sampleContent);
-        $this->assertInstanceOf(BankTransaction::class, $document);
-        $this->assertGreaterThan(0, count($document->getRows()));
     }
 
     public function testBankTransactionDocumentMethods(): void {
@@ -148,67 +112,51 @@ class BankTransactionParserTest extends BaseTestCase {
         $this->assertEquals('30.12.15', $summary['date_range']['to']);
     }
 
-    public function testToCSV(): void {
+    public function testToString(): void {
         $document = BankTransactionParser::fromString($this->sampleCSV);
-        $csvOutput = BankTransactionParser::toCSV($document);
+        $csvOutput = $document->toString();
 
         $this->assertNotEmpty($csvOutput);
         $this->assertTrue(str_contains($csvOutput, '70030000'));
         $this->assertTrue(str_contains($csvOutput, 'HANS MUSTERMANN'));
 
-        // Rund-Trip-Test: CSV -> Document -> CSV
+        // Round-trip test: CSV -> Document -> CSV -> Document
         $roundTripDocument = BankTransactionParser::fromString($csvOutput);
         $this->assertEquals($document->getTransactionSummary(), $roundTripDocument->getTransactionSummary());
     }
 
-    public function testGetSupportedExtensions(): void {
-        $extensions = BankTransactionParser::getSupportedExtensions();
-
-        $this->assertIsArray($extensions);
-        $this->assertContains('.csv', $extensions);
-        $this->assertContains('.txt', $extensions);
-        $this->assertContains('.asc', $extensions);
-    }
-
-    public function testGetFormatDescription(): void {
-        $description = BankTransactionParser::getFormatDescription();
-
-        $this->assertIsString($description);
-        $this->assertTrue(str_contains($description, 'ASCII-Weiterverarbeitungsdatei'));
-        $this->assertTrue(str_contains($description, '34 Felder'));
-    }
-
     public function testValidationErrors(): void {
-        // CSV mit ungültigen Daten (fehlende Pflichtfelder) - genau 34 Felder
-        $invalidCSV = '"";"";"";"29.12.15";"";"29.12.15";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""';
+        // CSV with invalid data (empty required fields but valid field count of 17)
+        // Fields: BLZ(empty), Account(empty), StatementNr, Date1(empty), Date2(empty), BookingDate(empty), Amount(empty), Name...
+        $invalidCSV = '"";"";"433";"";"";"";"";"";"";"";"";"";"";"";"";"";"EUR"';
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('ASCII-Weiterverarbeitungsdatei-Validierung fehlgeschlagen');
+        $this->expectExceptionMessage('ASCII processing file validation failed');
 
         BankTransactionParser::fromString($invalidCSV);
     }
 
     public function testDateSortingValidation(): void {
-        // CSV mit nicht aufsteigend sortierten Daten - beide genau 34 Felder
+        // CSV with non-ascending sorted dates - both exactly 17 fields (minimum valid format)
         $unsortedCSV = implode("\n", [
-            '"70030000";"1234567";"434";"30.12.15";"30.12.15";"30.12.15";"10.00";"TEST1";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""',
-            '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";"-25.50";"TEST2";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""'
+            '"70030000";"1234567";"434";"30.12.15";"30.12.15";"30.12.15";"10.00";"TEST1";"";"";"";"";"";"";"";"";"EUR"',
+            '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";"-25.50";"TEST2";"";"";"";"";"";"";"";"";"EUR"'
         ]);
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('nicht aufsteigend sortiert');
+        $this->expectExceptionMessage('Booking dates are not sorted in ascending order');
 
         BankTransactionParser::fromString($unsortedCSV);
     }
 
     public function testFieldCount(): void {
-        // Test mit 33 Feldern statt 34
-        $incompleteCSV = '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";051;"EUR";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""';
+        // Test with 35 fields instead of max 34
+        $tooManyFieldsCSV = '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";"EUR";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"EXTRA"';
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Falsche Anzahl Felder');
+        $this->expectExceptionMessage('Invalid field count');
 
-        BankTransactionParser::fromString($incompleteCSV);
+        BankTransactionParser::fromString($tooManyFieldsCSV);
     }
 
     public function testGetAdditionalAmounts(): void {

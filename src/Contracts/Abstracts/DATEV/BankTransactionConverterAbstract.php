@@ -22,15 +22,15 @@ use CommonToolkit\Helper\Data\CurrencyHelper;
 use DateTimeImmutable;
 
 /**
- * Abstrakte Basisklasse für BankTransaction-Konverter.
+ * Abstract base class for BankTransaction converters.
  * 
- * Stellt gemeinsame Hilfsmethoden für die Konvertierung zwischen
+ * Provides common helper methods for conversion between
  * DATEV ASCII-Weiterverarbeitungsdateien und Banking-Formaten bereit.
  * 
  * @package CommonToolkit\Contracts\Abstracts\DATEV
  */
 abstract class BankTransactionConverterAbstract {
-    /** Maximale Länge für Verwendungszweck-Felder (DATEV-Standard). */
+    /** Maximum length for purpose fields (DATEV standard). */
     protected const VERWENDUNGSZWECK_MAX_LENGTH = 27;
 
     /** Deutsches Datumsformat für DATEV-Export. */
@@ -39,15 +39,15 @@ abstract class BankTransactionConverterAbstract {
     /** Standard-Transaktionscode wenn keiner angegeben. */
     protected const DEFAULT_TRANSACTION_CODE = 'NTRF';
 
-    /** Standard-Währung wenn keine angegeben. */
+    /** Default currency wenn keine angegeben. */
     protected const DEFAULT_CURRENCY = 'EUR';
 
     /**
-     * Liste aller Verwendungszweck-Felder in korrekter Reihenfolge.
+     * List of all purpose fields in correct order.
      * 
      * @return F[]
      */
-    protected static function getVerwendungszweckFelder(): array {
+    protected static function getPurposeFields(): array {
         return [
             F::VERWENDUNGSZWECK_1,
             F::VERWENDUNGSZWECK_2,
@@ -67,11 +67,11 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Holt den Wert eines Feldes anhand des Header-Enums aus einem Feld-Array.
+     * Gets the value of a field by header enum from a field array.
      * 
      * @param array $fields Array der DataField-Objekte
-     * @param F $field Header-Feld Definition
-     * @return string Feldwert oder leerer String
+     * @param F $field Header field definition
+     * @return string Field value or empty string
      */
     protected static function getField(array $fields, F $field): string {
         $idx = $field->index();
@@ -79,7 +79,7 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Erstellt ein initialisiertes Feld-Array für DATEV-Export.
+     * Creates an initialized field array for DATEV export.
      * 
      * @return string[] Array mit 34 Leerstrings
      */
@@ -88,9 +88,9 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Konvertiert ein Feld-Array in DataField-Objekte.
+     * Converts a field array to DataField objects.
      * 
-     * @param string[] $values Feld-Werte
+     * @param string[] $values Field values
      * @return DataField[]
      */
     protected static function valuesToDataFields(array $values): array {
@@ -98,9 +98,9 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Erstellt eine DataLine aus einem Feld-Werte-Array.
+     * Creates a DataLine from a field values array.
      * 
-     * @param string[] $values Feld-Werte
+     * @param string[] $values Field values
      * @return DataLine
      */
     protected static function createDataLine(array $values): DataLine {
@@ -112,7 +112,7 @@ abstract class BankTransactionConverterAbstract {
      * 
      * @param float $amount Betrag
      * @param CreditDebit $creditDebit Credit/Debit-Kennzeichen
-     * @return string Formatierter Betrag mit Anführungszeichen
+     * @return string Formatted amount with quotes
      */
     protected static function formatAmount(float $amount, CreditDebit $creditDebit): string {
         $sign = $creditDebit === CreditDebit::CREDIT ? '+' : '-';
@@ -136,9 +136,9 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Parst eine Währung aus einem String.
+     * Parses a currency from a string.
      * 
-     * @param string $currencyStr Währungs-String (z.B. "EUR")
+     * @param string $currencyStr Currency string (e.g. "EUR")
      * @return CurrencyCode
      */
     protected static function parseCurrency(string $currencyStr): CurrencyCode {
@@ -151,7 +151,7 @@ abstract class BankTransactionConverterAbstract {
     /**
      * Parst ein Datum in verschiedenen Formaten.
      * 
-     * Unterstützte Formate:
+     * Supported formats:
      * - ISO: Y-m-d (2025-12-27)
      * - Deutsch: d.m.Y, d.m.y (27.12.2025, 27.12.25)
      * - Kompakt: Ymd, ymd, dmY, dmy
@@ -204,10 +204,10 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Teilt Text in Zeilen mit maximaler Länge (Wortgrenzen-bewusst).
+     * Splits text into lines with maximum length (word boundary aware).
      * 
      * @param string $text Text zum Aufteilen
-     * @param int $maxLength Maximale Zeilenlänge
+     * @param int $maxLength Maximum line length
      * @return string[]
      */
     protected static function splitText(string $text, int $maxLength = self::VERWENDUNGSZWECK_MAX_LENGTH): array {
@@ -257,7 +257,7 @@ abstract class BankTransactionConverterAbstract {
     /**
      * Parst eine Account-ID in BLZ und Kontonummer.
      * 
-     * Unterstützte Formate:
+     * Supported formats:
      * - BLZ/Kontonummer: "12345678/0123456789"
      * - IBAN: "DE89370400440532013000"
      * - Nur Kontonummer: "0123456789"
@@ -300,7 +300,7 @@ abstract class BankTransactionConverterAbstract {
     /**
      * Extrahiert BLZ oder BIC aus einer IBAN.
      * 
-     * Nutzt BankHelper für IBAN-Validierung und BIC-Lookup.
+     * Uses BankHelper for IBAN validation and BIC lookup.
      * 
      * @param string $iban IBAN
      * @return string BIC, BLZ oder leerer String
@@ -326,27 +326,27 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Befüllt alle Verwendungszweck-Felder in einem Werte-Array.
+     * Fills all purpose fields in a values array.
      * 
-     * @param string[] $values Referenz auf Feld-Array
+     * @param string[] $values Reference to field array
      * @param string[] $purposeLines Verwendungszweck-Zeilen
      */
-    protected static function fillVerwendungszweckFelder(array &$values, array $purposeLines): void {
-        $felder = self::getVerwendungszweckFelder();
+    protected static function fillPurposeFields(array &$values, array $purposeLines): void {
+        $felder = self::getPurposeFields();
         foreach ($felder as $i => $field) {
             $values[$field->index()] = $purposeLines[$i] ?? '';
         }
     }
 
     /**
-     * Sammelt alle Verwendungszweck-Werte aus einem Feld-Array.
+     * Collects all purpose values from a field array.
      * 
      * @param array $fields Array der DataField-Objekte
      * @return string[] Nicht-leere Verwendungszweck-Werte
      */
     protected static function collectVerwendungszweck(array $fields): array {
         $parts = [];
-        foreach (self::getVerwendungszweckFelder() as $field) {
+        foreach (self::getPurposeFields() as $field) {
             $vz = self::getField($fields, $field);
             if (!empty($vz)) {
                 $parts[] = $vz;

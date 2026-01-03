@@ -20,7 +20,7 @@ use DateTimeImmutable;
 /**
  * pain.014 Document - Creditor Payment Activation Request Status Report.
  * 
- * Statusbericht für Zahlungsaktivierungsanfragen.
+ * Status report for payment activation requests.
  * Antwort auf pain.013.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type14
@@ -153,7 +153,7 @@ final class Document {
         $errors = [];
 
         if (strlen($this->messageId) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (empty($this->paymentStatuses)) {
@@ -167,7 +167,7 @@ final class Document {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

@@ -17,8 +17,8 @@ use DateTimeImmutable;
 /**
  * CAMT.055 Underlying Transaction.
  * 
- * Repräsentiert eine Gruppe von Stornierungsanfragen zu einer ursprünglichen Nachricht.
- * Enthält sowohl OrgnlGrpInfAndCxl als auch OrgnlPmtInfAndCxl Strukturen.
+ * Represents a group of cancellation requests for an original message.
+ * Contains both OrgnlGrpInfAndCxl and OrgnlPmtInfAndCxl structures.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type55
  */

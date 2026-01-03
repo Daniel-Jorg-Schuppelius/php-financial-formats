@@ -18,7 +18,7 @@ use DateTimeImmutable;
 /**
  * CAMT.087 Modification Request.
  * 
- * Enthält die gewünschten Änderungen an einer Zahlung.
+ * Contains the desired changes to a payment.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type87
  */
@@ -94,21 +94,21 @@ class ModificationRequest {
     }
 
     /**
-     * Prüft ob Betrag geändert werden soll.
+     * Checks if amount should be changed.
      */
     public function hasAmountModification(): bool {
         return $this->requestedSettlementAmount !== null;
     }
 
     /**
-     * Prüft ob Debtor geändert werden soll.
+     * Checks if debtor should be changed.
      */
     public function hasDebtorModification(): bool {
         return $this->debtorName !== null || $this->debtorAccount !== null;
     }
 
     /**
-     * Prüft ob Creditor geändert werden soll.
+     * Checks if creditor should be changed.
      */
     public function hasCreditorModification(): bool {
         return $this->creditorName !== null || $this->creditorAccount !== null;

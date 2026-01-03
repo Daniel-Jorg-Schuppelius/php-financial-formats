@@ -19,10 +19,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.026 XML (Unable to Apply).
+ * Generator for CAMT.026 XML (Unable to Apply).
  * 
- * Generiert Anfragen zur Klärung nicht zuordenbarer Zahlungen
- * gemäß ISO 20022 camt.026.001.xx Standard.
+ * Generates requests to clarify payments that cannot be matched
+ * according to ISO 20022 camt.026.001.xx Standard.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -50,7 +50,7 @@ class Camt026Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -94,7 +94,7 @@ class Camt026Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu (optional).
+     * Adds the case structure (optional).
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -117,7 +117,7 @@ class Camt026Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Underlying Transaction Reference hinzu.
+     * Adds the underlying transaction reference.
      */
     private function addUnderlying(Document $document): void {
         if ($document->getOriginalMessageId() === null && $document->getOriginalEndToEndId() === null) {
@@ -161,7 +161,7 @@ class Camt026Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Justification (Unable to Apply Reasons) hinzu.
+     * Adds the justification (unable to apply reasons).
      */
     private function addJustification(Document $document): void {
         $reasons = $document->getUnableToApplyReasons();
@@ -179,7 +179,7 @@ class Camt026Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt einen einzelnen Unable-to-Apply-Grund hinzu.
+     * Adds a single unable-to-apply reason.
      */
     private function addUnableToApplyReason(UnableToApplyReason $reason): void {
         $this->builder->addElement('UblToApplyRsn');

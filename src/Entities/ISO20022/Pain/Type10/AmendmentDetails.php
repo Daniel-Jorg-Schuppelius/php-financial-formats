@@ -18,9 +18,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use DateTimeImmutable;
 
 /**
- * Amendment Details für pain.010.
+ * Amendment details for pain.010.
  * 
- * Enthält die geänderten Werte des Mandats.
+ * Contains the amended values of the mandate.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type10
  */

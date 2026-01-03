@@ -22,9 +22,9 @@ use CommonToolkit\Enums\CreditDebit;
 use DateTimeImmutable;
 
 /**
- * Konvertiert Bankkontoauszüge in ein lesbares ASCII-Textformat.
+ * Converts bank account statements to a readable ASCII text format.
  * 
- * Unterstützte Eingabeformate:
+ * Supported input formats:
  * - CAMT.052, CAMT.053, CAMT.054 (ISO 20022)
  * - MT940, MT941, MT942 (SWIFT FIN)
  * 
@@ -422,7 +422,7 @@ final class BankStatementToAsciiConverter {
     }
 
     /**
-     * Formatiert ein Schlüssel-Wert-Paar.
+     * Formats a key-value pair.
      */
     private function formatKeyValue(string $key, string $value): string {
         return str_pad($key . ':', 20) . $value;
@@ -570,7 +570,7 @@ final class BankStatementToAsciiConverter {
     }
 
     /**
-     * Kürzt einen String auf maximale Länge.
+     * Truncates a string to maximum length.
      */
     private function truncate(string $text, int $maxLength): string {
         if (mb_strlen($text) <= $maxLength) {

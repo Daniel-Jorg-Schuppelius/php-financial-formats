@@ -23,8 +23,8 @@ use DOMDocument;
 /**
  * CAMT.039 Document (Case Status Report).
  *
- * Repräsentiert einen Fallstatusbericht
- * gemäß ISO 20022 camt.039.001.xx Standard.
+ * Represents a case status report
+ * according to ISO 20022 camt.039.001.xx Standard.
  *
  * Antwort auf CAMT.038 mit dem aktuellen Status
  * einer laufenden Untersuchung oder eines Falls.

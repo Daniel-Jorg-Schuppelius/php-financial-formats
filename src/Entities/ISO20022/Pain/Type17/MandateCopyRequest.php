@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17;
 
 /**
- * Mandate Copy Request für pain.017.
+ * Mandate copy request for pain.017.
  * 
  * Einzelne Anfrage zur Erstellung einer Mandatskopie.
  * 

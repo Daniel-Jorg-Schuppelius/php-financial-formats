@@ -15,10 +15,10 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 use CommonToolkit\Enums\CountryCode;
 
 /**
- * Party Identification für pain-Nachrichten.
+ * Party identification for pain messages.
  * 
- * Repräsentiert eine Partei (Debtor, Creditor, Initiating Party) 
- * gemäß ISO 20022 PartyIdentification-Schema.
+ * Represents a party (Debtor, Creditor, Initiating Party) 
+ * according to ISO 20022 PartyIdentification schema.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain
  */
@@ -35,56 +35,56 @@ final readonly class PartyIdentification {
     }
 
     /**
-     * Gibt den Namen zurück (Nm).
+     * Returns the name (Nm).
      */
     public function getName(): ?string {
         return $this->name;
     }
 
     /**
-     * Gibt die Postadresse zurück (PstlAdr).
+     * Returns the postal address (PstlAdr).
      */
     public function getPostalAddress(): ?PostalAddress {
         return $this->postalAddress;
     }
 
     /**
-     * Gibt die Organisations-ID zurück (OrgId).
+     * Returns the organization ID (OrgId).
      */
     public function getOrganisationId(): ?string {
         return $this->organisationId;
     }
 
     /**
-     * Gibt die Privat-ID zurück (PrvtId).
+     * Returns the private ID (PrvtId).
      */
     public function getPrivateId(): ?string {
         return $this->privateId;
     }
 
     /**
-     * Gibt den BIC zurück (AnyBIC).
+     * Returns the BIC (AnyBIC).
      */
     public function getBic(): ?string {
         return $this->bic;
     }
 
     /**
-     * Gibt die LEI zurück (Legal Entity Identifier).
+     * Returns the LEI (Legal Entity Identifier).
      */
     public function getLei(): ?string {
         return $this->lei;
     }
 
     /**
-     * Gibt das Wohnsitzland zurück (CtryOfRes).
+     * Returns the country of residence (CtryOfRes).
      */
     public function getCountryOfResidence(): ?CountryCode {
         return $this->countryOfResidence;
     }
 
     /**
-     * Prüft ob die Partei gültig ist (mindestens Name oder ID).
+     * Checks if the party is valid (at least name or ID).
      */
     public function isValid(): bool {
         return $this->name !== null
@@ -93,14 +93,14 @@ final readonly class PartyIdentification {
     }
 
     /**
-     * Erstellt eine einfache Party mit nur Name.
+     * Creates a simple party with name only.
      */
     public static function fromName(string $name): self {
         return new self(name: $name);
     }
 
     /**
-     * Erstellt eine Party mit Name und BIC.
+     * Creates a party with name and BIC.
      */
     public static function fromNameAndBic(string $name, string $bic): self {
         return new self(name: $name, bic: $bic);

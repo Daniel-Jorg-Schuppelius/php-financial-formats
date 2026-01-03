@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Sprache für Debitoren/Kreditoren (Feld 101).
+ * DATEV Language for debitors/creditors (Field 101).
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
  */
@@ -27,7 +27,7 @@ enum Language: int {
     case ITALIAN = 19;
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -53,7 +53,7 @@ enum Language: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -67,7 +67,7 @@ enum Language: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value);

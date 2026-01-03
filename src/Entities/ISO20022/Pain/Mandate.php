@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Enums\SequenceType;
 use DateTimeImmutable;
 
 /**
- * Mandat für SEPA-Lastschriften.
+ * Mandate for SEPA direct debits.
  * 
  * Verwendet in pain.009 (Initiation), pain.010 (Amendment), 
  * pain.011 (Cancellation), pain.012 (Acceptance).
@@ -46,7 +46,7 @@ final readonly class Mandate {
     }
 
     /**
-     * Factory für SEPA Core Mandat.
+     * Factory for SEPA Core mandate.
      */
     public static function sepaCore(
         string $mandateId,
@@ -74,7 +74,7 @@ final readonly class Mandate {
     }
 
     /**
-     * Factory für SEPA B2B Mandat.
+     * Factory for SEPA B2B mandate.
      */
     public static function sepaB2B(
         string $mandateId,

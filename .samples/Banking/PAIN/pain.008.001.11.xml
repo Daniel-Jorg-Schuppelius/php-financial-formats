@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.11">
+  <CstmrDrctDbtInitn>
+    <GrpHdr>
+      <MsgId>DD-001</MsgId>
+      <CreDtTm>2026-01-01T12:00:00</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <CtrlSum>500.00</CtrlSum>
+      <InitgPty>
+        <Nm>DirectDebit GmbH</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>PMT-DD-001</PmtInfId>
+      <PmtMtd>DD</PmtMtd>
+      <ReqdColltnDt>2026-01-20</ReqdColltnDt>
+      <Cdtr>
+        <Nm>Creditor GmbH</Nm>
+      </Cdtr>
+      <CdtrAcct>
+        <Id>
+          <IBAN>DE89370400440532013000</IBAN>
+        </Id>
+      </CdtrAcct>
+      <CdtrAgt>
+        <FinInstnId>
+          <BICFI>COBADEFFXXX</BICFI>
+        </FinInstnId>
+      </CdtrAgt>
+      <DrctDbtTxInf>
+        <PmtId>
+          <EndToEndId>DD-TX-001</EndToEndId>
+        </PmtId>
+        <InstdAmt Ccy="EUR">500.00</InstdAmt>
+        <DrctDbtTx>
+          <MndtRltdInf>
+            <MndtId>MANDATE-001</MndtId>
+            <DtOfSgntr>2025-12-01</DtOfSgntr>
+          </MndtRltdInf>
+        </DrctDbtTx>
+        <Dbtr>
+          <Nm>Debtor AG</Nm>
+        </Dbtr>
+        <DbtrAcct>
+          <Id>
+            <IBAN>DE89370400440532013001</IBAN>
+          </Id>
+        </DbtrAcct>
+      </DrctDbtTxInf>
+    </PmtInf>
+  </CstmrDrctDbtInitn>
+</Document>

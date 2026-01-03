@@ -21,7 +21,7 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Direct Debit Transaction Information für pain.008 (DrctDbtTxInf).
+ * Direct debit transaction information for pain.008 (DrctDbtTxInf).
  * 
  * Einzelne Lastschrift-Transaktion mit Debtor-Informationen.
  * 
@@ -43,7 +43,7 @@ final readonly class DirectDebitTransaction {
     }
 
     /**
-     * Factory für SEPA-Lastschrift.
+     * Factory for SEPA direct debit.
      */
     public static function sepa(
         string $endToEndId,

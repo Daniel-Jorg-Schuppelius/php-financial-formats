@@ -28,10 +28,10 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Builder für pain.001 Documents (Customer Credit Transfer Initiation).
+ * Builder for pain.001 Documents (Customer Credit Transfer Initiation).
  * 
- * Erstellt Überweisungsaufträge gemäß ISO 20022.
- * Unterstützt sowohl SEPA-konforme als auch nicht-SEPA-Überweisungen.
+ * Creates credit transfer orders according to ISO 20022.
+ * Supports both SEPA-compliant and non-SEPA credit transfers.
  * 
  * Struktur:
  * - GroupHeader: Nachrichten-Metadaten
@@ -98,7 +98,7 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige PaymentInstruction hinzu.
+     * Adds a completed PaymentInstruction.
      */
     public function addPaymentInstruction(PaymentInstruction $instruction): self {
         $clone = clone $this;
@@ -127,7 +127,7 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Fügt eine Transaktion zur aktuellen PaymentInstruction hinzu.
+     * Adds a transaction to the current PaymentInstruction.
      * 
      * @throws RuntimeException Wenn keine PaymentInstruction begonnen wurde
      */
@@ -144,7 +144,7 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Setzt die Zahlungsmethode für die aktuelle PaymentInstruction.
+     * Sets the payment method for the current PaymentInstruction.
      */
     public function setPaymentMethod(PaymentMethod $method): self {
         if ($this->currentInstructionBuilder === null) {
@@ -157,7 +157,7 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Setzt das angeforderte Ausführungsdatum für die aktuelle PaymentInstruction.
+     * Sets the requested execution date for the current PaymentInstruction.
      */
     public function setRequestedExecutionDate(DateTimeImmutable $date): self {
         if ($this->currentInstructionBuilder === null) {
@@ -170,7 +170,7 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Setzt den ChargesCode für die aktuelle PaymentInstruction.
+     * Sets the ChargesCode for the current PaymentInstruction.
      */
     public function setChargesCode(ChargesCode $code): self {
         if ($this->currentInstructionBuilder === null) {
@@ -183,7 +183,7 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Beendet die aktuelle PaymentInstruction und fügt sie zum Dokument hinzu.
+     * Ends the current PaymentInstruction and adds it to the document.
      * 
      * @throws RuntimeException Wenn keine PaymentInstruction aktiv ist
      */
@@ -248,16 +248,16 @@ final class Pain001DocumentBuilder {
     }
 
     /**
-     * Erstellt eine einfache SEPA-Überweisung.
+     * Creates a simple SEPA credit transfer.
      * 
-     * Convenience-Methode für einfache Überweisungen mit einer Transaktion.
+     * Convenience method for simple credit transfers with one transaction.
      * 
      * @param string $messageId Eindeutige Nachrichten-ID
      * @param string $initiatorName Name des Auftraggebers
      * @param string $debtorIban IBAN des Auftraggebers
      * @param string $debtorBic BIC der Bank des Auftraggebers
-     * @param string $creditorName Name des Empfängers
-     * @param string $creditorIban IBAN des Empfängers
+     * @param string $creditorName Name of the recipient
+     * @param string $creditorIban IBAN of the recipient
      * @param float $amount Betrag in EUR
      * @param string $reference Verwendungszweck
      */
@@ -302,7 +302,7 @@ final class Pain001DocumentBuilder {
 }
 
 /**
- * Hilfsbuilder für PaymentInstruction.
+ * Helper builder for PaymentInstruction.
  * Intern verwendet von Pain001DocumentBuilder.
  */
 final class PaymentInstructionBuilder {

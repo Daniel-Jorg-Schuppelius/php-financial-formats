@@ -21,7 +21,7 @@ use DateTimeImmutable;
 /**
  * pain.008 Document - Customer Direct Debit Initiation.
  * 
- * Lastschrift-Einreichung gemäß ISO 20022.
+ * Direct debit submission according to ISO 20022.
  * 
  * Struktur:
  * - CstmrDrctDbtInitn (Customer Direct Debit Initiation)
@@ -70,7 +70,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt den Nachrichtentyp zurück.
+     * Returns the message type.
      */
     public function getType(): PainType {
         return PainType::PAIN_008;
@@ -88,7 +88,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Fügt eine PaymentInstruction hinzu.
+     * Adds a payment instruction.
      */
     public function addPaymentInstruction(PaymentInstruction $instruction): self {
         $clone = clone $this;
@@ -97,7 +97,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Zählt alle Transaktionen.
+     * Counts all transactions.
      */
     public function countTransactions(): int {
         return array_sum(array_map(
@@ -117,7 +117,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Gibt alle Transaktionen zurück.
+     * Returns all transactions.
      */
     public function getAllTransactions(): array {
         $transactions = [];
@@ -138,7 +138,7 @@ final class Document extends PainDocumentAbstract {
         $errors = [];
 
         if (strlen($this->groupHeader->getMessageId()) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (!$this->groupHeader->getInitiatingParty()->isValid()) {
@@ -151,7 +151,7 @@ final class Document extends PainDocumentAbstract {
 
         foreach ($this->paymentInstructions as $index => $instruction) {
             if (strlen($instruction->getPaymentInstructionId()) > 35) {
-                $errors[] = "PmtInf[$index]/PmtInfId darf maximal 35 Zeichen lang sein";
+                $errors[] = "PmtInf[$index]/PmtInfId must not exceed 35 characters";
             }
 
             if (empty($instruction->getCreditorSchemeId())) {
@@ -180,7 +180,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

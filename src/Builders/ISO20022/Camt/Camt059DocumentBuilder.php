@@ -18,9 +18,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.059 Documents (Notification to Receive Status Report).
+ * Builder for CAMT.059 Documents (Notification to Receive Status Report).
  * 
- * Erstellt Statusberichte zu Benachrichtigungen über erwartete Zahlungseingänge.
+ * Creates status reports for notifications about expected payment receipts.
  * Meldet den Status einer zuvor gesendeten CAMT.057-Benachrichtigung.
  * 
  * Verwendung:
@@ -52,21 +52,21 @@ final class Camt059DocumentBuilder {
 
     private function __construct(string $messageId) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Message-ID.
+     * Creates a new builder with message ID.
      */
     public static function create(string $messageId): self {
         return new self($messageId);
     }
 
     /**
-     * Erzeugt Builder für Status einer CAMT.057-Nachricht.
+     * Creates builder for status of a CAMT.057 message.
      */
     public static function forCamt057(string $messageId, string $originalCamt057MessageId): self {
         $builder = new self($messageId);
@@ -76,7 +76,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -85,7 +85,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Setzt die initiierende Partei (Bank).
+     * Sets the initiating party (bank).
      */
     public function withInitiatingParty(string $name): self {
         $clone = clone $this;
@@ -94,7 +94,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Setzt den Empfänger (BIC).
+     * Sets the receiver (BIC).
      */
     public function withMessageRecipient(string $bic): self {
         $clone = clone $this;
@@ -103,7 +103,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Setzt die Referenz auf die Original-Nachricht.
+     * Sets the reference to the original message.
      */
     public function withOriginalMessage(
         string $messageId,
@@ -118,9 +118,9 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Setzt den Group-Status-Code.
+     * Sets the group status code.
      * 
-     * Gängige Status-Codes:
+     * Common status codes:
      * - ACCP: Accepted (Akzeptiert)
      * - RJCT: Rejected (Abgelehnt)
      * - PDNG: Pending (In Bearbeitung)
@@ -133,7 +133,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Fügt ein Status Item hinzu.
+     * Adds a status item.
      */
     public function addStatusItem(StatusItem $item): self {
         $clone = clone $this;
@@ -142,7 +142,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Convenience: Fügt ein akzeptiertes Item hinzu.
+     * Convenience: Adds an accepted item.
      */
     public function addAccepted(string $originalItemId): self {
         return $this->addStatusItem(new StatusItem(
@@ -152,7 +152,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Convenience: Fügt ein abgelehntes Item hinzu.
+     * Convenience: Adds a rejected item.
      */
     public function addRejected(
         string $originalItemId,
@@ -168,7 +168,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Convenience: Fügt ein ausstehendes Item hinzu.
+     * Convenience: Adds a pending item.
      */
     public function addPending(string $originalItemId): self {
         return $this->addStatusItem(new StatusItem(
@@ -178,7 +178,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Status Items hinzu.
+     * Adds multiple status items.
      * 
      * @param StatusItem[] $items
      */
@@ -189,7 +189,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.059 Document.
+     * Creates the CAMT.059 Document.
      * 
      * @throws InvalidArgumentException wenn Pflichtfelder fehlen
      */
@@ -218,7 +218,7 @@ final class Camt059DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt einen einfachen Akzeptanz-Statusbericht.
+     * Creates einen einfachen Akzeptanz-Statusbericht.
      */
     public static function createAllAccepted(
         string $messageId,
@@ -236,7 +236,7 @@ final class Camt059DocumentBuilder {
     }
 
     /**
-     * Erstellt einen Ablehnungs-Statusbericht.
+     * Creates einen Ablehnungs-Statusbericht.
      */
     public static function createAllRejected(
         string $messageId,

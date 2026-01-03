@@ -23,11 +23,11 @@ use DOMDocument;
 /**
  * CAMT.087 Document (Request to Modify Payment).
  * 
- * Repräsentiert eine Anfrage zur Änderung einer Zahlung
- * gemäß ISO 20022 camt.087.001.xx Standard.
+ * Represents a request to modify a payment
+ * according to ISO 20022 camt.087.001.xx Standard.
  * 
- * Wird verwendet, um eine bereits eingereichte Zahlung
- * nachträglich zu modifizieren (z.B. Betrag, Empfänger).
+ * Used to modify an already submitted payment
+ * to be subsequently modified (e.g. amount, recipient).
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type87
  */

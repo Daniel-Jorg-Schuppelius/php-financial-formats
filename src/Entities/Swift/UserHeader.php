@@ -17,7 +17,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Swift;
  * 
  * Format: {3:{108:MUR12345678901234}{119:STP}}
  * 
- * Enthält optionale User-spezifische Felder:
+ * Contains optional user-specific fields:
  * - 103: Service Type Identifier
  * - 108: Message User Reference (MUR)
  * - 111: Service Type Identifier (Request for Transfer)
@@ -39,7 +39,7 @@ final class UserHeader {
     }
 
     /**
-     * Gibt alle Felder zurück
+     * Returns all fields
      * 
      * @return array<string, string>
      */
@@ -48,63 +48,63 @@ final class UserHeader {
     }
 
     /**
-     * Gibt ein bestimmtes Feld zurück
+     * Returns a specific field
      */
     public function getField(string $tag): ?string {
         return $this->fields[$tag] ?? null;
     }
 
     /**
-     * Gibt die Service Type Identifier zurück
+     * Returns the Service Type Identifier
      */
     public function getServiceTypeId(): ?string {
         return $this->getField('103');
     }
 
     /**
-     * Gibt die Message User Reference (MUR) zurück
+     * Returns the Message User Reference (MUR)
      */
     public function getMur(): ?string {
         return $this->getField('108');
     }
 
     /**
-     * Gibt das Banking Priority zurück
+     * Returns the Banking Priority
      */
     public function getBankingPriority(): ?string {
         return $this->getField('113');
     }
 
     /**
-     * Gibt das Validation Flag zurück (z.B. STP)
+     * Returns the Validation Flag (e.g. STP)
      */
     public function getValidationFlag(): ?string {
         return $this->getField('119');
     }
 
     /**
-     * Gibt die Unique End-to-End Transaction Reference (UETR) zurück
+     * Returns the Unique End-to-End Transaction Reference (UETR)
      */
     public function getUetr(): ?string {
         return $this->getField('121');
     }
 
     /**
-     * Prüft ob STP (Straight Through Processing) aktiviert ist
+     * Checks if STP (Straight Through Processing) is enabled
      */
     public function isStp(): bool {
         return $this->getField('119') === 'STP';
     }
 
     /**
-     * Prüft ob ein bestimmtes Feld vorhanden ist
+     * Checks if a specific field is present
      */
     public function hasField(string $tag): bool {
         return isset($this->fields[$tag]);
     }
 
     /**
-     * Gibt den vollständigen Block 3 String zurück
+     * Returns the complete Block 3 string
      */
     public function __toString(): string {
         if (empty($this->fields)) {

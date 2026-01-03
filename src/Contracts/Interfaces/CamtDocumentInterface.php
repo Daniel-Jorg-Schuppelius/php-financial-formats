@@ -17,22 +17,22 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Interface für alle CAMT-Dokumente.
+ * Interface for all CAMT documents.
  * 
- * Erweitert XmlDocumentInterface um CAMT-spezifische Funktionalität.
- * Ermöglicht einheitliche Handhabung aller CAMT-Formate
+ * Extends XmlDocumentInterface with CAMT-specific functionality.
+ * Enables uniform handling of all CAMT formats
  * (052, 053, 054, 055, 056, 026-039, 057-059, 087).
  * 
  * @package CommonToolkit\FinancialFormats\Contracts\Interfaces
  */
 interface CamtDocumentInterface extends XmlDocumentInterface {
     /**
-     * Gibt den CAMT-Typ des Dokuments zurück.
+     * Returns the CAMT type of the document.
      */
     public function getCamtType(): CamtType;
 
     /**
-     * Generiert das XML des Dokuments.
+     * Generates the XML of the document.
      */
     public function toXml(CamtVersion $version): string;
 }

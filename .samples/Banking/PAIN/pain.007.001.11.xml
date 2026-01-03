@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.007.001.11">
+  <CstmrPmtRvsl>
+    <GrpHdr>
+      <MsgId>RVSL-001</MsgId>
+      <CreDtTm>2026-01-01T12:00:00</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <InitgPty>
+        <Nm>Reversal GmbH</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>DD-001</OrgnlMsgId>
+      <OrgnlMsgNmId>pain.008.001.11</OrgnlMsgNmId>
+    </OrgnlGrpInf>
+  </CstmrPmtRvsl>
+</Document>

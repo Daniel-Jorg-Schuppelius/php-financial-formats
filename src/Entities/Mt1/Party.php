@@ -17,7 +17,7 @@ use CommonToolkit\Helper\Data\BankHelper;
 /**
  * Partei in einer MT10x-Nachricht.
  * 
- * Repräsentiert Auftraggeber (:50:), Begünstigten (:59:) oder
+ * Represents ordering party (:50:), beneficiary (:59:) or
  * beteiligte Banken (:52:, :53:, :56:, :57:).
  * 
  * Formate:
@@ -39,49 +39,49 @@ final readonly class Party {
     }
 
     /**
-     * Gibt die Kontonummer/IBAN zurück.
+     * Returns the account number/IBAN.
      */
     public function getAccount(): ?string {
         return $this->account;
     }
 
     /**
-     * Gibt den BIC zurück.
+     * Returns the BIC.
      */
     public function getBic(): ?string {
         return $this->bic;
     }
 
     /**
-     * Gibt den Namen zurück.
+     * Returns the name.
      */
     public function getName(): ?string {
         return $this->name;
     }
 
     /**
-     * Gibt die erste Adresszeile zurück.
+     * Returns the first address line.
      */
     public function getAddressLine1(): ?string {
         return $this->addressLine1;
     }
 
     /**
-     * Gibt die zweite Adresszeile zurück.
+     * Returns the second address line.
      */
     public function getAddressLine2(): ?string {
         return $this->addressLine2;
     }
 
     /**
-     * Gibt die dritte Adresszeile zurück.
+     * Returns the third address line.
      */
     public function getAddressLine3(): ?string {
         return $this->addressLine3;
     }
 
     /**
-     * Gibt die vollständige Adresse als Array zurück.
+     * Returns the complete address as array.
      * 
      * @return string[]
      */
@@ -94,7 +94,7 @@ final readonly class Party {
     }
 
     /**
-     * Gibt die vollständige Adresse als String zurück.
+     * Returns the complete address as string.
      */
     public function getFullAddress(): string {
         $lines = $this->getAddressLines();
@@ -105,21 +105,21 @@ final readonly class Party {
     }
 
     /**
-     * Prüft ob die Partei nur einen BIC hat (Option A).
+     * Checks if the party only has a BIC (Option A).
      */
     public function isBicOnly(): bool {
         return $this->bic !== null && $this->name === null;
     }
 
     /**
-     * Prüft ob die Partei Name und Adresse hat (Option K).
+     * Checks if the party has name and address (Option K).
      */
     public function hasNameAddress(): bool {
         return $this->name !== null;
     }
 
     /**
-     * Prüft ob die Partei ein Konto hat (Option H, F).
+     * Checks if the party has an account (Option H, F).
      */
     public function hasAccount(): bool {
         return $this->account !== null;

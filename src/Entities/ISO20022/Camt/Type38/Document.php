@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.038 Document (Case Status Report Request).
  *
- * Repräsentiert eine Anfrage zum Status eines Falls
- * gemäß ISO 20022 camt.038.001.xx Standard.
+ * Represents a request for the status of a case
+ * according to ISO 20022 camt.038.001.xx Standard.
  *
- * Wird verwendet, um den aktuellen Status einer laufenden
+ * Used to query the current status of an ongoing
  * Untersuchung oder eines Falls anzufordern.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type38

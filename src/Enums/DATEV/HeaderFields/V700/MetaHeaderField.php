@@ -92,7 +92,7 @@ enum MetaHeaderField: string implements MetaHeaderFieldInterface {
     }
 
     /**
-     * Regex für Validierung des jeweiligen Feldes (inkl. Anführungszeichen, wo spezifiziert).
+     * Regex for validation of the respective field (incl. quotes where specified).
      */
     public function pattern(): ?string {
         return match ($this) {
@@ -148,7 +148,7 @@ enum MetaHeaderField: string implements MetaHeaderFieldInterface {
     }
 
     /**
-     * Gibt an, ob das Feld laut DATEV-Spezifikation gequotet sein muss.
+     * Indicates whether the field must be quoted according to DATEV specification.
      *
      * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/header
      */
@@ -173,7 +173,7 @@ enum MetaHeaderField: string implements MetaHeaderFieldInterface {
     }
 
     /**
-     * Reihenfolge 1..31 für Export/Parsing.
+     * Order 1..31 for export/parsing.
      *
      * @return list<self>
      */

@@ -25,10 +25,10 @@ use DateTimeImmutable;
 /**
  * CAMT.054 Transaction Entry.
  * 
- * Repräsentiert einen einzelnen Buchungseintrag (Ntry) in der
+ * Represents a single booking entry (Ntry) in the
  * Soll/Haben-Benachrichtigung.
  * 
- * CAMT.054 enthält typischerweise mehr Details zu Agents und
+ * CAMT.054 typically contains more details about agents and
  * Referenzen als CAMT.052/053.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt054
@@ -139,7 +139,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt den vollständigen Transaktionscode zurück (Domain/Family/SubFamily).
+     * Returns the complete transaction code (Domain/Family/SubFamily).
      */
     public function getFullTransactionCode(): ?string {
         if ($this->domainCode === null) {
@@ -178,7 +178,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Erstellt eine zusammenfassende Beschreibung der Transaktion.
+     * Creates a summary description of the transaction.
      */
     public function getSummary(): string {
         $parts = [];
@@ -198,7 +198,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt eine String-Repräsentation der Transaktion zurück.
+     * Returns a string representation of the transaction.
      */
     public function __toString(): string {
         return $this->getSummary();

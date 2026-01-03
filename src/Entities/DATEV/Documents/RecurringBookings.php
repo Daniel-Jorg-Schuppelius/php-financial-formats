@@ -32,7 +32,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\RecurringBookin
 
 /**
  * DATEV-Wiederkehrende Buchungen-Dokument.
- * Spezielle Document-Klasse für Wiederkehrende Buchungen-Format (Kategorie 65).
+ * Special document class for recurring bookings format (Category 65).
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus RecurringBookingsHeaderField::getMaxLength() angewendet.
@@ -46,9 +46,9 @@ final class RecurringBookings extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus RecurringBookingsHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from RecurringBookingsHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -65,14 +65,14 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für diese Document-Art.
+     * Returns the DATEV category for this document type.
      */
     public function getCategory(): Category {
         return Category::WiederkehrendeBuchungen;
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::WiederkehrendeBuchungen->nameValue();
@@ -93,7 +93,7 @@ final class RecurringBookings extends Document {
     // ==================== BELEGFELD-BEHANDLUNG (FELD 1) ====================
 
     /**
-     * Gibt die Belegfeld1-Behandlung einer Buchungszeile zurück.
+     * Returns the receipt field 1 handling of a booking line.
      */
     public function getReceiptFieldHandlingValue(int $rowIndex): ?ReceiptFieldHandling {
         return $this->getReceiptFieldHandling($rowIndex, RecurringBookingsHeaderField::B1->getPosition());
@@ -109,14 +109,14 @@ final class RecurringBookings extends Document {
     // ==================== UMSATZ (FELD 2-5) ====================
 
     /**
-     * Gibt den Umsatzbetrag einer Buchungszeile zurück.
+     * Returns the turnover amount of a booking line.
      */
     public function getAmount(int $rowIndex): ?string {
         return $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Umsatz->getPosition());
     }
 
     /**
-     * Gibt Soll/Haben einer Buchungszeile zurück.
+     * Returns debit/credit of a booking line.
      */
     public function getCreditDebitValue(int $rowIndex): ?CreditDebit {
         return $this->getCreditDebit($rowIndex, RecurringBookingsHeaderField::SollHabenKennzeichen->getPosition());
@@ -130,14 +130,14 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt den Währungscode einer Buchungszeile zurück.
+     * Returns the currency code of a booking line.
      */
     public function getCurrencyCodeValue(int $rowIndex): ?CurrencyCode {
         return $this->getCurrencyCode($rowIndex, RecurringBookingsHeaderField::WKZUmsatz->getPosition());
     }
 
     /**
-     * Setzt den Währungscode einer Buchungszeile.
+     * Sets the currency code of a booking line.
      */
     public function setCurrencyCodeValue(int $rowIndex, CurrencyCode $currencyCode): void {
         $this->setCurrencyCode($rowIndex, RecurringBookingsHeaderField::WKZUmsatz->getPosition(), $currencyCode);
@@ -146,7 +146,7 @@ final class RecurringBookings extends Document {
     // ==================== POSTENSPERRE (FELD 21) ====================
 
     /**
-     * Gibt die Postensperre einer Buchungszeile zurück.
+     * Returns the item lock of a booking line.
      */
     public function getItemLockValue(int $rowIndex): ?ItemLock {
         return $this->getItemLock($rowIndex, RecurringBookingsHeaderField::Postensperre->getPosition());
@@ -162,7 +162,7 @@ final class RecurringBookings extends Document {
     // ==================== SACHVERHALT (FELD 24) ====================
 
     /**
-     * Gibt den Sachverhalt einer Buchungszeile zurück (Mahnzins/Mahngebühr).
+     * Returns the case type of a booking line (dunning interest/dunning fee).
      */
     public function getDunningSubjectValue(int $rowIndex): ?DunningSubject {
         return $this->getDunningSubject($rowIndex, RecurringBookingsHeaderField::Sachverhalt->getPosition());
@@ -178,7 +178,7 @@ final class RecurringBookings extends Document {
     // ==================== ZINSSPERRE (FELD 25) ====================
 
     /**
-     * Gibt die Zinssperre einer Buchungszeile zurück.
+     * Returns the interest lock of a booking line.
      */
     public function getInterestLockValue(int $rowIndex): ?InterestLock {
         return $this->getInterestLock($rowIndex, RecurringBookingsHeaderField::Zinssperre->getPosition());
@@ -194,7 +194,7 @@ final class RecurringBookings extends Document {
     // ==================== ZEITINTERVALL (FELDER 81-82) ====================
 
     /**
-     * Gibt die Zeitintervallart einer Buchungszeile zurück (TAG/MON).
+     * Returns the time interval type of a booking line (DAY/MON).
      */
     public function getTimeIntervalTypeValue(int $rowIndex): ?TimeIntervalType {
         return $this->getTimeIntervalType($rowIndex, RecurringBookingsHeaderField::Zeitintervallart->getPosition());
@@ -208,7 +208,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt das Zeitintervall (alle n Tage/Monate) zurück.
+     * Returns the time interval (every n days/months).
      */
     public function getTimeInterval(int $rowIndex): ?int {
         $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Zeitabstand->getPosition());
@@ -228,14 +228,14 @@ final class RecurringBookings extends Document {
     // ==================== WOCHENTAG (FELD 83) ====================
 
     /**
-     * Gibt die Wochentag-Bitmaske einer Buchungszeile zurück.
+     * Returns the weekday bitmask of a booking line.
      */
     public function getWeekdayMaskValue(int $rowIndex): ?int {
         return $this->getWeekdayMask($rowIndex, RecurringBookingsHeaderField::Wochentag->getPosition());
     }
 
     /**
-     * Gibt die Wochentage als Array von Weekday-Enums zurück.
+     * Returns the weekdays as array of Weekday enums.
      *
      * @return array<Weekday>
      */
@@ -264,8 +264,8 @@ final class RecurringBookings extends Document {
     // ==================== ORDNUNGSZAHL TAG IM MONAT (FELD 85) ====================
 
     /**
-     * Gibt die Ordnungszahl Tag im Monat zurück (1-31).
-     * Bei Zeitintervallart MON: Tag des Monats für die Buchung.
+     * Returns the day ordinal in month (1-31).
+     * For time interval type MON: day of month for the booking.
      */
     public function getDayOfMonth(int $rowIndex): ?int {
         $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::OrdnungszahlTagImMonat->getPosition());
@@ -285,7 +285,7 @@ final class RecurringBookings extends Document {
     // ==================== ORDNUNGSZAHL WOCHENTAG (FELD 86) ====================
 
     /**
-     * Gibt die Ordnungszahl des Wochentags zurück (1=erster, 5=letzter).
+     * Returns the weekday ordinal (1=first, 5=last).
      */
     public function getWeekdayOrdinalValue(int $rowIndex): ?WeekdayOrdinal {
         return $this->getWeekdayOrdinal($rowIndex, RecurringBookingsHeaderField::OrdnungszahlWochentag->getPosition());
@@ -301,7 +301,7 @@ final class RecurringBookings extends Document {
     // ==================== ENDETYP UND ENDDATUM (FELDER 80, 87) ====================
 
     /**
-     * Gibt das Enddatum der Buchungsserie zurück (Feld 80).
+     * Returns the end date of the booking series (field 80).
      * Muss nach dem Beginndatum liegen. Format: TTMMJJJJ
      */
     public function getEndDate(int $rowIndex): ?string {
@@ -316,7 +316,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt den Endetyp einer Buchungszeile zurück (Feld 87).
+     * Returns the end type of a booking line (field 87).
      * 1 = kein Enddatum, 2 = Endzeitpunkt bei Anzahl Ereignissen, 3 = Endet am
      */
     public function getEndTypeValue(int $rowIndex): ?EndType {
@@ -333,8 +333,8 @@ final class RecurringBookings extends Document {
     // ==================== GESELLSCHAFTER (FELDER 88-89) ====================
 
     /**
-     * Gibt den Gesellschafternamen zurück (Feld 88).
-     * Muss mit dem zugeordneten Gesellschafter in den zentralen Stammdaten übereinstimmen.
+     * Returns the shareholder name (field 88).
+     * Must match the assigned shareholder in the central master data.
      */
     public function getPartnerName(int $rowIndex): ?string {
         $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Gesellschaftername->getPosition());
@@ -351,9 +351,9 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt die Beteiligtennummer zurück (Feld 89).
-     * Muss-Feld für die Zuordnung von Gesellschaftern zum Buchungssatz.
-     * Die Beteiligtennummer muss der amtlichen Nummer aus der Feststellungserklärung entsprechen.
+     * Returns the participant number (field 89).
+     * Required field for assigning shareholders to the booking entry.
+     * The participant number must correspond to the official number from the assessment declaration.
      */
     public function getPartnerNumber(int $rowIndex): ?int {
         $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Beteiligtennummer->getPosition());
@@ -373,7 +373,7 @@ final class RecurringBookings extends Document {
     // ==================== SOBIL / GENERALUMKEHR (FELDER 96-97) ====================
 
     /**
-     * Gibt den SoBil-Buchung-Wert zurück.
+     * Returns the special balance booking value.
      */
     public function getSoBilValue(int $rowIndex): ?ItemLock {
         return $this->getItemLock($rowIndex, RecurringBookingsHeaderField::KennzeichenSoBilBuchung->getPosition());
@@ -387,7 +387,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt den Generalumkehr-Wert zurück.
+     * Returns the general reversal value.
      */
     public function getGeneralReversalValue(int $rowIndex): ?string {
         return $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Generalumkehr->getPosition());
@@ -403,7 +403,7 @@ final class RecurringBookings extends Document {
     // ==================== HILFSMETHODEN ====================
 
     /**
-     * Prüft, ob eine Buchungszeile als tägliches Intervall konfiguriert ist.
+     * Checks if a booking line is configured as daily interval.
      */
     public function isDailyInterval(int $rowIndex): bool {
         $intervalType = $this->getTimeIntervalTypeValue($rowIndex);
@@ -411,7 +411,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Prüft, ob eine Buchungszeile als monatliches Intervall konfiguriert ist.
+     * Checks if a booking line is configured as monthly interval.
      */
     public function isMonthlyInterval(int $rowIndex): bool {
         $intervalType = $this->getTimeIntervalTypeValue($rowIndex);
@@ -419,7 +419,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Prüft, ob eine Buchungszeile unbegrenzt läuft.
+     * Checks if a booking line runs indefinitely.
      */
     public function isUnlimitedRepetition(int $rowIndex): bool {
         $endType = $this->getEndTypeValue($rowIndex);
@@ -427,7 +427,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt eine lesbare Beschreibung des Wiederholungsintervalls zurück.
+     * Returns a readable description of the repetition interval.
      */
     public function getIntervalDescription(int $rowIndex): string {
         $intervalType = $this->getTimeIntervalTypeValue($rowIndex);
@@ -442,7 +442,7 @@ final class RecurringBookings extends Document {
     }
 
     /**
-     * Gibt eine lesbare Beschreibung des Endtyps zurück.
+     * Returns a readable description of the end type.
      */
     public function getEndDescription(int $rowIndex): string {
         $endType = $this->getEndTypeValue($rowIndex);

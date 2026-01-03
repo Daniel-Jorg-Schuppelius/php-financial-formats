@@ -13,20 +13,20 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV;
 
 /**
- * Gemeinsame Schnittstelle für alle Header-Felder (versioniert).
+ * Common interface for all header fields (versioned).
  */
 interface MetaHeaderFieldInterface {
-    /** Feldbezeichnung laut DATEV-Dokumentation. */
+    /** Field name according to DATEV documentation. */
     public function label(): string;
 
-    /** Regex-Validierungsmuster für das Feld. */
+    /** Regex validation pattern for the field. */
     public function pattern(): ?string;
 
-    /** Reihenfolge des Felds im Header (1..N). */
+    /** Order of the field in the header (1..N). */
     public function position(): int;
 
     /**
-     * Gibt an, ob das Feld laut DATEV-Spezifikation gequotet sein muss.
+     * Indicates whether the field must be quoted according to DATEV specification.
      *
      * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/header
      */

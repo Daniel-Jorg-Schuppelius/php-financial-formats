@@ -24,10 +24,10 @@ use DOMDocument;
 /**
  * CAMT.037 Document (Debit Authorisation Request).
  *
- * Repräsentiert eine Anfrage zur Belastungsautorisierung
- * gemäß ISO 20022 camt.037.001.xx Standard.
+ * Represents a debit authorisation request
+ * according to ISO 20022 camt.037.001.xx Standard.
  *
- * Wird verwendet, um die Genehmigung für eine Belastung
+ * Used to request approval for a debit
  * vom Kontoinhaber anzufordern.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type37

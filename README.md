@@ -160,7 +160,7 @@ $document = Mt103DocumentBuilder::createSimple(
 );
 ```
 
-### DATEV Buchungsstapel erstellen
+### Creating a DATEV Booking Batch
 
 ```php
 use CommonToolkit\FinancialFormats\Builders\DATEV\V700\BookingDocumentBuilder;
@@ -176,7 +176,7 @@ $document = $builder
         amount: 1190.00,
         offsetAccount: 8400,
         bookingDate: new DateTimeImmutable('2025-01-15'),
-        bookingText: 'Warenverkauf',
+        bookingText: 'Sales',
         account: 1200,
         currency: CurrencyCode::Euro
     )
@@ -190,10 +190,10 @@ use CommonToolkit\FinancialFormats\Registries\DATEV\VersionDiscovery;
 use CommonToolkit\FinancialFormats\Registries\DATEV\HeaderRegistry;
 use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 
-// Verfügbare Versionen abrufen
+// Get available versions
 $versions = VersionDiscovery::getAvailableVersions(); // [700, ...]
 
-// Format-Unterstützung prüfen
+// Check format support
 if (VersionDiscovery::isFormatSupported(Category::Buchungsstapel, 700)) {
     $definition = HeaderRegistry::getFormatDefinition(Category::Buchungsstapel, 700);
 }
@@ -258,20 +258,20 @@ composer require dschuppelius/php-financial-formats
 | Pain.017 | Mandate Copy Request | ✅ | ✅ | ✅ |
 | Pain.018 | Mandate Suspension Request | ✅ | ✅ | ✅ |
 
-### DATEV Formate (V700+)
+### DATEV Formats (V700+)
 
-Das System unterstützt dynamische Versionserkennung für alle DATEV-Formate. Neue Versionen werden automatisch erkannt.
+The system supports dynamic version detection for all DATEV formats. New versions are automatically detected.
 
-| Format | Kategorie | Beschreibung | Parser | Builder | Generator |
+| Format | Category | Description | Parser | Builder | Generator |
 |--------|-----------|--------------|--------|---------|-----------|
-| Buchungsstapel | 21 | Buchungsstapel für Finanzbuchhaltung | ✅ | ✅ | ✅ |
-| Debitoren/Kreditoren | 16 | Stammdaten für Debitoren und Kreditoren | ✅ | ✅ | ✅ |
-| Kontenbeschriftungen | 20 | Sachkontenbeschriftungen (SKR) | ✅ | ✅ | ✅ |
-| Zahlungsbedingungen | 46 | Zahlungsbedingungen und Skontoregeln | ✅ | ✅ | ✅ |
-| Diverse Adressen | 48 | Zusätzliche Adressdaten | ✅ | ✅ | ✅ |
-| Wiederkehrende Buchungen | 65 | Daueraufträge und wiederkehrende Buchungen | ✅ | ✅ | ✅ |
-| Natural-Stapel | 66 | Land-/Forstwirtschaftliche Buchungen | ✅ | ✅ | ✅ |
-| ASCII-Banktransaktionen | - | ASCII-Weiterverarbeitungsdatei (ohne MetaHeader) | ✅ | ✅ | ✅ |
+| Buchungsstapel | 21 | Booking batch for financial accounting | ✅ | ✅ | ✅ |
+| Debitoren/Kreditoren | 16 | Master data for debtors and creditors | ✅ | ✅ | ✅ |
+| Kontenbeschriftungen | 20 | Account labels (chart of accounts) | ✅ | ✅ | ✅ |
+| Zahlungsbedingungen | 46 | Payment terms and discount rules | ✅ | ✅ | ✅ |
+| Diverse Adressen | 48 | Additional address data | ✅ | ✅ | ✅ |
+| Wiederkehrende Buchungen | 65 | Standing orders and recurring bookings | ✅ | ✅ | ✅ |
+| Natural-Stapel | 66 | Agricultural/forestry bookings | ✅ | ✅ | ✅ |
+| ASCII-Banktransaktionen | - | ASCII processing file (without MetaHeader) | ✅ | ✅ | ✅ |
 
 ---
 

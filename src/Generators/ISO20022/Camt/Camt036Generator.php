@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.036 XML (Debit Authorisation Response).
+ * Generator for CAMT.036 XML (Debit Authorisation Response).
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */

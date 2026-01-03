@@ -23,10 +23,10 @@ use DateTimeImmutable;
 /**
  * CAMT.059 Document (Notification to Receive Status Report).
  *
- * Repräsentiert einen Statusbericht zu einer Benachrichtigung
- * über einen erwarteten Zahlungseingang gemäß ISO 20022 camt.059.001.xx Standard.
+ * Represents a status report for a notification
+ * about an expected payment receipt according to ISO 20022 camt.059.001.xx Standard.
  *
- * Wird verwendet, um den Status einer zuvor gesendeten CAMT.057-Benachrichtigung
+ * Used to report the status of a previously sent CAMT.057 notification
  * zu melden (z.B. akzeptiert, abgelehnt).
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type59

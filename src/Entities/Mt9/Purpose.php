@@ -13,17 +13,17 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\Mt9;
 
 /**
- * Repräsentiert das strukturierte :86: Mehrzweckfeld einer MT9xx-Transaktion.
+ * Represents the structured :86: multi-purpose field of an MT9xx transaction.
  * 
- * Gemäß DATEV-Spezifikation (Dok.-Nr. 9226962) enthält das Mehrzweckfeld:
- * - Geschäftsvorfall-Code (3 Stellen, gem. DFÜ-Abkommen)
- * - Feldschlüssel ?00: Buchungstext (max. 27 Zeichen)
- * - Feldschlüssel ?10: Primanoten-Nr. (max. 10 Zeichen)
- * - Feldschlüssel ?20-?29 und ?60-?63: Verwendungszweck (je max. 27 Zeichen)
- * - Feldschlüssel ?30: BLZ oder BIC Auftraggeber/Zahlungsempfänger (max. 12 Zeichen)
- * - Feldschlüssel ?31: Kontonummer oder IBAN Auftraggeber/Zahlungsempfänger (max. 24 Zeichen)
- * - Feldschlüssel ?32-?33: Name Auftraggeber/Zahlungsempfänger (je max. 27 Zeichen)
- * - Feldschlüssel ?34: Textschlüssel-Ergänzung (3 Zeichen)
+ * According to DATEV specification (Doc. No. 9226962) the multi-purpose field contains:
+ * - Business transaction code (3 digits, acc. to DFÜ agreement)
+ * - Field key ?00: Posting text (max. 27 characters)
+ * - Field key ?10: Primary note no. (max. 10 characters)
+ * - Field keys ?20-?29 and ?60-?63: Purpose of payment (max. 27 characters each)
+ * - Field key ?30: Bank code or BIC of ordering party/payee (max. 12 characters)
+ * - Field key ?31: Account number or IBAN of ordering party/payee (max. 24 characters)
+ * - Field keys ?32-?33: Name of ordering party/payee (max. 27 characters each)
+ * - Field key ?34: Text key extension (3 characters)
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9
  */
@@ -206,7 +206,7 @@ class Purpose {
     }
 
     /**
-     * Gibt den vollständigen Verwendungszweck als String zurück.
+     * Returns the complete purpose of payment as string.
      */
     public function getPurposeText(): string {
         $parts = $this->purposeLines;
@@ -217,7 +217,7 @@ class Purpose {
     }
 
     /**
-     * Gibt alle Informationen als lesbaren Text zurück.
+     * Returns all information as readable text.
      */
     public function getFullText(): string {
         $parts = [];

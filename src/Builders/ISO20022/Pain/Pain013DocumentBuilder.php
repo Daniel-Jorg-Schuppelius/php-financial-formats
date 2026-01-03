@@ -19,17 +19,17 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.013 Documents (Creditor Payment Activation Request).
+ * Builder for pain.013 Documents (Creditor Payment Activation Request).
  * 
- * Erstellt Anfragen zur Aktivierung von Zahlungen durch den Gläubiger.
- * Der Gläubiger initiiert eine Zahlung, die der Schuldner bestätigen muss.
+ * Creates requests for payment activation by the creditor.
+ * The creditor initiates a payment that the debtor must confirm.
  * 
  * Verwendung:
  * ```php
  * $document = Pain013DocumentBuilder::create('MSG-001', 'Firma GmbH')
  *     ->addPaymentRequest(PaymentActivationRequest::create(
  *         'E2E-001', 100.00, 'Schuldner', 'DE91...', 'DEUTDEFF',
- *         'Gläubiger', 'DE89...', 'COBADEFF', 'Rechnung 123'
+ *         'Creditor', 'DE89...', 'COBADEFF', 'Invoice 123'
  *     ))
  *     ->build();
  * ```
@@ -45,7 +45,7 @@ final class Pain013DocumentBuilder {
 
     private function __construct(string $messageId, PartyIdentification $initiatingParty) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -60,7 +60,7 @@ final class Pain013DocumentBuilder {
     }
 
     /**
-     * Erzeugt neuen Builder mit vollständiger PartyIdentification.
+     * Creates new builder with complete PartyIdentification.
      */
     public static function createWithParty(string $messageId, PartyIdentification $initiatingParty): self {
         return new self($messageId, $initiatingParty);
@@ -76,7 +76,7 @@ final class Pain013DocumentBuilder {
     }
 
     /**
-     * Fügt eine Zahlungsaktivierungsanfrage hinzu.
+     * Adds a payment activation request.
      */
     public function addPaymentRequest(PaymentActivationRequest $request): self {
         $clone = clone $this;
@@ -85,7 +85,7 @@ final class Pain013DocumentBuilder {
     }
 
     /**
-     * Convenience: Fügt eine einfache Zahlungsanfrage hinzu.
+     * Convenience: Adds a simple payment request.
      */
     public function addSimpleRequest(
         string $endToEndId,
@@ -114,7 +114,7 @@ final class Pain013DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Zahlungsanfragen hinzu.
+     * Adds multiple payment requests.
      * 
      * @param PaymentActivationRequest[] $requests
      */

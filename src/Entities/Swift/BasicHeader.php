@@ -74,21 +74,21 @@ final class BasicHeader {
     }
 
     /**
-     * Prüft ob es sich um eine FIN-Nachricht handelt
+     * Checks if this is a FIN message
      */
     public function isFin(): bool {
         return $this->applicationId === 'F';
     }
 
     /**
-     * Prüft ob es sich um eine GPA-Nachricht handelt
+     * Checks if this is a GPA message
      */
     public function isGpa(): bool {
         return $this->applicationId === 'A';
     }
 
     /**
-     * Gibt den vollständigen Block 1 String zurück
+     * Returns the complete Block 1 string
      */
     public function __toString(): string {
         $result = $this->applicationId . $this->serviceId . $this->logicalTerminalAddress;

@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Ausgabeziel für Debitoren/Kreditoren (Feld 106).
+ * DATEV Output target for debitors/creditors (Field 106).
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
  */
@@ -25,7 +25,7 @@ enum OutputTarget: int {
     case EMAIL = 3; // E-Mail
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -36,7 +36,7 @@ enum OutputTarget: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -48,7 +48,7 @@ enum OutputTarget: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value);

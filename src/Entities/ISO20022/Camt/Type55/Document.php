@@ -22,10 +22,10 @@ use DateTimeImmutable;
 /**
  * CAMT.055 Document (Customer Payment Cancellation Request).
  * 
- * Repräsentiert eine Stornierungsanfrage vom Kunden an die Bank
- * gemäß ISO 20022 camt.055.001.xx Standard.
+ * Represents a cancellation request from customer to bank
+ * according to ISO 20022 camt.055.001.xx Standard.
  * 
- * Verwendet <CstmrPmtCxlReq> als Root und <Undrlyg> für die zugrundeliegenden Transaktionen.
+ * Uses <CstmrPmtCxlReq> as root and <Undrlyg> for the underlying transactions.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type55
  */

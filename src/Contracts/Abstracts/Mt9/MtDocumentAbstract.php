@@ -17,13 +17,13 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Abstrakte Basisklasse für MT9xx-Dokumente (SWIFT Cash Management).
+ * Abstract base class for MT9xx documents (SWIFT Cash Management).
  * 
  * Gemeinsame Eigenschaften aller MT9-Nachrichtentypen:
  * - Account-Informationen
  * - Referenz-ID
  * - Auszugsnummer
- * - Währung
+ * - Currency
  * 
  * @package CommonToolkit\Contracts\Abstracts\Common\Banking\Mt9
  */
@@ -49,12 +49,12 @@ abstract class MtDocumentAbstract {
     }
 
     /**
-     * Gibt den MT-Nachrichtentyp zurück.
+     * Returns the MT message type.
      */
     abstract public function getMtType(): MtType;
 
     /**
-     * Gibt die Kontonummer/IBAN zurück.
+     * Returns the account number/IBAN.
      * Feld :25: in SWIFT-Notation.
      */
     public function getAccountId(): string {
@@ -62,7 +62,7 @@ abstract class MtDocumentAbstract {
     }
 
     /**
-     * Gibt die Transaktionsreferenz zurück.
+     * Returns the transaction reference.
      * Feld :20: in SWIFT-Notation.
      */
     public function getReferenceId(): string {
@@ -70,7 +70,7 @@ abstract class MtDocumentAbstract {
     }
 
     /**
-     * Gibt die Auszugsnummer/Folgenummer zurück.
+     * Returns the statement number/sequence number.
      * Feld :28C: in SWIFT-Notation.
      */
     public function getStatementNumber(): string {
@@ -78,21 +78,21 @@ abstract class MtDocumentAbstract {
     }
 
     /**
-     * Gibt die Währung zurück.
+     * Returns the currency.
      */
     public function getCurrency(): CurrencyCode {
         return $this->currency;
     }
 
     /**
-     * Gibt das Erstellungsdatum zurück.
+     * Returns the creation date.
      */
     public function getCreationDateTime(): DateTimeImmutable {
         return $this->creationDateTime;
     }
 
     /**
-     * Gibt die Anzahl der Einträge zurück.
+     * Returns the number of entries.
      */
     abstract public function countEntries(): int;
 

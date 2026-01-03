@@ -19,10 +19,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.028 XML (Additional Payment Information).
+ * Generator for CAMT.028 XML (Additional Payment Information).
  * 
- * Generiert Nachrichten mit zusätzlichen Zahlungsinformationen
- * gemäß ISO 20022 camt.028.001.xx Standard.
+ * Generates messages with additional payment information
+ * according to ISO 20022 camt.028.001.xx Standard.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -50,7 +50,7 @@ class Camt028Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -94,7 +94,7 @@ class Camt028Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu (optional).
+     * Adds the case structure (optional).
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -117,7 +117,7 @@ class Camt028Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Underlying Transaction Reference hinzu.
+     * Adds the underlying transaction reference.
      */
     private function addUnderlying(Document $document): void {
         if ($document->getOriginalMessageId() === null && $document->getOriginalEndToEndId() === null) {
@@ -161,7 +161,7 @@ class Camt028Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Additional Information hinzu.
+     * Adds the additional information.
      */
     private function addInformation(Document $document): void {
         $infos = $document->getAdditionalInformation();
@@ -179,7 +179,7 @@ class Camt028Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt eine einzelne Additional Payment Information hinzu.
+     * Adds a single additional payment information.
      */
     private function addAdditionalPaymentInformation(AdditionalPaymentInformation $info): void {
         $this->builder->addElement('AddtlPmtInf');

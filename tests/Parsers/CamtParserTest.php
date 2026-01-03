@@ -255,9 +255,9 @@ class CamtParserTest extends BaseTestCase {
     // ============================================================
 
     public function testCamtTypeDescriptions(): void {
-        $this->assertEquals('Untertägige Kontobewegungsinformation', CamtType::CAMT052->getDescription());
-        $this->assertEquals('Täglicher Kontoauszug', CamtType::CAMT053->getDescription());
-        $this->assertEquals('Soll/Haben-Avis', CamtType::CAMT054->getDescription());
+        $this->assertEquals('Intraday account movement information', CamtType::CAMT052->getDescription());
+        $this->assertEquals('Daily account statement', CamtType::CAMT053->getDescription());
+        $this->assertEquals('Debit/Credit Notification', CamtType::CAMT054->getDescription());
     }
 
     public function testCamtTypeMessageNames(): void {

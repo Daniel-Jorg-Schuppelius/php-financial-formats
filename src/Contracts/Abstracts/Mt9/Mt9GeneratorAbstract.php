@@ -15,27 +15,27 @@ namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 
 /**
- * Abstrakte Basisklasse für MT9xx-Generatoren.
+ * Abstract base class for MT9xx generators.
  * 
- * Gemeinsame Methoden für die Generierung von SWIFT MT9-Nachrichten.
+ * Common methods for generating SWIFT MT9 messages.
  * 
  * @package CommonToolkit\Contracts\Abstracts\Common\Banking\Mt9
  */
 abstract class Mt9GeneratorAbstract {
     /**
-     * Zeilentrennzeichen für SWIFT-Nachrichten.
+     * Line separator for SWIFT messages.
      */
     protected const LINE_SEPARATOR = "\r\n";
 
     /**
-     * Generiert das Dokument als SWIFT MT-String.
+     * Generates the document as a SWIFT MT string.
      */
     abstract public function generate(MtDocumentAbstract $document): string;
 
     /**
      * Formatiert einen Balance im SWIFT-Format.
      * 
-     * @param string $tag Tag-Präfix (z.B. ':60F:', ':62F:', ':60M:', ':62M:')
+     * @param string $tag Tag prefix (e.g. ':60F:', ':62F:', ':60M:', ':62M:')
      * @param Balance $balance Das Balance-Objekt
      */
     protected function formatBalance(string $tag, Balance $balance): string {
@@ -43,7 +43,7 @@ abstract class Mt9GeneratorAbstract {
     }
 
     /**
-     * Fügt die Standard-Header-Felder hinzu.
+     * Adds the standard header fields.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
      * @param MtDocumentAbstract $document Das Dokument
@@ -55,7 +55,7 @@ abstract class Mt9GeneratorAbstract {
     }
 
     /**
-     * Fügt den Abschluss-Marker hinzu.
+     * Adds the closing marker.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
      */

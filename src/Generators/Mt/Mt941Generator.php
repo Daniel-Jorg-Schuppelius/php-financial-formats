@@ -17,15 +17,15 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type941\Document;
 
 /**
- * Generator für MT941 Balance Report.
+ * Generator for MT941 Balance Report.
  * 
- * Generiert SWIFT MT941 Nachrichten aus Document-Objekten.
+ * Generates SWIFT MT941 messages from Document objects.
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
 class Mt941Generator extends Mt9GeneratorAbstract {
     /**
-     * Generiert die MT941 SWIFT-Nachricht.
+     * Generates the MT941 SWIFT message.
      * 
      * @param MtDocumentAbstract $document Das MT941-Dokument
      * @return string Die formatierte SWIFT-Nachricht
@@ -37,7 +37,7 @@ class Mt941Generator extends Mt9GeneratorAbstract {
 
         $lines = [];
 
-        // Header-Felder
+        // Header fields
         $this->appendHeaderFields($lines, $document);
 
         // Opening Balance (:60F:)

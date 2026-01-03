@@ -169,7 +169,7 @@ class Pain009Test extends BaseTestCase {
     #[Test]
     public function testMessageIdMaxLength(): void {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('MsgId darf maximal 35 Zeichen lang sein');
+        $this->expectExceptionMessage('MsgId must not exceed 35 characters');
 
         Pain009DocumentBuilder::create(str_repeat('X', 36), 'Firma GmbH');
     }
@@ -177,7 +177,7 @@ class Pain009Test extends BaseTestCase {
     #[Test]
     public function testMandateIdMaxLength(): void {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('MndtId darf maximal 35 Zeichen lang sein');
+        $this->expectExceptionMessage('MndtId must not exceed 35 characters');
 
         Pain009DocumentBuilder::create('MSG-001', 'Firma GmbH')
             ->beginCoreMandate(str_repeat('X', 36), new DateTimeImmutable('2025-01-15'));

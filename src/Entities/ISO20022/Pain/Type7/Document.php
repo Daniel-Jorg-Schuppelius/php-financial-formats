@@ -21,7 +21,7 @@ use DateTimeImmutable;
 /**
  * pain.007 Document - Customer Payment Reversal.
  * 
- * Rückruf von Lastschriften (Lastschriftstorno) gemäß ISO 20022.
+ * Reversal of direct debits according to ISO 20022.
  * Antwort/Korrektur zu pain.008 (Lastschriften).
  * 
  * Struktur:
@@ -117,11 +117,11 @@ final class Document extends PainDocumentAbstract {
         $errors = [];
 
         if (strlen($this->groupHeader->getMessageId()) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (strlen($this->originalGroupInformation->getOriginalMessageId()) > 35) {
-            $errors[] = 'OrgnlMsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'OrgnlMsgId must not exceed 35 characters';
         }
 
         if (empty($this->originalPaymentInformations)) {
@@ -135,7 +135,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

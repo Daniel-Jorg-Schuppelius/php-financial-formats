@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\DATEV;
 use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 
 /**
- * Informationen über ein DATEV-Format.
+ * Information about a DATEV format.
  * Kapselt alle relevanten Details eines erkannten DATEV-Formats.
  */
 final readonly class DocumentInfo {
@@ -27,49 +27,49 @@ final readonly class DocumentInfo {
     }
 
     /**
-     * Gibt das Category-Enum zurück.
+     * Returns the Category enum.
      */
     public function getCategory(): Category {
         return $this->category;
     }
 
     /**
-     * Gibt den Format-Typ als String zurück.
+     * Returns the format type as string.
      */
     public function getType(): string {
         return $this->category->nameValue();
     }
 
     /**
-     * Gibt die Kategorie-Nummer zurück.
+     * Returns the category number.
      */
     public function getCategoryNumber(): int {
         return $this->category->value;
     }
 
     /**
-     * Gibt die Format-Version zurück.
+     * Returns the format version.
      */
     public function getVersion(): int {
         return $this->version;
     }
 
     /**
-     * Gibt die Definition-Klasse zurück (falls implementiert).
+     * Returns the definition class (if implemented).
      */
     public function getDefinitionClass(): ?string {
         return $this->definitionClass;
     }
 
     /**
-     * Prüft, ob das Format unterstützt wird.
+     * Checks if the format is supported.
      */
     public function isSupported(): bool {
         return $this->definitionClass !== null;
     }
 
     /**
-     * Gibt eine String-Repräsentation zurück.
+     * Returns a string representation.
      */
     public function __toString(): string {
         $supported = $this->isSupported() ? 'unterstützt' : 'nicht unterstützt';

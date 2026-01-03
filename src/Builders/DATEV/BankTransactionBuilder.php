@@ -20,9 +20,9 @@ use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 
 /**
- * Builder für DATEV ASCII-Weiterverarbeitungsdokumente mit automatischer ColumnWidthConfig.
+ * Builder for DATEV ASCII processing documents with automatic ColumnWidthConfig.
  *
- * Dieser Builder konfiguriert automatisch die DATEV-konformen Feldlängen und Quoting.
+ * This builder automatically configures DATEV-compliant field lengths and quoting.
  *
  * @package CommonToolkit\Builders\DATEV
  */
@@ -40,9 +40,9 @@ final class BankTransactionBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine BankTransaction-Zeile mit korrektem DATEV-Quoting hinzu.
+     * Adds a BankTransaction line with correct DATEV quoting.
      * 
-     * @param array<string, string> $values Assoziatives Array mit Feldwerten (Schlüssel: HeaderField->value oder HeaderField->name)
+     * @param array<string, string> $values Associative array with field values (key: HeaderField->value or HeaderField->name)
      * @return self
      */
     public function addTransaction(array $values): self {
@@ -72,7 +72,7 @@ final class BankTransactionBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt mehrere BankTransaction-Zeilen hinzu.
+     * Adds multiple BankTransaction lines.
      * 
      * @param array<int, array<string, string>> $transactions Array von Transaktionen
      * @return self

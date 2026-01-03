@@ -25,10 +25,10 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Builder für CAMT.054 Documents (Bank to Customer Debit Credit Notification).
+ * Builder for CAMT.054 Documents (Bank to Customer Debit Credit Notification).
  * 
- * CAMT.054 enthält Einzelumsatzbenachrichtigungen ohne Salden.
- * Verwendet für Echtzeit-Buchungsbenachrichtigungen.
+ * CAMT.054 contains individual transaction notifications without balances.
+ * Used for real-time booking notifications.
  * 
  * @package CommonToolkit\Builders
  */
@@ -104,7 +104,7 @@ final class Camt054DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Transaktionen hinzu.
+     * Adds multiple transactions.
      * 
      * @param Transaction[] $entries
      * @throws InvalidArgumentException Wenn ein Element kein Transaction-Objekt ist
@@ -121,9 +121,9 @@ final class Camt054DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.054 Document.
+     * Creates the CAMT.054 Document.
      * 
-     * CAMT.054 enthält typischerweise mindestens einen Eintrag.
+     * CAMT.054 typically contains at least one entry.
      * 
      * @throws RuntimeException Wenn Pflichtfelder fehlen
      */
@@ -159,7 +159,7 @@ final class Camt054DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.054 Dokument aus einem MT940 Dokument.
+     * Creates ein CAMT.054 Dokument aus einem MT940 Dokument.
      *
      * @param Mt940Document $mt940 Das MT940 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -170,7 +170,7 @@ final class Camt054DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.054 Dokument aus einem MT941 Dokument.
+     * Creates ein CAMT.054 Dokument aus einem MT941 Dokument.
      *
      * @param Mt941Document $mt941 Das MT941 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -181,7 +181,7 @@ final class Camt054DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.054 Dokument aus einem MT942 Dokument.
+     * Creates ein CAMT.054 Dokument aus einem MT942 Dokument.
      *
      * @param Mt942Document $mt942 Das MT942 Dokument
      * @param string|null $messageId Optionale Message-ID

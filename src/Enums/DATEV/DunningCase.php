@@ -15,10 +15,10 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * Sachverhaltskennzeichen für OPOS-relevante Mahnzins- und Mahngebührendatensätze.
+ * Subject indicator for OPOS-relevant dunning interest and dunning fee records.
  *
  * 31 = Mahnzins
- * 40 = Mahngebühr
+ * 40 = Dunning fee
  */
 enum DunningCase: int {
     case INTEREST = 31;  // Mahnzins
@@ -35,7 +35,7 @@ enum DunningCase: int {
         return match ($value) {
             31 => self::INTEREST,
             40 => self::FEE,
-            default => throw new InvalidArgumentException("Ungültiger DATEV-Sachverhalt: $value"),
+            default => throw new InvalidArgumentException("Invalid DATEV case type: $value"),
         };
     }
 }

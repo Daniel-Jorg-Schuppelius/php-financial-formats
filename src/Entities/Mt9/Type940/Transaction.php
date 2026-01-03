@@ -23,7 +23,7 @@ use RuntimeException;
 /**
  * MT940 Transaction - Customer Statement Entry.
  * 
- * Repräsentiert einen einzelnen Umsatz (Feld :61:) mit zugehörigem
+ * Represents a single transaction (Field :61:) with associated
  * Mehrzweckfeld (Feld :86:) im Tagesendeauszug.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type940
@@ -66,14 +66,14 @@ class Transaction extends MtTransactionAbstract {
     }
 
     /**
-     * Gibt die Transaktionsreferenz zurück.
+     * Returns the transaction reference.
      */
     public function getReference(): Reference {
         return $this->reference;
     }
 
     /**
-     * Gibt den Verwendungszweck zurück (Feld :86:).
+     * Returns the purpose of payment (Field :86:).
      */
     public function getPurpose(): ?string {
         return $this->purpose;

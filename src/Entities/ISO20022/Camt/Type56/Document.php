@@ -22,10 +22,10 @@ use DateTimeImmutable;
 /**
  * CAMT.056 Document (FI To FI Payment Cancellation Request).
  * 
- * Repräsentiert eine Stornierungsanfrage von Bank zu Bank
- * gemäß ISO 20022 camt.056.001.xx Standard.
+ * Represents a bank-to-bank cancellation request
+ * according to ISO 20022 camt.056.001.xx Standard.
  * 
- * Verwendet <FIToFIPmtCxlReq> als Root und <Undrlyg> für die zugrundeliegenden Transaktionen.
+ * Uses <FIToFIPmtCxlReq> as root and <Undrlyg> for the underlying transactions.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type56
  */

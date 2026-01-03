@@ -17,15 +17,15 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
 
 /**
- * Generator für MT940 Customer Statement Message.
+ * Generator for MT940 Customer Statement Message.
  * 
- * Generiert SWIFT MT940 Nachrichten aus Document-Objekten.
+ * Generates SWIFT MT940 messages from Document objects.
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
 class Mt940Generator extends Mt9GeneratorAbstract {
     /**
-     * Generiert die MT940 SWIFT-Nachricht.
+     * Generates the MT940 SWIFT message.
      * 
      * @param MtDocumentAbstract $document Das MT940-Dokument
      * @return string Die formatierte SWIFT-Nachricht
@@ -37,7 +37,7 @@ class Mt940Generator extends Mt9GeneratorAbstract {
 
         $lines = [];
 
-        // Header-Felder
+        // Header fields
         $this->appendHeaderFields($lines, $document);
 
         // Opening Balance (:60F:)

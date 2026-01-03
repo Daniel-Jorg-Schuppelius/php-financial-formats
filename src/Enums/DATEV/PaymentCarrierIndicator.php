@@ -15,14 +15,14 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Zahlungsträger-Kennzeichen für Debitoren/Kreditoren (Feld 136).
+ * DATEV Payment carrier indicator for debitors/creditors (Field 136).
  *
- * Leer bzw. 0 = keine Angaben, es gilt die Stammdaten-Schlüsselung
+ * Empty or 0 = no specification, master data keying applies
  * 5 = Einzelscheck
  * 6 = Sammelscheck
- * 7 = SEPA-/Auslandsüberweisung mit einer Rechnung
- * 8 = SEPA-/Auslandsüberweisung mit mehreren Rechnungen
- * 9 = keine Überweisungen, Schecks
+ * 7 = SEPA/foreign transfer with one invoice
+ * 8 = SEPA/foreign transfer with multiple invoices
+ * 9 = no transfers, cheques
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
  */
@@ -35,7 +35,7 @@ enum PaymentCarrierIndicator: int {
     case DISABLED              = 9; // keine Überweisungen, Schecks
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -49,7 +49,7 @@ enum PaymentCarrierIndicator: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -64,7 +64,7 @@ enum PaymentCarrierIndicator: int {
     }
 
     /**
-     * Factory für String-Werte (quoted in DATEV-Format).
+     * Factory for string values (quoted in DATEV-Format).
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');
@@ -75,21 +75,21 @@ enum PaymentCarrierIndicator: int {
     }
 
     /**
-     * Prüft, ob es sich um eine SEPA-Überweisung handelt.
+     * Checks if this is a SEPA transfer.
      */
     public function isSepaTransfer(): bool {
         return $this === self::SEPA_TRANSFER_SINGLE || $this === self::SEPA_TRANSFER_MULTI;
     }
 
     /**
-     * Prüft, ob es sich um einen Scheck handelt.
+     * Checks if this is a cheque.
      */
     public function isCheck(): bool {
         return $this === self::SINGLE_CHECK || $this === self::COLLECTIVE_CHECK;
     }
 
     /**
-     * Prüft, ob Zahlungsträger explizit deaktiviert ist.
+     * Checks if payment carrier is explicitly disabled.
      */
     public function isDisabled(): bool {
         return $this === self::DISABLED;

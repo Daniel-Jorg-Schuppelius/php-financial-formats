@@ -17,7 +17,7 @@ use DateTimeImmutable;
 /**
  * CAMT.056 Underlying Transaction.
  * 
- * Repräsentiert eine Gruppe von Stornierungsanfragen zu einer ursprünglichen Nachricht.
+ * Represents a group of cancellation requests for an original message.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type56
  */

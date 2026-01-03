@@ -90,7 +90,7 @@ final class Document {
         $errors = [];
 
         if (strlen($this->messageId) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (empty($this->copyRequests)) {
@@ -104,7 +104,7 @@ final class Document {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

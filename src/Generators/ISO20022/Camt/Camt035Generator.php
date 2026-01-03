@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.035 XML (Proprietary Format Investigation).
+ * Generator for CAMT.035 XML (Proprietary Format Investigation).
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */

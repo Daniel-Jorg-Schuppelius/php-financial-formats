@@ -46,7 +46,7 @@ final class DocumentLink {
     }
 
     /**
-     * Gibt den Beleglink als DATEV-String zurück.
+     * Returns the document link as DATEV string.
      */
     public function __toString(): string {
         return $this->toDatevString();

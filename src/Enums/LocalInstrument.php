@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * Local Instrument für SEPA-Zahlungen (LclInstrm).
+ * Local Instrument for SEPA payments (LclInstrm).
  * 
  * Definiert den SEPA-Zahlungstyp (Core, B2B, etc.).
  * 
@@ -26,7 +26,7 @@ enum LocalInstrument: string {
     case SEPA_INST = 'INST';          // SEPA Instant
 
     /**
-     * Gibt die Beschreibung zurück.
+     * Returns the description.
      */
     public function description(): string {
         return match ($this) {
@@ -38,28 +38,28 @@ enum LocalInstrument: string {
     }
 
     /**
-     * Standard für Verbraucher-Lastschriften.
+     * Default for consumer direct debits.
      */
     public static function defaultConsumer(): self {
         return self::SEPA_CORE;
     }
 
     /**
-     * Standard für Firmen-Lastschriften.
+     * Default for business direct debits.
      */
     public static function defaultBusiness(): self {
         return self::SEPA_B2B;
     }
 
     /**
-     * Prüft, ob B2B-Lastschrift.
+     * Checks if B2B direct debit.
      */
     public function isBusiness(): bool {
         return $this === self::SEPA_B2B;
     }
 
     /**
-     * Prüft, ob Core-Lastschrift.
+     * Checks if Core direct debit.
      */
     public function isCore(): bool {
         return match ($this) {

@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.031 XML (Reject Investigation).
+ * Generator for CAMT.031 XML (Reject Investigation).
  * 
- * Generiert Ablehnungen von Untersuchungsanfragen
- * gemäß ISO 20022 camt.031.001.xx Standard.
+ * Generates rejections of investigation requests
+ * according to ISO 20022 camt.031.001.xx Standard.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -46,7 +46,7 @@ class Camt031Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -90,7 +90,7 @@ class Camt031Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu.
+     * Adds the case structure.
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -113,7 +113,7 @@ class Camt031Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Justification (Rejection Reason) hinzu.
+     * Adds the justification (rejection reason).
      */
     private function addJustification(Document $document): void {
         if ($document->getRejectionReasonCode() === null && $document->getRejectionReasonProprietary() === null) {

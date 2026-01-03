@@ -22,10 +22,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 use InvalidArgumentException;
 
 /**
- * Generator für CAMT.053 XML (Bank to Customer Statement).
+ * Generator for CAMT.053 XML (Bank to Customer Statement).
  * 
- * Generiert Tagesauszüge gemäß ISO 20022 camt.053.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates daily statements according to ISO 20022 camt.053.001.xx standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -73,7 +73,7 @@ class Camt053Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Erstellt ein vollständiges Entry-Element für CAMT.053.
+     * Creates a complete entry element for CAMT.053.
      */
     private function addEntryElement(Transaction $entry): void {
         $this->beginEntry($entry);
@@ -119,7 +119,7 @@ class Camt053Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt References zur Transaktion hinzu.
+     * Adds references to the transaction.
      */
     private function addReferences(Reference $reference): void {
         $this->builder->addElement('Refs');
@@ -134,7 +134,7 @@ class Camt053Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt Related Parties zur Transaktion hinzu.
+     * Adds related parties to the transaction.
      */
     private function addRelatedParties(Transaction $entry): void {
         $counterpartyName = $entry->getCounterpartyName();

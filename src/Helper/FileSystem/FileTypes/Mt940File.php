@@ -22,10 +22,10 @@ use Throwable;
 
 class Mt940File extends HelperAbstract {
     /**
-     * Gibt den Inhalt als einzelne MT940-Blöcke zurück.
+     * Returns the content as individual MT940 blocks.
      *
      * @param string $file Pfad zur MT940-Datei.
-     * @return string[] Array mit Roh-Textblöcken.
+     * @return string[] Array of raw text blocks.
      */
     public static function getBlocks(string $file): array {
         $file = File::getRealPath($file);
@@ -42,7 +42,7 @@ class Mt940File extends HelperAbstract {
     }
 
     /**
-     * Gibt alle `Document`-Objekte zurück.
+     * Returns all Document objects.
      *
      * @param string $file
      * @return Document[]
@@ -60,7 +60,7 @@ class Mt940File extends HelperAbstract {
     }
 
     /**
-     * Gibt alle Transaktionen aus allen Blöcken zurück.
+     * Returns all transactions from all blocks.
      *
      * @param string $file Pfad zur MT940-Datei.
      * @return Transaction[]
@@ -74,7 +74,7 @@ class Mt940File extends HelperAbstract {
     }
 
     /**
-     * Gibt die Anzahl der Transaktionen zurück.
+     * Returns the number of transactions.
      *
      * @param string $file
      * @return int
@@ -84,7 +84,7 @@ class Mt940File extends HelperAbstract {
     }
 
     /**
-     * Prüft, ob es sich um eine gültige MT940-Datei handelt.
+     * Checks if this is a valid MT940 file.
      *
      * @param string $file
      * @return bool

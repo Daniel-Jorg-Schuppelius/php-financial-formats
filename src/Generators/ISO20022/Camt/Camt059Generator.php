@@ -19,11 +19,11 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.059 XML (Notification to Receive Status Report).
+ * Generator for CAMT.059 XML (Notification to Receive Status Report).
  * 
- * Generiert Statusberichte zu Benachrichtigungen über erwartete Zahlungseingänge
- * gemäß ISO 20022 camt.059.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates status reports for notifications about expected payment receipts
+ * according to ISO 20022 camt.059.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -46,7 +46,7 @@ class Camt059Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt den Group Header mit optionalen Party-Informationen hinzu.
+     * Adds the group header with optional party information.
      */
     private function addGroupHeaderWithParties(Document $document): void {
         $this->builder->addElement('GrpHdr');
@@ -76,7 +76,7 @@ class Camt059Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Original Notification and Status hinzu.
+     * Adds the original notification and status.
      */
     private function addOriginalNotificationAndStatus(Document $document): void {
         $this->builder->addElement('OrgnlNtfctnAndSts');
@@ -99,7 +99,7 @@ class Camt059Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt ein Status Item hinzu.
+     * Adds a status item.
      */
     private function addStatusItem(StatusItem $item): void {
         $this->builder->addElement('OrgnlItmAndSts');

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII;
 
 /**
- * DATEV ASCII-Weiterverarbeitungsdatei Header-Felder
+ * DATEV ASCII-Weiterverarbeitungsdatei Header fields
  * 
- * Definiert alle 34 Felder der DATEV ASCII-Weiterverarbeitungsdatei für Banktransaktionen.
+ * Defines all 34 fields of the DATEV ASCII processing file for bank transactions.
  * Format basiert auf der offiziellen DATEV-Dokumentation (Dok.-Nr. 9226961).
- * Mindestens 7 Felder sind erforderlich, maximal 34 Felder sind möglich.
+ * At least 7 fields are required, maximum 34 fields are possible.
  * 
  * @see https://help-center.apps.datev.de/documents/9226961
  * 
@@ -102,7 +102,7 @@ enum BankTransactionHeaderField: string {
     }
 
     /**
-     * Liefert die verpflichtenden Felder laut DATEV-Dokumentation.
+     * Returns the required fields laut DATEV-Dokumentation.
      * Muss-Felder (M): 1, 2, 6, 7
      */
     public static function required(): array {
@@ -115,14 +115,14 @@ enum BankTransactionHeaderField: string {
     }
 
     /**
-     * Prüft, ob das Feld verpflichtend ist.
+     * Checks if the field is required.
      */
     public function isRequired(): bool {
         return in_array($this, self::required(), true);
     }
 
     /**
-     * Gibt das Regex-Validierungsmuster für das Feld zurück (nach DATEV-Dokumentation).
+     * Returns the regex validation pattern for the field (according to DATEV documentation).
      */
     public function pattern(): ?string {
         return match ($this) {
@@ -165,14 +165,14 @@ enum BankTransactionHeaderField: string {
     }
 
     /**
-     * Gibt die Position des Felds zurück (1-basiert).
+     * Returns the position of the field (1-based).
      */
     public function position(): int {
         return $this->index() + 1;
     }
 
     /**
-     * Gibt den Array-Index des Felds zurück (0-basiert).
+     * Returns the array index of the field (0-based).
      * 
      * Zum direkten Zugriff auf Feld-Arrays: $fields[$field->index()]
      */
@@ -183,9 +183,9 @@ enum BankTransactionHeaderField: string {
     }
 
     /**
-     * Gibt die maximale Feldlänge entsprechend der DATEV-Dokumentation zurück.
+     * Returns the maximum field length according to DATEV documentation.
      * 
-     * @return int|null Maximale Anzahl Zeichen oder null für unbegrenzt
+     * @return int|null Maximum number of characters or null for unlimited
      */
     public function getMaxLength(): ?int {
         return match ($this) {
@@ -228,15 +228,15 @@ enum BankTransactionHeaderField: string {
     }
 
     /**
-     * Gibt zurück, ob das Feld in Anführungszeichen gesetzt werden muss.
+     * Returns whether the field must be enclosed in quotes.
      * 
      * Nach DATEV-Dokumentation (Dok.-Nr. 9226961):
-     * - Format "A" (alphanumerisch): Anführungszeichen erforderlich
-     * - Format "N" (numerisch): Keine Anführungszeichen
-     * - Format "D" (Datum): Keine Anführungszeichen (optional erlaubt)
+     * - Format "A" (alphanumeric): Quotes required
+     * - Format "N" (numeric): No quotes
+     * - Format "D" (date): No quotes (optionally allowed)
      * 
-     * HINWEIS: In der Praxis werden einige "N"-Felder trotzdem gequotet (z.B. Geschäftsvorgangscode).
-     * Diese Implementierung orientiert sich an der tatsächlichen DATEV-Praxis.
+     * NOTE: In practice, some "N" fields are still quoted (e.g. business transaction code).
+     * This implementation follows the actual DATEV practice.
      * 
      * @return bool True wenn das Feld gequotet werden muss
      */

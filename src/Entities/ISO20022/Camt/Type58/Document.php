@@ -23,10 +23,10 @@ use DateTimeImmutable;
 /**
  * CAMT.058 Document (Notification to Receive Cancellation Advice).
  *
- * Repräsentiert einen Stornierungshinweis zu einer Benachrichtigung
- * über einen erwarteten Zahlungseingang gemäß ISO 20022 camt.058.001.xx Standard.
+ * Represents a cancellation advice for a notification
+ * about an expected payment receipt according to ISO 20022 camt.058.001.xx standard.
  *
- * Wird verwendet, um eine zuvor gesendete CAMT.057-Benachrichtigung zu stornieren.
+ * Used to cancel a previously sent CAMT.057 notification.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type58
  */

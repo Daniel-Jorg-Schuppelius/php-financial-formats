@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\MandateCopyRequest;
 
 /**
- * Generiert pain.017 XML-Dokumente (Mandate Copy Request).
+ * Generates pain.017 XML documents (Mandate Copy Request).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.017.001.04 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.017.001.04 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain017Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.017 Dokument.
+     * Generates XML from a pain.017 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('MndtCpyReq');

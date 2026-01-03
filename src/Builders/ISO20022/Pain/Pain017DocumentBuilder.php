@@ -19,7 +19,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.017 Documents (Mandate Copy Request).
+ * Builder for pain.017 Documents (Mandate Copy Request).
  * 
  * Erstellt Anfragen zur Erstellung einer Kopie eines bestehenden Mandats.
  * 
@@ -41,7 +41,7 @@ final class Pain017DocumentBuilder {
 
     private function __construct(string $messageId, PartyIdentification $initiatingParty) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -56,7 +56,7 @@ final class Pain017DocumentBuilder {
     }
 
     /**
-     * Erzeugt neuen Builder mit vollständiger PartyIdentification.
+     * Creates new builder with complete PartyIdentification.
      */
     public static function createWithParty(string $messageId, PartyIdentification $initiatingParty): self {
         return new self($messageId, $initiatingParty);
@@ -72,7 +72,7 @@ final class Pain017DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandatskopie-Anfrage hinzu.
+     * Adds a mandate copy request.
      */
     public function addCopyRequest(string $mandateId, ?string $creditorSchemeId = null): self {
         $clone = clone $this;
@@ -81,7 +81,7 @@ final class Pain017DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige MandateCopyRequest hinzu.
+     * Adds a completed MandateCopyRequest.
      */
     public function addMandateCopyRequest(MandateCopyRequest $request): self {
         $clone = clone $this;
@@ -90,7 +90,7 @@ final class Pain017DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Mandatskopie-Anfragen hinzu.
+     * Adds multiple mandate copy requests.
      * 
      * @param MandateCopyRequest[] $requests
      */
@@ -134,7 +134,7 @@ final class Pain017DocumentBuilder {
     }
 
     /**
-     * Erstellt Kopie-Anfragen für mehrere Mandate.
+     * Creates copy requests for multiple mandates.
      * 
      * @param string[] $mandateIds
      */

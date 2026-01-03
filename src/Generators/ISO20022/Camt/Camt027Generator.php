@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.027 XML (Claim Non Receipt).
+ * Generator for CAMT.027 XML (Claim Non Receipt).
  * 
- * Generiert Anfragen zum Nachweis einer nicht erhaltenen Zahlung
- * gemäß ISO 20022 camt.027.001.xx Standard.
+ * Generates requests for proof of a payment not received
+ * according to ISO 20022 camt.027.001.xx Standard.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -49,7 +49,7 @@ class Camt027Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Assignment-Struktur hinzu.
+     * Adds the assignment structure.
      */
     private function addAssignment(Document $document): void {
         $this->builder->addElement('Assgnmt');
@@ -93,7 +93,7 @@ class Camt027Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Case-Struktur hinzu (optional).
+     * Adds the case structure (optional).
      */
     private function addCase(Document $document): void {
         if ($document->getCaseId() === null) {
@@ -116,7 +116,7 @@ class Camt027Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Underlying Transaction Reference hinzu.
+     * Adds the underlying transaction reference.
      */
     private function addUnderlying(Document $document): void {
         if ($document->getOriginalMessageId() === null && $document->getOriginalEndToEndId() === null) {
@@ -176,7 +176,7 @@ class Camt027Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Cover Details hinzu.
+     * Adds the cover details.
      */
     private function addCoverDetails(Document $document): void {
         if ($document->getMissingCoverIndicator() === null) {

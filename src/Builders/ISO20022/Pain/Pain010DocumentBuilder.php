@@ -23,9 +23,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.010 Documents (Mandate Amendment Request).
+ * Builder for pain.010 Documents (Mandate Amendment Request).
  * 
- * Erstellt Anfragen zur Änderung bestehender SEPA-Lastschrift-Mandate.
+ * Creates requests for amending existing SEPA direct debit mandates.
  * 
  * Verwendung:
  * ```php
@@ -48,7 +48,7 @@ final class Pain010DocumentBuilder {
 
     private function __construct(string $messageId, PartyIdentification $initiatingParty) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -63,7 +63,7 @@ final class Pain010DocumentBuilder {
     }
 
     /**
-     * Erzeugt neuen Builder mit vollständiger PartyIdentification.
+     * Creates new builder with complete PartyIdentification.
      */
     public static function createWithParty(string $messageId, PartyIdentification $initiatingParty): self {
         return new self($messageId, $initiatingParty);
@@ -79,7 +79,7 @@ final class Pain010DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandatsänderung hinzu.
+     * Adds a mandate amendment.
      */
     public function addAmendment(Mandate $mandate, AmendmentDetails $details): self {
         $clone = clone $this;
@@ -88,7 +88,7 @@ final class Pain010DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige MandateAmendment hinzu.
+     * Adds a completed MandateAmendment.
      */
     public function addMandateAmendment(MandateAmendment $amendment): self {
         $clone = clone $this;
@@ -97,7 +97,7 @@ final class Pain010DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Mandatsänderungen hinzu.
+     * Adds multiple mandate amendments.
      * 
      * @param MandateAmendment[] $amendments
      */
@@ -128,7 +128,7 @@ final class Pain010DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache Mandats-ID-Änderung.
+     * Creates a simple mandate ID change.
      */
     public static function createMandateIdChange(
         string $messageId,
@@ -142,7 +142,7 @@ final class Pain010DocumentBuilder {
     }
 
     /**
-     * Erstellt eine Gläubiger-ID-Änderung.
+     * Creates a creditor ID change.
      */
     public static function createCreditorSchemeIdChange(
         string $messageId,
@@ -156,7 +156,7 @@ final class Pain010DocumentBuilder {
     }
 
     /**
-     * Erstellt eine Schuldner-Kontoänderung.
+     * Creates a debtor account change.
      */
     public static function createDebtorAccountChange(
         string $messageId,

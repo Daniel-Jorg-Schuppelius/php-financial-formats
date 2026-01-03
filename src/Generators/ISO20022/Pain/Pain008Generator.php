@@ -19,9 +19,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\MandateInformati
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\PaymentInstruction;
 
 /**
- * Generator für pain.008 (Customer Direct Debit Initiation) XML.
+ * Generator for pain.008 (Customer Direct Debit Initiation) XML.
  * 
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain008Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert pain.008 XML aus einem Document.
+     * Generates pain.008 XML aus einem Document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('CstmrDrctDbtInitn');

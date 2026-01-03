@@ -13,33 +13,33 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * Gebührencode für MT10x-Überweisungen (Feld :71A:).
+ * Charges code for MT10x transfers (Field :71A:).
  * 
- * Definiert wer die Überweisungsgebühren trägt.
+ * Defines who bears the transfer charges.
  */
 enum ChargesCode: string {
     /**
-     * BEN - Beneficiary (Begünstigter trägt alle Gebühren)
+     * BEN - Beneficiary (beneficiary bears all charges)
      */
     case BEN = 'BEN';
 
     /**
-     * OUR - Ordering Customer (Auftraggeber trägt alle Gebühren)
+     * OUR - Ordering Customer (sender bears all charges)
      */
     case OUR = 'OUR';
 
     /**
-     * SHA - Shared (Gebühren werden geteilt)
+     * SHA - Shared (charges are shared)
      */
     case SHA = 'SHA';
 
     /**
-     * SLEV - Service Level (gemäß SEPA-Vereinbarung)
+     * SLEV - Service Level (according to SEPA agreement)
      */
     case SLEV = 'SLEV';
 
     /**
-     * Gibt die deutsche Beschreibung zurück.
+     * Returns the German description.
      */
     public function description(): string {
         return match ($this) {
@@ -51,7 +51,7 @@ enum ChargesCode: string {
     }
 
     /**
-     * Gibt die englische Beschreibung zurück.
+     * Returns the English description.
      */
     public function descriptionEn(): string {
         return match ($this) {
@@ -63,14 +63,14 @@ enum ChargesCode: string {
     }
 
     /**
-     * Prüft, ob der Code SEPA-konform ist.
+     * Checks if the code is SEPA-compliant.
      */
     public function isSepaCompliant(): bool {
         return in_array($this, [self::SHA, self::SLEV]);
     }
 
     /**
-     * Gibt den Standard-SEPA-Code zurück.
+     * Returns the default SEPA code.
      */
     public static function defaultSepa(): self {
         return self::SLEV;

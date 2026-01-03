@@ -20,15 +20,15 @@ use CommonToolkit\FinancialFormats\Entities\Swift\UserHeader;
 use RuntimeException;
 
 /**
- * Parser für SWIFT FIN Messages mit Envelope (5-Block-Struktur)
+ * Parser for SWIFT FIN Messages with Envelope (5-block structure)
  * 
- * Unterstützt beide Formate:
- * 1. Vollständige SWIFT-Nachrichten mit {1:}...{5:} Blöcken
+ * Supports both formats:
+ * 1. Complete SWIFT messages with {1:}...{5:} blocks
  * 2. Raw MT-Daten ohne Envelope (nur Text-Block Inhalt)
  */
 final class SwiftMessageParser {
     /**
-     * Prüft ob der Input ein SWIFT Envelope hat
+     * Checks if the input has a SWIFT envelope
      */
     public static function hasEnvelope(string $input): bool {
         $trimmed = trim($input);
@@ -36,11 +36,11 @@ final class SwiftMessageParser {
     }
 
     /**
-     * Parst eine vollständige SWIFT-Nachricht mit Envelope
+     * Parses a complete SWIFT message with envelope
      * 
-     * @param string $input Die vollständige SWIFT-Nachricht
+     * @param string $input The complete SWIFT message
      * @return Message Das geparste Message-Objekt
-     * @throws RuntimeException Bei ungültigem Format
+     * @throws RuntimeException On invalid format
      */
     public static function parse(string $input): Message {
         if (!self::hasEnvelope($input)) {
@@ -111,7 +111,7 @@ final class SwiftMessageParser {
     }
 
     /**
-     * Extrahiert nur den Text-Block aus einer SWIFT-Nachricht oder gibt Raw-Daten zurück
+     * Extracts only the text block from a SWIFT message or returns raw data
      * 
      * Diese Methode kann sowohl SWIFT-Nachrichten mit Envelope als auch
      * Raw-MT-Daten ohne Envelope verarbeiten.
@@ -135,7 +135,7 @@ final class SwiftMessageParser {
     }
 
     /**
-     * Extrahiert alle Blöcke aus einer SWIFT-Nachricht
+     * Extracts all blocks from a SWIFT message
      * 
      * @param string $input Die SWIFT-Nachricht
      * @return array<int, string> Array mit Block-Nummer => Block-Inhalt
@@ -173,7 +173,7 @@ final class SwiftMessageParser {
     }
 
     /**
-     * Normalisiert den Text-Block (entfernt führende/nachfolgende Leerzeichen und Zeilenumbrüche)
+     * Normalizes the text block (removes leading/trailing whitespace and line breaks)
      */
     private static function normalizeTextBlock(string $textBlock): string {
         // Entferne führende Zeilenumbrüche

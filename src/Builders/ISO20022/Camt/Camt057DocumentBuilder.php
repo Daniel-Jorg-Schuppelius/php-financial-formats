@@ -19,9 +19,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.057 Documents (Notification to Receive).
+ * Builder for CAMT.057 Documents (Notification to Receive).
  * 
- * Erstellt Benachrichtigungen über erwartete Zahlungseingänge.
+ * Creates notifications about expected payment receipts.
  * 
  * Verwendung:
  * ```php
@@ -51,21 +51,21 @@ final class Camt057DocumentBuilder {
 
     private function __construct(string $messageId) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Message-ID.
+     * Creates a new builder with message ID.
      */
     public static function create(string $messageId): self {
         return new self($messageId);
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -74,7 +74,7 @@ final class Camt057DocumentBuilder {
     }
 
     /**
-     * Setzt die initiierende Partei (Bank).
+     * Sets the initiating party (bank).
      */
     public function withInitiatingParty(string $name): self {
         $clone = clone $this;
@@ -83,7 +83,7 @@ final class Camt057DocumentBuilder {
     }
 
     /**
-     * Setzt den Empfänger (BIC).
+     * Sets the receiver (BIC).
      */
     public function withMessageRecipient(string $bic): self {
         $clone = clone $this;
@@ -92,7 +92,7 @@ final class Camt057DocumentBuilder {
     }
 
     /**
-     * Fügt ein Notification Item hinzu.
+     * Adds a notification item.
      */
     public function addItem(NotificationItem $item): self {
         $clone = clone $this;
@@ -101,7 +101,7 @@ final class Camt057DocumentBuilder {
     }
 
     /**
-     * Convenience: Fügt ein einfaches Notification Item hinzu.
+     * Convenience: Adds a simple notification item.
      */
     public function addSimpleItem(
         string $id,
@@ -126,7 +126,7 @@ final class Camt057DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Notification Items hinzu.
+     * Adds multiple notification items.
      * 
      * @param NotificationItem[] $items
      */
@@ -137,7 +137,7 @@ final class Camt057DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.057 Document.
+     * Creates the CAMT.057 Document.
      * 
      * @throws InvalidArgumentException wenn Pflichtfelder fehlen
      */
@@ -158,7 +158,7 @@ final class Camt057DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache Zahlungsbenachrichtigung.
+     * Creates eine einfache Zahlungsbenachrichtigung.
      */
     public static function createSingleNotification(
         string $messageId,

@@ -84,7 +84,7 @@ class Camt026DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testAssignmentIdMaxLength(): void {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('AssignmentId darf maximal 35 Zeichen lang sein');
+        $this->expectExceptionMessage('AssignmentId must not exceed 35 characters');
 
         Camt026DocumentBuilder::create(str_repeat('A', 36));
     }

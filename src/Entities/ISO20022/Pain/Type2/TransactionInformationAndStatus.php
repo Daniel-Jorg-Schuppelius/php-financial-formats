@@ -16,7 +16,7 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Transaction Information and Status für pain.002 (TxInfAndSts).
+ * Transaction information and status for pain.002 (TxInfAndSts).
  * 
  * Details zum Status einer einzelnen Transaktion.
  * 
@@ -29,9 +29,9 @@ final readonly class TransactionInformationAndStatus {
      * @param string|null $originalEndToEndId Original End-to-End ID (OrgnlEndToEndId)
      * @param string|null $originalUetr Original UETR (OrgnlUETR)
      * @param TransactionStatus|null $status Transaktionsstatus (TxSts)
-     * @param StatusReason[] $statusReasons Status-Begründungen (StsRsnInf)
+     * @param StatusReason[] $statusReasons Status reasons (StsRsnInf)
      * @param float|null $originalAmount Original-Betrag (OrgnlTxRef/Amt)
-     * @param CurrencyCode|null $originalCurrency Original-Währung
+     * @param CurrencyCode|null $originalCurrency Original currency
      * @param DateTimeImmutable|null $acceptanceDateTime Akzeptanz-Zeitpunkt (AccptncDtTm)
      */
     public function __construct(
@@ -48,7 +48,7 @@ final readonly class TransactionInformationAndStatus {
     }
 
     /**
-     * Erstellt einen erfolgreichen Status.
+     * Creates a successful status.
      */
     public static function accepted(
         string $originalEndToEndId,
@@ -61,7 +61,7 @@ final readonly class TransactionInformationAndStatus {
     }
 
     /**
-     * Erstellt einen Ablehnungsstatus.
+     * Creates a rejection status.
      */
     public static function rejected(
         string $originalEndToEndId,
@@ -114,21 +114,21 @@ final readonly class TransactionInformationAndStatus {
     }
 
     /**
-     * Prüft, ob die Transaktion erfolgreich war.
+     * Checks if the transaction was successful.
      */
     public function isSuccessful(): bool {
         return $this->status?->isSuccessful() ?? false;
     }
 
     /**
-     * Prüft, ob die Transaktion abgelehnt wurde.
+     * Checks if the transaction was rejected.
      */
     public function isRejected(): bool {
         return $this->status?->isRejected() ?? false;
     }
 
     /**
-     * Gibt den ersten Ablehnungsgrund zurück.
+     * Returns the first rejection reason.
      */
     public function getFirstReason(): ?StatusReason {
         return $this->statusReasons[0] ?? null;

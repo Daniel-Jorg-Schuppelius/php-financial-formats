@@ -34,15 +34,15 @@ use Throwable;
  * - Feld 1: BLZ/BIC Kontoinhaber → Teil von accountId
  * - Feld 2: Kontonummer/IBAN Kontoinhaber → Teil von accountId
  * - Feld 3: Auszugsnummer → statementNumber
- * - Feld 4: Auszugsdatum → für Salden-Datum
+ * - Field 4: Statement date → for balance date
  * - Feld 5: Valuta → valutaDate
  * - Feld 6: Buchungsdatum → bookingDate
  * - Feld 7: Umsatz → amount (mit +/- Vorzeichen)
  * - Felder 8-9: Auftraggeber-Name → purpose
  * - Felder 10-11: BLZ/Kontonummer Auftraggeber → reference
  * - Felder 12-14: Verwendungszweck 1-3 → purpose
- * - Feld 16: Geschäftsvorgangscode → transactionCode
- * - Feld 17: Währung → currency
+ * - Field 16: Business transaction code → transactionCode
+ * - Field 17: Currency → currency
  * 
  * @package CommonToolkit\Converters\DATEV
  */
@@ -231,7 +231,7 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
         }
 
         // Alle Verwendungszweck-Felder sammeln
-        foreach (self::getVerwendungszweckFelder() as $vzFeld) {
+        foreach (self::getPurposeFields() as $vzFeld) {
             $vz = self::getField($fields, $vzFeld);
             if (!empty($vz)) {
                 $purposeParts[] = $vz;

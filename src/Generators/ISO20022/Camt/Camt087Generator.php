@@ -19,7 +19,7 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.087 XML (Request to Modify Payment).
+ * Generator for CAMT.087 XML (Request to Modify Payment).
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */

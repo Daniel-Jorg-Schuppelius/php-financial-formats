@@ -28,15 +28,15 @@ use CommonToolkit\Helper\Data\BankHelper;
 use DateTimeImmutable;
 
 /**
- * Konvertiert MT940 (SWIFT) Kontoauszüge in das CAMT-Format (ISO 20022).
+ * Converts MT940 (SWIFT) account statements to CAMT format (ISO 20022).
  * 
- * MT940 ist das ältere SWIFT-Format für Kontoauszüge, während CAMT.053
- * der moderne ISO 20022 Standard ist. Die Konvertierung ermöglicht die
+ * MT940 is the older SWIFT format for account statements, while CAMT.053
+ * is the modern ISO 20022 standard. The conversion enables
  * Migration von Legacy-Systemen auf den aktuellen Standard.
  * 
- * Unterstützte Zielformate:
- * - CAMT.052: Untertägige Kontobewegungen (Intraday)
- * - CAMT.053: Täglicher Kontoauszug (Standard für MT940-Migration)
+ * Supported target formats:
+ * - CAMT.052: Intraday account movements (Intraday)
+ * - CAMT.053: Daily account statement (Standard for MT940 migration)
  * - CAMT.054: Einzelumsatzbenachrichtigung
  * 
  * @package CommonToolkit\Converters\Banking
@@ -46,7 +46,7 @@ final class Mt940ToCamtConverter {
      * Konvertiert ein MT940-Dokument in ein CAMT.053-Dokument.
      * 
      * Dies ist der Standard-Konvertierungspfad, da MT940 und CAMT.053
-     * beide vollständige Tagesauszüge repräsentieren.
+     * both represent complete daily statements.
      * 
      * @param Mt940Document $mt940 Das zu konvertierende MT940-Dokument
      * @param string|null $messageId Optionale Message-ID (wird sonst generiert)
@@ -81,7 +81,7 @@ final class Mt940ToCamtConverter {
     /**
      * Konvertiert ein MT940-Dokument in ein CAMT.052-Dokument.
      * 
-     * CAMT.052 wird für untertägige Reports verwendet. Diese Konvertierung
+     * CAMT.052 is used for intraday reports. This conversion
      * ist sinnvoll, wenn die MT940-Daten Intraday-Bewegungen darstellen.
      * 
      * @param Mt940Document $mt940 Das zu konvertierende MT940-Dokument
@@ -117,7 +117,7 @@ final class Mt940ToCamtConverter {
     /**
      * Konvertiert ein MT940-Dokument in ein CAMT.054-Dokument.
      * 
-     * CAMT.054 wird für Einzelumsatzbenachrichtigungen verwendet.
+     * CAMT.054 is used for individual transaction notifications.
      * Bei dieser Konvertierung werden alle Transaktionen als
      * einzelne Benachrichtigungen behandelt.
      * 
@@ -147,7 +147,7 @@ final class Mt940ToCamtConverter {
     }
 
     /**
-     * Generische Konvertierung mit wählbarem CAMT-Typ.
+     * Generic conversion with selectable CAMT type.
      * 
      * @param Mt940Document $mt940 Das zu konvertierende MT940-Dokument
      * @param CamtType $targetType Ziel-CAMT-Typ
@@ -275,7 +275,7 @@ final class Mt940ToCamtConverter {
     }
 
     /**
-     * Extrahiert BIC aus der Account-ID wenn möglich.
+     * Extracts BIC from the Account ID if possible.
      * 
      * MT940 Account-ID kann verschiedene Formate haben:
      * - IBAN (DE89370400440532013000)
@@ -298,7 +298,7 @@ final class Mt940ToCamtConverter {
      * SEPA-Felder im Verwendungszweck:
      * - EREF+ = Ende-zu-Ende-Referenz
      * - MREF+ = Mandatsreferenz
-     * - CRED+ = Gläubiger-ID
+     * - CRED+ = Creditor ID
      * - KREF+ = Kundenreferenz (Instruction-ID)
      * - SVWZ+ = Verwendungszweck
      * 
@@ -399,7 +399,7 @@ final class Mt940ToCamtConverter {
      * Mappt MT940 Transaktionscodes auf ISO 20022 Codes.
      * 
      * MT940 verwendet 3-stellige Transaktionscodes (GVC),
-     * während ISO 20022 4-stellige Codes verwendet.
+     * while ISO 20022 uses 4-digit codes.
      */
     private static function mapTransactionCode(string $mt940Code): string {
         // Häufige MT940-Codes zu ISO 20022 Mapping

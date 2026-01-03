@@ -21,9 +21,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.011 Documents (Mandate Cancellation Request).
+ * Builder for pain.011 Documents (Mandate Cancellation Request).
  * 
- * Erstellt Anfragen zur Stornierung/Kündigung von SEPA-Lastschrift-Mandaten.
+ * Creates requests for cancellation/termination of SEPA direct debit mandates.
  * 
  * Verwendung:
  * ```php
@@ -43,7 +43,7 @@ final class Pain011DocumentBuilder {
 
     private function __construct(string $messageId, PartyIdentification $initiatingParty) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -58,7 +58,7 @@ final class Pain011DocumentBuilder {
     }
 
     /**
-     * Erzeugt neuen Builder mit vollständiger PartyIdentification.
+     * Creates new builder with complete PartyIdentification.
      */
     public static function createWithParty(string $messageId, PartyIdentification $initiatingParty): self {
         return new self($messageId, $initiatingParty);
@@ -74,7 +74,7 @@ final class Pain011DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandatsstornierung hinzu.
+     * Adds a mandate cancellation.
      */
     public function addCancellation(string $mandateId, CancellationReason $reason): self {
         $clone = clone $this;
@@ -83,7 +83,7 @@ final class Pain011DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandatsstornierung mit Original-Mandat hinzu.
+     * Adds a mandate cancellation with original mandate.
      */
     public function addCancellationWithMandate(Mandate $originalMandate, CancellationReason $reason): self {
         $clone = clone $this;
@@ -92,7 +92,7 @@ final class Pain011DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige MandateCancellation hinzu.
+     * Adds a completed MandateCancellation.
      */
     public function addMandateCancellation(MandateCancellation $cancellation): self {
         $clone = clone $this;
@@ -101,7 +101,7 @@ final class Pain011DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Mandatsstornierungen hinzu.
+     * Adds multiple mandate cancellations.
      * 
      * @param MandateCancellation[] $cancellations
      */

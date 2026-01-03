@@ -45,49 +45,49 @@ final readonly class Transaction {
     }
 
     /**
-     * Gibt die Transaction Reference zurück (Feld :21:).
+     * Returns the Transaction Reference (Field :21:).
      */
     public function getTransactionReference(): string {
         return $this->transactionReference;
     }
 
     /**
-     * Gibt die Überweisungsdetails zurück.
+     * Returns the transfer details.
      */
     public function getTransferDetails(): TransferDetails {
         return $this->transferDetails;
     }
 
     /**
-     * Gibt den Begünstigten zurück (Feld :59:).
+     * Returns the beneficiary (field :59:).
      */
     public function getBeneficiary(): Party {
         return $this->beneficiary;
     }
 
     /**
-     * Gibt die Account With Institution zurück (Feld :57a:).
+     * Returns the Account With Institution (Field :57a:).
      */
     public function getAccountWithInstitution(): ?Party {
         return $this->accountWithInstitution;
     }
 
     /**
-     * Gibt den Verwendungszweck zurück (Feld :70:).
+     * Returns the remittance information (field :70:).
      */
     public function getRemittanceInfo(): ?string {
         return $this->remittanceInfo;
     }
 
     /**
-     * Gibt den Gebührencode zurück (Feld :71A:).
+     * Returns the charges code (field :71A:).
      */
     public function getChargesCode(): ?ChargesCode {
         return $this->chargesCode;
     }
 
     /**
-     * Gibt den Betrag zurück.
+     * Returns the amount.
      */
     public function getAmount(): float {
         return $this->transferDetails->getAmount();

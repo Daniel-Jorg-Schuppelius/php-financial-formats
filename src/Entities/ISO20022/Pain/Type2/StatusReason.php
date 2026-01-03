@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 
 /**
- * Status Reason Information für pain.002 (StsRsnInf).
+ * Status reason information for pain.002 (StsRsnInf).
  * 
- * Enthält Details zum Status einer Transaktion.
+ * Contains details about the status of a transaction.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type2
  */
@@ -23,7 +23,7 @@ final readonly class StatusReason {
     /**
      * @param string|null $code Reason Code (Rsn/Cd)
      * @param string|null $proprietary Proprietary Reason (Rsn/Prtry)
-     * @param string[] $additionalInfo Zusätzliche Informationen (AddtlInf)
+     * @param string[] $additionalInfo Additional information (AddtlInf)
      */
     public function __construct(
         private ?string $code = null,
@@ -33,14 +33,14 @@ final readonly class StatusReason {
     }
 
     /**
-     * Erstellt aus einem ISO-Reason-Code.
+     * Creates from an ISO reason code.
      */
     public static function fromCode(string $code, array $additionalInfo = []): self {
         return new self($code, null, $additionalInfo);
     }
 
     /**
-     * Erstellt aus proprietärem Code.
+     * Creates from proprietary code.
      */
     public static function fromProprietary(string $proprietary, array $additionalInfo = []): self {
         return new self(null, $proprietary, $additionalInfo);
@@ -62,7 +62,7 @@ final readonly class StatusReason {
     }
 
     /**
-     * Gibt den Reason (Code oder Proprietary) zurück.
+     * Returns the reason (code or proprietary).
      */
     public function getReason(): ?string {
         return $this->code ?? $this->proprietary;

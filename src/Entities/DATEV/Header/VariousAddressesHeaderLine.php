@@ -24,7 +24,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\VariousAddresse
  */
 final class VariousAddressesHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 VariousAddresses Header.
+     * Factory method for V700 VariousAddresses header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,7 +34,7 @@ final class VariousAddressesHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 VariousAddresses passt.
+     * Checks if this header matches V700 VariousAddresses.
      */
     public function isV700VariousAddressesHeader(): bool {
         return $this->isCompatibleWithEnum(VariousAddressesHeaderField::class);

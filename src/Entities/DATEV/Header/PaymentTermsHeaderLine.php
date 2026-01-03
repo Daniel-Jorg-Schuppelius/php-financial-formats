@@ -24,7 +24,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\PaymentTermsHea
  */
 final class PaymentTermsHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 PaymentTerms Header.
+     * Factory method for V700 PaymentTerms header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,7 +34,7 @@ final class PaymentTermsHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 PaymentTerms passt.
+     * Checks if this header matches V700 PaymentTerms.
      */
     public function isV700PaymentTermsHeader(): bool {
         return $this->isCompatibleWithEnum(PaymentTermsHeaderField::class);

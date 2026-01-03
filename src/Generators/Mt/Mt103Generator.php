@@ -16,15 +16,15 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\Mt1GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type103\Document;
 
 /**
- * Generator für MT103 Single Customer Credit Transfer.
+ * Generator for MT103 Single Customer Credit Transfer.
  * 
- * Generiert SWIFT MT103 Nachrichten aus Document-Objekten.
+ * Generates SWIFT MT103 messages from Document objects.
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
 class Mt103Generator extends Mt1GeneratorAbstract {
     /**
-     * Generiert die MT103 SWIFT-Nachricht.
+     * Generates the MT103 SWIFT message.
      * 
      * @param object $document Das MT103-Dokument
      * @return string Die formatierte SWIFT-Nachricht
@@ -93,7 +93,7 @@ class Mt103Generator extends Mt1GeneratorAbstract {
     }
 
     /**
-     * Fügt die Währungsumrechnungsfelder hinzu, wenn vorhanden.
+     * Adds the currency conversion fields if present.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
      * @param Document $document Das Dokument

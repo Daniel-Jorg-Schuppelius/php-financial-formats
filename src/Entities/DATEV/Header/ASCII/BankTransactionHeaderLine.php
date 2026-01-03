@@ -18,9 +18,9 @@ use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHe
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 
 /**
- * Header-Zeile für DATEV ASCII-Weiterverarbeitungsdateien (Banktransaktionen).
+ * Header line for DATEV ASCII processing files (bank transactions).
  * 
- * Diese Klasse erstellt virtuelle Header für ASCII-Dateien mit 17-34 Feldern.
+ * This class creates virtual headers for ASCII files with 17-34 fields.
  * ASCII-Dateien haben KEINEN MetaHeader - nur einfache Datenzeilen.
  * 
  * @package CommonToolkit\Entities\DATEV\Header
@@ -28,7 +28,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactio
 class BankTransactionHeaderLine extends HeaderLine {
 
     /**
-     * Erstellt eine Standard-Header-Definition für ASCII-Banktransaktionen.
+     * Creates a standard header definition for ASCII bank transactions.
      * 
      * @return BankTransactionHeaderDefinition
      */

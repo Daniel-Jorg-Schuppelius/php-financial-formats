@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7;
 
 /**
- * Original Payment Information für pain.007 (OrgnlPmtInfAndRvsl).
+ * Original payment information for pain.007 (OrgnlPmtInfAndRvsl).
  * 
- * Referenz auf die ursprüngliche Payment Instruction.
+ * Reference to the original payment instruction.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type7
  */

@@ -17,11 +17,11 @@ use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\PainType;
 
 /**
- * Abstrakte Basisklasse für alle Pain-Dokumente.
+ * Abstract base class for all Pain documents.
  * 
- * Erbt von DomainXmlDocumentAbstract für XmlDocumentInterface-Implementierung.
+ * Inherits from DomainXmlDocumentAbstract for XmlDocumentInterface implementation.
  * 
- * Unterstützte Pain-Formate:
+ * Supported Pain formats:
  * - pain.001: Customer Credit Transfer Initiation
  * - pain.002: Customer Payment Status Report
  * - pain.007: Customer Payment Reversal
@@ -33,12 +33,12 @@ use CommonToolkit\FinancialFormats\Enums\PainType;
  */
 abstract class PainDocumentAbstract extends DomainXmlDocumentAbstract implements PainDocumentInterface {
     /**
-     * Gibt den Pain-Typ dieses Dokuments zurück.
+     * Returns the Pain type of this document.
      */
     abstract public function getType(): PainType;
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      */
     abstract public function toXml(): string;
 

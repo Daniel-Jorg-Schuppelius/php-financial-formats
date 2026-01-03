@@ -20,7 +20,7 @@ enum PaymentMethod: int {
     case PAYMENT      = 3; // Zahlung
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -31,7 +31,7 @@ enum PaymentMethod: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {

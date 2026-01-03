@@ -52,7 +52,7 @@ class DatevDocumentParserTest extends BaseTestCase {
         $analysis = DatevDocumentParser::analyzeFormat($csvContent);
 
         $this->assertArrayHasKey('error', $analysis);
-        $this->assertStringContainsString('Ungültiger DATEV MetaHeader', $analysis['error']);
+        $this->assertStringContainsString('Invalid DATEV MetaHeader', $analysis['error']);
     }
 
     public function testParseBookingBatchV700FromRealFile(): void {
@@ -156,7 +156,7 @@ class DatevDocumentParserTest extends BaseTestCase {
         $csvContent = '"EXTF";700;"21";"Buchungsstapel";7;20191001000000;7;"";"";"";"SV";"";"";"";0;""';
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('DATEV-CSV muss mindestens 2 Zeilen haben');
+        $this->expectExceptionMessage('DATEV CSV must have at least 2 lines');
 
         DatevDocumentParser::fromString($csvContent);
     }
@@ -167,7 +167,7 @@ class DatevDocumentParserTest extends BaseTestCase {
             '"Value1";"Value2"';
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Ungültiger DATEV MetaHeader');
+        $this->expectExceptionMessage('Invalid DATEV MetaHeader');
 
         DatevDocumentParser::fromString($csvContent);
     }

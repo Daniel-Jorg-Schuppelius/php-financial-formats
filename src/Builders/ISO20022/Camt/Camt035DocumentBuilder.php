@@ -17,10 +17,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.035 Documents (Proprietary Format Investigation).
+ * Builder for CAMT.035 Documents (Proprietary Format Investigation).
  * 
- * Erstellt proprietäre Untersuchungsanfragen.
- * Wird verwendet für institutsspezifische Untersuchungsformate.
+ * Creates proprietary investigation requests.
+ * Used for institution-specific investigation formats.
  * 
  * @package CommonToolkit\FinancialFormats\Builders\Camt
  */
@@ -38,7 +38,7 @@ final class Camt035DocumentBuilder {
 
     private function __construct(string $assignmentId) {
         if (strlen($assignmentId) > 35) {
-            throw new InvalidArgumentException('AssignmentId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('AssignmentId must not exceed 35 characters');
         }
         $this->assignmentId = $assignmentId;
         $this->creationDateTime = new DateTimeImmutable();

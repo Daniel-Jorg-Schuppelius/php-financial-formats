@@ -20,15 +20,15 @@ use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
 use DateTimeImmutable;
 
 /**
- * Payment Instruction für pain.001-Nachrichten (PmtInf).
+ * Payment instruction for pain.001 messages (PmtInf).
  * 
- * Gruppiert Überweisungen mit gemeinsamen Auftraggeber-Daten:
+ * Groups transfers with common debtor data:
  * - PmtInfId: Payment Instruction ID
- * - PmtMtd: Zahlungsmethode (TRF=Überweisung, CHK=Scheck)
+ * - PmtMtd: Payment method (TRF=transfer, CHK=cheque)
  * - Dbtr: Auftraggeber (Debtor)
  * - DbtrAcct: Konto des Auftraggebers
  * - DbtrAgt: Bank des Auftraggebers
- * - CdtTrfTxInf: Einzelne Überweisungen
+ * - CdtTrfTxInf: Individual transfers
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type1
  */
@@ -55,49 +55,49 @@ final class PaymentInstruction {
     }
 
     /**
-     * Gibt die Payment Instruction ID zurück (PmtInfId).
+     * Returns the payment instruction ID (PmtInfId).
      */
     public function getPaymentInstructionId(): string {
         return $this->paymentInstructionId;
     }
 
     /**
-     * Gibt die Zahlungsmethode zurück (PmtMtd).
+     * Returns the payment method (PmtMtd).
      */
     public function getPaymentMethod(): PaymentMethod {
         return $this->paymentMethod;
     }
 
     /**
-     * Gibt das gewünschte Ausführungsdatum zurück (ReqdExctnDt).
+     * Returns the requested execution date (ReqdExctnDt).
      */
     public function getRequestedExecutionDate(): DateTimeImmutable {
         return $this->requestedExecutionDate;
     }
 
     /**
-     * Gibt den Auftraggeber zurück (Dbtr).
+     * Returns the debtor (Dbtr).
      */
     public function getDebtor(): PartyIdentification {
         return $this->debtor;
     }
 
     /**
-     * Gibt das Konto des Auftraggebers zurück (DbtrAcct).
+     * Returns the debtor account (DbtrAcct).
      */
     public function getDebtorAccount(): AccountIdentification {
         return $this->debtorAccount;
     }
 
     /**
-     * Gibt die Bank des Auftraggebers zurück (DbtrAgt).
+     * Returns the debtor bank (DbtrAgt).
      */
     public function getDebtorAgent(): FinancialInstitution {
         return $this->debtorAgent;
     }
 
     /**
-     * Gibt die Transaktionen zurück (CdtTrfTxInf).
+     * Returns the transactions (CdtTrfTxInf).
      * @return CreditTransferTransaction[]
      */
     public function getTransactions(): array {
@@ -105,7 +105,7 @@ final class PaymentInstruction {
     }
 
     /**
-     * Gibt die Batch-Booking-Option zurück (BtchBookg).
+     * Returns the batch booking option (BtchBookg).
      * true = Sammelbuchung, false = Einzelbuchung pro Transaktion
      */
     public function getBatchBooking(): ?bool {
@@ -113,51 +113,51 @@ final class PaymentInstruction {
     }
 
     /**
-     * Gibt den Gebührenträger zurück (ChrgBr).
+     * Returns the charge bearer (ChrgBr).
      */
     public function getChargeBearer(): ?ChargesCode {
         return $this->chargeBearer;
     }
 
     /**
-     * Gibt den letztendlichen Auftraggeber zurück (UltmtDbtr).
+     * Returns the ultimate debtor (UltmtDbtr).
      */
     public function getUltimateDebtor(): ?PartyIdentification {
         return $this->ultimateDebtor;
     }
 
     /**
-     * Gibt das Service Level zurück (SvcLvl/Cd).
-     * Z.B. "SEPA" für SEPA-Überweisungen.
+     * Returns the service level (SvcLvl/Cd).
+     * E.g. "SEPA" for SEPA transfers.
      */
     public function getServiceLevel(): ?string {
         return $this->serviceLevel;
     }
 
     /**
-     * Gibt das Local Instrument zurück (LclInstrm/Cd).
+     * Returns the local instrument (LclInstrm/Cd).
      */
     public function getLocalInstrument(): ?string {
         return $this->localInstrument;
     }
 
     /**
-     * Gibt den Category Purpose zurück (CtgyPurp/Cd).
-     * Z.B. "SALA" für Gehaltszahlung.
+     * Returns the category purpose (CtgyPurp/Cd).
+     * E.g. "SALA" for salary payment.
      */
     public function getCategoryPurpose(): ?string {
         return $this->categoryPurpose;
     }
 
     /**
-     * Fügt eine Transaktion hinzu.
+     * Adds a transaction.
      */
     public function addTransaction(CreditTransferTransaction $transaction): void {
         $this->transactions[] = $transaction;
     }
 
     /**
-     * Gibt die Anzahl der Transaktionen zurück.
+     * Returns the number of transactions.
      */
     public function countTransactions(): int {
         return count($this->transactions);

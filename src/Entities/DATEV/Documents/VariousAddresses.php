@@ -28,7 +28,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\VariousAddresse
 
 /**
  * DATEV-Diverse Adressen-Dokument.
- * Spezielle Document-Klasse für Diverse Adressen-Format (Kategorie 48).
+ * Special document class for Various Addresses format (Category 48).
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus VariousAddressesHeaderField::getMaxLength() angewendet.
@@ -44,9 +44,9 @@ final class VariousAddresses extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus VariousAddressesHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from VariousAddressesHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -63,14 +63,14 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für diese Document-Art.
+     * Returns the DATEV category for this document type.
      */
     public function getCategory(): Category {
         return Category::DiverseAdressen;
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::DiverseAdressen->nameValue();
@@ -91,8 +91,8 @@ final class VariousAddresses extends Document {
     // ==== ADDRESSEE FIELDS ====
 
     /**
-     * Gibt den Adressatentyp zurück (Feld 10).
-     * 0 = keine Angabe (Default: Unternehmen), 1 = natürliche Person, 2 = Unternehmen
+     * Returns the addressee type (field 10).
+     * 0 = not specified (Default: company), 1 = natural person, 2 = company
      */
     public function getAddresseeTypeValue(int $rowIndex): ?AddresseeType {
         return parent::getAddresseeType($rowIndex, VariousAddressesHeaderField::Adressattyp->getPosition());
@@ -106,7 +106,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt die Adressart zurück (Feld 15): STR=Straße, PF=Postfach, GK=Großkunde.
+     * Returns the address type (field 15): STR=street, PF=P.O. box, GK=major customer.
      */
     public function getCorrespondenceAddressType(int $rowIndex): ?AddressType {
         return parent::getAddressType($rowIndex, VariousAddressesHeaderField::Adressart->getPosition());
@@ -120,7 +120,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt die Adressart der Rechnungsadresse zurück (Feld 29).
+     * Returns the address type of the invoice address (field 29).
      */
     public function getInvoiceAddressType(int $rowIndex): ?AddressType {
         return parent::getAddressType($rowIndex, VariousAddressesHeaderField::AdressartRechnungsadresse->getPosition());
@@ -136,7 +136,7 @@ final class VariousAddresses extends Document {
     // ==== COUNTRY FIELDS ====
 
     /**
-     * Gibt das Land zurück (Feld 20).
+     * Returns the country (field 20).
      */
     public function getCountry(int $rowIndex): ?CountryCode {
         return parent::getCountryCode($rowIndex, VariousAddressesHeaderField::Land->getPosition());
@@ -150,7 +150,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Land der Rechnungsadresse zurück (Feld 34).
+     * Returns the country of the invoice address (field 34).
      */
     public function getInvoiceCountry(int $rowIndex): ?CountryCode {
         return parent::getCountryCode($rowIndex, VariousAddressesHeaderField::LandRechnungsadresse->getPosition());
@@ -166,7 +166,7 @@ final class VariousAddresses extends Document {
     // ==== CORRESPONDENCE ADDRESS FLAG ====
 
     /**
-     * Gibt das Korrespondenzadresse-Kennzeichen zurück (Feld 25).
+     * Returns the correspondence address indicator (field 25).
      * 1 = Kennzeichnung Korrespondenzadresse
      */
     public function getCorrespondenceAddressFlag(int $rowIndex): ?ItemLock {
@@ -181,7 +181,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Prüft, ob die Adresse als Korrespondenzadresse markiert ist.
+     * Checks if the address is marked as correspondence address.
      */
     public function isCorrespondenceAddress(int $rowIndex): bool {
         $flag = $this->getCorrespondenceAddressFlag($rowIndex);
@@ -191,8 +191,8 @@ final class VariousAddresses extends Document {
     // ==== COMMUNICATION AND OUTPUT FIELDS ====
 
     /**
-     * Gibt die Sprache zurück (Feld 169).
-     * 1=deutsch, 4=französisch, 5=englisch, 10=spanisch, 19=italienisch
+     * Returns the language (field 169).
+     * 1=German, 4=French, 5=English, 10=Spanish, 19=Italian
      */
     public function getLanguageValue(int $rowIndex): ?Language {
         return parent::getLanguage($rowIndex, VariousAddressesHeaderField::Sprache->getPosition());
@@ -206,7 +206,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Ausgabeziel zurück (Feld 170).
+     * Returns the output target (field 170).
      * Bei Diverse Adressen: 1=Druck, 3=E-Mail (kein Fax!)
      */
     public function getOutputTargetValue(int $rowIndex): ?OutputTarget {
@@ -217,7 +217,7 @@ final class VariousAddresses extends Document {
      * Setzt das Ausgabeziel (Feld 170).
      * Bei Diverse Adressen nur 1=Druck oder 3=E-Mail erlaubt (kein Fax!).
      *
-     * @throws \InvalidArgumentException wenn Fax als Ausgabeziel gewählt wird
+     * @throws \InvalidArgumentException if fax is selected as output target
      */
     public function setOutputTargetValue(int $rowIndex, OutputTarget $outputTarget): void {
         if ($outputTarget === OutputTarget::FAX) {
@@ -229,21 +229,21 @@ final class VariousAddresses extends Document {
     // ==== MAIN BANK CONNECTION FLAGS (10 banks) ====
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 1 zurück (Feld 61).
+     * Returns the main bank account indicator for bank 1 (field 61).
      */
     public function getMainBankConnectionFlag1(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb1->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 1 (Feld 61).
+     * Sets the main bank account indicator for bank 1 (field 61).
      */
     public function setMainBankConnectionFlag1(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb1->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 1 die Hauptbankverbindung ist.
+     * Checks if bank 1 is the main bank account.
      */
     public function isMainBankConnection1(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag1($rowIndex);
@@ -251,21 +251,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 2 zurück (Feld 72).
+     * Returns the main bank account indicator for bank 2 (field 72).
      */
     public function getMainBankConnectionFlag2(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb2->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 2 (Feld 72).
+     * Sets the main bank account indicator for bank 2 (field 72).
      */
     public function setMainBankConnectionFlag2(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb2->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 2 die Hauptbankverbindung ist.
+     * Checks if bank 2 is the main bank account.
      */
     public function isMainBankConnection2(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag2($rowIndex);
@@ -273,21 +273,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 3 zurück (Feld 83).
+     * Returns the main bank account indicator for bank 3 (field 83).
      */
     public function getMainBankConnectionFlag3(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb3->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 3 (Feld 83).
+     * Sets the main bank account indicator for bank 3 (field 83).
      */
     public function setMainBankConnectionFlag3(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb3->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 3 die Hauptbankverbindung ist.
+     * Checks if bank 3 is the main bank account.
      */
     public function isMainBankConnection3(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag3($rowIndex);
@@ -295,21 +295,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 4 zurück (Feld 94).
+     * Returns the main bank account indicator for bank 4 (field 94).
      */
     public function getMainBankConnectionFlag4(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb4->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 4 (Feld 94).
+     * Sets the main bank account indicator for bank 4 (field 94).
      */
     public function setMainBankConnectionFlag4(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb4->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 4 die Hauptbankverbindung ist.
+     * Checks if bank 4 is the main bank account.
      */
     public function isMainBankConnection4(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag4($rowIndex);
@@ -317,21 +317,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 5 zurück (Feld 105).
+     * Returns the main bank account indicator for bank 5 (field 105).
      */
     public function getMainBankConnectionFlag5(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb5->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 5 (Feld 105).
+     * Sets the main bank account indicator for bank 5 (field 105).
      */
     public function setMainBankConnectionFlag5(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb5->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 5 die Hauptbankverbindung ist.
+     * Checks if bank 5 is the main bank account.
      */
     public function isMainBankConnection5(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag5($rowIndex);
@@ -339,21 +339,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 6 zurück (Feld 116).
+     * Returns the main bank account indicator for bank 6 (field 116).
      */
     public function getMainBankConnectionFlag6(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb6->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 6 (Feld 116).
+     * Sets the main bank account indicator for bank 6 (field 116).
      */
     public function setMainBankConnectionFlag6(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb6->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 6 die Hauptbankverbindung ist.
+     * Checks if bank 6 is the main bank account.
      */
     public function isMainBankConnection6(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag6($rowIndex);
@@ -361,21 +361,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 7 zurück (Feld 127).
+     * Returns the main bank account indicator for bank 7 (field 127).
      */
     public function getMainBankConnectionFlag7(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb7->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 7 (Feld 127).
+     * Sets the main bank account indicator for bank 7 (field 127).
      */
     public function setMainBankConnectionFlag7(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb7->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 7 die Hauptbankverbindung ist.
+     * Checks if bank 7 is the main bank account.
      */
     public function isMainBankConnection7(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag7($rowIndex);
@@ -383,21 +383,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 8 zurück (Feld 138).
+     * Returns the main bank account indicator for bank 8 (field 138).
      */
     public function getMainBankConnectionFlag8(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb8->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 8 (Feld 138).
+     * Sets the main bank account indicator for bank 8 (field 138).
      */
     public function setMainBankConnectionFlag8(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb8->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 8 die Hauptbankverbindung ist.
+     * Checks if bank 8 is the main bank account.
      */
     public function isMainBankConnection8(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag8($rowIndex);
@@ -405,21 +405,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 9 zurück (Feld 149).
+     * Returns the main bank account indicator for bank 9 (field 149).
      */
     public function getMainBankConnectionFlag9(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb9->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 9 (Feld 149).
+     * Sets the main bank account indicator for bank 9 (field 149).
      */
     public function setMainBankConnectionFlag9(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb9->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 9 die Hauptbankverbindung ist.
+     * Checks if bank 9 is the main bank account.
      */
     public function isMainBankConnection9(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag9($rowIndex);
@@ -427,21 +427,21 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt das Hauptbankverbindungs-Kennzeichen für Bank 10 zurück (Feld 160).
+     * Returns the main bank account indicator for bank 10 (field 160).
      */
     public function getMainBankConnectionFlag10(int $rowIndex): ?ItemLock {
         return parent::getItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb10->getPosition());
     }
 
     /**
-     * Setzt das Hauptbankverbindungs-Kennzeichen für Bank 10 (Feld 160).
+     * Sets the main bank account indicator for bank 10 (field 160).
      */
     public function setMainBankConnectionFlag10(int $rowIndex, ItemLock $flag): void {
         parent::setItemLock($rowIndex, VariousAddressesHeaderField::KennzHauptbankverb10->getPosition(), $flag);
     }
 
     /**
-     * Prüft, ob Bank 10 die Hauptbankverbindung ist.
+     * Checks if bank 10 is the main bank account.
      */
     public function isMainBankConnection10(int $rowIndex): bool {
         $flag = $this->getMainBankConnectionFlag10($rowIndex);
@@ -451,7 +451,7 @@ final class VariousAddresses extends Document {
     // ==== CONVENIENCE METHODS ====
 
     /**
-     * Prüft, ob eine diverse Adresse einer natürlichen Person gehört.
+     * Checks if a various address belongs to a natural person.
      */
     public function isNaturalPerson(int $rowIndex): bool {
         $type = $this->getAddresseeTypeValue($rowIndex);
@@ -459,7 +459,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Prüft, ob eine diverse Adresse einem Unternehmen gehört.
+     * Checks if a various address belongs to a company.
      */
     public function isCompany(int $rowIndex): bool {
         $type = $this->getAddresseeTypeValue($rowIndex);
@@ -467,8 +467,8 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Ermittelt die Hauptbankverbindung für eine diverse Adresse.
-     * Gibt die Bank-Nummer (1-10) zurück oder null, wenn keine Hauptbank gesetzt ist.
+     * Determines the main bank account for a various address.
+     * Returns the bank number (1-10) or null if no main bank is set.
      */
     public function getMainBankNumber(int $rowIndex): ?int {
         if ($this->isMainBankConnection1($rowIndex)) return 1;
@@ -485,7 +485,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt alle diversen Adressen zurück, die natürlichen Personen gehören.
+     * Returns all various addresses belonging to natural persons.
      *
      * @return int[] Array der Row-Indices
      */
@@ -501,7 +501,7 @@ final class VariousAddresses extends Document {
     }
 
     /**
-     * Gibt alle diversen Adressen zurück, die Unternehmen gehören.
+     * Returns all various addresses belonging to companies.
      *
      * @return int[] Array der Row-Indices
      */

@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * CAMT Nachrichtenversionen gemäß ISO 20022.
+ * CAMT message versions according to ISO 20022.
  * 
  * Die Versionsnummern entsprechen dem Schema camt.0XX.001.VV
- * wobei VV die hier aufgeführte Versionsnummer ist.
+ * where VV is the version number listed here.
  * 
  * @package CommonToolkit\Enums\Common\Banking
  */
@@ -27,7 +27,7 @@ enum CamtVersion: string {
     case V02 = '02';
 
     /**
-     * Version 04 - Erweiterungen für SEPA
+     * Version 04 - Extensions for SEPA
      */
     case V04 = '04';
 
@@ -77,14 +77,14 @@ enum CamtVersion: string {
     case V13 = '13';
 
     /**
-     * Gibt den vollständigen Namespace für einen CAMT-Typ zurück.
+     * Returns the complete namespace for a CAMT type.
      */
     public function getNamespace(CamtType $type): string {
         return "urn:iso:std:iso:20022:tech:xsd:{$type->value}.001.{$this->value}";
     }
 
     /**
-     * Gibt die Versionsnummer als Integer zurück.
+     * Returns the version number as integer.
      */
     public function toInt(): int {
         return (int) $this->value;
@@ -99,7 +99,7 @@ enum CamtVersion: string {
     }
 
     /**
-     * Erstellt eine Version aus einem String (mit oder ohne führende Null).
+     * Creates a version from a string (with or without leading zero).
      */
     public static function fromString(string $version): ?self {
         $padded = str_pad(ltrim($version, '0') ?: '0', 2, '0', STR_PAD_LEFT);
@@ -107,7 +107,7 @@ enum CamtVersion: string {
     }
 
     /**
-     * Gibt die Beschreibung der Version zurück.
+     * Returns the description of the version.
      */
     public function getDescription(): string {
         return match ($this) {
@@ -126,21 +126,21 @@ enum CamtVersion: string {
     }
 
     /**
-     * Prüft ob diese Version neuer ist als eine andere.
+     * Checks if this version is newer than another.
      */
     public function isNewerThan(self $other): bool {
         return $this->toInt() > $other->toInt();
     }
 
     /**
-     * Prüft ob diese Version älter ist als eine andere.
+     * Checks if this version is older than another.
      */
     public function isOlderThan(self $other): bool {
         return $this->toInt() < $other->toInt();
     }
 
     /**
-     * Gibt die Standard-Version zurück (V02 für maximale Kompatibilität).
+     * Returns the default version (V02 for maximum compatibility).
      */
     public static function default(): self {
         return self::V02;

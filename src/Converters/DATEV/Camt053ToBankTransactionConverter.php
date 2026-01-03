@@ -21,7 +21,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactio
 use Throwable;
 
 /**
- * Konvertiert CAMT.053 ISO 20022 Kontoauszüge in das DATEV ASCII-Weiterverarbeitungsformat.
+ * Converts CAMT.053 ISO 20022 account statements to the DATEV ASCII processing format.
  * 
  * Die Konvertierung mappt CAMT.053-Felder auf die DATEV BankTransaction-Struktur:
  * - accountIdentifier → Feld 2 (IBAN)
@@ -32,7 +32,7 @@ use Throwable;
  * - Transaction.bookingDate → Feld 6 (Buchungsdatum)
  * - Transaction.amount → Feld 7 (Umsatz mit +/- Vorzeichen)
  * - Transaction.reference → Verwendungszweck-Felder
- * - Transaction.currency → Feld 17 (Währung)
+ * - Transaction.currency → Field 17 (Currency)
  * 
  * @package CommonToolkit\Converters\DATEV
  */
@@ -95,7 +95,7 @@ final class Camt053ToBankTransactionConverter extends BankTransactionConverterAb
         // Verwendungszweck aufteilen
         $purposeText = self::buildPurposeText($txn);
         $purposeLines = self::splitPurpose($purposeText);
-        self::fillVerwendungszweckFelder($values, $purposeLines);
+        self::fillPurposeFields($values, $purposeLines);
 
         // Geschäftsvorgangscode und Metadaten
         $values[F::GESCHAEFTSVORGANGSCODE->index()] = $txn->getTransactionCode() ?? '';

@@ -24,7 +24,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\GLAccountDescri
  */
 final class GLAccountDescriptionHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 GLAccountDescription Header.
+     * Factory method for V700 GLAccountDescription header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,7 +34,7 @@ final class GLAccountDescriptionHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 GLAccountDescription passt.
+     * Checks if this header matches V700 GLAccountDescription.
      */
     public function isV700GLAccountDescriptionHeader(): bool {
         return $this->isCompatibleWithEnum(GLAccountDescriptionHeaderField::class);

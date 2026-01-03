@@ -23,8 +23,8 @@ use RuntimeException;
 
 /**
  * DATEV-Natural-Stapel-Dokument.
- * Spezielle Document-Klasse für Natural-Stapel-Format (Kategorie 66).
- * Verwendet für Land-/Forstwirtschaft.
+ * Special document class for Natural Stack format (Category 66).
+ * Used for agriculture/forestry.
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus NaturalStackHeaderField::getMaxLength() angewendet.
@@ -36,9 +36,9 @@ final class NaturalStack extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus NaturalStackHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from NaturalStackHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -55,14 +55,14 @@ final class NaturalStack extends Document {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für diese Document-Art.
+     * Returns the DATEV category for this document type.
      */
     public function getCategory(): Category {
         return Category::NaturalStapel;
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::NaturalStapel->nameValue();
@@ -81,7 +81,7 @@ final class NaturalStack extends Document {
     }
 
     /**
-     * Prüft, ob eine Bewegungsart gültig ist.
+     * Checks if a movement type is valid.
      */
     public function validateMovementType(int $type): bool {
         $validTypes = [2, 21, 24, 25, 26, 27, 28, 29];

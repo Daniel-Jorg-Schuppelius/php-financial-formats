@@ -15,8 +15,8 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Sachverhalt für OPOS (Feld 24).
- * Identifiziert Buchungen/Posten als Mahnzins oder Mahngebühr.
+ * DATEV Subject for OPOS (Field 24).
+ * Identifies bookings/items as dunning interest or dunning fee.
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/recurring-bookings
  */
@@ -26,7 +26,7 @@ enum DunningSubject: int {
     case DUNNING_FEE    = 40; // Mahngebühr
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -37,7 +37,7 @@ enum DunningSubject: int {
     }
 
     /**
-     * Factory für Integer-Werte.
+     * Factory for integer values.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -49,7 +49,7 @@ enum DunningSubject: int {
     }
 
     /**
-     * Factory für String-Werte mit null-Rückgabe bei ungültigen Werten.
+     * Factory for string values with null return for invalid values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');
@@ -65,21 +65,21 @@ enum DunningSubject: int {
     }
 
     /**
-     * Prüft, ob es sich um einen Mahnzins handelt.
+     * Checks if this is dunning interest.
      */
     public function isDunningInterest(): bool {
         return $this === self::DUNNING_INTEREST;
     }
 
     /**
-     * Prüft, ob es sich um eine Mahngebühr handelt.
+     * Checks if this is a dunning fee.
      */
     public function isDunningFee(): bool {
         return $this === self::DUNNING_FEE;
     }
 
     /**
-     * Prüft, ob ein Mahn-Sachverhalt vorliegt.
+     * Checks if a dunning subject exists.
      */
     public function isDunningRelated(): bool {
         return $this === self::DUNNING_INTEREST || $this === self::DUNNING_FEE;

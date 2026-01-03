@@ -17,9 +17,9 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Abstrakte Basisklasse für CAMT Entry/Transaction.
+ * Abstract base class for CAMT Entry/Transaction.
  * 
- * Repräsentiert einen einzelnen Buchungseintrag (Ntry) in CAMT-Dokumenten.
+ * Represents a single booking entry (Ntry) in CAMT documents.
  * 
  * @package CommonToolkit\Entities\Common\Banking
  */
@@ -38,7 +38,7 @@ abstract class CamtTransactionAbstract {
      * @param DateTimeImmutable $bookingDate Buchungsdatum
      * @param DateTimeImmutable|null $valutaDate Valutadatum (Wertstellung)
      * @param float $amount Betrag (immer positiv)
-     * @param CurrencyCode $currency Währung
+     * @param CurrencyCode $currency Currency
      * @param CreditDebit $creditDebit Soll/Haben-Kennzeichen
      * @param string|null $entryReference Entry Reference (NtryRef)
      * @param string|null $accountServicerReference Account Servicer Reference
@@ -112,8 +112,8 @@ abstract class CamtTransactionAbstract {
     }
 
     /**
-     * Gibt den vorzeichenbehafteten Betrag zurück.
-     * Positiv für Haben, negativ für Soll.
+     * Returns the signed amount.
+     * Positive for credit, negative for debit.
      */
     public function getSignedAmount(): float {
         return $this->isCredit() ? $this->amount : -$this->amount;

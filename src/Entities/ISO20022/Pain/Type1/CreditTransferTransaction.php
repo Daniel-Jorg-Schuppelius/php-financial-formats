@@ -21,10 +21,10 @@ use CommonToolkit\FinancialFormats\Enums\ChargesCode;
 use CommonToolkit\Enums\CurrencyCode;
 
 /**
- * Credit Transfer Transaction für pain.001-Nachrichten (CdtTrfTxInf).
+ * Credit transfer transaction for pain.001 messages (CdtTrfTxInf).
  * 
- * Einzelne Überweisung innerhalb einer PaymentInstruction.
- * Enthält alle Details zu Betrag, Empfänger und Verwendungszweck.
+ * Single transfer within a PaymentInstruction.
+ * Contains all details about amount, recipient and remittance information.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type1
  */
@@ -47,99 +47,99 @@ final readonly class CreditTransferTransaction {
     }
 
     /**
-     * Gibt die Zahlungsidentifikation zurück (PmtId).
+     * Returns the payment identification (PmtId).
      */
     public function getPaymentId(): PaymentIdentification {
         return $this->paymentId;
     }
 
     /**
-     * Gibt den Betrag zurück (Amt/InstdAmt).
+     * Returns the amount (Amt/InstdAmt).
      */
     public function getAmount(): float {
         return $this->amount;
     }
 
     /**
-     * Gibt die Währung zurück.
+     * Returns the currency.
      */
     public function getCurrency(): CurrencyCode {
         return $this->currency;
     }
 
     /**
-     * Gibt den Begünstigten zurück (Cdtr).
+     * Returns the beneficiary (Cdtr).
      */
     public function getCreditor(): PartyIdentification {
         return $this->creditor;
     }
 
     /**
-     * Gibt das Konto des Begünstigten zurück (CdtrAcct).
+     * Returns the beneficiary account (CdtrAcct).
      */
     public function getCreditorAccount(): ?AccountIdentification {
         return $this->creditorAccount;
     }
 
     /**
-     * Gibt die Bank des Begünstigten zurück (CdtrAgt).
+     * Returns the beneficiary bank (CdtrAgt).
      */
     public function getCreditorAgent(): ?FinancialInstitution {
         return $this->creditorAgent;
     }
 
     /**
-     * Gibt den letztendlichen Begünstigten zurück (UltmtCdtr).
+     * Returns the ultimate beneficiary (UltmtCdtr).
      */
     public function getUltimateCreditor(): ?PartyIdentification {
         return $this->ultimateCreditor;
     }
 
     /**
-     * Gibt den Verwendungszweck zurück (RmtInf).
+     * Returns the remittance information (RmtInf).
      */
     public function getRemittanceInformation(): ?RemittanceInformation {
         return $this->remittanceInformation;
     }
 
     /**
-     * Gibt den Gebührenträger zurück (ChrgBr).
+     * Returns the charge bearer (ChrgBr).
      */
     public function getChargeBearer(): ?ChargesCode {
         return $this->chargeBearer;
     }
 
     /**
-     * Gibt den Zweckcode zurück (Purp/Cd).
-     * Z.B. SALA für Gehalt, RENT für Miete.
+     * Returns the purpose code (Purp/Cd).
+     * E.g. SALA for salary, RENT for rent.
      */
     public function getPurposeCode(): ?string {
         return $this->purposeCode;
     }
 
     /**
-     * Gibt den Wechselkurs zurück (XchgRateInf).
+     * Returns the exchange rate (XchgRateInf).
      */
     public function getExchangeRate(): ?float {
         return $this->exchangeRate;
     }
 
     /**
-     * Gibt die ursprünglich angewiesene Währung zurück.
+     * Returns the originally instructed currency.
      */
     public function getInstructedCurrency(): ?CurrencyCode {
         return $this->instructedCurrency;
     }
 
     /**
-     * Gibt den ursprünglich angewiesenen Betrag zurück.
+     * Returns the originally instructed amount.
      */
     public function getInstructedAmount(): ?float {
         return $this->instructedAmount;
     }
 
     /**
-     * Erstellt eine einfache Überweisung.
+     * Creates a simple transfer.
      */
     public static function create(
         string $endToEndId,
@@ -162,7 +162,7 @@ final readonly class CreditTransferTransaction {
     }
 
     /**
-     * Erstellt eine SEPA-Überweisung mit BIC.
+     * Creates a SEPA transfer with BIC.
      */
     public static function sepa(
         string $endToEndId,

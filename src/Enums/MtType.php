@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * MT Nachrichtentypen gemäß SWIFT-Spezifikation.
+ * MT message types according to SWIFT specification.
  * 
  * SWIFT-Nachrichten verschiedener Kategorien:
  * - Kategorie 1: Customer Payments & Cheques
@@ -34,7 +34,7 @@ enum MtType: string {
 
     /**
      * MT103 - Single Customer Credit Transfer
-     * Einzelne Kundenüberweisung (SEPA/International)
+     * Single customer credit transfer (SEPA/International)
      */
     case MT103 = 'MT103';
 
@@ -44,13 +44,13 @@ enum MtType: string {
 
     /**
      * MT900 - Confirmation of Debit
-     * Belastungsbestätigung (Debit Advice)
+     * Debit confirmation (Debit Advice)
      */
     case MT900 = 'MT900';
 
     /**
      * MT910 - Confirmation of Credit
-     * Gutschriftsbestätigung (Credit Advice)
+     * Credit confirmation (Credit Advice)
      */
     case MT910 = 'MT910';
 
@@ -63,7 +63,7 @@ enum MtType: string {
     /**
      * MT940 - Customer Statement Message
      * Tagesendeauszug (End of Day Statement)
-     * Äquivalent zu CAMT.053
+     * Equivalent to CAMT.053
      */
     case MT940 = 'MT940';
 
@@ -75,13 +75,13 @@ enum MtType: string {
 
     /**
      * MT942 - Interim Transaction Report
-     * Untertägige Umsatzinformation (Intraday)
-     * Äquivalent zu CAMT.052
+     * Intraday transaction information (Intraday)
+     * Equivalent to CAMT.052
      */
     case MT942 = 'MT942';
 
     /**
-     * Gibt den deutschen Beschreibungstext zurück.
+     * Returns the German description text.
      */
     public function getDescription(): string {
         return match ($this) {
@@ -97,7 +97,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt den SWIFT-Nachrichtennamen zurück.
+     * Returns the SWIFT message name.
      */
     public function getMessageName(): string {
         return match ($this) {
@@ -113,7 +113,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt den numerischen Nachrichtentyp zurück.
+     * Returns the numeric message type.
      */
     public function getNumericType(): int {
         return match ($this) {
@@ -129,7 +129,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt die SWIFT-Kategorie zurück.
+     * Returns the SWIFT category.
      */
     public function getCategory(): int {
         return match ($this) {
@@ -139,7 +139,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt die Kategoriebeschreibung zurück.
+     * Returns the category description.
      */
     public function getCategoryDescription(): string {
         return match ($this->getCategory()) {
@@ -150,7 +150,7 @@ enum MtType: string {
     }
 
     /**
-     * Prüft ob dieser Typ ein Zahlungsauftrag ist.
+     * Checks if this type is a payment order.
      */
     public function isPaymentInitiation(): bool {
         return match ($this) {
@@ -160,7 +160,7 @@ enum MtType: string {
     }
 
     /**
-     * Prüft ob dieser Typ eine Bestätigung ist.
+     * Checks if this type is a confirmation.
      */
     public function isConfirmation(): bool {
         return match ($this) {
@@ -170,7 +170,7 @@ enum MtType: string {
     }
 
     /**
-     * Prüft ob dieser Typ ein Statement/Report ist.
+     * Checks if this type is a statement/report.
      */
     public function isStatement(): bool {
         return match ($this) {
@@ -180,7 +180,7 @@ enum MtType: string {
     }
 
     /**
-     * Prüft ob dieser Typ Transaktionen enthält.
+     * Checks if this type contains transactions.
      */
     public function hasTransactions(): bool {
         return match ($this) {
@@ -196,7 +196,7 @@ enum MtType: string {
     }
 
     /**
-     * Prüft ob dieser Typ Salden enthält.
+     * Checks if this type contains balances.
      */
     public function hasBalances(): bool {
         return match ($this) {
@@ -212,7 +212,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt das entsprechende CAMT-Format zurück (wenn vorhanden).
+     * Returns the corresponding CAMT format (if available).
      */
     public function getCamtEquivalent(): ?CamtType {
         return match ($this) {
@@ -288,7 +288,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt alle Statement-Typen zurück (MT94x).
+     * Returns all statement types (MT94x).
      * 
      * @return self[]
      */
@@ -297,7 +297,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt alle Payment-Typen zurück (MT1xx).
+     * Returns all payment types (MT1xx).
      * 
      * @return self[]
      */
@@ -306,7 +306,7 @@ enum MtType: string {
     }
 
     /**
-     * Gibt alle Confirmation-Typen zurück (MT9xx ohne Statements).
+     * Returns all confirmation types (MT9xx without statements).
      * 
      * @return self[]
      */

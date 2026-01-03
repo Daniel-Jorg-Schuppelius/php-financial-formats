@@ -24,7 +24,7 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV BookingBatch-Dokumente (V700).
+ * Builder for DATEV BookingBatch documents (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und Buchungsdaten.
  */
 final class BookingDocumentBuilder extends CSVDocumentBuilder {
@@ -55,7 +55,7 @@ final class BookingDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Buchungszeile hinzu.
+     * Adds a booking line.
      */
     public function addBooking(DataLine $booking): self {
         $this->bookingLines[] = $booking;
@@ -63,7 +63,7 @@ final class BookingDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen einer einfachen Buchung.
+     * Convenience method for adding a simple booking.
      * Erstellt eine DataLine mit den wichtigsten Buchungsfeldern.
      */
     public function addSimpleBooking(
@@ -193,7 +193,7 @@ final class BookingDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für BookingBatch.
+     * Creates a standard MetaHeader for BookingBatch.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -209,7 +209,7 @@ final class BookingDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

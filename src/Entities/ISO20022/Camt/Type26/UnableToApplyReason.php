@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type26;
 /**
  * CAMT.026 Unable to Apply Reason.
  * 
- * Enthält die Gründe, warum eine Zahlung nicht verarbeitet werden konnte.
+ * Contains the reasons why a payment could not be processed.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type26
  */
@@ -65,14 +65,14 @@ class UnableToApplyReason {
     }
 
     /**
-     * Prüft ob es sich um fehlende Informationen handelt.
+     * Checks if it is missing information.
      */
     public function isMissingInformation(): bool {
         return $this->missingInformationType !== null;
     }
 
     /**
-     * Prüft ob es sich um fehlerhafte Informationen handelt.
+     * Checks if it is incorrect information.
      */
     public function isIncorrectInformation(): bool {
         return $this->incorrectInformationType !== null;

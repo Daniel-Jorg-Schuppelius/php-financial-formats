@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.030 Document (Notification of Case Assignment).
  *
- * Repräsentiert eine Benachrichtigung über die Zuweisung eines Falls
- * gemäß ISO 20022 camt.030.001.xx Standard.
+ * Represents a notification about a case assignment
+ * according to ISO 20022 camt.030.001.xx Standard.
  *
- * Wird verwendet, um einen Teilnehmer darüber zu informieren, dass
+ * Used to inform a participant that
  * ihm ein Untersuchungsfall zugewiesen wurde.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type30

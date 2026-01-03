@@ -55,7 +55,7 @@ enum PainType: string {
     case PAIN_018 = 'pain.018';
 
     /**
-     * Gibt den Namespace-Präfix zurück.
+     * Returns the namespace prefix.
      */
     public function namespacePrefix(): string {
         return match ($this) {
@@ -75,7 +75,7 @@ enum PainType: string {
     }
 
     /**
-     * Gibt den deutschen Beschreibungstext zurück.
+     * Returns the German description text.
      */
     public function description(): string {
         return match ($this) {
@@ -95,7 +95,7 @@ enum PainType: string {
     }
 
     /**
-     * Gibt das Root-Element zurück.
+     * Returns the root element.
      */
     public function rootElement(): string {
         return match ($this) {
@@ -139,21 +139,21 @@ enum PainType: string {
     }
 
     /**
-     * Prüft, ob es sich um ein Überweisungsformat handelt.
+     * Checks if this is a transfer format.
      */
     public function isCreditTransfer(): bool {
         return $this === self::PAIN_001;
     }
 
     /**
-     * Prüft, ob es sich um ein Lastschriftformat handelt.
+     * Checks if this is a direct debit format.
      */
     public function isDirectDebit(): bool {
         return $this === self::PAIN_008;
     }
 
     /**
-     * Prüft, ob es sich um ein Mandatsformat handelt.
+     * Checks if this is a mandate format.
      */
     public function isMandate(): bool {
         return in_array($this, [
@@ -167,7 +167,7 @@ enum PainType: string {
     }
 
     /**
-     * Prüft, ob es sich um einen Statusbericht handelt.
+     * Checks if this is a status report.
      */
     public function isStatusReport(): bool {
         return in_array($this, [self::PAIN_002, self::PAIN_014]);
@@ -176,8 +176,8 @@ enum PainType: string {
     /**
      * Ermittelt den Pain-Typ aus einem XML-Dokument.
      * 
-     * Sucht nach dem Namespace-Präfix im XML-Inhalt.
-     * Prüft spezifisch auf xmlns-Attribute, um Fehlmatches zu vermeiden.
+     * Sucht nach dem Namespace prefix im XML-Inhalt.
+     * Specifically checks xmlns attributes to avoid mismatches.
      */
     public static function fromXml(string $xmlContent): ?self {
         // Suche nach xmlns= oder xmlns: Deklarationen für Pain-Namespaces

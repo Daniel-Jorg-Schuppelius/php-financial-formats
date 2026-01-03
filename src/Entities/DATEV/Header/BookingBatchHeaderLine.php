@@ -20,11 +20,11 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\BookingBatchHea
 /**
  * DATEV BookingBatch Header-Zeile (Spaltenbeschreibungen).
  * Zweite Zeile im DATEV-Format nach dem MetaHeader.
- * Versionsunabhängig - arbeitet mit FieldHeaderInterface Enums.
+ * Version-independent - works with FieldHeaderInterface enums.
  */
 final class BookingBatchHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 BookingBatch Header.
+     * Factory method for V700 BookingBatch header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,14 +34,14 @@ final class BookingBatchHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 BookingBatch passt.
+     * Checks if this header matches V700 BookingBatch.
      */
     public function isV700BookingHeader(): bool {
         return $this->isCompatibleWithEnum(BookingBatchHeaderField::class);
     }
 
     /**
-     * Prüft ob dieser Header zu V700 BookingBatch passt.
+     * Checks if this header matches V700 BookingBatch.
      */
     public function isV700BookingBatchHeader(): bool {
         return $this->isCompatibleWithEnum(BookingBatchHeaderField::class);

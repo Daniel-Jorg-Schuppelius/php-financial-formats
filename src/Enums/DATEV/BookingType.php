@@ -24,7 +24,7 @@ enum BookingType: string {
     case SO = 'SO'; // Sonstige
 
     /**
-     * Deutsche Beschriftung für UI / Ausgabe / Fehlertexte.
+     * German label for UI / output / error messages.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -39,7 +39,7 @@ enum BookingType: string {
     }
 
     /**
-     * Factory für CSV/DATEV-Parser.
+     * Factory for CSV/DATEV parser.
      */
     public static function fromStringValue(string $value): self {
         return match (strtoupper(trim($value))) {
@@ -50,7 +50,7 @@ enum BookingType: string {
             'SU' => self::SU,
             'SG' => self::SG,
             'SO' => self::SO,
-            default => throw new InvalidArgumentException("Ungültiger DATEV-Buchungstyp: $value"),
+            default => throw new InvalidArgumentException("Invalid DATEV booking type: $value"),
         };
     }
 }

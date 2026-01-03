@@ -23,7 +23,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.009 Mandate Initiation Request.
+ * Builder for pain.009 Mandate Initiation Request.
  * 
  * Erstellt Anfragen zur Einrichtung von SEPA-Lastschrift-Mandaten.
  * 
@@ -48,7 +48,7 @@ final class Pain009DocumentBuilder {
 
     private function __construct(string $messageId, PartyIdentification $initiatingParty) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -63,7 +63,7 @@ final class Pain009DocumentBuilder {
     }
 
     /**
-     * Erzeugt neuen Builder mit vollständiger PartyIdentification.
+     * Creates new builder with complete PartyIdentification.
      */
     public static function createWithParty(string $messageId, PartyIdentification $initiatingParty): self {
         return new self($messageId, $initiatingParty);
@@ -93,7 +93,7 @@ final class Pain009DocumentBuilder {
     }
 
     /**
-     * Fügt ein vorgefertigtes Mandat hinzu.
+     * Adds a pre-built mandate.
      */
     public function addMandate(Mandate $mandate): self {
         $clone = clone $this;
@@ -102,7 +102,7 @@ final class Pain009DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Mandate hinzu.
+     * Adds multiple mandates.
      * 
      * @param Mandate[] $mandates
      */
@@ -113,7 +113,7 @@ final class Pain009DocumentBuilder {
     }
 
     /**
-     * Wird von MandateBuilder aufgerufen, um das Mandat hinzuzufügen.
+     * Called by MandateBuilder to add the mandate.
      * @internal
      */
     public function pushMandate(Mandate $mandate): self {
@@ -202,7 +202,7 @@ final class Pain009DocumentBuilder {
 }
 
 /**
- * Helper-Builder für einzelne Mandate.
+ * Helper builder for individual mandates.
  */
 final class MandateBuilder {
     private string $mandateId;
@@ -235,7 +235,7 @@ final class MandateBuilder {
         LocalInstrument $localInstrument
     ) {
         if (strlen($mandateId) > 35) {
-            throw new InvalidArgumentException('MndtId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MndtId must not exceed 35 characters');
         }
         $this->mandateId = $mandateId;
         $this->dateOfSignature = $dateOfSignature;
@@ -243,7 +243,7 @@ final class MandateBuilder {
     }
 
     /**
-     * Setzt die Gläubiger-Informationen.
+     * Sets the creditor information.
      */
     public function creditor(
         string $name,
@@ -260,7 +260,7 @@ final class MandateBuilder {
     }
 
     /**
-     * Setzt die Gläubiger-Informationen mit vollständigen Objekten.
+     * Sets the creditor information with complete objects.
      */
     public function creditorFull(
         PartyIdentification $creditor,
@@ -288,7 +288,7 @@ final class MandateBuilder {
     }
 
     /**
-     * Setzt die Schuldner-Informationen mit vollständigen Objekten.
+     * Sets the debtor information with complete objects.
      */
     public function debtorFull(
         PartyIdentification $debtor,
@@ -357,7 +357,7 @@ final class MandateBuilder {
     }
 
     /**
-     * Beendet das Mandat und kehrt zum Haupt-Builder zurück.
+     * Ends the mandate and returns to the main builder.
      */
     public function done(): Pain009DocumentBuilder {
         if ($this->creditor === null || $this->creditorAccount === null || $this->creditorAgent === null) {

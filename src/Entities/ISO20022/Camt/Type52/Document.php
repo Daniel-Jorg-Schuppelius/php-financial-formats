@@ -23,10 +23,10 @@ use DateTimeImmutable;
 /**
  * CAMT.052 Document (Bank to Customer Account Report).
  * 
- * Repräsentiert eine untertägige Kontobewegungsinformation gemäß
+ * Represents an intraday account movement report according to
  * ISO 20022 camt.052.001.02/08 Standard.
  * 
- * Verwendet <BkToCstmrAcctRpt> als Root und <Rpt> für Reports.
+ * Uses <BkToCstmrAcctRpt> as root and <Rpt> for reports.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt052
  */
@@ -104,7 +104,7 @@ class Document extends CamtDocumentAbstract {
     }
 
     /**
-     * Gibt das Dokument als XML-String zurück.
+     * Returns the document as XML string.
      */
     public function __toString(): string {
         return $this->toXml();

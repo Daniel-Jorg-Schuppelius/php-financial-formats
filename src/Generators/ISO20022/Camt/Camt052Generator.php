@@ -21,10 +21,10 @@ use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 use InvalidArgumentException;
 
 /**
- * Generator für CAMT.052 XML (Bank to Customer Account Report).
+ * Generator for CAMT.052 XML (Bank to Customer Account Report).
  * 
- * Generiert Intraday-Kontoberichte gemäß ISO 20022 camt.052.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates Intraday-Kontoberichte according to ISO 20022 camt.052.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -72,7 +72,7 @@ class Camt052Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Erstellt ein vollständiges Entry-Element für CAMT.052.
+     * Creates a complete entry element for CAMT.052.
      */
     private function addEntryElement(Transaction $entry): void {
         $this->beginEntry($entry);

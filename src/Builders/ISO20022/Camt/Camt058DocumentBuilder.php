@@ -18,9 +18,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.058 Documents (Notification to Receive Cancellation Advice).
+ * Builder for CAMT.058 Documents (Notification to Receive Cancellation Advice).
  * 
- * Erstellt Stornierungshinweise zu Benachrichtigungen über erwartete Zahlungseingänge.
+ * Creates cancellation notifications for expected payment receipts.
  * Storniert eine zuvor gesendete CAMT.057-Benachrichtigung.
  * 
  * Verwendung:
@@ -50,21 +50,21 @@ final class Camt058DocumentBuilder {
 
     private function __construct(string $messageId) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Message-ID.
+     * Creates a new builder with message ID.
      */
     public static function create(string $messageId): self {
         return new self($messageId);
     }
 
     /**
-     * Erzeugt Builder für Stornierung einer CAMT.057-Nachricht.
+     * Creates builder for cancellation of a CAMT.057 message.
      */
     public static function forCamt057(string $messageId, string $originalCamt057MessageId): self {
         $builder = new self($messageId);
@@ -74,7 +74,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -83,7 +83,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Setzt die initiierende Partei (Bank).
+     * Sets the initiating party (bank).
      */
     public function withInitiatingParty(string $name): self {
         $clone = clone $this;
@@ -92,7 +92,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Setzt den Empfänger (BIC).
+     * Sets the receiver (BIC).
      */
     public function withMessageRecipient(string $bic): self {
         $clone = clone $this;
@@ -101,7 +101,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Setzt die Referenz auf die Original-Nachricht.
+     * Sets the reference to the original message.
      */
     public function withOriginalMessage(
         string $messageId,
@@ -116,7 +116,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Fügt ein Cancellation Item hinzu.
+     * Adds a cancellation item.
      */
     public function addCancellationItem(CancellationItem $item): self {
         $clone = clone $this;
@@ -125,7 +125,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Convenience: Fügt ein einfaches Cancellation Item hinzu.
+     * Convenience: Adds a simple cancellation item.
      */
     public function addSimpleCancellation(
         string $originalItemId,
@@ -140,7 +140,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Cancellation Items hinzu.
+     * Adds multiple cancellation items.
      * 
      * @param CancellationItem[] $items
      */
@@ -151,7 +151,7 @@ final class Camt058DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.058 Document.
+     * Creates the CAMT.058 Document.
      * 
      * @throws InvalidArgumentException wenn Pflichtfelder fehlen
      */
@@ -179,7 +179,7 @@ final class Camt058DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache Stornierung für eine Benachrichtigung.
+     * Creates a simple cancellation for a notification.
      */
     public static function createSingleCancellation(
         string $messageId,

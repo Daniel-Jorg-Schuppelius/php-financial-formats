@@ -24,7 +24,7 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV Debitoren/Kreditoren-Dokumente (V700).
+ * Builder for DATEV Debitors/Creditors documents (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und Stammdaten.
  */
 final class DebitorsCreditorsDocumentBuilder extends CSVDocumentBuilder {
@@ -55,7 +55,7 @@ final class DebitorsCreditorsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Datenzeile hinzu.
+     * Adds a data line.
      */
     public function addDataLine(DataLine $dataLine): self {
         $this->dataLines[] = $dataLine;
@@ -63,7 +63,7 @@ final class DebitorsCreditorsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen eines Debitors/Kreditors.
+     * Convenience method for adding a debitor/creditor.
      */
     public function addDebitorCreditor(
         string $account,
@@ -176,7 +176,7 @@ final class DebitorsCreditorsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für DebitorsCreditors.
+     * Creates a standard MetaHeader for DebitorsCreditors.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -191,7 +191,7 @@ final class DebitorsCreditorsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

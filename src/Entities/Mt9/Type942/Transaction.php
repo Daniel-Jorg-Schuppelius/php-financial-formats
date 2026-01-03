@@ -23,8 +23,8 @@ use RuntimeException;
 /**
  * MT942 Transaction - Interim Transaction Entry.
  * 
- * Repräsentiert einen einzelnen untertägigen Umsatz (Feld :61:)
- * mit zugehörigem Mehrzweckfeld (Feld :86:).
+ * Represents a single intraday transaction (Field :61:)
+ * with associated multi-purpose field (Field :86:).
  * 
  * Im Wesentlichen identisch mit MT940 Transaction, aber im
  * Kontext eines Intraday-Reports.
@@ -69,14 +69,14 @@ class Transaction extends MtTransactionAbstract {
     }
 
     /**
-     * Gibt die Transaktionsreferenz zurück.
+     * Returns the transaction reference.
      */
     public function getReference(): Reference {
         return $this->reference;
     }
 
     /**
-     * Gibt den Verwendungszweck zurück (Feld :86:).
+     * Returns the purpose of payment (Field :86:).
      */
     public function getPurpose(): ?string {
         return $this->purpose;

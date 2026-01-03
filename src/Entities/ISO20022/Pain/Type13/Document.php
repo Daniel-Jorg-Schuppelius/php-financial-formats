@@ -21,8 +21,8 @@ use DateTimeImmutable;
 /**
  * pain.013 Document - Creditor Payment Activation Request.
  * 
- * Anfrage zur Aktivierung einer Zahlung durch den Gläubiger.
- * Der Gläubiger initiiert eine Zahlung, die der Schuldner bestätigen muss.
+ * Request for payment activation by the creditor.
+ * The creditor initiates a payment that the debtor must confirm.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type13
  */
@@ -119,7 +119,7 @@ final class Document {
         $errors = [];
 
         if (strlen($this->messageId) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (empty($this->paymentRequests)) {
@@ -128,7 +128,7 @@ final class Document {
 
         foreach ($this->paymentRequests as $index => $request) {
             if (strlen($request->getEndToEndId()) > 35) {
-                $errors[] = "PmtActvtnReq[$index]/EndToEndId darf maximal 35 Zeichen lang sein";
+                $errors[] = "PmtActvtnReq[$index]/EndToEndId must not exceed 35 characters";
             }
 
             if ($request->getAmount() <= 0) {
@@ -143,7 +143,7 @@ final class Document {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

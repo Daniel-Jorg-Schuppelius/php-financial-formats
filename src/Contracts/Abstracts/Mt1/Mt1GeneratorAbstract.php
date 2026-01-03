@@ -15,28 +15,28 @@ namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 
 /**
- * Abstrakte Basisklasse für MT1xx-Generatoren.
+ * Abstract base class for MT1xx generators.
  * 
- * Gemeinsame Methoden für die Generierung von SWIFT MT1-Nachrichten
- * (Zahlungsaufträge wie MT101, MT103).
+ * Common methods for generating SWIFT MT1 messages
+ * (payment orders such as MT101, MT103).
  * 
  * @package CommonToolkit\Contracts\Abstracts\Common\Banking\Mt1
  */
 abstract class Mt1GeneratorAbstract {
     /**
-     * Zeilentrennzeichen für SWIFT-Nachrichten.
+     * Line separator for SWIFT messages.
      */
     protected const LINE_SEPARATOR = "\r\n";
 
     /**
-     * Generiert das Dokument als SWIFT MT-String.
+     * Generates the document as a SWIFT MT string.
      */
     abstract public function generate(object $document): string;
 
     /**
-     * Formatiert eine Party für Option A (nur BIC).
+     * Formats a party for Option A (BIC only).
      * 
-     * @param string $tag Tag-Präfix (z.B. ':52A:', ':57A:')
+     * @param string $tag Tag prefix (e.g. ':52A:', ':57A:')
      * @param Party $party Die Party
      */
     protected function formatPartyOptionA(string $tag, Party $party): string {
@@ -44,9 +44,9 @@ abstract class Mt1GeneratorAbstract {
     }
 
     /**
-     * Formatiert eine Party für Option K (Name + Adresse).
+     * Formats a party for Option K (Name + Address).
      * 
-     * @param string $tag Tag-Präfix (z.B. ':50K:', ':59:')
+     * @param string $tag Tag prefix (e.g. ':50K:', ':59:')
      * @param Party $party Die Party
      */
     protected function formatPartyOptionK(string $tag, Party $party): string {
@@ -54,12 +54,12 @@ abstract class Mt1GeneratorAbstract {
     }
 
     /**
-     * Fügt eine optionale Party hinzu, wenn vorhanden.
+     * Adds an optional party if present.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
      * @param Party|null $party Die Party (optional)
-     * @param string $bicTag Tag für BIC-only Format
-     * @param string $fullTag Tag für vollständiges Format
+     * @param string $bicTag Tag for BIC-only format
+     * @param string $fullTag Tag for full format
      */
     protected function appendOptionalParty(
         array &$lines,

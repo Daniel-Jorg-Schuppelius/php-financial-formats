@@ -17,7 +17,7 @@ use DateTimeImmutable;
 /**
  * CAMT.029 Original Group Information and Status.
  * 
- * Enthält Informationen über die ursprüngliche Nachrichtengruppe und deren Status.
+ * Contains information about the original message group and its status.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type29
  */
@@ -86,21 +86,21 @@ class OriginalGroupInformationAndStatus {
     }
 
     /**
-     * Prüft ob alle Stornierungen akzeptiert wurden.
+     * Checks if all cancellations were accepted.
      */
     public function isFullyAccepted(): bool {
         return $this->groupCancellationStatus === 'ACCR';
     }
 
     /**
-     * Prüft ob Stornierungen teilweise akzeptiert wurden.
+     * Checks if cancellations were partially accepted.
      */
     public function isPartiallyAccepted(): bool {
         return $this->groupCancellationStatus === 'PACR';
     }
 
     /**
-     * Prüft ob alle Stornierungen abgelehnt wurden.
+     * Checks if all cancellations were rejected.
      */
     public function isRejected(): bool {
         return $this->groupCancellationStatus === 'RJCR';

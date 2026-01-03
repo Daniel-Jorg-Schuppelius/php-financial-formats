@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7;
 
 /**
- * Reversal Reason für pain.007 (RvslRsnInf).
+ * Reversal reason for pain.007 (RvslRsnInf).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type7
  */

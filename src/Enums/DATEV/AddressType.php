@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Adressart für Debitoren/Kreditoren (Feld 15, 153).
+ * DATEV Address type for debitors/creditors (Field 15, 153).
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
  */
@@ -25,7 +25,7 @@ enum AddressType: string {
     case KEY_ACCOUNT  = 'GK';  // Großkunde
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -36,7 +36,7 @@ enum AddressType: string {
     }
 
     /**
-     * Factory für CSV/DATEV-Import (mit Anführungszeichen).
+     * Factory for CSV/DATEV import (with quotes).
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');

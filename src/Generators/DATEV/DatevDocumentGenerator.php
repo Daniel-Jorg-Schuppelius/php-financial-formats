@@ -17,9 +17,9 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\Helper\Data\StringHelper;
 
 /**
- * Generator für DATEV-Dokumente.
+ * Generator for DATEV documents.
  * 
- * Generiert DATEV-konforme CSV-Dateien mit:
+ * Generates DATEV-compliant CSV files with:
  * - MetaHeader (Zeile 1)
  * - Header (Zeile 2)
  * - Datenzeilen
@@ -28,7 +28,7 @@ use CommonToolkit\Helper\Data\StringHelper;
  */
 class DatevDocumentGenerator {
     /**
-     * Generiert das DATEV-Dokument als CSV-String.
+     * Generates the DATEV document as a CSV string.
      * 
      * @param Document $document Das DATEV-Dokument
      * @param string|null $delimiter Das Trennzeichen (Standard: ;)
@@ -73,7 +73,7 @@ class DatevDocumentGenerator {
     }
 
     /**
-     * Generiert den CSV-Inhalt (Header + Datenzeilen) ohne MetaHeader.
+     * Generates the CSV content (header + data rows) without MetaHeader.
      */
     protected function generateCsvContent(
         Document $document,

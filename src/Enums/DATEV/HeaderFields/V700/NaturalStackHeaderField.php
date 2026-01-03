@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 
 /**
  * DATEV Natural-Stapel - Feldheader V700.
- * Vollständige Implementierung aller 15 DATEV-Felder für Natural-Stapel (Land-/Forstwirtschaft)
+ * Complete implementation of all 15 DATEV fields for Natural Stack (agriculture/forestry)
  * basierend auf der offiziellen DATEV-Spezifikation.
  * 
  * @see https://developer.datev.de/de/file-format/details/datev-format/appendix/natural-stack
@@ -83,7 +83,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert den Datentyp für DATEV-Validierung.
+     * Returns the data type for DATEV validation.
      */
     public function getDataType(): string {
         return match ($this) {
@@ -98,7 +98,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die maximale Feldlänge für DATEV.
+     * Returns the maximum field length for DATEV.
      */
     public function getMaxLength(): ?int {
         return match ($this) {
@@ -121,7 +121,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert das Regex-Pattern für DATEV-Validierung.
+     * Returns the regex pattern for DATEV validation.
      */
     public function getValidationPattern(): ?string {
         return match ($this) {
@@ -173,7 +173,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die unterstützten Bewegungsarten für Art-Feld.
+     * Returns the supported movement types for the type field.
      */
     public static function getSupportedMovementTypes(): array {
         return [
@@ -189,7 +189,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Prüft, ob eine Bewegungsart gültig ist.
+     * Checks if a movement type is valid.
      */
     public static function isValidMovementType(int $type): bool {
         return array_key_exists($type, self::getSupportedMovementTypes());
@@ -203,28 +203,28 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Prüft, ob für eine Bewegungsart das An/Für-Textschlüssel-Feld Pflicht ist.
+     * Checks if the to/for text key field is required for a movement type.
      */
     public static function requiresTargetTextschluessel(int $type): bool {
         return in_array($type, [21, 24, 25]); // Versetzung, Verfüttert an, Verbraucht für
     }
 
     /**
-     * Prüft, ob ein Feld ein Mengen-Feld ist.
+     * Checks if a field is a quantity field.
      */
     public function isQuantityField(): bool {
         return in_array($this, [self::Stueck, self::Gewicht]);
     }
 
     /**
-     * Prüft, ob ein Feld ein Textschlüssel-Feld ist.
+     * Checks if a field is a text key field.
      */
     public function isTextschluesselField(): bool {
         return in_array($this, [self::Textschluessel, self::AnFuerTextschluessel]);
     }
 
     /**
-     * Prüft, ob ein Feld für Naturalentnahmen verwendet wird.
+     * Checks if a field is used for natural withdrawals.
      */
     public function isNaturalWithdrawalField(): bool {
         return in_array($this, [
@@ -237,21 +237,21 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Prüft, ob ein Feld ein Konto-Feld ist.
+     * Checks if a field is an account field.
      */
     public function isAccountField(): bool {
         return $this === self::Entnahmekonto;
     }
 
     /**
-     * Prüft, ob das Feld verpflichtend ist.
+     * Checks if the field is required.
      */
     public function isRequired(): bool {
         return in_array($this, self::required());
     }
 
     /**
-     * Gibt die Position/den Index des Feldes in der Feldreihenfolge zurück.
+     * Returns the position/index of the field in the field order.
      * 
      * @return int Die nullbasierte Position des Feldes
      */
@@ -261,28 +261,28 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für dieses Header-Format.
+     * Returns the DATEV category for this header format.
      */
     public static function getCategory(): Category {
         return Category::NaturalStapel;
     }
 
     /**
-     * Liefert die DATEV-Version für dieses Header-Format.
+     * Returns the DATEV version for this header format.
      */
     public static function getVersion(): int {
         return 700;
     }
 
     /**
-     * Liefert die Anzahl der definierten Felder.
+     * Returns the number of defined fields.
      */
     public static function getFieldCount(): int {
         return count(self::ordered());
     }
 
     /**
-     * Prüft, ob ein Feldwert gültig ist (im Enum enthalten).
+     * Checks if a field value is valid (contained in enum).
      */
     public static function isValidFieldValue(string $value): bool {
         foreach (self::cases() as $case) {
@@ -294,7 +294,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Gibt an, ob der FieldHeader (Spaltenüberschrift) in Anführungszeichen gesetzt wird.
+     * Indicates whether the FieldHeader (column heading) is enclosed in quotes.
      * DATEV-FieldHeaders werden NICHT gequoted.
      */
     public function isQuotedHeader(): bool {
@@ -302,7 +302,7 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Gibt an, ob der Feldwert in Anführungszeichen gesetzt wird.
+     * Indicates whether the field value is enclosed in quotes.
      * Basierend auf dem Validierungspattern: Pattern mit ^["]... = gequotet
      */
     public function isQuotedValue(): bool {
@@ -315,8 +315,8 @@ enum NaturalStackHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert den tatsächlichen Header-Namen für die CSV-Ausgabe.
-     * Weicht ggf. vom Enum-Wert ab, um Kompatibilität mit DATEV-Sample-Dateien zu gewährleisten.
+     * Returns the actual header name for CSV output.
+     * May differ from enum value to ensure compatibility with DATEV sample files.
      */
     public function headerName(): string {
         return match ($this) {

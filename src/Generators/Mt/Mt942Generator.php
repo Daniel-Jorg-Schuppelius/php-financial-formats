@@ -17,15 +17,15 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type942\Document;
 
 /**
- * Generator für MT942 Interim Transaction Report.
+ * Generator for MT942 Interim Transaction Report.
  * 
- * Generiert SWIFT MT942 Nachrichten aus Document-Objekten.
+ * Generates SWIFT MT942 messages from Document objects.
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
 class Mt942Generator extends Mt9GeneratorAbstract {
     /**
-     * Generiert die MT942 SWIFT-Nachricht.
+     * Generates the MT942 SWIFT message.
      * 
      * @param MtDocumentAbstract $document Das MT942-Dokument
      * @return string Die formatierte SWIFT-Nachricht
@@ -37,7 +37,7 @@ class Mt942Generator extends Mt9GeneratorAbstract {
 
         $lines = [];
 
-        // Header-Felder
+        // Header fields
         $this->appendHeaderFields($lines, $document);
 
         // DateTime Indicator (:13D:) - optional
@@ -73,7 +73,7 @@ class Mt942Generator extends Mt9GeneratorAbstract {
     }
 
     /**
-     * Fügt die Zusammenfassungsfelder hinzu.
+     * Adds the summary fields.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
      * @param Document $document Das MT942-Dokument
@@ -102,7 +102,7 @@ class Mt942Generator extends Mt9GeneratorAbstract {
     }
 
     /**
-     * Zählt die Soll-Buchungen.
+     * Counts the debit entries.
      */
     private function countDebitEntries(Document $document): int {
         return count(array_filter(
@@ -112,7 +112,7 @@ class Mt942Generator extends Mt9GeneratorAbstract {
     }
 
     /**
-     * Zählt die Haben-Buchungen.
+     * Counts the credit entries.
      */
     private function countCreditEntries(Document $document): int {
         return count(array_filter(

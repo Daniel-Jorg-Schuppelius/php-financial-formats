@@ -21,15 +21,15 @@ use CommonToolkit\FinancialFormats\Enums\ChargesCode;
 use DateTimeImmutable;
 
 /**
- * Konverter für MT10x Formate (Zahlungsaufträge).
+ * Converter for MT10x formats (payment orders).
  * 
- * MT10x sind Zahlungsaufträge, keine Kontoauszüge:
- * - MT101: Request for Transfer (Sammelüberweisung mit mehreren Transaktionen)
- * - MT103: Single Customer Credit Transfer (Einzelüberweisung)
+ * MT10x are payment orders, not account statements:
+ * - MT101: Request for Transfer (batch transfer with multiple transactions)
+ * - MT103: Single Customer Credit Transfer (single transfer)
  * 
  * Hinweis: Die Konvertierung zwischen MT10x und MT940/CAMT.053 ist nicht sinnvoll,
- * da MT10x Aufträge sind und MT940/CAMT.053 Kontoauszüge.
- * Das XML-Äquivalent zu MT101/MT103 wäre pain.001.
+ * since MT10x are orders and MT940/CAMT.053 are account statements.
+ * The XML equivalent to MT101/MT103 would be pain.001.
  * 
  * @package CommonToolkit\Converters\Banking
  */
@@ -38,7 +38,7 @@ final class Mt10xConverter {
      * Extrahiert einzelne MT103-Dokumente aus einem MT101.
      * 
      * Jede Transaktion im MT101 wird zu einem separaten MT103-Dokument.
-     * Nützlich für die Verarbeitung in Systemen, die nur Einzelüberweisungen akzeptieren.
+     * Useful for processing in systems that only accept single transfers.
      * 
      * @return Mt103Document[]
      */
@@ -71,8 +71,8 @@ final class Mt10xConverter {
     /**
      * Fasst mehrere MT103-Dokumente zu einem MT101 zusammen.
      * 
-     * Voraussetzung: Alle MT103 müssen vom gleichen Auftraggeber stammen.
-     * Nützlich für Batch-Verarbeitung.
+     * Prerequisite: All MT103 must be from the same ordering party.
+     * Useful for batch processing.
      * 
      * @param Mt103Document[] $mt103Documents
      */
@@ -117,9 +117,9 @@ final class Mt10xConverter {
     /**
      * Berechnet die Gesamtsumme aller Transaktionen in einem MT101.
      * 
-     * Achtung: Bei unterschiedlichen Währungen wird nur die Stückzahl zurückgegeben,
-     * nicht die Summe. Für eine echte Summe müssen alle Transaktionen die gleiche
-     * Währung haben.
+     * Warning: For different currencies, only the count is returned,
+     * not the sum. For a real sum, all transactions must have the same
+     * currency.
      * 
      * @return array{total: float, currency: string, count: int, mixed_currencies: bool}
      */
@@ -157,7 +157,7 @@ final class Mt10xConverter {
     }
 
     /**
-     * Filtert Transaktionen in einem MT101 nach Währung.
+     * Filters transactions in an MT101 by currency.
      * 
      * @return Mt101Transaction[]
      */
@@ -169,7 +169,7 @@ final class Mt10xConverter {
     }
 
     /**
-     * Validiert ein MT103-Dokument auf Vollständigkeit.
+     * Validates an MT103 document for completeness.
      * 
      * @return array{valid: bool, errors: string[]}
      */
@@ -203,7 +203,7 @@ final class Mt10xConverter {
     }
 
     /**
-     * Validiert ein MT101-Dokument auf Vollständigkeit.
+     * Validates an MT101 document for completeness.
      * 
      * @return array{valid: bool, errors: string[], transaction_errors: array<int, string[]>}
      */

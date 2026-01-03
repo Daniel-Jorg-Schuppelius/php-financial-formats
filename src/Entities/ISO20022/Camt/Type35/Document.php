@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.035 Document (Proprietary Format Investigation).
  *
- * Repräsentiert eine proprietäre Untersuchungsanfrage
- * gemäß ISO 20022 camt.035.001.xx Standard.
+ * Represents a proprietary investigation request
+ * according to ISO 20022 camt.035.001.xx Standard.
  *
- * Wird verwendet für institutsspezifische Untersuchungsformate,
+ * Used for institution-specific investigation formats,
  * die nicht durch andere CAMT-Nachrichten abgedeckt sind.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type35

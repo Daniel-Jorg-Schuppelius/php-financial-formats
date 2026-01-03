@@ -22,10 +22,10 @@ use DateTimeImmutable;
 /**
  * CAMT.029 Document (Resolution of Investigation).
  * 
- * Repräsentiert eine Antwort auf eine Untersuchungsanfrage 
- * gemäß ISO 20022 camt.029.001.xx Standard.
+ * Represents a response to an investigation request 
+ * according to ISO 20022 camt.029.001.xx Standard.
  * 
- * Verwendet <RsltnOfInvstgtn> als Root und enthält Status zu Stornierungsanfragen.
+ * Uses <RsltnOfInvstgtn> as root and contains status for cancellation requests.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type29
  */
@@ -147,21 +147,21 @@ class Document implements CamtDocumentInterface {
     }
 
     /**
-     * Prüft ob die Untersuchung abgeschlossen ist.
+     * Checks if the investigation is complete.
      */
     public function isResolved(): bool {
         return in_array($this->investigationStatus, ['CNCL', 'MODI', 'ACCP', 'RJCR'], true);
     }
 
     /**
-     * Prüft ob die Stornierung akzeptiert wurde.
+     * Checks if the cancellation was accepted.
      */
     public function isAccepted(): bool {
         return $this->investigationStatus === 'ACCP' || $this->investigationStatus === 'CNCL';
     }
 
     /**
-     * Prüft ob die Stornierung abgelehnt wurde.
+     * Checks if the cancellation was rejected.
      */
     public function isRejected(): bool {
         return $this->investigationStatus === 'RJCR';

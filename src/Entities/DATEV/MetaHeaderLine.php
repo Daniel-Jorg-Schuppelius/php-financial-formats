@@ -30,7 +30,7 @@ final class MetaHeaderLine extends DataLine {
     private array $fieldIndex = [];
 
     /**
-     * Header-Definition für versionsneutrale Feldlokalisierung.
+     * Header definition for version-neutral field localization.
      */
     private MetaHeaderDefinitionInterface $definition;
 
@@ -84,7 +84,7 @@ final class MetaHeaderLine extends DataLine {
 
     /**
      * Setzt einen Feldwert mit expliziter Quote-Information.
-     * Wird für das korrekte Roundtrip-Verhalten bei DATEV-Importen verwendet.
+     * Used for correct roundtrip behavior in DATEV imports.
      */
     public function setWithQuoteInfo(MetaHeaderFieldInterface $field, mixed $value, bool $wasQuoted): self {
         $pattern = $field->pattern();
@@ -138,8 +138,8 @@ final class MetaHeaderLine extends DataLine {
     }
 
     /**
-     * Typisierte Getter für häufig verwendete Felder - eliminiert Casts im Parser-Code.
-     * Versionsneutral durch dynamische Feldlokalisierung über Definition.
+     * Typed getters for frequently used fields - eliminates casts in parser code.
+     * Version-neutral through dynamic field localization via definition.
      */
 
     public function getKennzeichen(): string {
@@ -164,7 +164,7 @@ final class MetaHeaderLine extends DataLine {
     }
 
     /**
-     * Lokalisiert ein Feld anhand seines Namens über alle verfügbaren Felder der Definition.
+     * Locates a field by its name across all available fields of the definition.
      * Versionsneutral und robust gegen verschiedene DATEV-Versionen.
      */
     private function getFieldByName(string $fieldName): ?string {
@@ -178,7 +178,7 @@ final class MetaHeaderLine extends DataLine {
 
     /**
      * Convenience-Fabrik: aus Werteliste (Index 0..N) MetaHeaderLine bauen.
-     * Verwendet die isQuoted()-Information aus den Feldern für korrektes Quoting.
+     * Uses the isQuoted() information from fields for correct quoting.
      *
      * @param MetaHeaderDefinitionInterface $definition
      * @param array<int, string|null>       $values

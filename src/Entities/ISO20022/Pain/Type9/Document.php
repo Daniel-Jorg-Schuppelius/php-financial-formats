@@ -97,7 +97,7 @@ final class Document extends PainDocumentAbstract {
         $errors = [];
 
         if (strlen($this->messageId) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (empty($this->mandates)) {
@@ -106,7 +106,7 @@ final class Document extends PainDocumentAbstract {
 
         foreach ($this->mandates as $index => $mandate) {
             if (strlen($mandate->getMandateId()) > 35) {
-                $errors[] = "Mndt[$index]/MndtId darf maximal 35 Zeichen lang sein";
+                $errors[] = "Mndt[$index]/MndtId must not exceed 35 characters";
             }
 
             if (!$mandate->getCreditorSchemeId()) {
@@ -121,7 +121,7 @@ final class Document extends PainDocumentAbstract {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

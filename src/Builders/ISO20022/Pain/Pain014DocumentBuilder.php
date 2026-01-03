@@ -20,9 +20,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.014 Documents (Creditor Payment Activation Request Status Report).
+ * Builder for pain.014 Documents (Creditor Payment Activation Request Status Report).
  * 
- * Erstellt Statusberichte für Zahlungsaktivierungsanfragen.
+ * Creates status reports for payment activation requests.
  * Wird typischerweise von Banken als Antwort auf pain.013 generiert.
  * 
  * Verwendung:
@@ -46,7 +46,7 @@ final class Pain014DocumentBuilder {
 
     private function __construct(string $messageId, string $originalMessageId) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -54,7 +54,7 @@ final class Pain014DocumentBuilder {
     }
 
     /**
-     * Erzeugt Builder für pain.013 Antwort.
+     * Creates builder for pain.013 response.
      */
     public static function forPain013(string $messageId, string $originalMessageId): self {
         return new self($messageId, $originalMessageId);
@@ -79,7 +79,7 @@ final class Pain014DocumentBuilder {
     }
 
     /**
-     * Fügt einen Akzeptiert-Status hinzu.
+     * Adds an accepted status.
      */
     public function addAccepted(string $originalInstructionId, string $originalEndToEndId): self {
         $clone = clone $this;
@@ -88,7 +88,7 @@ final class Pain014DocumentBuilder {
     }
 
     /**
-     * Fügt einen Ausstehend-Status hinzu.
+     * Adds a pending status.
      */
     public function addPending(string $originalInstructionId, string $originalEndToEndId): self {
         $clone = clone $this;
@@ -97,7 +97,7 @@ final class Pain014DocumentBuilder {
     }
 
     /**
-     * Fügt einen Abgelehnt-Status hinzu.
+     * Adds a rejected status.
      */
     public function addRejected(
         string $originalInstructionId,
@@ -114,7 +114,7 @@ final class Pain014DocumentBuilder {
     }
 
     /**
-     * Fügt einen fertigen PaymentActivationStatus hinzu.
+     * Adds a completed PaymentActivationStatus.
      */
     public function addPaymentStatus(PaymentActivationStatus $status): self {
         $clone = clone $this;
@@ -123,7 +123,7 @@ final class Pain014DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Zahlungsstatus hinzu.
+     * Adds multiple payment statuses.
      * 
      * @param PaymentActivationStatus[] $statuses
      */

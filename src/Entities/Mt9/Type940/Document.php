@@ -21,10 +21,10 @@ use DateTimeImmutable;
 /**
  * MT940 Document - Customer Statement Message.
  * 
- * Tagesendeauszug gemäß SWIFT-Standard.
- * Enthält vollständige Umsätze eines Tages mit Opening und Closing Balance.
+ * End-of-day statement according to SWIFT standard.
+ * Contains complete transactions of a day with Opening and Closing Balance.
  * 
- * Äquivalent zu CAMT.053 (Bank to Customer Statement).
+ * Equivalent to CAMT.053 (Bank to Customer Statement).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type940
  */
@@ -68,7 +68,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Opening Balance zurück.
+     * Returns the Opening Balance.
      * Feld :60F: in SWIFT-Notation.
      */
     public function getOpeningBalance(): Balance {
@@ -76,7 +76,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Closing Balance zurück.
+     * Returns the Closing Balance.
      * Feld :62F: in SWIFT-Notation.
      */
     public function getClosingBalance(): Balance {
@@ -84,7 +84,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Closing Available Balance zurück.
+     * Returns the Closing Available Balance.
      * Feld :64: in SWIFT-Notation (optional).
      */
     public function getClosingAvailableBalance(): ?Balance {
@@ -92,7 +92,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Forward Available Balance zurück.
+     * Returns the Forward Available Balance.
      * Feld :65: in SWIFT-Notation (optional).
      */
     public function getForwardAvailableBalance(): ?Balance {
@@ -100,7 +100,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt alle Transaktionen zurück.
+     * Returns all transactions.
      * @return Transaction[]
      */
     public function getTransactions(): array {
@@ -108,7 +108,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Fügt eine Transaktion hinzu.
+     * Adds a transaction.
      */
     public function addTransaction(Transaction $transaction): void {
         $this->transactions[] = $transaction;

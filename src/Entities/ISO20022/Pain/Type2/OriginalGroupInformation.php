@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 use DateTimeImmutable;
 
 /**
- * Original Group Information and Status für pain.002 (OrgnlGrpInfAndSts).
+ * Original group information and status for pain.002 (OrgnlGrpInfAndSts).
  * 
  * Informationen zur Original-Nachricht und deren Gesamtstatus.
  * 
@@ -29,7 +29,7 @@ final readonly class OriginalGroupInformation {
      * @param int|null $originalNumberOfTransactions Anzahl der Original-Transaktionen (OrgnlNbOfTxs)
      * @param float|null $originalControlSum Original Control Sum (OrgnlCtrlSum)
      * @param TransactionStatus|null $groupStatus Gruppen-Status (GrpSts)
-     * @param StatusReason[] $statusReasons Status-Begründungen (StsRsnInf)
+     * @param StatusReason[] $statusReasons Status reasons (StsRsnInf)
      */
     public function __construct(
         private string $originalMessageId,
@@ -43,7 +43,7 @@ final readonly class OriginalGroupInformation {
     }
 
     /**
-     * Factory für pain.001 Antwort.
+     * Factory for pain.001 response.
      */
     public static function forPain001(
         string $originalMessageId,
@@ -57,7 +57,7 @@ final readonly class OriginalGroupInformation {
     }
 
     /**
-     * Factory für pain.008 Antwort.
+     * Factory for pain.008 response.
      */
     public static function forPain008(
         string $originalMessageId,
@@ -102,14 +102,14 @@ final readonly class OriginalGroupInformation {
     }
 
     /**
-     * Prüft, ob die gesamte Gruppe akzeptiert wurde.
+     * Checks if the entire group was accepted.
      */
     public function isGroupAccepted(): bool {
         return $this->groupStatus?->isSuccessful() ?? false;
     }
 
     /**
-     * Prüft, ob die gesamte Gruppe abgelehnt wurde.
+     * Checks if the entire group was rejected.
      */
     public function isGroupRejected(): bool {
         return $this->groupStatus?->isRejected() ?? false;

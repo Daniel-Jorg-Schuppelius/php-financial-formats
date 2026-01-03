@@ -20,9 +20,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionInformationAndStatus;
 
 /**
- * Generator für pain.002 (Customer Payment Status Report) XML.
+ * Generator for pain.002 (Customer Payment Status Report) XML.
  * 
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -34,7 +34,7 @@ class Pain002Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert pain.002 XML aus einem Document.
+     * Generates pain.002 XML aus einem Document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('CstmrPmtStsRpt');

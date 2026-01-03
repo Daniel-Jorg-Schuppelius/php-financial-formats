@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * Mandate Status für SEPA-Mandate.
+ * Mandate status for SEPA mandates.
  * 
  * @package CommonToolkit\Enums\Common\Banking
  */

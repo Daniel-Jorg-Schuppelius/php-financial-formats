@@ -17,7 +17,7 @@ use DateTimeImmutable;
 /**
  * CAMT.055 Original Payment Information and Cancellation.
  * 
- * Repräsentiert die ursprünglichen Zahlungsinformationen, die storniert werden sollen.
+ * Represents the original payment information to be cancelled.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type55
  */

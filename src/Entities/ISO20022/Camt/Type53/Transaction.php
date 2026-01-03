@@ -25,11 +25,11 @@ use DateTimeImmutable;
 /**
  * CAMT.053 Transaction Entry.
  * 
- * Repräsentiert einen einzelnen Buchungseintrag (Ntry) im
+ * Represents a single booking entry (Ntry) in
  * Tagesauszug (Bank to Customer Statement).
  * 
- * CAMT.053 enthält vollständige Referenzinformationen über das
- * Reference-Objekt für SEPA-Buchungen.
+ * CAMT.053 contains complete reference information via the
+ * Reference object for SEPA transactions.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt053
  */
@@ -51,7 +51,7 @@ final class Transaction extends CamtTransactionAbstract {
      * @param DateTimeImmutable $bookingDate Buchungsdatum
      * @param DateTimeImmutable|null $valutaDate Valutadatum (Wertstellung)
      * @param float $amount Betrag (immer positiv)
-     * @param CurrencyCode $currency Währung
+     * @param CurrencyCode $currency Currency
      * @param CreditDebit $creditDebit Soll/Haben-Kennzeichen
      * @param Reference $reference Alle Referenzen der Transaktion
      * @param string|null $entryReference Entry Reference (NtryRef)
@@ -60,12 +60,12 @@ final class Transaction extends CamtTransactionAbstract {
      * @param bool $isReversal Storno-Kennzeichen
      * @param string|null $purpose Verwendungszweck (unstrukturiert)
      * @param TransactionPurpose|string|null $purposeCode ISO 20022 Verwendungszweck-Code
-     * @param string|null $additionalInfo Zusätzliche Buchungsinformationen
+     * @param string|null $additionalInfo Additional booking information
      * @param string|null $transactionCode Transaktionscode (GVC)
      * @param TransactionDomain|string|null $domainCode ISO 20022 Domain Code
      * @param TransactionFamily|string|null $familyCode ISO 20022 Family Code
      * @param TransactionSubFamily|string|null $subFamilyCode ISO 20022 SubFamily Code
-     * @param ReturnReason|string|null $returnReason ISO 20022 Rückbuchungsgrund
+     * @param ReturnReason|string|null $returnReason ISO 20022 return reason
      * @param string|null $counterpartyName Name der Gegenseite
      * @param string|null $counterpartyIban IBAN der Gegenseite
      * @param string|null $counterpartyBic BIC der Gegenseite
@@ -156,7 +156,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt den vollständigen Transaktionscode zurück (Domain/Family/SubFamily).
+     * Returns the complete transaction code (Domain/Family/SubFamily).
      */
     public function getFullTransactionCode(): ?string {
         if ($this->domainCode === null) {
@@ -191,7 +191,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt eine kompakte Beschreibung der Transaktion zurück.
+     * Returns a compact description of the transaction.
      */
     public function getSummary(): string {
         $parts = [];
@@ -212,7 +212,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Erstellt eine Kopie mit geändertem Verwendungszweck.
+     * Creates a copy with modified remittance information.
      */
     public function withPurpose(string $purpose): self {
         $clone = clone $this;
@@ -221,7 +221,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Erstellt eine Kopie mit geänderten Gegenseiten-Daten.
+     * Creates a copy with modified counterparty data.
      */
     public function withCounterparty(?string $name, ?string $iban = null, ?string $bic = null): self {
         $clone = clone $this;
@@ -232,7 +232,7 @@ final class Transaction extends CamtTransactionAbstract {
     }
 
     /**
-     * Gibt eine String-Repräsentation der Transaktion zurück.
+     * Returns a string representation of the transaction.
      */
     public function __toString(): string {
         $sign = $this->isCredit() ? '+' : '-';

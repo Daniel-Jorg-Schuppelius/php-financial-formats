@@ -17,9 +17,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use DateTimeImmutable;
 
 /**
- * Group Header für pain.001-Nachrichten (GrpHdr).
+ * Group header for pain.001 messages (GrpHdr).
  * 
- * Enthält Metadaten für die gesamte Nachricht:
+ * Contains metadata for the entire message:
  * - MsgId: Eindeutige Nachrichten-ID
  * - CreDtTm: Erstellungszeitpunkt
  * - NbOfTxs: Anzahl der Transaktionen
@@ -40,7 +40,7 @@ final readonly class GroupHeader {
     }
 
     /**
-     * Gibt die Nachrichten-ID zurück (MsgId).
+     * Returns the message ID (MsgId).
      * Max. 35 Zeichen.
      */
     public function getMessageId(): string {
@@ -48,29 +48,29 @@ final readonly class GroupHeader {
     }
 
     /**
-     * Gibt den Erstellungszeitpunkt zurück (CreDtTm).
+     * Returns the creation timestamp (CreDtTm).
      */
     public function getCreationDateTime(): DateTimeImmutable {
         return $this->creationDateTime;
     }
 
     /**
-     * Gibt die Anzahl der Transaktionen zurück (NbOfTxs).
+     * Returns the number of transactions (NbOfTxs).
      */
     public function getNumberOfTransactions(): int {
         return $this->numberOfTransactions;
     }
 
     /**
-     * Gibt die Kontrollsumme zurück (CtrlSum).
-     * Summe aller Beträge in der Nachricht.
+     * Returns the control sum (CtrlSum).
+     * Sum of all amounts in the message.
      */
     public function getControlSum(): ?float {
         return $this->controlSum;
     }
 
     /**
-     * Gibt die initiierende Partei zurück (InitgPty).
+     * Returns the initiating party (InitgPty).
      * Der Auftraggeber der gesamten Nachricht.
      */
     public function getInitiatingParty(): PartyIdentification {
@@ -78,7 +78,7 @@ final readonly class GroupHeader {
     }
 
     /**
-     * Gibt den Forwarding Agent zurück (FwdgAgt).
+     * Returns the forwarding agent (FwdgAgt).
      * Bank, die die Nachricht weiterleitet.
      */
     public function getForwardingAgent(): ?FinancialInstitution {

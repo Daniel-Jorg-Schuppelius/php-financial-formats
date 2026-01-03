@@ -17,11 +17,11 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.031 Documents (Reject Investigation).
+ * Builder for CAMT.031 Documents (Reject Investigation).
  * 
- * Erstellt Ablehnungen von Untersuchungsanfragen.
- * Wird verwendet, um eine Untersuchungsanfrage abzulehnen
- * (z.B. weil sie ungültig ist oder nicht bearbeitet werden kann).
+ * Creates rejections of investigation requests.
+ * Used to reject an investigation request
+ * (e.g. because it is invalid or cannot be processed).
  * 
  * Verwendung:
  * ```php
@@ -50,21 +50,21 @@ final class Camt031DocumentBuilder {
 
     private function __construct(string $assignmentId) {
         if (strlen($assignmentId) > 35) {
-            throw new InvalidArgumentException('AssignmentId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('AssignmentId must not exceed 35 characters');
         }
         $this->assignmentId = $assignmentId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Assignment-ID.
+     * Creates a new builder with assignment ID.
      */
     public static function create(string $assignmentId): self {
         return new self($assignmentId);
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -73,7 +73,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Agent (sendende Bank).
+     * Sets the assigner agent (sending bank).
      */
     public function withAssignerAgent(string $bic): self {
         $clone = clone $this;
@@ -82,7 +82,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Party Name.
+     * Sets the assigner party name.
      */
     public function withAssignerPartyName(string $name): self {
         $clone = clone $this;
@@ -91,7 +91,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Agent (empfangende Bank).
+     * Sets the assignee agent (receiving bank).
      */
     public function withAssigneeAgent(string $bic): self {
         $clone = clone $this;
@@ -100,7 +100,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Party Name.
+     * Sets the assignee party name.
      */
     public function withAssigneePartyName(string $name): self {
         $clone = clone $this;
@@ -109,7 +109,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt die Case-Referenz.
+     * Sets the case reference.
      */
     public function forCase(string $caseId, ?string $caseCreator = null): self {
         $clone = clone $this;
@@ -119,9 +119,9 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt den Ablehnungsgrund (Code).
+     * Sets the rejection reason (code).
      * 
-     * Gängige Codes:
+     * Common codes:
      * - NOOR: No Original Transaction Received
      * - ARDT: Already Returned
      * - NOAS: No Answer From Customer
@@ -134,7 +134,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt den proprietären Ablehnungsgrund.
+     * Sets the proprietary rejection reason.
      */
     public function withProprietaryRejectionReason(string $reason): self {
         $clone = clone $this;
@@ -143,7 +143,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Setzt zusätzliche Informationen.
+     * Sets additional information.
      */
     public function withAdditionalInformation(string $info): self {
         $clone = clone $this;
@@ -152,7 +152,7 @@ final class Camt031DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.031 Document.
+     * Creates the CAMT.031 document.
      */
     public function build(): Document {
         return new Document(

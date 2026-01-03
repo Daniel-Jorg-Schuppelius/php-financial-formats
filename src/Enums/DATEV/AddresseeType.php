@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Adressatentyp für Debitoren/Kreditoren (Feld 7).
+ * DATEV Addressee type for debitors/creditors (Field 7).
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/debitorskreditors
  */
@@ -25,7 +25,7 @@ enum AddresseeType: int {
     case COMPANY        = 2; // Unternehmen
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -36,7 +36,7 @@ enum AddresseeType: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Import.
+     * Factory for CSV/DATEV import.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -48,7 +48,7 @@ enum AddresseeType: int {
     }
 
     /**
-     * Factory für String-Werte (quoted in DATEV-Format).
+     * Factory for string values (quoted in DATEV-Format).
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '"');
@@ -59,14 +59,14 @@ enum AddresseeType: int {
     }
 
     /**
-     * Prüft, ob es sich um eine natürliche Person handelt.
+     * Checks if this is a natural person.
      */
     public function isNaturalPerson(): bool {
         return $this === self::NATURAL_PERSON;
     }
 
     /**
-     * Prüft, ob es sich um ein Unternehmen handelt.
+     * Checks if this is a company.
      */
     public function isCompany(): bool {
         return $this === self::COMPANY || $this === self::NONE;

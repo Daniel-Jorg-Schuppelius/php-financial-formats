@@ -25,13 +25,13 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Parser für MT10x SWIFT-Nachrichten (Zahlungsaufträge).
+ * Parser for MT10x SWIFT messages (payment orders).
  * 
- * Unterstützte Formate:
- * - MT101: Request for Transfer (Sammelüberweisung)
- * - MT103: Single Customer Credit Transfer (Einzelüberweisung)
+ * Supported formats:
+ * - MT101: Request for Transfer (batch transfer)
+ * - MT103: Single Customer Credit Transfer (single transfer)
  * 
- * Kann sowohl rohe Text-Blöcke als auch vollständige SWIFT-Messages parsen.
+ * Can parse both raw text blocks and complete SWIFT messages.
  * 
  * @package CommonToolkit\Parsers
  */
@@ -265,7 +265,7 @@ final class Mt10xParser {
     }
 
     /**
-     * Parst eine Party aus möglichen Feldvarianten.
+     * Parses a party from possible field variants.
      * 
      * @param array<string, string> $fields
      * @param string[] $possibleTags

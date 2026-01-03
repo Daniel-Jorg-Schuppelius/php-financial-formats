@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29;
 /**
  * CAMT.029 Cancellation Details.
  * 
- * Enthält Details über die Stornierungsantwort mit Gruppen-, Zahlungs- und Transaktionsstatus.
+ * Contains details about the cancellation response with group, payment and transaction status.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type29
  */

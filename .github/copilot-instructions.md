@@ -166,6 +166,6 @@ vendor/bin/phpunit --testdox          # Verbose test descriptions
 - **Date handling**: Prefer `DateTimeImmutable`, flexible constructor parsing (`'ymd'`, `'Ymd'`)
 - **Validation**: Use `bcmod()` for IBAN checksum, regex patterns for BIC/BLZ
 - **Error handling**: `ErrorLog` trait with PSR-3 logging, custom exceptions from `ERRORToolkit`
-- **German locale**: Domain comments and error messages in German for banking compliance
+- **English locale**: Domain comments and error messages in english for banking compliance
 - **Type safety**: Strict types enabled, comprehensive type hints, match expressions
 - **XSD Validation**: Optional XML schema validation for CAMT/Pain documents

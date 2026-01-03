@@ -23,10 +23,10 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Builder für pain.007 Documents (Customer Payment Reversal).
+ * Builder for pain.007 Documents (Customer Payment Reversal).
  * 
- * Erstellt Lastschrift-Stornierungen gemäß ISO 20022.
- * Ermöglicht den Rückruf von bereits eingereichten Lastschriften (pain.008).
+ * Creates direct debit reversals according to ISO 20022.
+ * Enables recall of already submitted direct debits (pain.008).
  * 
  * Struktur:
  * - GroupHeader: Nachrichten-Metadaten
@@ -100,7 +100,7 @@ final class Pain007DocumentBuilder {
     }
 
     /**
-     * Startet eine neue Reversal-Anweisung für eine Payment Instruction.
+     * Starts a new reversal instruction for a Payment Instruction.
      */
     public function beginReversalInstruction(string $originalPaymentInformationId): self {
         $clone = clone $this;
@@ -109,7 +109,7 @@ final class Pain007DocumentBuilder {
     }
 
     /**
-     * Fügt eine zu stornierende Transaktion hinzu.
+     * Adds a transaction to be reversed.
      */
     public function addTransactionReversal(TransactionInformation $transaction): self {
         if ($this->currentInstructionBuilder === null) {
@@ -122,7 +122,7 @@ final class Pain007DocumentBuilder {
     }
 
     /**
-     * Setzt den Stornogrund für die aktuelle Anweisung.
+     * Sets the reversal reason for the current instruction.
      */
     public function setReversalReason(ReversalReason $reason): self {
         if ($this->currentInstructionBuilder === null) {
@@ -149,7 +149,7 @@ final class Pain007DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige Payment Information hinzu.
+     * Adds a completed Payment Information.
      */
     public function addOriginalPaymentInformation(OriginalPaymentInformation $info): self {
         $clone = clone $this;
@@ -190,7 +190,7 @@ final class Pain007DocumentBuilder {
     }
 
     /**
-     * Erstellt eine einfache Stornierung für eine einzelne Lastschrift.
+     * Creates a simple reversal for a single direct debit.
      */
     public static function createSingleReversal(
         string $messageId,
@@ -233,7 +233,7 @@ final class Pain007DocumentBuilder {
 }
 
 /**
- * Hilfsbuilder für Reversal PaymentInstruction.
+ * Helper builder for Reversal PaymentInstruction.
  * Intern verwendet von Pain007DocumentBuilder.
  */
 final class ReversalInstructionBuilder {

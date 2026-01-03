@@ -19,14 +19,14 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Repräsentiert einen Saldo in CAMT-Dokumenten.
+ * Represents a balance in CAMT documents.
  * 
- * Unterstützte Balance-Typen:
- * - OPBD: Opening Booked (Eröffnungssaldo)
+ * Supported balance types:
+ * - OPBD: Opening Booked
  * - CLBD: Closing Booked (Schlusssaldo)
  * - PRCD: Previously Closed Booked (Vortrag)
- * - CLAV: Closing Available (verfügbarer Schlusssaldo)
- * - FWAV: Forward Available (voraussichtlich verfügbar)
+ * - CLAV: Closing Available
+ * - FWAV: Forward Available
  * 
  * @package CommonToolkit\Entities\Common\Banking
  */
@@ -41,7 +41,7 @@ class Balance {
     /**
      * @param CreditDebit $creditDebit Soll/Haben-Kennzeichen
      * @param DateTimeImmutable|string $date Datum des Saldos
-     * @param CurrencyCode|string $currency Währung
+     * @param CurrencyCode|string $currency Currency
      * @param float $amount Betrag (positiv)
      * @param string $type Balance-Typ (OPBD, CLBD, PRCD, CLAV, FWAV)
      * @param BalanceSubType|string|null $subType ISO 20022 Balance Untertyp
@@ -103,36 +103,36 @@ class Balance {
     }
 
     /**
-     * Gibt den vorzeichenbehafteten Betrag zurück.
-     * Positiv für Haben, negativ für Soll.
+     * Returns the signed amount.
+     * Positive for credit, negative for debit.
      */
     public function getSignedAmount(): float {
         return $this->isCredit() ? $this->amount : -$this->amount;
     }
 
     /**
-     * Prüft, ob es sich um einen Eröffnungssaldo handelt.
+     * Checks if this is an opening balance.
      */
     public function isOpeningBalance(): bool {
         return in_array($this->type, ['OPBD', 'PRCD'], true);
     }
 
     /**
-     * Prüft, ob es sich um einen Schlusssaldo handelt.
+     * Checks if this is a closing balance.
      */
     public function isClosingBalance(): bool {
         return $this->type === 'CLBD';
     }
 
     /**
-     * Prüft, ob es sich um einen verfügbaren Schlusssaldo handelt.
+     * Checks if this is a closing available balance.
      */
     public function isClosingAvailable(): bool {
         return $this->type === 'CLAV';
     }
 
     /**
-     * Erstellt einen Balance aus XML-Daten.
+     * Creates a Balance from XML data.
      */
     public static function fromArray(array $data): self {
         return new self(
@@ -145,7 +145,7 @@ class Balance {
     }
 
     /**
-     * Gibt eine String-Repräsentation des Balance zurück.
+     * Returns a string representation of the balance.
      * Format: "OPBD: C 2025-01-15 EUR 1000.00"
      */
     public function __toString(): string {

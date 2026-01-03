@@ -21,19 +21,19 @@ use DOMDocument;
 use DOMElement;
 
 /**
- * Abstrakte Basisklasse für CAMT-XML-Generatoren.
+ * Abstract base class for CAMT XML generators.
  * 
- * Erweitert Iso20022GeneratorAbstract und stellt CAMT-spezifische Funktionalität bereit:
+ * Extends Iso20022GeneratorAbstract and provides CAMT-specific functionality:
  * - CAMT-Namespace und Version-Handling
  * - Gemeinsame Strukturen (Balance, Account, Entry, etc.)
  * 
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Contracts\Abstracts\ISO20022\Camt
  */
 abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
-     * Gibt den CAMT-Typ dieses Generators zurück.
+     * Returns the CAMT type of this generator.
      */
     abstract public function getCamtType(): CamtType;
 
@@ -49,7 +49,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt den Group Header hinzu.
+     * Adds the group header.
      */
     protected function addGroupHeader(CamtDocumentAbstract $document, string $messageIdPrefix): self {
         $this->builder->addElement('GrpHdr');
@@ -65,7 +65,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine Account-Struktur für CAMT hinzu.
+     * Adds an account structure for CAMT.
      */
     protected function addCamtAccount(CamtDocumentAbstract $document, bool $includeCurrency = true): self {
         $this->addAccountIdentificationFromString('Acct', $document->getAccountIdentifier(), $includeCurrency, $document->getCurrency());
@@ -79,7 +79,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine vollständige CAMT-Account-Struktur hinzu (mit Owner und Servicer).
+     * Adds a complete CAMT account structure (with owner and servicer).
      */
     protected function addCamtAccountFull(CamtDocumentAbstract $document, bool $includeCurrency = true): self {
         $this->builder->addElement('Acct');
@@ -125,7 +125,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt ein Balance-Element hinzu.
+     * Adds a balance element.
      */
     protected function addBalance(Balance $balance): self {
         $this->builder->addElement('Bal');
@@ -156,7 +156,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Erstellt die Basis-Entry-Struktur (öffnet Ntry-Element).
+     * Creates the basic entry structure (opens Ntry element).
      */
     protected function beginEntry(CamtTransactionAbstract $entry): self {
         $this->builder->addElement('Ntry');
@@ -185,7 +185,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt Booking- und Value-Date zu einem Entry hinzu.
+     * Adds booking and value date to an entry.
      */
     protected function addEntryDates(CamtTransactionAbstract $entry, bool $useDateTimeForBooking = false): self {
         // BookgDt
@@ -209,7 +209,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt einen proprietären BankTransactionCode hinzu.
+     * Adds a proprietary BankTransactionCode.
      */
     protected function addBankTxCodeProprietary(string $code): self {
         $this->builder
@@ -223,7 +223,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Schließt das aktuelle Ntry-Element.
+     * Closes the current Ntry element.
      */
     protected function endEntry(): self {
         $this->builder->end(); // Ntry
@@ -231,9 +231,9 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
-     * Gibt das interne DOM-Dokument zurück.
+     * Returns the internal DOM document.
      * 
-     * @deprecated Nutze getDocument() für ExtendedDOMDocument
+     * @deprecated Use getDocument() for ExtendedDOMDocument
      */
     public function getDomDocument(): DOMDocument {
         return $this->builder->build();

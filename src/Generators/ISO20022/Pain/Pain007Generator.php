@@ -20,9 +20,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\ReversalReason;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\TransactionInformation;
 
 /**
- * Generator für pain.007 (Customer Payment Reversal) XML.
+ * Generator for pain.007 (Customer Payment Reversal) XML.
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -34,7 +34,7 @@ class Pain007Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert pain.007 XML aus einem Document.
+     * Generates pain.007 XML aus einem Document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('CstmrPmtRvsl');

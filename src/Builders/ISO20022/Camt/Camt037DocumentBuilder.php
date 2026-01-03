@@ -18,10 +18,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.037 Documents (Debit Authorisation Request).
+ * Builder for CAMT.037 Documents (Debit Authorisation Request).
  * 
- * Erstellt Anfragen zur Belastungsautorisierung.
- * Wird verwendet um eine Genehmigung für eine Belastung anzufordern.
+ * Creates debit authorisation requests.
+ * Used to request approval for a debit.
  * 
  * @package CommonToolkit\FinancialFormats\Builders\Camt
  */
@@ -44,7 +44,7 @@ final class Camt037DocumentBuilder {
 
     private function __construct(string $assignmentId) {
         if (strlen($assignmentId) > 35) {
-            throw new InvalidArgumentException('AssignmentId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('AssignmentId must not exceed 35 characters');
         }
         $this->assignmentId = $assignmentId;
         $this->creationDateTime = new DateTimeImmutable();

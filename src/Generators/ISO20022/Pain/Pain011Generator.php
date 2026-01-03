@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type11\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type11\MandateCancellation;
 
 /**
- * Generiert pain.011 XML-Dokumente (Mandate Cancellation Request).
+ * Generates pain.011 XML documents (Mandate Cancellation Request).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.011.001.08 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.011.001.08 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain011Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.011 Dokument.
+     * Generates XML from a pain.011 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('MndtCxlReq');

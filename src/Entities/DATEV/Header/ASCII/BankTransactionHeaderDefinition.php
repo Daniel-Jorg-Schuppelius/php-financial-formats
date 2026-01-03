@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactio
 /**
  * Definiert die Struktur der DATEV ASCII-Weiterverarbeitungsdatei Header
  * 
- * Diese Klasse definiert alle 34 Felder für Banktransaktionen im ASCII Format.
+ * This class defines all 34 fields for bank transactions in ASCII format.
  * ASCII-Weiterverarbeitungsdateien haben KEINEN MetaHeader - nur reine Datenzeilen.
  * Basiert auf der offiziellen DATEV-Dokumentation (Dok.-Nr. 9226961).
  * 
@@ -31,7 +31,7 @@ class BankTransactionHeaderDefinition {
     }
 
     /**
-     * Gibt die erwartete Anzahl der Felder zurück.
+     * Returns the expected number of fields.
      * 
      * @return int
      */
@@ -40,7 +40,7 @@ class BankTransactionHeaderDefinition {
     }
 
     /**
-     * Prüft ob eine gegebene Datenzeile gegen die Feldstruktur passt
+     * Checks if a given data line matches the field structure
      * Akzeptiert auch Dateien mit weniger Feldern (fehlende Felder gelten als leer)
      */
     public function matches(array $values): bool {
@@ -89,7 +89,7 @@ class BankTransactionHeaderDefinition {
     }
 
     /**
-     * Prüft ob die gegebene Feldanzahl der erwarteten Struktur entspricht
+     * Checks if the given field count matches the expected structure
      */
     public function isValidFieldCount(int $fieldCount): bool {
         // Mindestens 7 Felder (bis zum Umsatz), maximal 34 Felder
@@ -97,14 +97,14 @@ class BankTransactionHeaderDefinition {
     }
 
     /**
-     * Gibt alle Felder zurück (für 17-Feld Version)
+     * Returns all fields (for 17-field version)
      */
     public function getFields(): array {
         return BankTransactionHeaderField::ordered();
     }
 
     /**
-     * Gibt die Pflichtfelder zurück
+     * Returns the required fields
      */
     public function getRequiredFields(): array {
         return BankTransactionHeaderField::required();
@@ -168,7 +168,7 @@ class BankTransactionHeaderDefinition {
     }
 
     /**
-     * Gibt Validierungsregeln für Muss-Felder zurück
+     * Returns validation rules for required fields
      */
     private function getRequiredFieldsValidation(): array {
         return [
@@ -180,7 +180,7 @@ class BankTransactionHeaderDefinition {
     }
 
     /**
-     * Gibt Beispieldaten für eine DATEV ASCII-Banktransaktion zurück.
+     * Returns sample data for a DATEV ASCII bank transaction.
      * 
      * @return array<string>
      */

@@ -23,7 +23,7 @@ use RuntimeException;
 
 /**
  * DATEV-Zahlungsbedingungen-Dokument.
- * Spezielle Document-Klasse für Zahlungsbedingungen-Format (Kategorie 46).
+ * Special document class for payment terms format (Category 46).
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus PaymentTermsHeaderField::getMaxLength() angewendet.
@@ -35,9 +35,9 @@ final class PaymentTerms extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus PaymentTermsHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from PaymentTermsHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -54,14 +54,14 @@ final class PaymentTerms extends Document {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für diese Document-Art.
+     * Returns the DATEV category for this document type.
      */
     public function getCategory(): Category {
         return Category::Zahlungsbedingungen;
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::Zahlungsbedingungen->nameValue();

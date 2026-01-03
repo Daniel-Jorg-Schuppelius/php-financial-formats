@@ -24,7 +24,7 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\V700\DebitorsCredito
  */
 final class DebitorsCreditorsHeaderLine extends HeaderLineAbstract {
     /**
-     * Factory-Methode für V700 Debitoren/Kreditoren Header.
+     * Factory method for V700 Debitors/Creditors header.
      */
     public static function createV700(
         string $delimiter = Document::DEFAULT_DELIMITER,
@@ -34,7 +34,7 @@ final class DebitorsCreditorsHeaderLine extends HeaderLineAbstract {
     }
 
     /**
-     * Prüft ob dieser Header zu V700 Debitoren/Kreditoren passt.
+     * Checks if this header matches V700 Debitors/Creditors.
      */
     public function isV700DebitorsCreditorsHeader(): bool {
         return $this->isCompatibleWithEnum(DebitorsCreditorsHeaderField::class);

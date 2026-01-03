@@ -24,9 +24,9 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Builder für pain.002 Documents (Customer Payment Status Report).
+ * Builder for pain.002 Documents (Customer Payment Status Report).
  * 
- * Erstellt Status-Rückmeldungen für Zahlungsaufträge gemäß ISO 20022.
+ * Creates status reports for payment orders according to ISO 20022.
  * Diese Nachricht wird typischerweise von Banken als Antwort auf pain.001/008 generiert.
  * 
  * Struktur:
@@ -116,7 +116,7 @@ final class Pain002DocumentBuilder {
     }
 
     /**
-     * Fügt Payment Information Status hinzu.
+     * Adds Payment Information Status.
      */
     public function addOriginalPaymentInformation(OriginalPaymentInformation $info): self {
         $clone = clone $this;
@@ -125,7 +125,7 @@ final class Pain002DocumentBuilder {
     }
 
     /**
-     * Fügt einen abgelehnten Payment Information Status hinzu.
+     * Adds a rejected Payment Information Status.
      */
     public function addRejectedPaymentInformation(
         string $originalPaymentInformationId,
@@ -151,7 +151,7 @@ final class Pain002DocumentBuilder {
     }
 
     /**
-     * Fügt einen akzeptierten Payment Information Status hinzu.
+     * Adds an accepted Payment Information Status.
      */
     public function addAcceptedPaymentInformation(string $originalPaymentInformationId): self {
         $info = new OriginalPaymentInformation(
@@ -186,7 +186,7 @@ final class Pain002DocumentBuilder {
     }
 
     /**
-     * Erstellt einen vollständig akzeptierten Status-Report.
+     * Creates a fully accepted status-Report.
      */
     public static function createAllAccepted(
         string $messageId,
@@ -197,7 +197,7 @@ final class Pain002DocumentBuilder {
     }
 
     /**
-     * Erstellt einen vollständig abgelehnten Status-Report.
+     * Creates a completely rejected status report.
      */
     public static function createRejected(
         string $messageId,

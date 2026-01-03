@@ -37,7 +37,7 @@ use RuntimeException;
 
 /**
  * DATEV-Debitoren/Kreditoren-Dokument.
- * Spezielle Document-Klasse für Debitoren/Kreditoren-Format (Kategorie 16).
+ * Special document class for Debitors/Creditors format (Category 16).
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus DebitorsCreditorsHeaderField::getMaxLength() angewendet.
@@ -49,9 +49,9 @@ final class DebitorsCreditors extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus DebitorsCreditorsHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from DebitorsCreditorsHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -68,14 +68,14 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für diese Document-Art.
+     * Returns the DATEV category for this document type.
      */
     public function getCategory(): Category {
         return Category::DebitorenKreditoren;
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::DebitorenKreditoren->nameValue();
@@ -99,8 +99,8 @@ final class DebitorsCreditors extends Document {
     // ---- ADDRESSEE FIELDS ----
 
     /**
-     * Gibt den Adressatentyp eines Debitors/Kreditors zurück (Feld 7).
-     * 0 = keine Angabe (Default: Unternehmen), 1 = natürliche Person, 2 = Unternehmen
+     * Returns the addressee type of a debitor/creditor (field 7).
+     * 0 = not specified (Default: company), 1 = natural person, 2 = company
      */
     public function getAddresseeTypeValue(int $rowIndex): ?AddresseeType {
         return parent::getAddresseeType($rowIndex, DebitorsCreditorsHeaderField::Adressattyp->getPosition());
@@ -114,7 +114,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt die Adressart zurück (Feld 15): STR=Straße, PF=Postfach, GK=Großkunde.
+     * Returns the address type (field 15): STR=street, PF=P.O. box, GK=major customer.
      */
     public function getCorrespondenceAddressType(int $rowIndex): ?AddressType {
         return parent::getAddressType($rowIndex, DebitorsCreditorsHeaderField::Adressart->getPosition());
@@ -128,7 +128,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt die Adressart der Rechnungsadresse zurück (Feld 153).
+     * Returns the address type of the invoice address (field 153).
      */
     public function getInvoiceAddressType(int $rowIndex): ?AddressType {
         return parent::getAddressType($rowIndex, DebitorsCreditorsHeaderField::AdressartRechnungsadresse->getPosition());
@@ -144,7 +144,7 @@ final class DebitorsCreditors extends Document {
     // ---- COUNTRY FIELDS ----
 
     /**
-     * Gibt das EU-Land eines Debitors/Kreditors zurück (Feld 9).
+     * Returns the EU country of a debitor/creditor (field 9).
      */
     public function getEUCountry(int $rowIndex): ?CountryCode {
         return $this->getCountryCode($rowIndex, DebitorsCreditorsHeaderField::EULand->getPosition());
@@ -158,7 +158,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt das Land eines Debitors/Kreditors zurück (Feld 20).
+     * Returns the country of a debitor/creditor (field 20).
      */
     public function getCountry(int $rowIndex): ?CountryCode {
         return $this->getCountryCode($rowIndex, DebitorsCreditorsHeaderField::Land->getPosition());
@@ -172,7 +172,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt das Land der Rechnungsadresse zurück (Feld 158).
+     * Returns the country of the invoice address (field 158).
      */
     public function getInvoiceCountry(int $rowIndex): ?CountryCode {
         return $this->getCountryCode($rowIndex, DebitorsCreditorsHeaderField::LandRechnungsadresse->getPosition());
@@ -188,8 +188,8 @@ final class DebitorsCreditors extends Document {
     // ---- COMMUNICATION AND OUTPUT FIELDS ----
 
     /**
-     * Gibt die Sprache zurück (Feld 101).
-     * 1=deutsch, 4=französisch, 5=englisch, 10=spanisch, 19=italienisch
+     * Returns the language (field 101).
+     * 1=German, 4=French, 5=English, 10=Spanish, 19=Italian
      */
     public function getLanguageValue(int $rowIndex): ?Language {
         return parent::getLanguage($rowIndex, DebitorsCreditorsHeaderField::Sprache->getPosition());
@@ -203,7 +203,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt das Ausgabeziel zurück (Feld 106).
+     * Returns the output target (field 106).
      * 1=Druck, 2=Telefax, 3=E-Mail
      */
     public function getOutputTargetValue(int $rowIndex): ?OutputTarget {
@@ -220,22 +220,22 @@ final class DebitorsCreditors extends Document {
     // ---- CURRENCY AND MISCELLANEOUS ACCOUNT ----
 
     /**
-     * Gibt die Währungssteuerung zurück (Feld 107).
-     * 0=Zahlungen in Eingabewährung, 2=Ausgabe in EUR
+     * Returns the currency control (field 107).
+     * 0=payments in input currency, 2=output in EUR
      */
     public function getCurrencyControlValue(int $rowIndex): ?CurrencyControl {
         return parent::getCurrencyControl($rowIndex, DebitorsCreditorsHeaderField::Waehrungssteuerung->getPosition());
     }
 
     /**
-     * Setzt die Währungssteuerung (Feld 107).
+     * Sets the currency control (field 107).
      */
     public function setCurrencyControlValue(int $rowIndex, CurrencyControl $currencyControl): void {
         parent::setCurrencyControl($rowIndex, DebitorsCreditorsHeaderField::Waehrungssteuerung->getPosition(), $currencyControl);
     }
 
     /**
-     * Gibt das Diverse-Konto-Kennzeichen zurück (Feld 105).
+     * Returns the sundry account indicator (field 105).
      * 0=Nein, 1=Ja
      */
     public function getMiscellaneousAccount(int $rowIndex): ?ItemLock {
@@ -252,7 +252,7 @@ final class DebitorsCreditors extends Document {
     // ---- DUNNING AND STATEMENT ----
 
     /**
-     * Gibt das Mahnungs-Kennzeichen zurück (Feld 121).
+     * Returns the dunning indicator (field 121).
      * 0=Keine Angaben, 1=1. Mahnung, 2=2. Mahnung, 3=1.+2. Mahnung,
      * 4=3. Mahnung, 6=2.+3. Mahnung, 7=1.,2.+3. Mahnung, 9=keine Mahnung
      */
@@ -268,8 +268,8 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt das Kontoauszugs-Kennzeichen zurück (Feld 122).
-     * 1=alle Posten, 2=nur mahnfähig, 3=alle mahnfälligen, 9=kein Kontoauszug
+     * Returns the statement indicator (field 122).
+     * 1=all items, 2=only dunnable, 3=all dunnable due, 9=no statement
      */
     public function getStatementIndicatorValue(int $rowIndex): ?StatementIndicator {
         return parent::getStatementIndicator($rowIndex, DebitorsCreditorsHeaderField::Kontoauszug->getPosition());
@@ -285,8 +285,8 @@ final class DebitorsCreditors extends Document {
     // ---- INTEREST CALCULATION ----
 
     /**
-     * Gibt das Zinsberechnungs-Kennzeichen zurück (Feld 129).
-     * 0=MPD-Schlüsselung, 1=Fester Zinssatz, 2=Zinssatz über Staffel, 9=Keine Berechnung
+     * Returns the interest calculation indicator (field 129).
+     * 0=MPD keying, 1=fixed rate, 2=rate via scale, 9=no calculation
      */
     public function getInterestCalculationIndicatorValue(int $rowIndex): ?InterestCalculationIndicator {
         return parent::getInterestCalculationIndicator($rowIndex, DebitorsCreditorsHeaderField::Zinsberechnung->getPosition());
@@ -302,7 +302,7 @@ final class DebitorsCreditors extends Document {
     // ---- DIRECT DEBIT AND PAYMENT CARRIER ----
 
     /**
-     * Gibt das Lastschrift-Kennzeichen zurück (Feld 133).
+     * Returns the direct debit indicator (field 133).
      * 0=keine Angabe, 7=SEPA-Einzelrechnung, 8=SEPA-Sammelrechnung, 9=kein Lastschriftverfahren
      */
     public function getDirectDebitIndicatorValue(int $rowIndex): ?DirectDebitIndicator {
@@ -317,16 +317,16 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt das Zahlungsträger-Kennzeichen zurück (Feld 136).
-     * 0=keine Angabe, 5=Einzelscheck, 6=Sammelscheck, 7=SEPA-Überweisung einzeln,
-     * 8=SEPA-Überweisung Sammel, 9=keine Überweisungen/Schecks
+     * Returns the payment carrier indicator (field 136).
+     * 0=not specified, 5=single cheque, 6=collective cheque, 7=SEPA transfer single,
+     * 8=SEPA transfer collective, 9=no transfers/cheques
      */
     public function getPaymentCarrierIndicatorValue(int $rowIndex): ?PaymentCarrierIndicator {
         return parent::getPaymentCarrierIndicator($rowIndex, DebitorsCreditorsHeaderField::Zahlungstraeger->getPosition());
     }
 
     /**
-     * Setzt das Zahlungsträger-Kennzeichen (Feld 136).
+     * Sets the payment carrier indicator (field 136).
      */
     public function setPaymentCarrierIndicatorValue(int $rowIndex, PaymentCarrierIndicator $indicator): void {
         parent::setPaymentCarrierIndicator($rowIndex, DebitorsCreditorsHeaderField::Zahlungstraeger->getPosition(), $indicator);
@@ -336,7 +336,7 @@ final class DebitorsCreditors extends Document {
     // ==== CONVENIENCE METHODS ====
 
     /**
-     * Prüft, ob ein Debitor/Kreditor in einem EU-Land ansässig ist.
+     * Checks if a debitor/creditor is located in an EU country.
      */
     public function isEUResident(int $rowIndex): bool {
         $euCountry = $this->getEUCountry($rowIndex);
@@ -346,56 +346,56 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Prüft, ob SEPA-Lastschrift für diesen Debitor/Kreditor aktiviert ist.
+     * Checks if SEPA direct debit is enabled for this debitor/creditor.
      */
     public function isSepaDirectDebitEnabled(int $rowIndex): bool {
         return $this->getDirectDebitIndicatorValue($rowIndex)?->isSepaDirectDebit() ?? false;
     }
 
     /**
-     * Prüft, ob Mahnung für diesen Debitor/Kreditor aktiviert ist.
+     * Checks if dunning is enabled for this debitor/creditor.
      */
     public function isDunningEnabled(int $rowIndex): bool {
         return $this->getDunningIndicatorValue($rowIndex)?->hasDunning() ?? false;
     }
 
     /**
-     * Prüft, ob es sich um eine natürliche Person handelt.
+     * Checks if this is a natural person.
      */
     public function isNaturalPerson(int $rowIndex): bool {
         return $this->getAddresseeTypeValue($rowIndex)?->isNaturalPerson() ?? false;
     }
 
     /**
-     * Prüft, ob es sich um ein Unternehmen handelt.
+     * Checks if this is a company.
      */
     public function isCompany(int $rowIndex): bool {
         return $this->getAddresseeTypeValue($rowIndex)?->isCompany() ?? true; // Default ist Unternehmen
     }
 
     /**
-     * Prüft, ob Kontoauszug aktiviert ist.
+     * Checks if statement is enabled.
      */
     public function isStatementEnabled(int $rowIndex): bool {
         return $this->getStatementIndicatorValue($rowIndex)?->isEnabled() ?? false;
     }
 
     /**
-     * Prüft, ob Zinsberechnung aktiviert ist.
+     * Checks if interest calculation is enabled.
      */
     public function isInterestCalculationEnabled(int $rowIndex): bool {
         return $this->getInterestCalculationIndicatorValue($rowIndex)?->isEnabled() ?? false;
     }
 
     /**
-     * Prüft, ob es sich um ein Diverse-Konto handelt.
+     * Checks if this is a sundry account.
      */
     public function isMiscellaneousAccount(int $rowIndex): bool {
         return $this->getMiscellaneousAccount($rowIndex)?->isLocked() ?? false;
     }
 
     /**
-     * Gibt alle Debitoren/Kreditoren eines bestimmten Landes zurück.
+     * Returns all debitors/creditors of a specific country.
      */
     public function getRowsByCountry(CountryCode $country): array {
         $result = [];
@@ -410,7 +410,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt alle natürlichen Personen zurück.
+     * Returns all natural persons.
      */
     public function getNaturalPersons(): array {
         $result = [];
@@ -425,7 +425,7 @@ final class DebitorsCreditors extends Document {
     }
 
     /**
-     * Gibt alle Unternehmen zurück.
+     * Returns all companies.
      */
     public function getCompanies(): array {
         $result = [];

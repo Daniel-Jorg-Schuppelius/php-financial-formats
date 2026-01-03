@@ -19,10 +19,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type10\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type10\MandateAmendment;
 
 /**
- * Generiert pain.010 XML-Dokumente (Mandate Amendment Request).
+ * Generates pain.010 XML documents (Mandate Amendment Request).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.010.001.08 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.010.001.08 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -34,7 +34,7 @@ class Pain010Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.010 Dokument.
+     * Generates XML from a pain.010 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('MndtAmdmntReq');

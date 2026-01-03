@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Generators\Swift;
 use CommonToolkit\FinancialFormats\Entities\Swift\Message;
 
 /**
- * Generator für SWIFT FIN Nachrichten.
+ * Generator for SWIFT FIN messages.
  * 
- * Generiert vollständige SWIFT-Nachrichten mit allen 5 Blöcken:
+ * Generates complete SWIFT messages with all 5 blocks:
  * - Block 1: Basic Header
  * - Block 2: Application Header
  * - Block 3: User Header (optional)
@@ -28,7 +28,7 @@ use CommonToolkit\FinancialFormats\Entities\Swift\Message;
  */
 class SwiftMessageGenerator {
     /**
-     * Generiert die SWIFT-Nachricht als String.
+     * Generates the SWIFT message as a string.
      * 
      * @param Message $message Die SWIFT-Nachricht
      * @return string Die formatierte SWIFT-Nachricht
@@ -44,21 +44,21 @@ class SwiftMessageGenerator {
     }
 
     /**
-     * Generiert Block 1: Basic Header
+     * Generates Block 1: Basic Header
      */
     protected function generateBasicHeader(Message $message): string {
         return (string) $message->getBasicHeader();
     }
 
     /**
-     * Generiert Block 2: Application Header
+     * Generates Block 2: Application Header
      */
     protected function generateApplicationHeader(Message $message): string {
         return (string) $message->getApplicationHeader();
     }
 
     /**
-     * Generiert Block 3: User Header (optional)
+     * Generates Block 3: User Header (optional)
      */
     protected function generateUserHeader(Message $message): string {
         $userHeader = $message->getUserHeader();
@@ -71,14 +71,14 @@ class SwiftMessageGenerator {
     }
 
     /**
-     * Generiert Block 4: Text Block (MT-Daten)
+     * Generates Block 4: Text Block (MT data)
      */
     protected function generateTextBlock(Message $message): string {
         return "{4:\n" . $message->getTextBlock() . "\n-}";
     }
 
     /**
-     * Generiert Block 5: Trailer (optional)
+     * Generates Block 5: Trailer (optional)
      */
     protected function generateTrailer(Message $message): string {
         $trailer = $message->getTrailer();

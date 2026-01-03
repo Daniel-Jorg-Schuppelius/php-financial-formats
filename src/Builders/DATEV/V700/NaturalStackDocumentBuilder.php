@@ -24,9 +24,9 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV Natural-Stapel (V700).
+ * Builder for DATEV Natural Stack (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und
- * Natural-Buchungsdaten für Land-/Forstwirtschaft (SKR14).
+ * Natural booking data for agriculture/forestry (SKR14).
  */
 final class NaturalStackDocumentBuilder extends CSVDocumentBuilder {
 
@@ -56,7 +56,7 @@ final class NaturalStackDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Datenzeile hinzu.
+     * Adds a data line.
      */
     public function addDataLine(DataLine $dataLine): self {
         $this->dataLines[] = $dataLine;
@@ -64,16 +64,16 @@ final class NaturalStackDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen einer Natural-Buchung (Land-/Forstwirtschaft).
+     * Convenience method for adding a natural booking (agriculture/forestry).
      * 
-     * @param string $textschluessel Textschlüssel gem. SKR14 (1-9 Stellen)
-     * @param string $art Art der Bewegung (2=Erzeugung, 21=Versetzung, 24=Verfüttert, etc.)
+     * @param string $textschluessel Text key acc. to SKR14 (1-9 digits)
+     * @param string $art Type of movement (2=production, 21=transfer, 24=fed, etc.)
      * @param string $datum Datum im TTMM-Format
-     * @param int|null $stueck Anzahl Stück (bei Tieren)
-     * @param int|null $gewicht Gewicht (bei anderen Textschlüsseln)
+     * @param int|null $stueck Number of pieces (for animals)
+     * @param int|null $gewicht Weight (for other text keys)
      * @param string|null $beleg Belegnummer
      * @param string|null $text Buchungstext
-     * @param string|null $anFuerTextschluessel Ziel-Textschlüssel bei Versetzungen
+     * @param string|null $anFuerTextschluessel Target text key for transfers
      */
     public function addNaturalBooking(
         string $textschluessel,
@@ -192,7 +192,7 @@ final class NaturalStackDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für NaturalStack.
+     * Creates a standard MetaHeader for NaturalStack.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -207,7 +207,7 @@ final class NaturalStackDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

@@ -34,7 +34,7 @@ enum Category: int {
     }
 
     /**
-     * Liefert alle Kategorien als Liste (z. B. für Pattern-Erzeugung).
+     * Returns all categories as list (e.g. for pattern generation).
      */
     public static function values(): array {
         return array_map(static fn(self $c) => $c->value, self::cases());

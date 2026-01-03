@@ -23,11 +23,11 @@ use DOMDocument;
 /**
  * CAMT.031 Document (Reject Investigation).
  *
- * Repräsentiert die Ablehnung einer Untersuchungsanfrage
- * gemäß ISO 20022 camt.031.001.xx Standard.
+ * Represents the rejection of an investigation request
+ * according to ISO 20022 camt.031.001.xx Standard.
  *
- * Wird verwendet, um eine Untersuchungsanfrage abzulehnen
- * (z.B. weil sie ungültig ist oder nicht bearbeitet werden kann).
+ * Used to reject an investigation request
+ * (e.g. because it is invalid or cannot be processed).
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type31
  */

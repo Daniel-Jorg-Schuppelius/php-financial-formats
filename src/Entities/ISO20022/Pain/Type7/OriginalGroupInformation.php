@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7;
 use DateTimeImmutable;
 
 /**
- * Original Group Information für pain.007 (OrgnlGrpInf).
+ * Original group information for pain.007 (OrgnlGrpInf).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type7
  */

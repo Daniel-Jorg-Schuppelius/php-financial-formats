@@ -28,11 +28,11 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Builder für MT942 Documents (Interim Transaction Report).
+ * Builder for MT942 Documents (Interim Transaction Report).
  * 
- * MT942 enthält untertägige Transaktionen seit dem letzten Report.
+ * MT942 contains intraday transactions since the last report.
  * Opening Balance ist optional, Closing Balance ist Pflicht.
- * Äquivalent zu CAMT.052 (Bank to Customer Account Report).
+ * Equivalent to CAMT.052 (Bank to Customer Account Report).
  * 
  * @package CommonToolkit\Builders
  */
@@ -75,7 +75,7 @@ final class Mt942DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Transaktionen hinzu.
+     * Adds multiple transactions.
      * 
      * @param Transaction[] $transactions
      * @throws InvalidArgumentException Wenn ein Element kein Transaction-Objekt ist

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type11;
 
 /**
- * Cancellation Reason für pain.011.
+ * Cancellation reason for pain.011.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type11
  */

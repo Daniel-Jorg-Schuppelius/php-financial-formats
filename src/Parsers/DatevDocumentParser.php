@@ -44,7 +44,7 @@ use Exception;
 use RuntimeException;
 
 /**
- * Parser für DATEV-CSV-Dokumente.
+ * Parser for DATEV CSV documents.
  * Erkennt automatisch Typ und Version der DATEV-Datei und erweitert den CSVDocumentParser.
  */
 class DatevDocumentParser extends CSVDocumentParser {
@@ -53,7 +53,7 @@ class DatevDocumentParser extends CSVDocumentParser {
      *
      * @param string $csv Der CSV-Inhalt
      * @param string $delimiter CSV-Trennzeichen (Standard: Semikolon)
-     * @param string $enclosure CSV-Textbegrenzer (Standard: Anführungszeichen)
+     * @param string $enclosure CSV text delimiter (default: double quotes)
      * @param bool $hasHeader Ob ein Header vorhanden ist (bei DATEV immer true)
      * @param string|null $encoding Das Quell-Encoding. Wenn null, wird UTF-8 angenommen.
      * @return Document Das geparste DATEV-Dokument
@@ -69,8 +69,8 @@ class DatevDocumentParser extends CSVDocumentParser {
         $lines = explode("\n", trim($csv));
 
         if (count($lines) < 2) {
-            static::logError('DATEV-CSV muss mindestens 2 Zeilen haben (MetaHeader + FieldHeader)');
-            throw new RuntimeException('DATEV-CSV muss mindestens 2 Zeilen haben');
+            static::logError('DATEV CSV must have at least 2 lines (MetaHeader + FieldHeader)');
+            throw new RuntimeException('DATEV CSV must have at least 2 lines');
         }
 
         // 1. MetaHeader extrahieren
@@ -104,30 +104,30 @@ class DatevDocumentParser extends CSVDocumentParser {
      * @param string $delimiter CSV-Trennzeichen
      * @param string $enclosure CSV-Textbegrenzer
      * @return MetaHeaderLine Die geparste MetaHeaderLine
-     * @throws RuntimeException Bei ungültigem MetaHeader
+     * @throws RuntimeException On invalid MetaHeader
      */
     private static function parseMetaHeader(string $metaHeaderLine, string $delimiter, string $enclosure): MetaHeaderLine {
         // DataLine für CSV-Parsing nutzen - nur einmal!
         $dataLine = DataLine::fromString($metaHeaderLine, $delimiter, $enclosure);
 
         if (count($dataLine->getFields()) < 4) {
-            static::logError('Ungültiger DATEV MetaHeader: MetaHeader muss mindestens 4 Felder haben');
-            throw new RuntimeException('Ungültiger DATEV MetaHeader');
+            static::logError('Invalid DATEV MetaHeader: MetaHeader must have at least 4 fields');
+            throw new RuntimeException('Invalid DATEV MetaHeader');
         }
 
         // HeaderRegistry direkt mit DataLine - keine raw value extraction nötig!
         $metaDefinition = HeaderRegistry::detectFromDataLine($dataLine);
         if (!$metaDefinition) {
-            static::logError('Ungültiger DATEV MetaHeader: Ungültige DATEV-Version erkannt');
-            throw new RuntimeException('Ungültiger DATEV MetaHeader');
+            static::logError('Invalid DATEV MetaHeader: Invalid DATEV version detected');
+            throw new RuntimeException('Invalid DATEV MetaHeader');
         }
 
         return self::createMetaHeaderLineFromDataLine($dataLine, $metaDefinition);
     }
 
     /**
-     * Analysiert eine DATEV-CSV-Datei und gibt Format-Informationen zurück.
-     * Nutzt die HeaderRegistry für direkte und effiziente Format-Erkennung.
+     * Analyzes a DATEV CSV file and returns format information.
+     * Uses the HeaderRegistry for direct and efficient format detection.
      */
     public static function analyzeFormat(string $csvContent, string $delimiter = ';', string $enclosure = '"'): array {
         $lines = explode("\n", trim($csvContent));
@@ -140,7 +140,7 @@ class DatevDocumentParser extends CSVDocumentParser {
         $dataLine = DataLine::fromString($lines[0], $delimiter, $enclosure);
 
         if (count($dataLine->getFields()) < 4) {
-            return ['error' => 'Ungültiger DATEV MetaHeader: zu wenige Felder'];
+            return ['error' => 'Invalid DATEV MetaHeader: too few fields'];
         }
 
         // HeaderRegistry direkt mit DataLine - konsistent mit parseMetaHeader!
@@ -178,7 +178,7 @@ class DatevDocumentParser extends CSVDocumentParser {
 
     /**
      * Parst eine DATEV-CSV-Datei aus einer Datei.
-     * Nutzt File Helper für effizienten und sicheren Dateizugriff.
+     * Uses File Helper for efficient and safe file access.
      *
      * @param bool $detectEncoding Automatische Encoding-Erkennung aktivieren
      */
@@ -225,7 +225,7 @@ class DatevDocumentParser extends CSVDocumentParser {
 
     /**
      * Parst einen Bereich einer DATEV-CSV-Datei.
-     * Nutzt File Helper für effizienten Bereichs-Zugriff.
+     * Uses File Helper for efficient range access.
      *
      * @param bool $detectEncoding Automatische Encoding-Erkennung aktivieren
      */
@@ -278,7 +278,7 @@ class DatevDocumentParser extends CSVDocumentParser {
     }
 
     /**
-     * Prüft automatisch, ob ein DATEV-Format unterstützt wird.
+     * Automatically checks if a DATEV format is supported.
      * Basiert auf der Existenz entsprechender Document-Klassen.
      */
     private static function isFormatSupported(?Category $category, int $version): bool {
@@ -314,10 +314,10 @@ class DatevDocumentParser extends CSVDocumentParser {
     }
 
     /**
-     * Gibt die unterstützten DATEV-Formate dynamisch zurück.
-     * Prüft automatisch alle verfügbaren Document-Klassen.
+     * Dynamically returns the supported DATEV formats.
+     * Automatically checks all available document classes.
      * 
-     * @return array<string, bool> Format-Name => Unterstützt
+     * @return array<string, bool> Format name => Supported
      */
     public static function getSupportedFormats(): array {
         $formats = [];
@@ -362,7 +362,7 @@ class DatevDocumentParser extends CSVDocumentParser {
     }
 
     /**
-     * Erstellt versionsabhängige Header-Lines basierend auf Kategorie und Version.
+     * Creates version-dependent header lines based on category and version.
      */
     private static function createVersionedHeaderLine(?Category $category, int $version, string $delimiter, string $enclosure): HeaderLine {
         if ($version === 700) {
@@ -452,7 +452,7 @@ class DatevDocumentParser extends CSVDocumentParser {
      * @param array $rows Die Datenzeilen
      * @param string $encoding Das Encoding des Dokuments
      * @return Document Das korrekte Document-Objekt
-     * @throws RuntimeException Wenn die Kategorie nicht unterstützt wird
+     * @throws RuntimeException If the category is not supported
      */
     private static function createDocument(?Category $category, MetaHeaderLine $metaHeader, HeaderLine $header, array $rows, string $encoding = CSVDocument::DEFAULT_ENCODING): Document {
         return match ($category) {

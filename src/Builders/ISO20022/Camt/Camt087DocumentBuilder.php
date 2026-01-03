@@ -19,9 +19,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.087 Documents (Request to Modify Payment).
+ * Builder for CAMT.087 Documents (Request to Modify Payment).
  * 
- * Erstellt Anfragen zur Änderung einer bereits eingereichten Zahlung.
+ * Creates requests to modify an already submitted payment.
  * 
  * @package CommonToolkit\FinancialFormats\Builders\Camt
  */
@@ -47,7 +47,7 @@ final class Camt087DocumentBuilder {
 
     private function __construct(string $assignmentId) {
         if (strlen($assignmentId) > 35) {
-            throw new InvalidArgumentException('AssignmentId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('AssignmentId must not exceed 35 characters');
         }
         $this->assignmentId = $assignmentId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -124,7 +124,7 @@ final class Camt087DocumentBuilder {
     }
 
     /**
-     * Fügt eine Betragsänderung hinzu.
+     * Adds an amount modification.
      */
     public function requestAmountChange(float $newAmount, CurrencyCode $currency): self {
         return $this->addModificationRequest(new ModificationRequest(
@@ -134,7 +134,7 @@ final class Camt087DocumentBuilder {
     }
 
     /**
-     * Fügt eine Gläubigeränderung hinzu.
+     * Adds a creditor modification.
      */
     public function requestCreditorChange(string $name, ?string $accountIban = null): self {
         return $this->addModificationRequest(new ModificationRequest(
@@ -144,7 +144,7 @@ final class Camt087DocumentBuilder {
     }
 
     /**
-     * Fügt eine Verwendungszweck-Änderung hinzu.
+     * Adds a remittance information modification.
      */
     public function requestRemittanceChange(string $remittanceInformation): self {
         return $this->addModificationRequest(new ModificationRequest(

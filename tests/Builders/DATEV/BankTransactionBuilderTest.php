@@ -183,7 +183,7 @@ class BankTransactionBuilderTest extends BaseTestCase {
         $this->assertInstanceOf(BankTransaction::class, $document);
 
         // Gib das Dokument als String aus
-        $outputContent = BankTransactionParser::toCSV($document);
+        $outputContent = $document->toString();
         $outputContent = rtrim($outputContent, "\n");
 
         // Direkter String-Vergleich: Output muss exakt mit Original übereinstimmen
@@ -201,7 +201,7 @@ class BankTransactionBuilderTest extends BaseTestCase {
         $document = BankTransactionParser::fromFile(self::SAMPLE_FILE);
 
         // Gib es als String aus und parse erneut
-        $outputContent = BankTransactionParser::toCSV($document);
+        $outputContent = $document->toString();
         $reparsedDocument = BankTransactionParser::fromString($outputContent);
 
         // Prüfe Format-Typ

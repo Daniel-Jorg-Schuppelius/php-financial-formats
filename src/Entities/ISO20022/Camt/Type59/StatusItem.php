@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59;
 
 /**
- * Status Item für CAMT.059.
+ * Status item for CAMT.059.
  *
- * Repräsentiert den Status eines einzelnen Elements
- * einer Benachrichtigung über einen erwarteten Zahlungseingang.
+ * Represents the status of a single element
+ * of a notification about an expected payment receipt.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type59
  */

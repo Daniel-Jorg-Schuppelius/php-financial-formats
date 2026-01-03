@@ -24,7 +24,7 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV Zahlungsbedingungen-Dokumente (V700).
+ * Builder for DATEV Payment Terms documents (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und Zahlungsbedingungen.
  */
 final class PaymentTermsDocumentBuilder extends CSVDocumentBuilder {
@@ -55,7 +55,7 @@ final class PaymentTermsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Datenzeile hinzu.
+     * Adds a data line.
      */
     public function addDataLine(DataLine $dataLine): self {
         $this->dataLines[] = $dataLine;
@@ -63,7 +63,7 @@ final class PaymentTermsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen einer Zahlungsbedingung.
+     * Convenience method for adding a payment term.
      */
     public function addPaymentTerm(
         string $number,
@@ -176,7 +176,7 @@ final class PaymentTermsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für PaymentTerms.
+     * Creates a standard MetaHeader for PaymentTerms.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -200,7 +200,7 @@ final class PaymentTermsDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

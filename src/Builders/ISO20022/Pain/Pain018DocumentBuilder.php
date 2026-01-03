@@ -19,9 +19,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.018 Documents (Mandate Suspension Request).
+ * Builder for pain.018 Documents (Mandate Suspension Request).
  * 
- * Erstellt Anfragen zur temporären Aussetzung eines Mandats.
+ * Creates requests for temporary suspension of a mandate.
  * 
  * Verwendung:
  * ```php
@@ -46,7 +46,7 @@ final class Pain018DocumentBuilder {
 
     private function __construct(string $messageId, PartyIdentification $initiatingParty) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -61,7 +61,7 @@ final class Pain018DocumentBuilder {
     }
 
     /**
-     * Erzeugt neuen Builder mit vollständiger PartyIdentification.
+     * Creates new builder with complete PartyIdentification.
      */
     public static function createWithParty(string $messageId, PartyIdentification $initiatingParty): self {
         return new self($messageId, $initiatingParty);
@@ -77,7 +77,7 @@ final class Pain018DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandatsaussetzung hinzu.
+     * Adds a mandate suspension.
      */
     public function addSuspension(
         string $mandateId,
@@ -96,7 +96,7 @@ final class Pain018DocumentBuilder {
     }
 
     /**
-     * Fügt eine unbegrenzte Mandatsaussetzung hinzu.
+     * Adds an unlimited mandate suspension.
      */
     public function addIndefiniteSuspension(
         string $mandateId,
@@ -113,7 +113,7 @@ final class Pain018DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige MandateSuspensionRequest hinzu.
+     * Adds a completed MandateSuspensionRequest.
      */
     public function addMandateSuspensionRequest(MandateSuspensionRequest $request): self {
         $clone = clone $this;
@@ -122,7 +122,7 @@ final class Pain018DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Mandatsaussetzungen hinzu.
+     * Adds multiple mandate suspensions.
      * 
      * @param MandateSuspensionRequest[] $requests
      */
@@ -183,7 +183,7 @@ final class Pain018DocumentBuilder {
     }
 
     /**
-     * Erstellt Aussetzungen für mehrere Mandate mit demselben Zeitraum.
+     * Creates suspensions for multiple mandates with the same period.
      * 
      * @param string[] $mandateIds
      */

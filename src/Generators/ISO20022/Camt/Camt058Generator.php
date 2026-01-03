@@ -19,11 +19,11 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.058 XML (Notification to Receive Cancellation Advice).
+ * Generator for CAMT.058 XML (Notification to Receive Cancellation Advice).
  * 
- * Generiert Stornierungshinweise zu Benachrichtigungen über erwartete Zahlungseingänge
- * gemäß ISO 20022 camt.058.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates cancellation advices for notifications of expected credit entries
+ * according to ISO 20022 camt.058.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -46,7 +46,7 @@ class Camt058Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt den Group Header mit optionalen Party-Informationen hinzu.
+     * Adds the group header with optional party information.
      */
     private function addGroupHeaderWithParties(Document $document): void {
         $this->builder->addElement('GrpHdr');
@@ -76,7 +76,7 @@ class Camt058Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Original Notification Reference hinzu.
+     * Adds the original notification reference.
      */
     private function addOriginalNotification(Document $document): void {
         $this->builder->addElement('OrgnlNtfctn');
@@ -97,7 +97,7 @@ class Camt058Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt ein Cancellation Item hinzu.
+     * Adds a cancellation item.
      */
     private function addCancellationItem(CancellationItem $item): void {
         $this->builder->addElement('OrgnlItm');

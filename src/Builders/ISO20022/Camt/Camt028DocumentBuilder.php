@@ -19,11 +19,11 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.028 Documents (Additional Payment Information).
+ * Builder for CAMT.028 Documents (Additional Payment Information).
  * 
- * Erstellt Nachrichten mit zusätzlichen Zahlungsinformationen.
- * Wird verwendet, um zusätzliche Informationen zu einer bereits
- * gesendeten Zahlung nachzureichen.
+ * Creates messages with additional payment information.
+ * Used to submit additional information for an already
+ * sent payment.
  * 
  * Verwendung:
  * ```php
@@ -63,21 +63,21 @@ final class Camt028DocumentBuilder {
 
     private function __construct(string $assignmentId) {
         if (strlen($assignmentId) > 35) {
-            throw new InvalidArgumentException('AssignmentId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('AssignmentId must not exceed 35 characters');
         }
         $this->assignmentId = $assignmentId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Assignment-ID.
+     * Creates a new builder with assignment ID.
      */
     public static function create(string $assignmentId): self {
         return new self($assignmentId);
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -86,7 +86,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Agent (sendende Bank).
+     * Sets the assigner agent (sending bank).
      */
     public function withAssignerAgent(string $bic): self {
         $clone = clone $this;
@@ -95,7 +95,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Party Name.
+     * Sets the assigner party name.
      */
     public function withAssignerPartyName(string $name): self {
         $clone = clone $this;
@@ -104,7 +104,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Agent (empfangende Bank).
+     * Sets the assignee agent (receiving bank).
      */
     public function withAssigneeAgent(string $bic): self {
         $clone = clone $this;
@@ -113,7 +113,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Party Name.
+     * Sets the assignee party name.
      */
     public function withAssigneePartyName(string $name): self {
         $clone = clone $this;
@@ -122,7 +122,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt die Case-Referenz.
+     * Sets the case reference.
      */
     public function forCase(string $caseId, ?string $caseCreator = null): self {
         $clone = clone $this;
@@ -132,7 +132,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt die Original-Transaktionsreferenzen.
+     * Sets the original transaction references.
      */
     public function withOriginalTransaction(
         ?string $messageId = null,
@@ -149,7 +149,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt die Original-Transaktionsbeträge.
+     * Sets the original transaction amounts.
      */
     public function withOriginalAmount(
         float $amount,
@@ -164,7 +164,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Setzt den Original-Erstellungszeitpunkt.
+     * Sets the original creation timestamp.
      */
     public function withOriginalCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -173,7 +173,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Fügt zusätzliche Zahlungsinformationen hinzu.
+     * Adds additional payment information.
      */
     public function addAdditionalInformation(AdditionalPaymentInformation $info): self {
         $clone = clone $this;
@@ -182,7 +182,7 @@ final class Camt028DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.028 Document.
+     * Creates the CAMT.028 document.
      */
     public function build(): Document {
         $document = new Document(

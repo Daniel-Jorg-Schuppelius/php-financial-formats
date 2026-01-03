@@ -20,14 +20,14 @@ use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
 /**
- * Abstrakte Basisklasse für MT10x-Dokumente (Zahlungsaufträge).
+ * Abstract base class for MT10x documents (payment orders).
  * 
- * Gemeinsame Felder für MT101, MT103, MT104:
+ * Common fields for MT101, MT103, MT104:
  * - :20:  Sender's Reference
  * - :23B: Bank Operation Code
  * - :32A/B: Value Date, Currency, Amount
  * - :50:  Ordering Customer (Auftraggeber)
- * - :59:  Beneficiary (Begünstigter)
+ * - :59:  Beneficiary
  * - :70:  Remittance Information (Verwendungszweck)
  * - :71A: Details of Charges
  * 
@@ -61,89 +61,89 @@ abstract class MtDocumentAbstract {
     }
 
     /**
-     * Gibt den MT-Typ zurück.
+     * Returns the MT type.
      */
     abstract public function getMtType(): MtType;
 
     /**
-     * Gibt die Sender's Reference zurück (Feld :20:).
+     * Returns the sender's reference (field :20:).
      */
     public function getSendersReference(): string {
         return $this->sendersReference;
     }
 
     /**
-     * Gibt die Überweisungsdetails zurück.
+     * Returns the transfer details.
      */
     public function getTransferDetails(): TransferDetails {
         return $this->transferDetails;
     }
 
     /**
-     * Gibt den Auftraggeber zurück (Feld :50:).
+     * Returns the ordering customer (field :50:).
      */
     public function getOrderingCustomer(): Party {
         return $this->orderingCustomer;
     }
 
     /**
-     * Gibt den Begünstigten zurück (Feld :59:).
+     * Returns the beneficiary (field :59:).
      */
     public function getBeneficiary(): Party {
         return $this->beneficiary;
     }
 
     /**
-     * Gibt den Verwendungszweck zurück (Feld :70:).
+     * Returns the remittance information (field :70:).
      */
     public function getRemittanceInfo(): ?string {
         return $this->remittanceInfo;
     }
 
     /**
-     * Gibt den Gebührencode zurück (Feld :71A:).
+     * Returns the charges code (field :71A:).
      */
     public function getChargesCode(): ?ChargesCode {
         return $this->chargesCode;
     }
 
     /**
-     * Gibt das Erstellungsdatum zurück.
+     * Returns the creation date.
      */
     public function getCreationDateTime(): DateTimeImmutable {
         return $this->creationDateTime;
     }
 
     /**
-     * Gibt das Valutadatum zurück.
+     * Returns the value date.
      */
     public function getValueDate(): DateTimeImmutable {
         return $this->transferDetails->getValueDate();
     }
 
     /**
-     * Gibt die Währung zurück.
+     * Returns the currency.
      */
     public function getCurrency(): CurrencyCode {
         return $this->transferDetails->getCurrency();
     }
 
     /**
-     * Gibt den Betrag zurück.
+     * Returns the amount.
      */
     public function getAmount(): float {
         return $this->transferDetails->getAmount();
     }
 
     /**
-     * Gibt den formatierten Betrag zurück.
+     * Returns the formatted amount.
      */
     public function getFormattedAmount(): string {
         return $this->transferDetails->getFormattedAmount();
     }
 
     /**
-     * Generiert die gemeinsamen SWIFT-Felder.
+     * Generates the common SWIFT fields.
      * 
      * @return array<string, string>
      */

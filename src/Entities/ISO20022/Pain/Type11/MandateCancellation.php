@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type11;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
 
 /**
- * Mandate Cancellation für pain.011.
+ * Mandate cancellation for pain.011.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type11
  */

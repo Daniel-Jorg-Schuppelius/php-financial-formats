@@ -24,10 +24,10 @@ use DOMDocument;
 /**
  * CAMT.033 Document (Request for Duplicate).
  *
- * Repräsentiert eine Anfrage für ein Duplikat eines Dokuments
- * gemäß ISO 20022 camt.033.001.xx Standard.
+ * Represents a request for a duplicate of a document
+ * according to ISO 20022 camt.033.001.xx Standard.
  *
- * Wird verwendet, um ein Duplikat einer Nachricht
+ * Used to request a duplicate of a message
  * (z.B. Kontoauszug, Zahlungsanweisung) anzufordern.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type33

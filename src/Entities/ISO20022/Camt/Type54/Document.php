@@ -20,12 +20,12 @@ use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt054Generator;
 /**
  * CAMT.054 Document (Bank to Customer Debit Credit Notification).
  * 
- * Repräsentiert einen Soll/Haben-Avis (Einzelumsatzbenachrichtigung) gemäß
+ * Represents a debit/credit notification (single transaction notification) according to
  * ISO 20022 camt.054.001.02/08 Standard.
  * 
- * Verwendet <BkToCstmrDbtCdtNtfctn> als Root und <Ntfctn> für Notifications.
+ * Uses <BkToCstmrDbtCdtNtfctn> as root and <Ntfctn> for notifications.
  * 
- * Anders als CAMT.052/053 enthält CAMT.054 normalerweise keine Salden,
+ * Unlike CAMT.052/053, CAMT.054 normally contains no balances,
  * sondern nur einzelne Buchungsbenachrichtigungen.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt054
@@ -54,7 +54,7 @@ class Document extends CamtDocumentAbstract {
     }
 
     /**
-     * Gibt das Dokument als XML-String zurück.
+     * Returns the document as XML string.
      */
     public function __toString(): string {
         return $this->toXml();

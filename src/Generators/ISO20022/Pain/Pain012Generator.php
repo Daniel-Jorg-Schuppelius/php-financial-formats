@@ -18,10 +18,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type12\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type12\MandateAcceptance;
 
 /**
- * Generiert pain.012 XML-Dokumente (Mandate Acceptance Report).
+ * Generates pain.012 XML documents (Mandate Acceptance Report).
  * 
- * Verwendet ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
- * Unterstützt pain.012.001.08 (ISO 20022).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
+ * Supports pain.012.001.08 (ISO 20022).
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -33,7 +33,7 @@ class Pain012Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.012 Dokument.
+     * Generates XML from a pain.012 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('MndtAccptncRpt');

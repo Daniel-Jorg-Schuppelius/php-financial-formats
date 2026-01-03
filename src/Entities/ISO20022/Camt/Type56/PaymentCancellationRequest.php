@@ -18,10 +18,10 @@ use DateTimeImmutable;
 /**
  * CAMT.056 Payment Transaction Information.
  * 
- * Repräsentiert eine einzelne Stornierungsanfrage für eine Zahlung 
- * gemäß ISO 20022 camt.056.001.xx Standard.
+ * Represents a single cancellation request for a payment 
+ * according to ISO 20022 camt.056.001.xx Standard.
  * 
- * Enthält Informationen zur ursprünglichen Transaktion und den Stornierungsgrund.
+ * Contains information about the original transaction and the cancellation reason.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type56
  */

@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Enums\MandateStatus;
 use DateTimeImmutable;
 
 /**
- * Mandate Acceptance für pain.012.
+ * Mandate acceptance for pain.012.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type12
  */

@@ -17,7 +17,7 @@ enum BookingType: int {
     case AnnualFinancialStatement = 2; // Jahresabschluss
 
     /**
-     * DATEV-Regex-Muster für Buchungstyp.
+     * DATEV regex pattern for booking type.
      */
     public static function pattern(): string {
         return '^[1-2]$';

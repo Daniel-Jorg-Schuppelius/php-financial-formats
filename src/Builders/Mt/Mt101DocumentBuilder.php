@@ -22,10 +22,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für MT101 Request for Transfer.
+ * Builder for MT101 Request for Transfer.
  * 
- * Erstellt Sammelüberweisungen gemäß SWIFT-Standard. Ermöglicht das Senden
- * mehrerer Zahlungsaufträge in einer Nachricht.
+ * Creates batch transfers according to SWIFT standard. Enables sending
+ * multiple payment orders in one message.
  * 
  * Verwendung:
  * ```php
@@ -73,7 +73,7 @@ final class Mt101DocumentBuilder {
      */
     public function customerReference(string $reference): self {
         if (strlen($reference) > 16) {
-            throw new InvalidArgumentException('Customer Reference darf maximal 16 Zeichen lang sein');
+            throw new InvalidArgumentException('Customer reference must not exceed 16 characters');
         }
         $clone = clone $this;
         $clone->customerReference = $reference;
@@ -105,7 +105,7 @@ final class Mt101DocumentBuilder {
     }
 
     /**
-     * Setzt den Auftraggeber mit vollständiger Party.
+     * Sets the ordering party with complete Party.
      */
     public function orderingCustomerParty(Party $party): self {
         $clone = clone $this;
@@ -123,7 +123,7 @@ final class Mt101DocumentBuilder {
     }
 
     /**
-     * Setzt die Ordering Institution mit vollständiger Party.
+     * Sets the Ordering Institution with complete Party.
      */
     public function orderingInstitutionParty(Party $party): self {
         $clone = clone $this;
@@ -132,7 +132,7 @@ final class Mt101DocumentBuilder {
     }
 
     /**
-     * Setzt das gewünschte Ausführungsdatum (Feld :30:).
+     * Sets the requested execution date (Field :30:).
      */
     public function requestedExecutionDate(DateTimeImmutable $date): self {
         $clone = clone $this;
@@ -157,7 +157,7 @@ final class Mt101DocumentBuilder {
     }
 
     /**
-     * Fügt eine vorgefertigte Transaktion hinzu.
+     * Adds a pre-built transaction.
      */
     public function addTransaction(Transaction $transaction): self {
         $clone = clone $this;
@@ -166,7 +166,7 @@ final class Mt101DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Transaktionen hinzu.
+     * Adds multiple transactions.
      * 
      * @param Transaction[] $transactions
      */
@@ -177,7 +177,7 @@ final class Mt101DocumentBuilder {
     }
 
     /**
-     * Wird von Mt101TransactionBuilder aufgerufen, um die Transaktion hinzuzufügen.
+     * Called by Mt101TransactionBuilder to add the transaction.
      * @internal
      */
     public function pushTransaction(Transaction $transaction): self {
@@ -215,7 +215,7 @@ final class Mt101DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache Sammelüberweisung.
+     * Creates a simple batch transfer.
      * 
      * @param array<array{reference: string, amount: float, currency: CurrencyCode, beneficiaryAccount: string, beneficiaryName: string, beneficiaryBic?: string, remittanceInfo?: string}> $payments
      */
@@ -248,7 +248,7 @@ final class Mt101DocumentBuilder {
 }
 
 /**
- * Helper-Builder für einzelne MT101 Transaktionen.
+ * Helper builder for individual MT101 transactions.
  */
 final class Mt101TransactionBuilder {
     private string $transactionReference;
@@ -263,13 +263,13 @@ final class Mt101TransactionBuilder {
         string $transactionReference
     ) {
         if (strlen($transactionReference) > 16) {
-            throw new InvalidArgumentException('Transaction Reference darf maximal 16 Zeichen lang sein');
+            throw new InvalidArgumentException('Transaction reference must not exceed 16 characters');
         }
         $this->transactionReference = $transactionReference;
     }
 
     /**
-     * Setzt Betrag, Währung und Valutadatum (Feld :32B:).
+     * Sets amount, currency and value date (Field :32B:).
      */
     public function amount(float $amount, CurrencyCode $currency, DateTimeImmutable $valueDate): self {
         $clone = clone $this;
@@ -282,7 +282,7 @@ final class Mt101TransactionBuilder {
     }
 
     /**
-     * Setzt die TransferDetails mit vollständigem Objekt.
+     * Sets the TransferDetails with complete object.
      */
     public function transferDetails(TransferDetails $details): self {
         $clone = clone $this;
@@ -291,7 +291,7 @@ final class Mt101TransactionBuilder {
     }
 
     /**
-     * Setzt den Begünstigten (Feld :59:).
+     * Sets the beneficiary (Field :59:).
      */
     public function beneficiary(string $account, string $name, ?string $bic = null, ?string $address = null): self {
         $clone = clone $this;
@@ -305,7 +305,7 @@ final class Mt101TransactionBuilder {
     }
 
     /**
-     * Setzt den Begünstigten mit vollständiger Party.
+     * Sets the beneficiary with complete Party.
      */
     public function beneficiaryParty(Party $party): self {
         $clone = clone $this;
@@ -332,7 +332,7 @@ final class Mt101TransactionBuilder {
     }
 
     /**
-     * Setzt den Gebührencode (Feld :71A:).
+     * Sets the charges code (Field :71A:).
      */
     public function chargesCode(ChargesCode $code): self {
         $clone = clone $this;
@@ -341,7 +341,7 @@ final class Mt101TransactionBuilder {
     }
 
     /**
-     * Beendet die Transaktion und kehrt zum Haupt-Builder zurück.
+     * Ends the transaction and returns to the main builder.
      */
     public function done(): Mt101DocumentBuilder {
         if ($this->transferDetails === null) {

@@ -18,10 +18,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.027 Documents (Claim Non Receipt).
+ * Builder for CAMT.027 Documents (Claim Non Receipt).
  * 
- * Erstellt Anfragen zum Nachweis einer nicht erhaltenen Zahlung.
- * Wird vom Begünstigten verwendet, um eine Zahlung einzufordern.
+ * Creates requests for proof of a payment not received.
+ * Used by the beneficiary to claim a payment.
  * 
  * Verwendung:
  * ```php
@@ -64,21 +64,21 @@ final class Camt027DocumentBuilder {
 
     private function __construct(string $assignmentId) {
         if (strlen($assignmentId) > 35) {
-            throw new InvalidArgumentException('AssignmentId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('AssignmentId must not exceed 35 characters');
         }
         $this->assignmentId = $assignmentId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Assignment-ID.
+     * Creates a new builder with assignment ID.
      */
     public static function create(string $assignmentId): self {
         return new self($assignmentId);
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -87,7 +87,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Agent (sendende Bank).
+     * Sets the assigner agent (sending bank).
      */
     public function withAssignerAgent(string $bic): self {
         $clone = clone $this;
@@ -96,7 +96,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Assigner Party Name.
+     * Sets the assigner party name.
      */
     public function withAssignerPartyName(string $name): self {
         $clone = clone $this;
@@ -105,7 +105,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Agent (empfangende Bank).
+     * Sets the assignee agent (receiving bank).
      */
     public function withAssigneeAgent(string $bic): self {
         $clone = clone $this;
@@ -114,7 +114,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Assignee Party Name.
+     * Sets the assignee party name.
      */
     public function withAssigneePartyName(string $name): self {
         $clone = clone $this;
@@ -123,7 +123,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt die Case-Referenz.
+     * Sets the case reference.
      */
     public function forCase(string $caseId, ?string $caseCreator = null): self {
         $clone = clone $this;
@@ -133,7 +133,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt die Original-Transaktionsreferenzen.
+     * Sets the original transaction references.
      */
     public function withOriginalTransaction(
         ?string $messageId = null,
@@ -150,7 +150,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt die Original-Transaktionsbeträge.
+     * Sets the original transaction amounts.
      */
     public function withOriginalAmount(
         float $amount,
@@ -165,7 +165,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Original-Erstellungszeitpunkt.
+     * Sets the original creation timestamp.
      */
     public function withOriginalCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -174,7 +174,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Missing Cover Indicator.
+     * Sets the missing cover indicator.
      */
     public function withMissingCoverIndicator(bool $indicator, ?DateTimeImmutable $coverDate = null): self {
         $clone = clone $this;
@@ -184,7 +184,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Debtor-Namen.
+     * Sets the debtor name.
      */
     public function withDebtorName(string $name): self {
         $clone = clone $this;
@@ -193,7 +193,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Setzt den Creditor-Namen.
+     * Sets the creditor name.
      */
     public function withCreditorName(string $name): self {
         $clone = clone $this;
@@ -202,7 +202,7 @@ final class Camt027DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.027 Document.
+     * Creates the CAMT.027 document.
      */
     public function build(): Document {
         return new Document(

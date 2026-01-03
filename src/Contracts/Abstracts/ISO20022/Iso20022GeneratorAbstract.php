@@ -27,11 +27,11 @@ use CommonToolkit\Helper\Data\BankHelper;
 use DateTimeInterface;
 
 /**
- * Abstrakte Basisklasse für ISO 20022 XML-Generatoren.
+ * Abstract base class for ISO 20022 XML generators.
  * 
- * Nutzt ExtendedDOMDocumentBuilder für eine optimierte, fluent XML-Generierung.
- * Stellt gemeinsame Funktionalität für CAMT und Pain Generatoren bereit:
- * - Fluent Builder-API für DOM-Erstellung
+ * Uses ExtendedDOMDocumentBuilder for optimized, fluent XML generation.
+ * Provides common functionality for CAMT and Pain generators:
+ * - Fluent builder API for DOM creation
  * - Gemeinsame Strukturen (Party, Account, Amount, etc.)
  * - Formatierungs-Hilfsmethoden
  * 
@@ -76,14 +76,14 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Gibt das generierte XML als String zurück.
+     * Returns the generated XML as string.
      */
     protected function getXml(): string {
         return $this->builder->toString();
     }
 
     /**
-     * Gibt das ExtendedDOMDocument zurück.
+     * Returns the ExtendedDOMDocument.
      */
     protected function getDocument(): ExtendedDOMDocument {
         return $this->builder->build();
@@ -94,21 +94,21 @@ abstract class Iso20022GeneratorAbstract {
     // =========================================================================
 
     /**
-     * Formatiert einen Betrag für XML-Ausgabe.
+     * Formats an amount for XML output.
      */
     protected function formatAmount(float $amount): string {
         return number_format($amount, 2, '.', '');
     }
 
     /**
-     * Formatiert ein Datum für XML-Ausgabe (ISO 8601 Date).
+     * Formats a date for XML output (ISO 8601 Date).
      */
     protected function formatDate(DateTimeInterface $date): string {
         return $date->format('Y-m-d');
     }
 
     /**
-     * Formatiert ein DateTime für XML-Ausgabe (ISO 8601 DateTime mit Millisekunden und Timezone).
+     * Formats a DateTime for XML output (ISO 8601 DateTime with milliseconds and timezone).
      */
     protected function formatDateTime(DateTimeInterface $dateTime): string {
         return $dateTime->format('Y-m-d\TH:i:s.vP');
@@ -122,7 +122,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Escapt HTML-Sonderzeichen für XML.
+     * Escapes HTML special characters for XML.
      */
     protected function escape(string $value): string {
         return htmlspecialchars($value, ENT_XML1 | ENT_QUOTES, 'UTF-8');
@@ -133,7 +133,7 @@ abstract class Iso20022GeneratorAbstract {
     // =========================================================================
 
     /**
-     * Fügt ein Amount-Element mit Currency-Attribut hinzu.
+     * Adds an amount element with currency attribute.
      * 
      * Beispiel: <Amt Ccy="EUR">1234.56</Amt>
      */
@@ -147,7 +147,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt ein Element nur hinzu wenn der Wert nicht null/leer ist.
+     * Adds an element only if the value is not null/empty.
      */
     protected function addChildIfNotEmpty(string $name, ?string $value): self {
         $this->builder->addChildIfNotEmpty($name, $value !== null ? $this->escape($value) : null);
@@ -155,7 +155,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine Account-Identifikation hinzu (IBAN oder Other).
+     * Adds an account identification (IBAN or Other).
      */
     protected function addAccountIdentification(string $elementName, AccountIdentification $account): self {
         $this->builder->addElement($elementName);
@@ -183,7 +183,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine Account-Identifikation mit automatischer IBAN-Erkennung hinzu.
+     * Adds an account identification with automatic IBAN detection.
      */
     protected function addAccountIdentificationFromString(string $elementName, string $identifier, bool $includeCurrency = false, ?CurrencyCode $currency = null): self {
         $this->builder
@@ -211,7 +211,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine PartyIdentification hinzu.
+     * Adds a PartyIdentification.
      */
     protected function addPartyIdentification(string $elementName, PartyIdentification $party): self {
         $this->builder->addElement($elementName);
@@ -256,7 +256,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine PostalAddress hinzu.
+     * Adds a PostalAddress.
      */
     protected function addPostalAddress(PostalAddress $address): self {
         $this->builder->addElement('PstlAdr');
@@ -280,7 +280,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine FinancialInstitution hinzu.
+     * Adds a FinancialInstitution.
      */
     protected function addFinancialInstitution(string $elementName, FinancialInstitution $institution): self {
         $this->builder
@@ -306,7 +306,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt eine PaymentIdentification hinzu.
+     * Adds a PaymentIdentification.
      */
     protected function addPaymentIdentification(PaymentIdentification $paymentId): self {
         $this->builder->addElement('PmtId');
@@ -321,7 +321,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt RemittanceInformation hinzu.
+     * Adds RemittanceInformation.
      */
     protected function addRemittanceInformation(RemittanceInformation $remittance): self {
         $this->builder->addElement('RmtInf');
@@ -347,7 +347,7 @@ abstract class Iso20022GeneratorAbstract {
     }
 
     /**
-     * Fügt einen BIC-basierten Agent hinzu.
+     * Adds a BIC-based agent.
      */
     protected function addAgentByBic(string $elementName, string $bic): self {
         $this->builder

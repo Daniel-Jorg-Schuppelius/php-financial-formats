@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type10;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
 
 /**
- * Mandate Amendment für pain.010.
+ * Mandate amendment for pain.010.
  * 
  * Kombiniert das neue Mandat mit den Original-Werten.
  * 

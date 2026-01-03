@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58;
 
 /**
- * Cancellation Item für CAMT.058.
+ * Cancellation item for CAMT.058.
  *
- * Repräsentiert ein einzelnes Element einer Stornierungsbenachrichtigung.
+ * Represents a single element of a cancellation notification.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type58
  */

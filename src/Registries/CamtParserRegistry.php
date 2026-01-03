@@ -45,10 +45,10 @@ use DOMNode;
 use DOMXPath;
 
 /**
- * Registry für CAMT-Parser-Konfigurationen.
+ * Registry for CAMT parser configurations.
  * 
- * Registriert alle unterstützten CAMT-Typen mit ihren XPath-Mappings
- * für den Reflection-basierten Parser.
+ * Registers all supported CAMT types with their XPath mappings
+ * for the reflection-based parser.
  * 
  * @package CommonToolkit\FinancialFormats\Registries
  */
@@ -57,7 +57,7 @@ class CamtParserRegistry {
 
     /**
      * Initialisiert alle CAMT-Typ-Registrierungen.
-     * Wird automatisch beim ersten Zugriff aufgerufen.
+     * Is automatically called on first access.
      */
     public static function initialize(): void {
         if (self::$initialized) {
@@ -70,7 +70,7 @@ class CamtParserRegistry {
 
     /**
      * Registriert Investigation-Dokumente (026, 027, 028, 030, 031, 033-039, 087).
-     * Diese haben alle ähnliche Strukturen mit Assignment + Case.
+     * These all have similar structures with Assignment + Case.
      */
     private static function registerInvestigationDocuments(): void {
         // CAMT.026 - Unable to Apply
@@ -343,7 +343,7 @@ class CamtParserRegistry {
     }
 
     /**
-     * Erstellt Post-Processor für CAMT.026 (Unable to Apply Reasons).
+     * Creates post-processor for CAMT.026 (Unable to Apply Reasons).
      */
     private static function getCamt026PostProcessor(): callable {
         return function (Camt026Document $document, DOMXPath $xpath, DOMNode $rootNode, string $prefix): void {
@@ -369,7 +369,7 @@ class CamtParserRegistry {
     }
 
     /**
-     * Erstellt Post-Processor für CAMT.028 (Additional Payment Information).
+     * Creates post-processor for CAMT.028 (Additional Payment Information).
      */
     private static function getCamt028PostProcessor(): callable {
         return function (Camt028Document $document, DOMXPath $xpath, DOMNode $rootNode, string $prefix): void {
@@ -393,7 +393,7 @@ class CamtParserRegistry {
     }
 
     /**
-     * Erstellt Post-Processor für CAMT.087 (Modification Requests).
+     * Creates post-processor for CAMT.087 (Modification Requests).
      */
     private static function getCamt087PostProcessor(): callable {
         return function (Camt087Document $document, DOMXPath $xpath, DOMNode $rootNode, string $prefix): void {
@@ -425,7 +425,7 @@ class CamtParserRegistry {
     }
 
     /**
-     * Erstellt Post-Processor für CAMT.057 (Notification Items).
+     * Creates post-processor for CAMT.057 (Notification Items).
      */
     private static function getCamt057PostProcessor(): callable {
         return function (Camt057Document $document, DOMXPath $xpath, DOMNode $rootNode, string $prefix): void {
@@ -459,7 +459,7 @@ class CamtParserRegistry {
     }
 
     /**
-     * Erstellt Post-Processor für CAMT.058 (Cancellation Items).
+     * Creates post-processor for CAMT.058 (Cancellation Items).
      */
     private static function getCamt058PostProcessor(): callable {
         return function (Camt058Document $document, DOMXPath $xpath, DOMNode $rootNode, string $prefix): void {
@@ -485,7 +485,7 @@ class CamtParserRegistry {
     }
 
     /**
-     * Erstellt Post-Processor für CAMT.059 (Status Items).
+     * Creates post-processor for CAMT.059 (Status Items).
      */
     private static function getCamt059PostProcessor(): callable {
         return function (Camt059Document $document, DOMXPath $xpath, DOMNode $rootNode, string $prefix): void {
@@ -513,14 +513,14 @@ class CamtParserRegistry {
     }
 
     /**
-     * Prüft ob die Registry initialisiert ist.
+     * Checks if the registry is initialized.
      */
     public static function isInitialized(): bool {
         return self::$initialized;
     }
 
     /**
-     * Setzt die Registry zurück (für Tests).
+     * Resets the registry (for tests).
      */
     public static function reset(): void {
         CamtReflectionParser::clearRegistrations();

@@ -24,7 +24,7 @@ use RuntimeException;
 use DateTimeImmutable;
 
 /**
- * Builder für DATEV Diverse Adressen-Dokumente (V700).
+ * Builder for DATEV Various Addresses documents (V700).
  * Erstellt komplette DATEV-Export-Dateien mit MetaHeader, FieldHeader und Adressdaten.
  */
 final class VariousAddressesDocumentBuilder extends CSVDocumentBuilder {
@@ -55,7 +55,7 @@ final class VariousAddressesDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Fügt eine Datenzeile hinzu.
+     * Adds a data line.
      */
     public function addDataLine(DataLine $dataLine): self {
         $this->dataLines[] = $dataLine;
@@ -63,7 +63,7 @@ final class VariousAddressesDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Convenience-Methode zum Hinzufügen einer Adresse.
+     * Convenience method for adding an address.
      */
     public function addAddress(
         string $addressNumber,
@@ -180,7 +180,7 @@ final class VariousAddressesDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Erstellt einen Standard-MetaHeader für VariousAddresses.
+     * Creates a standard MetaHeader for VariousAddresses.
      */
     private function createDefaultMetaHeader(): MetaHeaderLine {
         $definition = new MetaHeaderDefinition();
@@ -195,7 +195,7 @@ final class VariousAddressesDocumentBuilder extends CSVDocumentBuilder {
     }
 
     /**
-     * Liefert Statistiken über den aktuellen Builder-Zustand.
+     * Returns statistics about the current builder state.
      */
     public function getStats(): array {
         return [

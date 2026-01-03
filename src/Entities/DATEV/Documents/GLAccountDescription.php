@@ -24,7 +24,7 @@ use RuntimeException;
 
 /**
  * DATEV-Kontenbeschriftungen-Dokument.
- * Spezielle Document-Klasse für Kontenbeschriftungen-Format (Kategorie 20).
+ * Special document class for account labels format (Category 20).
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus GLAccountDescriptionHeaderField::getMaxLength() angewendet.
@@ -36,9 +36,9 @@ final class GLAccountDescription extends Document {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus GLAccountDescriptionHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from GLAccountDescriptionHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -55,14 +55,14 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für diese Document-Art.
+     * Returns the DATEV category for this document type.
      */
     public function getCategory(): Category {
         return Category::Sachkontenbeschriftungen;
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      */
     public function getFormatType(): string {
         return Category::Sachkontenbeschriftungen->nameValue();
@@ -83,7 +83,7 @@ final class GLAccountDescription extends Document {
     // ==== ACCOUNT FIELDS ====
 
     /**
-     * Gibt die Kontonummer zurück (Feld 1).
+     * Returns the account number (field 1).
      */
     public function getAccountNumber(int $rowIndex): ?int {
         $value = $this->getFieldValue($rowIndex, GLAccountDescriptionHeaderField::Konto->getPosition());
@@ -103,7 +103,7 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Gibt die Kontenbeschriftung zurück (Feld 2, max 40 Zeichen).
+     * Returns the account label (field 2, max 40 characters).
      */
     public function getAccountDescription(int $rowIndex): ?string {
         $value = $this->getFieldValue($rowIndex, GLAccountDescriptionHeaderField::Kontenbeschriftung->getPosition());
@@ -120,7 +120,7 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Gibt die lange Kontenbeschriftung zurück (Feld 4, max 300 Zeichen).
+     * Returns the long account label (field 4, max 300 characters).
      */
     public function getLongAccountDescription(int $rowIndex): ?string {
         $value = $this->getFieldValue($rowIndex, GLAccountDescriptionHeaderField::KontenbeschriftungLang->getPosition());
@@ -139,7 +139,7 @@ final class GLAccountDescription extends Document {
     // ==== LANGUAGE FIELD ====
 
     /**
-     * Gibt die Sprach-ID zurück (Feld 3).
+     * Returns the language ID (field 3).
      * de-DE = Deutsch, en-GB = Englisch
      */
     public function getLanguageCodeValue(int $rowIndex): ?LanguageCode {
@@ -156,7 +156,7 @@ final class GLAccountDescription extends Document {
     // ==== CONVENIENCE METHODS ====
 
     /**
-     * Prüft, ob eine Kontenbeschriftung auf Deutsch ist.
+     * Checks if an account label is in German.
      */
     public function isGerman(int $rowIndex): bool {
         $lang = $this->getLanguageCodeValue($rowIndex);
@@ -164,7 +164,7 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Prüft, ob eine Kontenbeschriftung auf Englisch ist.
+     * Checks if an account label is in English.
      */
     public function isEnglish(int $rowIndex): bool {
         $lang = $this->getLanguageCodeValue($rowIndex);
@@ -172,7 +172,7 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Gibt alle deutschen Kontenbeschriftungen zurück.
+     * Returns all German account labels.
      *
      * @return int[] Array der Row-Indices
      */
@@ -188,7 +188,7 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Gibt alle englischen Kontenbeschriftungen zurück.
+     * Returns all English account labels.
      *
      * @return int[] Array der Row-Indices
      */
@@ -204,7 +204,7 @@ final class GLAccountDescription extends Document {
     }
 
     /**
-     * Findet eine Kontenbeschriftung für eine bestimmte Kontonummer und Sprache.
+     * Finds an account label for a specific account number and language.
      *
      * @return int|null Row-Index oder null, wenn nicht gefunden
      */

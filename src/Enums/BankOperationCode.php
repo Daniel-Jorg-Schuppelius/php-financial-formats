@@ -13,20 +13,20 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * Bank Operation Code für MT10x-Überweisungen (Feld :23B:).
+ * Bank Operation Code for MT10x transfers (Field :23B:).
  * 
  * Definiert die Art der Transaktion.
  */
 enum BankOperationCode: string {
     /**
      * CRED - Credit Transfer
-     * Normale Gutschrift/Überweisung
+     * Normal credit/transfer
      */
     case CRED = 'CRED';
 
     /**
      * CRTS - Credit Transfer for Test
-     * Testüberweisung
+     * Test transfer
      */
     case CRTS = 'CRTS';
 
@@ -38,7 +38,7 @@ enum BankOperationCode: string {
 
     /**
      * SPRI - Priority Payment
-     * Prioritätszahlung
+     * Priority payment
      */
     case SPRI = 'SPRI';
 
@@ -49,20 +49,20 @@ enum BankOperationCode: string {
     case SSTD = 'SSTD';
 
     /**
-     * Gibt die deutsche Beschreibung zurück.
+     * Returns the German description.
      */
     public function description(): string {
         return match ($this) {
             self::CRED => 'Überweisung',
-            self::CRTS => 'Testüberweisung',
+            self::CRTS => 'Test transfer',
             self::SPAY => 'Sonderzahlung',
-            self::SPRI => 'Prioritätszahlung',
+            self::SPRI => 'Priority payment',
             self::SSTD => 'Standard-Abwicklung',
         };
     }
 
     /**
-     * Gibt die englische Beschreibung zurück.
+     * Returns the English description.
      */
     public function descriptionEn(): string {
         return match ($this) {
@@ -75,7 +75,7 @@ enum BankOperationCode: string {
     }
 
     /**
-     * Prüft ob es sich um eine Testüberweisung handelt.
+     * Checks if this is a test transfer.
      */
     public function isTest(): bool {
         return $this === self::CRTS;

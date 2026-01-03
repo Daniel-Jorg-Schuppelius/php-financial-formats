@@ -20,9 +20,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für pain.012 Documents (Mandate Acceptance Report).
+ * Builder for pain.012 Documents (Mandate Acceptance Report).
  * 
- * Erstellt Bestätigungen/Ablehnungen für Mandatsanfragen.
+ * Creates confirmations/rejections for mandate requests.
  * Wird typischerweise von Banken als Antwort auf pain.009/010/011 generiert.
  * 
  * Verwendung:
@@ -46,7 +46,7 @@ final class Pain012DocumentBuilder {
 
     private function __construct(string $messageId, string $originalMessageId, string $originalMessageNameId) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
@@ -55,21 +55,21 @@ final class Pain012DocumentBuilder {
     }
 
     /**
-     * Erzeugt Builder für pain.009 Antwort (Mandate Initiation).
+     * Creates builder for pain.009 response (Mandate Initiation).
      */
     public static function forPain009(string $messageId, string $originalMessageId): self {
         return new self($messageId, $originalMessageId, 'pain.009.001.08');
     }
 
     /**
-     * Erzeugt Builder für pain.010 Antwort (Mandate Amendment).
+     * Creates builder for pain.010 response (Mandate Amendment).
      */
     public static function forPain010(string $messageId, string $originalMessageId): self {
         return new self($messageId, $originalMessageId, 'pain.010.001.08');
     }
 
     /**
-     * Erzeugt Builder für pain.011 Antwort (Mandate Cancellation).
+     * Creates builder for pain.011 response (Mandate Cancellation).
      */
     public static function forPain011(string $messageId, string $originalMessageId): self {
         return new self($messageId, $originalMessageId, 'pain.011.001.08');
@@ -94,7 +94,7 @@ final class Pain012DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandat-Annahme hinzu.
+     * Adds a mandate acceptance.
      */
     public function addAccepted(string $mandateId, ?Mandate $mandate = null): self {
         $clone = clone $this;
@@ -103,7 +103,7 @@ final class Pain012DocumentBuilder {
     }
 
     /**
-     * Fügt eine Mandat-Ablehnung hinzu.
+     * Adds a mandate rejection.
      */
     public function addRejected(string $mandateId, string $rejectReason): self {
         $clone = clone $this;
@@ -112,7 +112,7 @@ final class Pain012DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige MandateAcceptance hinzu.
+     * Adds a completed MandateAcceptance.
      */
     public function addMandateAcceptance(MandateAcceptance $acceptance): self {
         $clone = clone $this;
@@ -121,7 +121,7 @@ final class Pain012DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Mandate-Annahmen/Ablehnungen hinzu.
+     * Adds multiple mandate acceptances/rejections.
      * 
      * @param MandateAcceptance[] $acceptances
      */
@@ -153,7 +153,7 @@ final class Pain012DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache Annahme für ein Mandat.
+     * Creates a simple acceptance for a mandate.
      */
     public static function createSingleAcceptance(
         string $messageId,
@@ -172,7 +172,7 @@ final class Pain012DocumentBuilder {
     }
 
     /**
-     * Erstellt eine einfache Ablehnung für ein Mandat.
+     * Creates a simple rejection for a mandate.
      */
     public static function createSingleRejection(
         string $messageId,

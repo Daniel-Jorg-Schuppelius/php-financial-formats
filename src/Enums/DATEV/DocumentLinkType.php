@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * Programmkürzel für DATEV-Beleglinks.
+ * Program abbreviation for DATEV document links.
  */
 enum DocumentLinkType: string {
     case BEDI = 'BEDI'; // Unternehmen online

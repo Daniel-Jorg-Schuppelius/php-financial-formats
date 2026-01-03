@@ -24,7 +24,7 @@ final class MetaHeaderDefinition extends MetaHeaderDefinitionAbstract {
     protected const VERSION = 700;
 
     /**
-     * Liefert den Enum-Typ, der die Meta-Header-Felder beschreibt.
+     * Liefert den Enum-Typ, der die Meta-Header fields beschreibt.
      *
      * @return class-string<MetaHeaderField>
      */
@@ -33,7 +33,7 @@ final class MetaHeaderDefinition extends MetaHeaderDefinitionAbstract {
     }
 
     /**
-     * Reihenfolge der Meta-Header-Felder wie von DATEV spezifiziert.
+     * Reihenfolge der Meta-Header fields wie von DATEV spezifiziert.
      *
      * @return MetaHeaderFieldInterface[]
      */
@@ -43,7 +43,7 @@ final class MetaHeaderDefinition extends MetaHeaderDefinitionAbstract {
     }
 
     /**
-     * Liefert die fachlichen Default-Werte für den Metaheader.
+     * Returns the business default values for the meta header.
      *
      * Enums werden hier auf ihre skalaren Werte (int/string) abgebildet, damit
      * CSV-Ausgabe und Regex-Validierung konsistent bleiben.

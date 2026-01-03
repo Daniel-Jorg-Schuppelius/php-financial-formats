@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums;
 
 /**
- * Sequence Type für SEPA-Lastschriften (SeqTp).
+ * Sequence Type for SEPA direct debits (SeqTp).
  * 
  * Definiert die Sequenz der Lastschrift im Mandatskontext.
  * 
@@ -26,7 +26,7 @@ enum SequenceType: string {
     case ONE_OFF = 'OOFF';    // Einmalige Lastschrift
 
     /**
-     * Gibt die Beschreibung zurück.
+     * Returns the description.
      */
     public function description(): string {
         return match ($this) {
@@ -38,14 +38,14 @@ enum SequenceType: string {
     }
 
     /**
-     * SEPA-Standardwert für einmalige Lastschriften.
+     * SEPA default value for one-time direct debits.
      */
     public static function defaultSepa(): self {
         return self::ONE_OFF;
     }
 
     /**
-     * Prüft, ob Mandat erforderlich ist.
+     * Checks if mandate is required.
      */
     public function requiresMandate(): bool {
         return true; // Alle SEPA-Lastschriften erfordern ein Mandat

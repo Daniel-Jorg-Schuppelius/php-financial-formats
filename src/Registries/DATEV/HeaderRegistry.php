@@ -18,13 +18,13 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 use RuntimeException;
 
 /**
- * Zentrale Registry für DATEV-Header-Definitionen.
- * Nutzt das VersionDiscovery-System zur automatischen Erkennung verfügbarer Versionen.
+ * Central registry for DATEV header definitions.
+ * Uses the VersionDiscovery system for automatic detection of available versions.
  * 
- * Die Format-Definitionen sind jetzt direkt über die HeaderField-Enums verfügbar,
+ * The format definitions are now directly available via HeaderField enums,
  * die FieldHeaderInterface implementieren.
  * 
- * @see VersionDiscovery Für automatische Versionserkennung
+ * @see VersionDiscovery For automatic version detection
  */
 final class HeaderRegistry {
     /** @var array<int, MetaHeaderDefinitionInterface> */
@@ -32,7 +32,7 @@ final class HeaderRegistry {
 
 
     /**
-     * Liefert die MetaHeader-Definition für eine Version (dynamisch über Discovery).
+     * Returns the MetaHeader definition for a version (dynamically via Discovery).
      */
     public static function get(int $version): MetaHeaderDefinitionInterface {
         // Prüfe zuerst ob durch Discovery verfügbar
@@ -53,7 +53,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Liefert den Format-Enum für eine Kategorie und Version.
+     * Returns the format enum for a category and version.
      * 
      * @return class-string<FieldHeaderInterface>
      */
@@ -75,7 +75,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Alias für getFormatEnum für Abwärtskompatibilität.
+     * Alias for getFormatEnum for backwards compatibility.
      * @deprecated Use getFormatEnum() instead
      * 
      * @return class-string<FieldHeaderInterface>
@@ -85,7 +85,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Prüft ob eine Format/Version-Kombination unterstützt wird (dynamisch).
+     * Checks if a format/version combination is supported (dynamically).
      */
     public static function isFormatSupported(Category $category, int $version): bool {
         return VersionDiscovery::isFormatSupported($category, $version);
@@ -93,7 +93,7 @@ final class HeaderRegistry {
 
     /**
      * Automatische Erkennung aus dem rohen Werte-Array.
-     * Prüft die Versionsnummer an Position 1 (feste DATEV-Struktur).
+     * Checks the version number at position 1 (fixed DATEV structure).
      */
     public static function detectFromValues(array $values): ?MetaHeaderDefinitionInterface {
         // Versionsnummer muss an Position 1 stehen (DATEV-Standard)
@@ -109,7 +109,7 @@ final class HeaderRegistry {
 
     /**
      * Automatische Erkennung direkt aus einer geparsten DataLine.
-     * Prüft die Versionsnummer an Position 1 (feste DATEV-Struktur).
+     * Checks the version number at position 1 (fixed DATEV structure).
      */
     public static function detectFromDataLine(DataLine $dataLine): ?MetaHeaderDefinitionInterface {
         $fields = $dataLine->getFields();
@@ -140,7 +140,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Gibt alle unterstützten Versionen zurück (dynamisch über Discovery).
+     * Returns all supported versions (dynamically via Discovery).
      * 
      * @return int[]
      */
@@ -149,7 +149,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Gibt alle verfügbaren Versionen zurück (auch nicht unterstützte, dynamisch).
+     * Returns all available versions (including unsupported ones, dynamically).
      * 
      * @return int[]
      */
@@ -158,7 +158,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Gibt alle unterstützten Formate für eine Version zurück (dynamisch).
+     * Returns all supported formats for a version (dynamisch).
      * 
      * @return Category[]
      */
@@ -167,7 +167,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Gibt alle unterstützten Format-Versionen-Kombinationen zurück (dynamisch).
+     * Returns all supported format-version combinations (dynamically).
      * 
      * @return array<string, array{category: Category, version: int, supported: bool}>
      */
@@ -190,7 +190,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Gibt detaillierte Informationen über alle erkannten Versionen zurück.
+     * Returns detailed information about all detected versions.
      * 
      * @return array<int, array{version: int, path: string, metaHeaderClass: ?string, formatEnums: array<int, class-string<FieldHeaderInterface>>, formatCount: int}>
      */
@@ -199,7 +199,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Prüft die Konsistenz einer Version.
+     * Checks the consistency of a version.
      * 
      * @return array{valid: bool, missing: string[], issues: string[]}
      */
@@ -208,7 +208,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Erzwingt eine erneute Erkennung der verfügbaren Versionen.
+     * Forces re-detection of available versions.
      */
     public static function refresh(): void {
         VersionDiscovery::refresh();
@@ -216,7 +216,7 @@ final class HeaderRegistry {
     }
 
     /**
-     * Leert den Cache für Instanzen (für Tests).
+     * Clears the instance cache (for tests).
      */
     public static function clearCache(): void {
         self::$metaHeaderInstances = [];

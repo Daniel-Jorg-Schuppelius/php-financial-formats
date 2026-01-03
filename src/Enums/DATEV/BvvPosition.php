@@ -35,7 +35,7 @@ enum BvvPosition: int {
     }
 
     /**
-     * Factory für CSV/DATEV-Parser.
+     * Factory for CSV/DATEV parser.
      */
     public static function fromInt(int $value): self {
         return match ($value) {

@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt9;
 use RuntimeException;
 
 /**
- * Gemeinsame Referenz-Klasse für alle MT9xx-Nachrichtentypen.
+ * Common reference class for all MT9xx message types.
  * 
- * Repräsentiert die Referenz in Feld :61: einer SWIFT MT-Nachricht.
+ * Represents the reference in Field :61: of a SWIFT MT message.
  * Format: [N][Transaktionscode 3 Zeichen][Referenz max. 16 Zeichen]//[Bankreferenz]
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9
@@ -44,21 +44,21 @@ class Reference {
     }
 
     /**
-     * Gibt den Transaktionscode zurück (z.B. TRF, CHK, BOE).
+     * Returns the transaction code (e.g. TRF, CHK, BOE).
      */
     public function getTransactionCode(): string {
         return $this->transactionCode;
     }
 
     /**
-     * Gibt die Kundenreferenz zurück.
+     * Returns the customer reference.
      */
     public function getReference(): string {
         return $this->reference;
     }
 
     /**
-     * Gibt die Bankreferenz zurück (nach //).
+     * Returns the bank reference (after //).
      */
     public function getBankReference(): ?string {
         return $this->bankReference;

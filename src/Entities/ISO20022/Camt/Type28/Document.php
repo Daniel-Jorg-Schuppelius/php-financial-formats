@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.028 Document (Additional Payment Information).
  * 
- * Repräsentiert zusätzliche Zahlungsinformationen
- * gemäß ISO 20022 camt.028.001.xx Standard.
+ * Represents additional payment information
+ * according to ISO 20022 camt.028.001.xx Standard.
  * 
- * Wird verwendet, um zusätzliche Informationen zu einer
+ * Used to provide additional information for a
  * bereits gesendeten Zahlung nachzureichen.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type28

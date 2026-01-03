@@ -31,15 +31,15 @@ use DOMXPath;
 use RuntimeException;
 
 /**
- * Abstrakte Basisklasse für ISO 20022 XML-Parser (CAMT, Pain).
+ * Abstract base class for ISO 20022 XML parsers (CAMT, Pain).
  * 
- * Erweitert XmlParserAbstract um ISO 20022-spezifische Funktionalität:
- * - Namespace-Erkennung für ISO 20022 URNs
+ * Extends XmlParserAbstract with ISO 20022-specific functionality:
+ * - Namespace detection for ISO 20022 URNs
  * - Gemeinsame Party/Account-Parsing-Methoden
  * - CreditDebit-Handling
  * - Balance/Transaction-Basis-Parsing
  * 
- * Bietet sowohl Instanz- als auch statische Methoden für Flexibilität.
+ * Provides both instance and static methods for flexibility.
  */
 abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
@@ -47,7 +47,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
-     * ISO 20022 URN Präfix für Namespace-Erkennung.
+     * ISO 20022 URN prefix for namespace detection.
      */
     protected const ISO20022_URN_PREFIX = 'urn:iso:std:iso:20022:tech:xsd:';
 
@@ -56,13 +56,13 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
-     * Erstellt ein ExtendedDOMDocument für ein ISO 20022 Dokument.
+     * Creates an ExtendedDOMDocument for an ISO 20022 document.
      * 
      * @param string $xmlContent Der XML-Inhalt
-     * @param string $formatType Der Format-Typ für Namespace-Erkennung (z.B. 'camt.053', 'pain.001')
-     * @param array<string> $knownNamespaces Optional: Liste bekannter Namespaces für diesen Typ
+     * @param string $formatType The format type for namespace detection (e.g. 'camt.053', 'pain.001')
+     * @param array<string> $knownNamespaces Optional: List of known namespaces for this type
      * @return array{doc: ExtendedDOMDocument, prefix: string}
-     * @throws RuntimeException Bei ungültigem XML
+     * @throws RuntimeException On invalid XML
      */
     protected static function createIso20022Document(
         string $xmlContent,
@@ -87,14 +87,14 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Erstellt DOM und XPath für ein ISO 20022 Dokument mit Namespace-Handling.
+     * Creates DOM and XPath for an ISO 20022 document with namespace handling.
      * 
      * @param string $xmlContent Der XML-Inhalt
-     * @param string $formatType Der Format-Typ für Namespace-Erkennung (z.B. 'camt.053', 'pain.001')
-     * @param array<string> $knownNamespaces Optional: Liste bekannter Namespaces für diesen Typ
+     * @param string $formatType The format type for namespace detection (e.g. 'camt.053', 'pain.001')
+     * @param array<string> $knownNamespaces Optional: List of known namespaces for this type
      * @return array{dom: DOMDocument, xpath: DOMXPath, namespace: ?string, prefix: string}
-     * @throws RuntimeException Bei ungültigem XML
-     * @deprecated Nutze createIso20022Document() für ExtendedDOMDocument
+     * @throws RuntimeException On invalid XML
+     * @deprecated Use createIso20022Document() for ExtendedDOMDocument
      */
     protected static function createIso20022XPath(
         string $xmlContent,
@@ -123,7 +123,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMDocument $dom Das DOM-Dokument
      * @param string $formatType Der Format-Typ (z.B. 'camt.053', 'pain.001')
-     * @param array<string> $knownNamespaces Bekannte Namespaces für diesen Typ
+     * @param array<string> $knownNamespaces Known namespaces for this type
      * @return string|null Der erkannte Namespace oder null
      */
     protected static function detectIso20022Namespace(
@@ -180,12 +180,12 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Initialisiert XPath mit optionalem Namespace (Rückwärtskompatibel).
+     * Initializes XPath with optional namespace (backwards compatible).
      * 
      * @param DOMDocument $dom Das DOM-Dokument (oder ExtendedDOMDocument)
      * @param string $formatType Der Format-Typ (z.B. 'camt.053', 'pain.001')
-     * @return array{0: DOMXPath, 1: string} [XPath-Objekt, Namespace-Präfix]
-     * @deprecated Nutze createIso20022Document() für ExtendedDOMDocument
+     * @return array{0: DOMXPath, 1: string} [XPath object, namespace prefix]
+     * @deprecated Use createIso20022Document() for ExtendedDOMDocument
      */
     protected static function initializeXPath(DOMDocument $dom, string $formatType = ''): array {
         // Wenn bereits ein ExtendedDOMDocument, nutze dessen XPath
@@ -231,7 +231,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Prüft den Reversal-Indikator.
+     * Checks the reversal indicator.
      * 
      * @param string|null $indicator Der Indikator-String
      * @return bool True wenn Storno
@@ -249,7 +249,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode|null $node Der Party-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return PartyIdentification Die geparste Party
      */
     protected static function parseParty(DOMXPath $xpath, ?DOMNode $node, string $prefix): PartyIdentification {
@@ -291,7 +291,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $node Der PostalAddress-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return PostalAddress Die geparste Adresse
      */
     protected static function parsePostalAddr(DOMXPath $xpath, DOMNode $node, string $prefix): PostalAddress {
@@ -325,7 +325,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode|null $node Der Account-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return AccountIdentification Die geparste Kontoidentifikation
      */
     protected static function parseAccount(DOMXPath $xpath, ?DOMNode $node, string $prefix): AccountIdentification {
@@ -351,7 +351,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode|null $node Der FinancialInstitution-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return FinancialInstitution Die geparste Institution
      */
     protected static function parseFinancialInst(DOMXPath $xpath, ?DOMNode $node, string $prefix): FinancialInstitution {
@@ -386,7 +386,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $node Der PaymentIdentification-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return PaymentIdentification Die geparste Zahlungsidentifikation
      */
     protected static function parsePaymentId(DOMXPath $xpath, DOMNode $node, string $prefix): PaymentIdentification {
@@ -406,7 +406,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode|null $node Der RemittanceInformation-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return RemittanceInformation|null Die geparste Verwendungszweck-Info
      */
     protected static function parseRemittance(DOMXPath $xpath, ?DOMNode $node, string $prefix): ?RemittanceInformation {
@@ -424,7 +424,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
         // Structured Creditor Reference
         $creditorReference = $xpath->evaluate("string({$prefix}Strd/{$prefix}CdtrRefInf/{$prefix}Ref)", $node);
 
-        // Nur zurückgeben wenn Inhalt vorhanden
+        // Only return if content is present
         if (empty($unstructuredLines) && empty($creditorReference)) {
             return null;
         }
@@ -445,7 +445,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $context Kontext-Node
      * @param string $partyType Der Party-Typ (Dbtr, Cdtr, etc.)
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return array{name: ?string, iban: ?string, bic: ?string}
      */
     protected static function parsePartyInfo(DOMXPath $xpath, DOMNode $context, string $partyType, string $prefix): array {
@@ -473,7 +473,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $context Kontext-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return string|null Die Verwendungszweck-Information
      */
     protected static function parseRemittanceInfoString(DOMXPath $xpath, DOMNode $context, string $prefix): ?string {
@@ -496,7 +496,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param DOMNode $context Kontext-Node
-     * @param string $prefix Namespace-Präfix
+     * @param string $prefix Namespace prefix
      * @return array{code: ?string, domain: ?string, family: ?string, subFamily: ?string}
      */
     protected static function parseBankTxCode(DOMXPath $xpath, DOMNode $context, string $prefix): array {
@@ -516,7 +516,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
-     * Evaluiert einen XPath-Ausdruck und gibt einen String oder null zurück (statisch).
+     * Evaluates an XPath expression and returns a string or null (static).
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param string $expression XPath-Ausdruck
@@ -536,10 +536,10 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Evaluiert XPath-Ausdrücke mit Fallback-Alternativen (statisch).
+     * Evaluates XPath expressions with fallback alternatives (static).
      * 
      * @param DOMXPath $xpath XPath-Objekt
-     * @param array<string> $expressions Liste von XPath-Ausdrücken
+     * @param array<string> $expressions List of XPath expressions
      * @param DOMNode|null $context Kontext-Node (optional)
      * @return string|null Erstes nicht-leeres Ergebnis oder null
      */
@@ -567,12 +567,12 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Parst einen Betrag mit Währung aus einem Element mit Ccy-Attribut (statisch).
+     * Parses an amount with currency from an element with Ccy attribute (static).
      * 
      * @param DOMXPath $xpath XPath-Objekt
      * @param string $amountPath XPath zum Betrags-Element
      * @param DOMNode $context Kontext-Node
-     * @param CurrencyCode $default Standard-Währung
+     * @param CurrencyCode $default Default currency
      * @return array{amount: float, currency: CurrencyCode}
      */
     protected static function parseAmountWithCcy(
@@ -596,7 +596,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Konvertiert leere Strings zu null (statisch).
+     * Converts empty strings to null (static).
      * 
      * @param string $value Der String
      * @return string|null Null wenn leer, sonst der String
@@ -610,7 +610,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
-     * Alias für createIso20022Document - Pain-Kompatibilität.
+     * Alias for createIso20022Document - Pain compatibility.
      * 
      * @deprecated Verwende createIso20022Document
      */
@@ -625,7 +625,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für detectIso20022Namespace - Pain-Kompatibilität.
+     * Alias for detectIso20022Namespace - Pain compatibility.
      * 
      * @deprecated Verwende detectIso20022Namespace
      */
@@ -634,7 +634,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parseParty - Pain-Kompatibilität.
+     * Alias for parseParty - Pain compatibility.
      * 
      * @deprecated Verwende parseParty
      */
@@ -643,7 +643,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parseAccount - Pain-Kompatibilität.
+     * Alias for parseAccount - Pain compatibility.
      * 
      * @deprecated Verwende parseAccount
      */
@@ -652,7 +652,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parseFinancialInst - Pain-Kompatibilität.
+     * Alias for parseFinancialInst - Pain compatibility.
      * 
      * @deprecated Verwende parseFinancialInst
      */
@@ -661,7 +661,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parsePaymentId - Pain-Kompatibilität.
+     * Alias for parsePaymentId - Pain compatibility.
      * 
      * @deprecated Verwende parsePaymentId
      */
@@ -670,7 +670,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parseRemittance - Pain-Kompatibilität.
+     * Alias for parseRemittance - Pain compatibility.
      * 
      * @deprecated Verwende parseRemittance
      */
@@ -679,7 +679,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parseAmountWithCcy - Pain-Kompatibilität (statische Version).
+     * Alias for parseAmountWithCcy - Pain compatibility (static version).
      * 
      * @deprecated Verwende parseAmountWithCcy
      */
@@ -706,7 +706,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias für parsePostalAddr - Pain-Kompatibilität.
+     * Alias for parsePostalAddr - Pain compatibility.
      * 
      * @deprecated Verwende parsePostalAddr
      */

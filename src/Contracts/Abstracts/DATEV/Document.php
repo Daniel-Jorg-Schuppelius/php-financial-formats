@@ -20,10 +20,10 @@ use CommonToolkit\FinancialFormats\Traits\DATEV\DatevEnumConversionTrait;
 use RuntimeException;
 
 /**
- * Abstrakte Basisklasse für DATEV-Dokumente.
+ * Abstract base class for DATEV documents.
  * 
- * Erweitert die CSV-Document-Klasse um DATEV-spezifische Funktionalität:
- * - MetaHeader-Unterstützung
+ * Extends the CSV Document class with DATEV-specific functionality:
+ * - MetaHeader support
  * - DATEV-spezifische Validierung
  * - Enum-Konvertierungen via Trait
  * 
@@ -45,13 +45,13 @@ abstract class Document extends CSVDocument {
     }
 
     /**
-     * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Muss von abgeleiteten Klassen überschrieben werden, um die spezifischen Feldbreiten zu definieren.
+     * Creates a ColumnWidthConfig based on DATEV specifications.
+     * Must be overridden by derived classes to define specific field widths.
      * 
      * @return ColumnWidthConfig|null
      */
     public static function createDatevColumnWidthConfig(): ?ColumnWidthConfig {
-        // Standardimplementierung gibt null zurück
+        // Default implementation returns null
         // Abgeleitete Klassen sollten dies überschreiben
         return null;
     }
@@ -65,12 +65,12 @@ abstract class Document extends CSVDocument {
             throw new RuntimeException('DATEV-Metadatenheader fehlt.');
         }
         if (!$this->header) {
-            throw new RuntimeException('DATEV-Feldheader fehlt.');
+            throw new RuntimeException('DATEV field header is missing.');
         }
 
         $metaValues = array_map(fn($f) => trim($f->getValue(), "\"'"), $this->metaHeader->getFields());
         if ($metaValues[0] !== 'EXTF') {
-            throw new RuntimeException('Ungültiger DATEV-Metadatenheader – "EXTF" erwartet.');
+            throw new RuntimeException('Invalid DATEV metadata header - "EXTF" expected.');
         }
     }
 
@@ -90,19 +90,19 @@ abstract class Document extends CSVDocument {
     }
 
     /**
-     * Gibt den DATEV-Format-Typ zurück.
+     * Returns the DATEV format type.
      * Muss von abgeleiteten Klassen implementiert werden.
      */
     abstract public function getFormatType(): string;
 
     /**
      * Wandelt das gesamte DATEV-Dokument in eine rohe CSV-Zeichenkette um.
-     * Überschreibt die Parent-Methode, um den MetaHeader mit einzubeziehen.
+     * Overrides the parent method to include the MetaHeader.
      *
-     * @param string|null $delimiter Das Trennzeichen. Wenn null, wird das Standard-Trennzeichen verwendet.
-     * @param string|null $enclosure Das Einschlusszeichen. Wenn null, wird das Standard-Einschlusszeichen verwendet.
+     * @param string|null $delimiter The delimiter. If null, the default delimiter is used.
+     * @param string|null $enclosure The enclosure. If null, the default enclosure is used.
      * @param int|null $enclosureRepeat Die Anzahl der Enclosure-Wiederholungen.
-     * @param string|null $targetEncoding Das Ziel-Encoding. Wenn null, wird das Dokument-Encoding verwendet.
+     * @param string|null $targetEncoding The target encoding. If null, the document encoding is used.
      * @return string
      */
     public function toString(?string $delimiter = null, ?string $enclosure = null, ?int $enclosureRepeat = null, ?string $targetEncoding = null): string {
@@ -116,7 +116,7 @@ abstract class Document extends CSVDocument {
     }
 
     /**
-     * Gibt das Dokument als String zurück (DATEV-CSV-Format).
+     * Returns the document as string (DATEV CSV format).
      */
     public function __toString(): string {
         return $this->toString();

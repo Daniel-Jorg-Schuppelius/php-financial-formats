@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29;
 /**
  * CAMT.029 Original Payment Information and Status.
  * 
- * Enthält Informationen über den Status einer ursprünglichen Zahlungsinformation.
+ * Contains information about the status of an original payment information.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type29
  */

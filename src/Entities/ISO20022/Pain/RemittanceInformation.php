@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 
 /**
- * Remittance Information für pain-Nachrichten.
+ * Remittance information for pain messages.
  * 
  * Verwendungszweck einer Zahlung. Kann entweder unstrukturiert (Freitext)
  * oder strukturiert (Referenznummern, Rechnungsdaten) sein.
@@ -32,7 +32,7 @@ final readonly class RemittanceInformation {
     }
 
     /**
-     * Gibt die unstrukturierten Verwendungszweckzeilen zurück (Ustrd).
+     * Returns the unstructured remittance lines (Ustrd).
      * @return string[]
      */
     public function getUnstructured(): array {
@@ -40,14 +40,14 @@ final readonly class RemittanceInformation {
     }
 
     /**
-     * Gibt den Verwendungszweck als einzelnen String zurück.
+     * Returns the remittance information as a single string.
      */
     public function getUnstructuredString(): string {
         return implode(' ', $this->unstructured);
     }
 
     /**
-     * Gibt die strukturierte Gläubigerreferenz zurück (CdtrRef/Ref).
+     * Returns the structured creditor reference (CdtrRef/Ref).
      * Z.B. ISO 11649 Referenz (RF-Referenz).
      */
     public function getCreditorReference(): ?string {
@@ -55,15 +55,15 @@ final readonly class RemittanceInformation {
     }
 
     /**
-     * Gibt den Typ der Gläubigerreferenz zurück (CdtrRef/Tp).
-     * Z.B. "SCOR" für ISO 11649.
+     * Returns the creditor reference type (CdtrRef/Tp).
+     * E.g. "SCOR" for ISO 11649.
      */
     public function getCreditorReferenceType(): ?string {
         return $this->creditorReferenceType;
     }
 
     /**
-     * Prüft ob strukturierte Informationen vorhanden sind.
+     * Checks if structured information is present.
      */
     public function hasStructured(): bool {
         return $this->creditorReference !== null;
@@ -79,7 +79,7 @@ final readonly class RemittanceInformation {
     }
 
     /**
-     * Erstellt mit ISO 11649 Gläubigerreferenz (RF-Referenz).
+     * Creates with ISO 11649 creditor reference (RF reference).
      */
     public static function fromCreditorReference(string $reference): self {
         return new self(

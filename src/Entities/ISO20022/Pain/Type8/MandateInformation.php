@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8;
 use DateTimeImmutable;
 
 /**
- * Mandate Related Information für pain.008 (DrctDbtTx/MndtRltdInf).
+ * Mandate related information for pain.008 (DrctDbtTx/MndtRltdInf).
  * 
- * Enthält Informationen zum SEPA-Lastschrift-Mandat.
+ * Contains information about the SEPA direct debit mandate.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type8
  */
@@ -36,7 +36,7 @@ final readonly class MandateInformation {
     }
 
     /**
-     * Factory für einfaches Mandat.
+     * Factory for simple mandate.
      */
     public static function create(
         string $mandateId,
@@ -46,7 +46,7 @@ final readonly class MandateInformation {
     }
 
     /**
-     * Factory für geändertes Mandat.
+     * Factory for amended mandate.
      */
     public static function amended(
         string $mandateId,
@@ -100,7 +100,7 @@ final readonly class MandateInformation {
     }
 
     /**
-     * Prüft, ob das Mandat geändert wurde.
+     * Checks if the mandate was amended.
      */
     public function isAmended(): bool {
         return $this->amendmentIndicator === true;

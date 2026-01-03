@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 
 /**
- * Payment Identification für pain-Nachrichten.
+ * Payment identification for pain messages.
  * 
- * Enthält die Referenzen zur Identifikation einer Zahlung:
+ * Contains the references for payment identification:
  * - InstrId: Instruction Identification (optional, intern)
- * - EndToEndId: End-to-End Identification (Pflicht, durchgängig)
+ * - EndToEndId: End-to-End Identification (required, end-to-end)
  * - UETR: Unique End-to-End Transaction Reference (optional, UUID)
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain
@@ -31,15 +31,15 @@ final readonly class PaymentIdentification {
     }
 
     /**
-     * Gibt die End-to-End-ID zurück (EndToEndId).
-     * Dies ist die durchgängige Referenz, die bis zum Empfänger transportiert wird.
+     * Returns the end-to-end ID (EndToEndId).
+     * This is the continuous reference that is transported to the recipient.
      */
     public function getEndToEndId(): string {
         return $this->endToEndId;
     }
 
     /**
-     * Gibt die Instruction-ID zurück (InstrId).
+     * Returns the instruction ID (InstrId).
      * Dies ist die interne Referenz zwischen Auftraggeber und Bank.
      */
     public function getInstructionId(): ?string {
@@ -47,8 +47,8 @@ final readonly class PaymentIdentification {
     }
 
     /**
-     * Gibt die UETR zurück (Unique End-to-End Transaction Reference).
-     * UUID v4 Format für gpi-Tracking.
+     * Returns the UETR (Unique End-to-End Transaction Reference).
+     * UUID v4 format for gpi tracking.
      */
     public function getUetr(): ?string {
         return $this->uetr;
@@ -66,14 +66,14 @@ final readonly class PaymentIdentification {
     }
 
     /**
-     * Erstellt eine PaymentIdentification mit nur EndToEndId.
+     * Creates a PaymentIdentification with only EndToEndId.
      */
     public static function fromEndToEndId(string $endToEndId): self {
         return new self(endToEndId: $endToEndId);
     }
 
     /**
-     * Erstellt eine PaymentIdentification mit EndToEndId und InstructionId.
+     * Creates a PaymentIdentification with EndToEndId and InstructionId.
      */
     public static function create(string $endToEndId, ?string $instructionId = null): self {
         return new self(
@@ -83,7 +83,7 @@ final readonly class PaymentIdentification {
     }
 
     /**
-     * Erstellt eine PaymentIdentification mit generierter UETR.
+     * Creates a PaymentIdentification with generated UETR.
      */
     public static function withUetr(string $endToEndId, ?string $instructionId = null): self {
         return new self(

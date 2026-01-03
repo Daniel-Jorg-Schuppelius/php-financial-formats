@@ -23,10 +23,10 @@ use DOMDocument;
 /**
  * CAMT.034 Document (Duplicate).
  *
- * Repräsentiert die Antwort auf eine Duplikatanfrage (CAMT.033)
- * gemäß ISO 20022 camt.034.001.xx Standard.
+ * Represents the response to a duplicate request (CAMT.033)
+ * according to ISO 20022 camt.034.001.xx Standard.
  *
- * Enthält das angeforderte Duplikat einer Nachricht.
+ * Contains the requested duplicate of a message.
  *
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type34
  */

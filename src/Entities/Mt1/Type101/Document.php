@@ -21,8 +21,8 @@ use DateTimeImmutable;
 /**
  * MT101 Document - Request for Transfer.
  * 
- * Sammelüberweisung gemäß SWIFT-Standard. Ermöglicht das Senden
- * mehrerer Zahlungsaufträge in einer Nachricht.
+ * Batch transfer according to SWIFT standard. Enables sending
+ * multiple payment orders in one message.
  * 
  * Struktur:
  * - Sequence A: Allgemeine Informationen (einmal pro Nachricht)
@@ -80,21 +80,21 @@ class Document {
     }
 
     /**
-     * Gibt die Sender's Reference zurück (Feld :20:).
+     * Returns the sender's reference (field :20:).
      */
     public function getSendersReference(): string {
         return $this->sendersReference;
     }
 
     /**
-     * Gibt die Customer Specified Reference zurück (Feld :21R:).
+     * Returns the Customer Specified Reference (Field :21R:).
      */
     public function getCustomerReference(): ?string {
         return $this->customerReference;
     }
 
     /**
-     * Gibt den Message Index zurück (Feld :28D:).
+     * Returns the Message Index (Field :28D:).
      * Format: n/m (z.B. "1/1" oder "2/3")
      */
     public function getMessageIndex(): string {
@@ -102,35 +102,35 @@ class Document {
     }
 
     /**
-     * Gibt den Auftraggeber zurück (Feld :50:).
+     * Returns the ordering customer (field :50:).
      */
     public function getOrderingCustomer(): Party {
         return $this->orderingCustomer;
     }
 
     /**
-     * Gibt die Ordering Institution zurück (Feld :52a:).
+     * Returns the Ordering Institution (Field :52a:).
      */
     public function getOrderingInstitution(): ?Party {
         return $this->orderingInstitution;
     }
 
     /**
-     * Gibt das gewünschte Ausführungsdatum zurück (Feld :30:).
+     * Returns the requested execution date (Field :30:).
      */
     public function getRequestedExecutionDate(): DateTimeImmutable {
         return $this->requestedExecutionDate;
     }
 
     /**
-     * Gibt das Erstellungsdatum zurück.
+     * Returns the creation date.
      */
     public function getCreationDateTime(): DateTimeImmutable {
         return $this->creationDateTime;
     }
 
     /**
-     * Gibt alle Transaktionen zurück.
+     * Returns all transactions.
      * @return Transaction[]
      */
     public function getTransactions(): array {
@@ -138,14 +138,14 @@ class Document {
     }
 
     /**
-     * Fügt eine Transaktion hinzu.
+     * Adds a transaction.
      */
     public function addTransaction(Transaction $transaction): void {
         $this->transactions[] = $transaction;
     }
 
     /**
-     * Gibt die Anzahl der Transaktionen zurück.
+     * Returns the number of transactions.
      */
     public function countTransactions(): int {
         return count($this->transactions);
@@ -163,7 +163,7 @@ class Document {
     }
 
     /**
-     * Gibt alle verwendeten Währungen zurück.
+     * Returns all used currencies.
      * @return CurrencyCode[]
      */
     public function getCurrencies(): array {

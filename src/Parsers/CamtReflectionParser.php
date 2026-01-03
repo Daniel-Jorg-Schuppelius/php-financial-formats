@@ -15,7 +15,6 @@ namespace CommonToolkit\FinancialFormats\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\CamtType;
-use CommonToolkit\Entities\XML\ExtendedDOMDocument;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\Parsers\ExtendedDOMDocumentParser;
@@ -38,7 +37,7 @@ use RuntimeException;
  */
 class CamtReflectionParser {
     /**
-     * XPath-Mapping-Konfiguration für CAMT-Typen.
+     * XPath mapping configuration for CAMT types.
      * 
      * Format: [
      *   CamtType::CAMT031 => [
@@ -58,7 +57,7 @@ class CamtReflectionParser {
     private static array $typeConfigs = [];
 
     /**
-     * Gemeinsame Assignment-Pfade (für viele Investigation-Dokumente).
+     * Common assignment paths (for many investigation documents).
      */
     private const ASSIGNMENT_MAPPINGS = [
         'assignmentId' => 'Assgnmt/Id',
@@ -92,8 +91,8 @@ class CamtReflectionParser {
      * @param class-string $class Entity-Klasse
      * @param string $root Root-Element-Name
      * @param array<string, string|array> $mappings XPath-Mappings (Parameter => XPath)
-     * @param bool $includeAssignment Gemeinsame Assignment-Mappings einschließen
-     * @param bool $includeUnderlying Gemeinsame Underlying-Mappings einschließen
+     * @param bool $includeAssignment Include common assignment mappings
+     * @param bool $includeUnderlying Include common underlying mappings
      * @param callable|null $postProcessor Post-Processing-Callback: fn($document, DOMXPath, DOMNode, string $prefix)
      */
     public static function registerType(CamtType $type, string $class, string $root, array $mappings = [], bool $includeAssignment = false, bool $includeUnderlying = false, ?callable $postProcessor = null): void {
@@ -123,7 +122,7 @@ class CamtReflectionParser {
      * @param string $xmlContent XML-Inhalt
      * @param CamtType $type CAMT-Typ
      * @return CamtDocumentInterface
-     * @throws RuntimeException Bei fehlendem Mapping oder ungültigem XML
+     * @throws RuntimeException On missing mapping or invalid XML
      */
     public static function parse(string $xmlContent, CamtType $type): CamtDocumentInterface {
         if (!isset(self::$typeConfigs[$type->value])) {
@@ -259,7 +258,7 @@ class CamtReflectionParser {
     }
 
     /**
-     * Fügt Namespace-Prefix zu einem XPath hinzu.
+     * Adds namespace prefix to an XPath.
      * 
      * @param string $path XPath ohne Prefix (z.B. "Assgnmt/Id")
      * @param string $prefix Namespace-Prefix (z.B. "ns:")
@@ -304,7 +303,7 @@ class CamtReflectionParser {
     }
 
     /**
-     * Initialisiert DOM und XPath für ein XML-Dokument.
+     * Initializes DOM and XPath for an XML document.
      */
     private static function initXPath(string $xmlContent): array {
         $doc = ExtendedDOMDocumentParser::fromString($xmlContent);
@@ -347,7 +346,7 @@ class CamtReflectionParser {
     }
 
     /**
-     * Gibt alle registrierten Typ-Konfigurationen zurück.
+     * Returns all registered type configurations.
      * 
      * @return array<string, array>
      */
@@ -356,7 +355,7 @@ class CamtReflectionParser {
     }
 
     /**
-     * Löscht alle registrierten Typ-Konfigurationen.
+     * Clears all registered type configurations.
      */
     public static function clearRegistrations(): void {
         self::$typeConfigs = [];

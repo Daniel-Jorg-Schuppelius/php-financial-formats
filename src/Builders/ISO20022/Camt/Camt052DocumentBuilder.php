@@ -27,10 +27,10 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Builder für CAMT.052 Documents (Bank to Customer Account Report).
+ * Builder for CAMT.052 Documents (Bank to Customer Account Report).
  * 
- * CAMT.052 enthält untertägige Kontobewegungen mit optionalen Salden.
- * Äquivalent zu MT942 im SWIFT-Format.
+ * CAMT.052 contains intraday account movements with optional balances.
+ * Equivalent to MT942 in SWIFT format.
  * 
  * @package CommonToolkit\Builders
  */
@@ -121,7 +121,7 @@ final class Camt052DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Transaktionen hinzu.
+     * Adds multiple transactions.
      * 
      * @param Transaction[] $entries
      * @throws InvalidArgumentException Wenn ein Element kein Transaction-Objekt ist
@@ -138,7 +138,7 @@ final class Camt052DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.052 Document.
+     * Creates the CAMT.052 Document.
      * 
      * @throws RuntimeException Wenn Pflichtfelder fehlen
      */
@@ -210,7 +210,7 @@ final class Camt052DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.052 Dokument aus einem MT940 Dokument.
+     * Creates ein CAMT.052 Dokument aus einem MT940 Dokument.
      *
      * @param Mt940Document $mt940 Das MT940 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -221,7 +221,7 @@ final class Camt052DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.052 Dokument aus einem MT941 Dokument.
+     * Creates ein CAMT.052 Dokument aus einem MT941 Dokument.
      *
      * @param Mt941Document $mt941 Das MT941 Dokument
      * @param string|null $messageId Optionale Message-ID
@@ -232,7 +232,7 @@ final class Camt052DocumentBuilder {
     }
 
     /**
-     * Erstellt ein CAMT.052 Dokument aus einem MT942 Dokument.
+     * Creates ein CAMT.052 Dokument aus einem MT942 Dokument.
      *
      * @param Mt942Document $mt942 Das MT942 Dokument
      * @param string|null $messageId Optionale Message-ID

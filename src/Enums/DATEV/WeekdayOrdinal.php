@@ -16,7 +16,7 @@ use CommonToolkit\Enums\Weekday;
 use InvalidArgumentException;
 
 /**
- * DATEV Ordnungszahl Wochentag für wiederkehrende Buchungen (Feld 86).
+ * DATEV Weekday ordinal for recurring bookings (Field 86).
  * Definiert, ob z.B. der 1., 2., 3., 4. oder letzte Montag im Monat gemeint ist.
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/recurring-bookings
@@ -29,7 +29,7 @@ enum WeekdayOrdinal: int {
     case LAST   = 5;
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -42,14 +42,14 @@ enum WeekdayOrdinal: int {
     }
 
     /**
-     * Textform in Kleinbuchstaben (für Satzbildung).
+     * Text form in lowercase (for sentence construction).
      */
     public function getLowercaseLabel(): string {
         return strtolower($this->getLabel());
     }
 
     /**
-     * Factory für Integer-Werte.
+     * Factory for integer values.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -63,7 +63,7 @@ enum WeekdayOrdinal: int {
     }
 
     /**
-     * Factory mit null-Rückgabe bei ungültigen Werten.
+     * Factory with null return for invalid values.
      */
     public static function tryFromInt(int $value): ?self {
         try {
@@ -74,7 +74,7 @@ enum WeekdayOrdinal: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');
@@ -85,7 +85,7 @@ enum WeekdayOrdinal: int {
     }
 
     /**
-     * Prüft, ob es sich um den letzten Tag handelt.
+     * Checks if this is the last day.
      */
     public function isLast(): bool {
         return $this === self::LAST;

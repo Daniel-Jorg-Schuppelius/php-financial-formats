@@ -14,16 +14,18 @@ namespace CommonToolkit\FinancialFormats\Entities\DATEV\Documents;
 
 use CommonToolkit\Entities\CSV\{HeaderField, DataLine, Document as CSVDocument, ColumnWidthConfig};
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderLine;
+use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderDefinition;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
+use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 use RuntimeException;
 
 /**
- * ASCII-Weiterverarbeitungsdokument für DATEV-Banktransaktionen.
+ * ASCII processing document for DATEV bank transactions.
  * 
- * Eigenständiges Dokument-Format OHNE MetaHeader und DATEV-Kategorien.
+ * Standalone document format WITHOUT MetaHeader and DATEV categories.
  * Verwendet das einfache CSV-Document als Basis, nicht das DATEV-Document.
- * Diese ASCII-Dateien sind unabhängig vom Standard DATEV V700-System.
+ * These ASCII files are independent from the standard DATEV V700 system.
  * 
  * Die Spaltenbreiten werden automatisch basierend auf den DATEV-Spezifikationen
  * aus BankTransactionHeaderField::getMaxLength() angewendet.
@@ -47,9 +49,9 @@ final class BankTransaction extends CSVDocument {
 
     /**
      * Erstellt eine ColumnWidthConfig basierend auf den DATEV-Spezifikationen.
-     * Die maximalen Feldlängen werden aus BankTransactionHeaderField::getMaxLength() abgeleitet.
+     * Maximum field lengths are derived from BankTransactionHeaderField::getMaxLength().
      * 
-     * @param TruncationStrategy $strategy Abschneidungsstrategie (Standard: TRUNCATE für DATEV-Konformität)
+     * @param TruncationStrategy $strategy Truncation strategy (Default: TRUNCATE for DATEV conformity)
      * @return ColumnWidthConfig
      */
     public static function createDatevColumnWidthConfig(TruncationStrategy $strategy = TruncationStrategy::TRUNCATE): ColumnWidthConfig {
@@ -67,7 +69,7 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Erstellt einen internen Header aus der HeaderDefinition für interne Zwecke.
+     * Creates an internal header from the HeaderDefinition for internal purposes.
      */
     private function createInternalHeader(string $delimiter, string $enclosure): BankTransactionHeaderLine {
         $headerFields = [];
@@ -81,67 +83,58 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Überschreibt getHeader() um den korrekten BankTransactionHeaderLine-Typ zurückzugeben.
+     * Overrides getHeader() to return the correct BankTransactionHeaderLine type.
      */
     public function getHeader(): ?BankTransactionHeaderLine {
         return $this->header instanceof BankTransactionHeaderLine ? $this->header : null;
     }
 
     /**
-     * Gibt den Format-Typ zurück.
+     * Returns the format type.
      */
     public function getFormatType(): string {
         return 'ASCII-Weiterverarbeitungsdatei';
     }
 
     /**
-     * Validiert das ASCII-BankTransaction-Format.
+     * Validates the ASCII BankTransaction format.
+     * 
+     * @throws RuntimeException On validation errors
      */
     public function validate(): void {
-        $this->validateBankTransactionFormat();
-    }
+        if (empty($this->rows)) {
+            throw new RuntimeException('Empty ASCII processing file');
+        }
 
-    /**
-     * Validiert das spezifische BankTransaction-Format.
-     * ASCII-Weiterverarbeitungsdateien haben keinen Header, nur Datenzeilen.
-     * 
-     * @throws RuntimeException
-     */
-    private function validateBankTransactionFormat(): void {
-        // ASCII-Weiterverarbeitungsdateien haben keinen Header
-        // Validiere alle Datenzeilen gegen die Definition
-        foreach ($this->rows as $index => $row) {
-            $this->validateDataRow($row, $index);
+        // Validate field count (7-34 fields required)
+        $firstRow = $this->rows[0];
+        $fieldCount = $firstRow->countFields();
+        if ($fieldCount < 7 || $fieldCount > 34) {
+            throw new RuntimeException('Invalid field count (expected: 7-34 fields)');
+        }
+
+        // Validate required fields using header definition
+        $values = array_map(fn($field) => $field->getValue(), $firstRow->getFields());
+        $headerDef = new BankTransactionHeaderDefinition();
+        if (!$headerDef->matches($values)) {
+            throw new RuntimeException('ASCII processing file validation failed');
+        }
+
+        // Validate date sorting
+        $bookingDates = $this->getColumnByName(BankTransactionHeaderField::BUCHUNGSDATUM->value);
+        $previousDate = null;
+        foreach ($bookingDates as $currentDate) {
+            if (!empty($currentDate)) {
+                if ($previousDate !== null && $currentDate < $previousDate) {
+                    throw new RuntimeException('Booking dates are not sorted in ascending order');
+                }
+                $previousDate = $currentDate;
+            }
         }
     }
 
     /**
-     * Validiert eine einzelne Datenzeile.
-     * 
-     * @param DataLine $row
-     * @param int $index
-     * @throws RuntimeException
-     */
-    private function validateDataRow(DataLine $row, int $index): void {
-        $fieldCount = $row->countFields();
-        $expectedCount = $this->header->countFields();
-
-        if ($fieldCount !== $expectedCount) {
-            throw new RuntimeException(
-                sprintf(
-                    'Zeile %d hat ungültige Feldanzahl. Erwartet: %d, Erhalten: %d',
-                    $index + 1,
-                    $expectedCount,
-                    $fieldCount
-                )
-            );
-        }
-
-        // Vereinfachte Validierung - komplexe Feldvalidierung kann später hinzugefügt werden
-    }
-
-    /**
-     * Prüft, ob das Dokument ASCII-Weiterverarbeitungsformat ist.
+     * Checks if the document is ASCII processing format.
      * ASCII-Weiterverarbeitungsdateien haben keinen Header im Export.
      */
     public function isAsciiProcessingFormat(): bool {
@@ -149,7 +142,7 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Gibt das Dokument als assoziatives Array zurück mit ASCII-spezifischen Metadaten.
+     * Returns the document as associative array with ASCII-specific metadata.
      */
     public function toAssoc(): array {
         $rows = parent::toAssoc();
@@ -169,7 +162,7 @@ final class BankTransaction extends CSVDocument {
     // ==== Banking-spezifische Methoden ====
 
     /**
-     * Prüft, ob das Dokument gültige Bankdaten enthält.
+     * Checks if the document contains valid bank data.
      */
     public function hasValidBankData(): bool {
         foreach ($this->rows as $row) {
@@ -187,7 +180,7 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Gibt Kontoinhaber-Bankdaten für eine bestimmte Zeile zurück.
+     * Returns account holder bank data for a specific line.
      */
     public function getAccountHolderBankData(int $rowIndex): ?array {
         if (!isset($this->rows[$rowIndex])) {
@@ -206,7 +199,7 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Gibt Zahler-Bankdaten für eine bestimmte Zeile zurück.
+     * Returns payer bank data for a specific line.
      */
     public function getPayerBankData(int $rowIndex): ?array {
         if (!isset($this->rows[$rowIndex])) {
@@ -227,9 +220,9 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Gibt Transaktionsdaten für eine bestimmte Zeile zurück.
+     * Returns transaction data for a specific line.
      */
-    public function getTransactionData(int $rowIndex): ?array {
+    public function getTransactionData(int $rowIndex, CurrencyCode $currencyCode = CurrencyCode::Euro): ?array {
         if (!isset($this->rows[$rowIndex])) {
             return null;
         }
@@ -239,20 +232,14 @@ final class BankTransaction extends CSVDocument {
             return null;
         }
 
-        // Für 34-Feld Format: 
+        // Für 34-Feld Format:
         // - Auszugsnummer ist Feld 3 (Index 2)
-        // - Buchungsdatum ist Feld 6 (Index 5)  
+        // - Buchungsdatum ist Feld 6 (Index 5)
         // - Valutadatum ist Feld 5 (Index 4)
         // - Betrag ist Feld 7 (Index 6)
-        // - Währung ist bei Position 17 (Index 16) falls vorhanden
+        // - Currency ist bei Position 17 (Index 16) falls vorhanden
 
-        $currency = 'EUR'; // Default
-        if (count($fields) > 16) {
-            $currencyField = trim($fields[16]->getValue());
-            if (!empty($currencyField)) {
-                $currency = $currencyField;
-            }
-        }
+        $currency = count($fields) > 16 ? trim($fields[16]->getValue()) : $currencyCode->value;
 
         return [
             'statement_number' => trim($fields[2]->getValue()),
@@ -264,7 +251,7 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Gibt Verwendungszwecke für eine bestimmte Zeile zurück.
+     * Returns remittance purposes for a specific line.
      */
     public function getUsagePurposes(int $rowIndex): array {
         if (!isset($this->rows[$rowIndex])) {
@@ -288,7 +275,7 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Gibt eine Zusammenfassung aller Transaktionen zurück.
+     * Returns a summary of all transactions.
      */
     public function getTransactionSummary(): array {
         $totalAmount = 0.0;
@@ -327,12 +314,12 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Extrahiert zusätzliche Beträge aus den erweiterten Feldern (25-34).
-     * Diese Felder enthalten oft Ursprungsbeträge in anderen Währungen,
-     * Umrechnungsbeträge und Gebühren.
+     * Extracts additional amounts from the extended fields (25-34).
+     * These fields often contain original amounts in other currencies,
+     * conversion amounts and fees.
      *
      * @param int $rowIndex Index der Zeile (0-basiert)
-     * @return array<string, string> Zusätzliche Beträge mit Währungen
+     * @return array<string, string> Additional amounts with currencies
      */
     public function getAdditionalAmounts(int $rowIndex): array {
         $row = $this->getRow($rowIndex);

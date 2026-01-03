@@ -31,19 +31,19 @@ use RuntimeException;
 /**
  * Konvertiert CAMT-Dokumente (ISO 20022) in das MT940-Format (SWIFT).
  * 
- * Diese Konvertierung ist nützlich für Legacy-Systeme, die nur das
- * ältere MT940-Format unterstützen. ISO 20022 CAMT-Nachrichten werden
+ * This conversion is useful for legacy systems that only support the
+ * older MT940 format. ISO 20022 CAMT messages are
  * in das kompaktere SWIFT-Format umgewandelt.
  * 
  * **Hinweis**: Bei der Konvertierung gehen Details verloren, da MT940
  * weniger strukturierte Felder als CAMT hat. Insbesondere:
  * - Detaillierte Referenzinformationen werden in den Verwendungszweck gepackt
  * - Counterparty-Daten werden als SEPA-Tags im Verwendungszweck codiert
- * - Nur Opening und Closing Balance werden übernommen
+ * - Only Opening and Closing Balance are transferred
  * 
- * Unterstützte Quellformate:
- * - CAMT.052: Untertägige Kontobewegungen
- * - CAMT.053: Täglicher Kontoauszug (Standard-Quellformat)
+ * Supported source formats:
+ * - CAMT.052: Intraday account movements
+ * - CAMT.053: Daily account statement (standard source format)
  * - CAMT.054: Einzelumsatzbenachrichtigung
  * 
  * @package CommonToolkit\Converters\Banking
@@ -53,7 +53,7 @@ final class CamtToMt940Converter {
      * Konvertiert ein CAMT.053-Dokument in ein MT940-Dokument.
      * 
      * Dies ist der Standard-Konvertierungspfad, da CAMT.053 und MT940
-     * beide vollständige Tagesauszüge repräsentieren.
+     * both represent complete daily statements.
      * 
      * @param Camt053Document $camt053 Das zu konvertierende CAMT.053-Dokument
      * @param string|null $referenceId Optionale Referenz-ID (wird sonst generiert)
@@ -92,7 +92,7 @@ final class CamtToMt940Converter {
     /**
      * Konvertiert ein CAMT.052-Dokument in ein MT940-Dokument.
      * 
-     * CAMT.052 enthält untertägige Buchungen. Da MT940 keinen
+     * CAMT.052 contains intraday bookings. Since MT940 has no
      * direkten Intraday-Typ hat, wird ein Standard-MT940 erzeugt.
      * 
      * @param Camt052Document $camt052 Das zu konvertierende CAMT.052-Dokument
@@ -132,7 +132,7 @@ final class CamtToMt940Converter {
     /**
      * Konvertiert ein CAMT.054-Dokument in ein MT940-Dokument.
      * 
-     * CAMT.054 enthält Einzelumsätze ohne Salden. Die Opening/Closing
+     * CAMT.054 contains individual transactions without balances. The Opening/Closing
      * Balances werden daher auf 0 gesetzt.
      * 
      * @param Camt054Document $camt054 Das zu konvertierende CAMT.054-Dokument
@@ -315,7 +315,7 @@ final class CamtToMt940Converter {
      * Formatiert SEPA-Tags im MT940-kompatiblen Format:
      * - EREF+ Ende-zu-Ende-Referenz
      * - MREF+ Mandatsreferenz
-     * - CRED+ Gläubiger-ID
+     * - CRED+ Creditor ID
      * - KREF+ Kundenreferenz
      * - SVWZ+ Verwendungszweck
      * - IBAN+ Gegenseiten-IBAN
@@ -393,7 +393,7 @@ final class CamtToMt940Converter {
     }
 
     /**
-     * Kürzt einen String auf die maximale Länge.
+     * Truncates a string to maximum length.
      */
     private static function truncate(string $value, int $maxLength): string {
         return substr($value, 0, $maxLength);

@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18;
 use DateTimeImmutable;
 
 /**
- * Mandate Suspension Request für pain.018.
+ * Mandate suspension request for pain.018.
  * 
- * Einzelne Anfrage zur temporären Aussetzung eines Mandats.
+ * Single request for temporary suspension of a mandate.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type18
  */
@@ -46,7 +46,7 @@ final readonly class MandateSuspensionRequest {
     }
 
     /**
-     * Factory für unbegrenzte Aussetzung.
+     * Factory for unlimited suspension.
      */
     public static function indefinite(
         string $mandateId,

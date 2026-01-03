@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 
 /**
- * Original Payment Information and Status für pain.002 (OrgnlPmtInfAndSts).
+ * Original payment information and status for pain.002 (OrgnlPmtInfAndSts).
  * 
  * Status einer Payment Instruction aus der Original-Nachricht.
  * 
@@ -26,7 +26,7 @@ final class OriginalPaymentInformation {
     /**
      * @param string $originalPaymentInformationId Original Payment Information ID (OrgnlPmtInfId)
      * @param TransactionStatus|null $status Payment-Status (PmtInfSts)
-     * @param StatusReason[] $statusReasons Status-Begründungen (StsRsnInf)
+     * @param StatusReason[] $statusReasons Status reasons (StsRsnInf)
      * @param int|null $numberOfTransactionsPerStatus Anzahl Transaktionen je Status
      * @param TransactionInformationAndStatus[] $transactionStatuses Einzelne Transaktions-Status
      */
@@ -67,7 +67,7 @@ final class OriginalPaymentInformation {
     }
 
     /**
-     * Fügt einen Transaktionsstatus hinzu.
+     * Adds a transaction status.
      */
     public function addTransactionStatus(TransactionInformationAndStatus $status): self {
         $clone = clone $this;
@@ -76,7 +76,7 @@ final class OriginalPaymentInformation {
     }
 
     /**
-     * Prüft, ob alle Transaktionen erfolgreich waren.
+     * Checks if all transactions were successful.
      */
     public function isFullyAccepted(): bool {
         if ($this->status?->isSuccessful()) {
@@ -93,7 +93,7 @@ final class OriginalPaymentInformation {
     }
 
     /**
-     * Prüft, ob es abgelehnte Transaktionen gibt.
+     * Checks if there are rejected transactions.
      */
     public function hasRejections(): bool {
         if ($this->status?->isRejected()) {
@@ -110,7 +110,7 @@ final class OriginalPaymentInformation {
     }
 
     /**
-     * Gibt alle abgelehnten Transaktionen zurück.
+     * Returns all rejected transactions.
      */
     public function getRejectedTransactions(): array {
         return array_filter(
@@ -120,7 +120,7 @@ final class OriginalPaymentInformation {
     }
 
     /**
-     * Zählt die Transaktionen.
+     * Counts the transactions.
      */
     public function countTransactionStatuses(): int {
         return count($this->transactionStatuses);

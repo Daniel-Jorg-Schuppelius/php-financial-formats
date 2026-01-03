@@ -16,15 +16,15 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\Mt1GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Document;
 
 /**
- * Generator für MT101 Request for Transfer.
+ * Generator for MT101 Request for Transfer.
  * 
- * Generiert SWIFT MT101 Nachrichten aus Document-Objekten.
+ * Generates SWIFT MT101 messages from Document objects.
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
 class Mt101Generator extends Mt1GeneratorAbstract {
     /**
-     * Generiert die MT101 SWIFT-Nachricht.
+     * Generates the MT101 SWIFT message.
      * 
      * @param object $document Das MT101-Dokument
      * @return string Die formatierte SWIFT-Nachricht
@@ -70,7 +70,7 @@ class Mt101Generator extends Mt1GeneratorAbstract {
     }
 
     /**
-     * Fügt die Ordering Institution hinzu, wenn vorhanden.
+     * Adds the ordering institution if present.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
      * @param Document $document Das Dokument

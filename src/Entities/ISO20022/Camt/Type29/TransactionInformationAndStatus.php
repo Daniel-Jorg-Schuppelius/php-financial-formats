@@ -18,7 +18,7 @@ use DateTimeImmutable;
 /**
  * CAMT.029 Transaction Information and Status.
  * 
- * Enthält Informationen über den Status einer einzelnen Transaktion im Rahmen
+ * Contains information about the status of a single transaction in the context of
  * einer Stornierungsantwort.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type29
@@ -132,21 +132,21 @@ class TransactionInformationAndStatus {
     }
 
     /**
-     * Prüft ob die Stornierung akzeptiert wurde.
+     * Checks if the cancellation was accepted.
      */
     public function isAccepted(): bool {
         return $this->transactionCancellationStatus === 'CNCL' || $this->transactionCancellationStatus === 'ACCP';
     }
 
     /**
-     * Prüft ob die Stornierung abgelehnt wurde.
+     * Checks if the cancellation was rejected.
      */
     public function isRejected(): bool {
         return $this->transactionCancellationStatus === 'RJCR';
     }
 
     /**
-     * Prüft ob die Stornierung noch aussteht.
+     * Checks if the cancellation is still pending.
      */
     public function isPending(): bool {
         return $this->transactionCancellationStatus === 'PDNG';

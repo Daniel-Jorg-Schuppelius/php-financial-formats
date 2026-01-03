@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 
 /**
- * Financial Institution Identification für pain-Nachrichten.
+ * Financial institution identification for pain messages.
  * 
- * Repräsentiert eine Bank/Finanzinstitution gemäß ISO 20022.
+ * Represents a bank/financial institution according to ISO 20022.
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain
  */
@@ -31,49 +31,49 @@ final readonly class FinancialInstitution {
     }
 
     /**
-     * Gibt den BIC zurück (BICFI).
+     * Returns the BIC (BICFI).
      */
     public function getBic(): ?string {
         return $this->bic;
     }
 
     /**
-     * Gibt den Namen zurück (Nm).
+     * Returns the name (Nm).
      */
     public function getName(): ?string {
         return $this->name;
     }
 
     /**
-     * Gibt die Postadresse zurück (PstlAdr).
+     * Returns the postal address (PstlAdr).
      */
     public function getPostalAddress(): ?PostalAddress {
         return $this->postalAddress;
     }
 
     /**
-     * Gibt die Clearing-System-ID zurück (ClrSysId).
+     * Returns the clearing system ID (ClrSysId).
      */
     public function getClearingSystemId(): ?string {
         return $this->clearingSystemId;
     }
 
     /**
-     * Gibt die Member-ID zurück (MmbId).
+     * Returns the member ID (MmbId).
      */
     public function getMemberId(): ?string {
         return $this->memberId;
     }
 
     /**
-     * Gibt die LEI zurück.
+     * Returns the LEI.
      */
     public function getLei(): ?string {
         return $this->lei;
     }
 
     /**
-     * Prüft ob die Institution gültig ist (mindestens BIC oder Name).
+     * Checks if the institution is valid (at least BIC or name).
      */
     public function isValid(): bool {
         return $this->bic !== null || $this->name !== null;

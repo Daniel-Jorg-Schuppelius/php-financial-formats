@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Enums\CamtType;
 use CommonToolkit\FinancialFormats\Enums\CamtVersion;
 
 /**
- * Generator für CAMT.039 XML (Case Status Report).
+ * Generator for CAMT.039 XML (Case Status Report).
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */

@@ -24,9 +24,9 @@ use CommonToolkit\Enums\CreditDebit;
  * Konverter zwischen MT940, MT941 und MT942 Formaten.
  * 
  * Die SWIFT MT9xx-Formate haben unterschiedliche Zwecke:
- * - MT940: Tageskontoauszug mit vollständigen Transaktionen
+ * - MT940: Daily account statement with complete transactions
  * - MT941: Nur Saldeninformation ohne Transaktionsdetails
- * - MT942: Untertägige (Interim) Umsätze
+ * - MT942: Intraday (Interim) transactions
  * 
  * @package CommonToolkit\Converters\Banking
  */
@@ -34,7 +34,7 @@ final class MtInterConverter {
     /**
      * Konvertiert MT940 zu MT941 (nur Salden, keine Transaktionen).
      * 
-     * Verwendung: Schnelle Saldenübersicht aus vollständigem Kontoauszug.
+     * Usage: Quick balance overview from complete account statement.
      */
     public static function mt940ToMt941(Mt940Document $mt940): Mt941Document {
         return new Mt941Document(
@@ -52,7 +52,7 @@ final class MtInterConverter {
     /**
      * Konvertiert MT940 zu MT942 (Interim-Format).
      * 
-     * Verwendung: Untertägige Darstellung eines Tagesauszugs.
+     * Usage: Intraday representation of a daily statement.
      * Die Transaktionen werden zu MT942-Transaktionen konvertiert.
      */
     public static function mt940ToMt942(Mt940Document $mt940): Mt942Document {
@@ -86,7 +86,7 @@ final class MtInterConverter {
     /**
      * Konvertiert MT942 zu MT940 (Final-Format).
      * 
-     * Verwendung: Tagesabschluss aus untertägigen Umsätzen erstellen.
+     * Usage: Create end-of-day closing from intraday transactions.
      * Bei fehlendem Opening Balance wird ein Null-Saldo verwendet.
      */
     public static function mt942ToMt940(Mt942Document $mt942): Mt940Document {
@@ -128,7 +128,7 @@ final class MtInterConverter {
      * Konvertiert MT941 zu MT940 (ohne Transaktionen).
      * 
      * Verwendung: Leeres MT940-Dokument aus Saldeninformation.
-     * Achtung: Transaktionen können nicht rekonstruiert werden!
+     * Warning: Transactions cannot be reconstructed!
      */
     public static function mt941ToMt940(Mt941Document $mt941): Mt940Document {
         return new Mt940Document(

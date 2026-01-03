@@ -18,9 +18,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.056 Documents (FI To FI Payment Cancellation Request).
+ * Builder for CAMT.056 Documents (FI To FI Payment Cancellation Request).
  * 
- * Erstellt Stornierungsanfragen von Bank zu Bank.
+ * Creates Stornierungsanfragen von Bank zu Bank.
  * 
  * Verwendung:
  * ```php
@@ -49,21 +49,21 @@ final class Camt056DocumentBuilder {
 
     private function __construct(string $messageId) {
         if (strlen($messageId) > 35) {
-            throw new InvalidArgumentException('MsgId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('MsgId must not exceed 35 characters');
         }
         $this->messageId = $messageId;
         $this->creationDateTime = new DateTimeImmutable();
     }
 
     /**
-     * Erzeugt neuen Builder mit Message-ID.
+     * Creates a new builder with message ID.
      */
     public static function create(string $messageId): self {
         return new self($messageId);
     }
 
     /**
-     * Setzt den Erstellungszeitpunkt (Standard: jetzt).
+     * Sets the creation timestamp (default: now).
      */
     public function withCreationDateTime(DateTimeImmutable $dateTime): self {
         $clone = clone $this;
@@ -72,7 +72,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Setzt die Anzahl der Transaktionen.
+     * Sets the number of transactions.
      */
     public function withNumberOfTransactions(int $count): self {
         $clone = clone $this;
@@ -81,7 +81,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Setzt die Kontrollsumme.
+     * Sets the control sum.
      */
     public function withControlSum(float $sum): self {
         $clone = clone $this;
@@ -90,7 +90,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Setzt die anweisende Bank (Instructing Agent).
+     * Sets the instructing agent (bank).
      */
     public function withInstructingAgent(string $bic): self {
         $clone = clone $this;
@@ -99,7 +99,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Setzt die angewiesene Bank (Instructed Agent).
+     * Sets the instructed agent (bank).
      */
     public function withInstructedAgent(string $bic): self {
         $clone = clone $this;
@@ -108,7 +108,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Setzt die Case-Referenz.
+     * Sets the case reference.
      */
     public function forCase(string $caseId, ?string $caseCreator = null): self {
         $clone = clone $this;
@@ -118,7 +118,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Fügt eine Underlying Transaction hinzu.
+     * Adds an underlying transaction.
      */
     public function addUnderlyingTransaction(UnderlyingTransaction $transaction): self {
         $clone = clone $this;
@@ -127,7 +127,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Fügt mehrere Underlying Transactions hinzu.
+     * Adds multiple underlying transactions.
      * 
      * @param UnderlyingTransaction[] $transactions
      */
@@ -138,7 +138,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Erstellt das CAMT.056 Document.
+     * Creates the CAMT.056 Document.
      * 
      * @throws InvalidArgumentException wenn Pflichtfelder fehlen
      */
@@ -172,7 +172,7 @@ final class Camt056DocumentBuilder {
     // === Static Factory Methods ===
 
     /**
-     * Erstellt eine einfache Bank-zu-Bank Stornierungsanfrage.
+     * Creates eine einfache Bank-zu-Bank Stornierungsanfrage.
      */
     public static function createSimple(
         string $messageId,
@@ -194,7 +194,7 @@ final class Camt056DocumentBuilder {
     }
 
     /**
-     * Erstellt eine Stornierungsanfrage mit Case-Referenz.
+     * Creates eine Stornierungsanfrage mit Case-Referenz.
      */
     public static function createWithCase(
         string $messageId,

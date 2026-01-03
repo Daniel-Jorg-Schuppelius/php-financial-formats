@@ -16,11 +16,11 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\{FieldHeaderInterface, MetaHeaderDefinitionInterface};
 
 /**
- * Automatische Erkennung verfügbarer DATEV-Versionen aus den Enum-Definitionen.
- * Durchsucht die HeaderFields-Verzeichnisse nach verfügbaren Versionen und deren Enums.
+ * Automatic detection of available DATEV versions from enum definitions.
+ * Searches HeaderFields directories for available versions and their enums.
  * 
- * Die Enums implementieren FieldHeaderInterface und liefern über getCategory() und getVersion()
- * die notwendigen Informationen für die dynamische Format-Erkennung.
+ * The enums implement FieldHeaderInterface and provide via getCategory() and getVersion()
+ * the necessary information for dynamic format detection.
  */
 final class VersionDiscovery {
     private const ENUM_BASE_PATH = __DIR__ . '/../../Enums/DATEV/HeaderFields';
@@ -34,7 +34,7 @@ final class VersionDiscovery {
     private static bool $discovered = false;
 
     /**
-     * Führt die Erkennung verfügbarer Versionen durch.
+     * Performs detection of available versions.
      */
     public static function discover(): void {
         if (self::$discovered) {
@@ -78,7 +78,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Analysiert eine spezifische Version und ihre verfügbaren Enums.
+     * Analyzes a specific version and its available enums.
      * 
      * @param int $version Die Versionsnummer
      * @param string $enumPath Pfad zum Enum-Versionsverzeichnis
@@ -128,7 +128,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt alle entdeckten Versionen zurück.
+     * Returns all discovered versions.
      * 
      * @return int[]
      */
@@ -138,7 +138,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt alle unterstützten Versionen zurück (die eine MetaHeaderDefinition haben).
+     * Returns all supported versions (that have a MetaHeaderDefinition).
      * 
      * @return int[]
      */
@@ -151,7 +151,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Prüft, ob eine Version unterstützt wird.
+     * Checks if a version is supported.
      */
     public static function isVersionSupported(int $version): bool {
         self::discover();
@@ -160,7 +160,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt die MetaHeader-Klasse für eine Version zurück.
+     * Returns the MetaHeader class for a version.
      * 
      * @return class-string<MetaHeaderDefinitionInterface>|null
      */
@@ -170,7 +170,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt alle Format-Enums für eine Version zurück.
+     * Returns all format enums for a version.
      * 
      * @return array<int, class-string<FieldHeaderInterface>>
      */
@@ -180,7 +180,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Alias für getFormatEnums für Abwärtskompatibilität.
+     * Alias for getFormatEnums for backwards compatibility.
      * @deprecated Use getFormatEnums() instead
      * 
      * @return array<int, class-string<FieldHeaderInterface>>
@@ -190,7 +190,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Prüft, ob ein Format in einer Version unterstützt wird.
+     * Checks if a format is supported in a version.
      */
     public static function isFormatSupported(Category $category, int $version): bool {
         $formatEnums = self::getFormatEnums($version);
@@ -198,7 +198,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt den Format-Enum für eine Kategorie und Version zurück.
+     * Returns the format enum for a category and version.
      * 
      * @return class-string<FieldHeaderInterface>|null
      */
@@ -208,7 +208,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Alias für getFormatEnum für Abwärtskompatibilität.
+     * Alias for getFormatEnum for backwards compatibility.
      * @deprecated Use getFormatEnum() instead
      * 
      * @return class-string<FieldHeaderInterface>|null
@@ -218,7 +218,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt alle unterstützten Formate für eine Version zurück.
+     * Returns all supported formats for a version.
      * 
      * @return Category[]
      */
@@ -236,7 +236,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Gibt detaillierte Informationen über alle entdeckten Versionen zurück.
+     * Returns detailed information about all discovered versions.
      * 
      * @return array<int, array{version: int, path: string, metaHeaderClass: ?string, formatEnums: array<int, class-string<FieldHeaderInterface>>, formatCount: int}>
      */
@@ -252,7 +252,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Erzwingt eine erneute Erkennung (für Tests oder nach Dateisystem-Änderungen).
+     * Forces re-detection (for tests or after filesystem changes).
      */
     public static function refresh(): void {
         self::$discovered = false;
@@ -261,7 +261,7 @@ final class VersionDiscovery {
     }
 
     /**
-     * Prüft die Konsistenz einer Version (ob alle erwarteten Dateien vorhanden sind).
+     * Checks the consistency of a version (whether all expected files are present).
      * 
      * @return array{valid: bool, missing: string[], issues: string[]}
      */

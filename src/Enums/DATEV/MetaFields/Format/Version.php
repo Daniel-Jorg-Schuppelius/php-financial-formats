@@ -34,7 +34,7 @@ enum Version: int {
     }
 
     /**
-     * Regex für Feld 5 (Formatversion) im Metaheader.
+     * Regex for field 5 (format version) in meta header.
      */
     public static function pattern(): string {
         return '^(2|3|4|5|13)$';

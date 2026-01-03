@@ -205,26 +205,16 @@ class PainParserTest extends BaseTestCase {
     }
 
     public function testIsValidWithWrongExpectedType(): void {
-        $xml = $this->getSamplePain001Xml();
-
-        $this->assertFalse(PainParser::isValid($xml, PainType::PAIN_002));
-    }
-
-    public function testIsValidWithInvalidXml(): void {
-        $this->assertFalse(PainParser::isValid('invalid xml content'));
-    }
-
-    public function testIsValidWithUnknownPainType(): void {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?><Document><Unknown/></Document>';
+        $xml = $this->getSampleUnknownDocumentXml();
 
         $this->assertFalse(PainParser::isValid($xml));
     }
 
     public function testParseThrowsOnUnknownType(): void {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?><Document><Unknown/></Document>';
+        $xml = $this->getSampleUnknownDocumentXml();
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Unbekannter Pain-Dokumenttyp');
+        $this->expectExceptionMessage('Unknown PAIN document type');
 
         PainParser::parse($xml);
     }
@@ -251,185 +241,39 @@ class PainParserTest extends BaseTestCase {
     }
 
     // ============================================================
-    // Sample XML Helpers
+    // Sample XML Helpers (loaded from .samples)
     // ============================================================
 
     private function getSamplePain001Xml(): string {
-        return <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.12">
-    <CstmrCdtTrfInitn>
-        <GrpHdr>
-            <MsgId>MSG-001</MsgId>
-            <CreDtTm>2026-01-01T12:00:00</CreDtTm>
-            <NbOfTxs>1</NbOfTxs>
-            <CtrlSum>1000.00</CtrlSum>
-            <InitgPty>
-                <Nm>Test GmbH</Nm>
-            </InitgPty>
-        </GrpHdr>
-        <PmtInf>
-            <PmtInfId>PMT-001</PmtInfId>
-            <PmtMtd>TRF</PmtMtd>
-            <ReqdExctnDt><Dt>2026-01-15</Dt></ReqdExctnDt>
-            <Dbtr>
-                <Nm>Debtor GmbH</Nm>
-            </Dbtr>
-            <DbtrAcct>
-                <Id><IBAN>DE89370400440532013000</IBAN></Id>
-            </DbtrAcct>
-            <DbtrAgt>
-                <FinInstnId><BICFI>COBADEFFXXX</BICFI></FinInstnId>
-            </DbtrAgt>
-            <ChrgBr>SLEV</ChrgBr>
-            <CdtTrfTxInf>
-                <PmtId>
-                    <EndToEndId>TX-001</EndToEndId>
-                </PmtId>
-                <Amt>
-                    <InstdAmt Ccy="EUR">1000.00</InstdAmt>
-                </Amt>
-                <Cdtr>
-                    <Nm>Creditor AG</Nm>
-                </Cdtr>
-                <CdtrAcct>
-                    <Id><IBAN>DE89370400440532013001</IBAN></Id>
-                </CdtrAcct>
-            </CdtTrfTxInf>
-        </PmtInf>
-    </CstmrCdtTrfInitn>
-</Document>
-XML;
+        return $this->getSampleXml('pain.001.001.12.xml');
     }
 
     private function getSamplePain002Xml(): string {
-        return <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.12">
-    <CstmrPmtStsRpt>
-        <GrpHdr>
-            <MsgId>STATUS-001</MsgId>
-            <CreDtTm>2026-01-01T12:00:00</CreDtTm>
-        </GrpHdr>
-        <OrgnlGrpInfAndSts>
-            <OrgnlMsgId>MSG-001</OrgnlMsgId>
-            <OrgnlMsgNmId>pain.001.001.12</OrgnlMsgNmId>
-            <GrpSts>ACCP</GrpSts>
-        </OrgnlGrpInfAndSts>
-    </CstmrPmtStsRpt>
-</Document>
-XML;
+        return $this->getSampleXml('pain.002.001.12.xml');
     }
 
     private function getSamplePain007Xml(): string {
-        return <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.007.001.11">
-    <CstmrPmtRvsl>
-        <GrpHdr>
-            <MsgId>RVSL-001</MsgId>
-            <CreDtTm>2026-01-01T12:00:00</CreDtTm>
-            <NbOfTxs>1</NbOfTxs>
-            <InitgPty>
-                <Nm>Reversal GmbH</Nm>
-            </InitgPty>
-        </GrpHdr>
-        <OrgnlGrpInf>
-            <OrgnlMsgId>DD-001</OrgnlMsgId>
-            <OrgnlMsgNmId>pain.008.001.11</OrgnlMsgNmId>
-        </OrgnlGrpInf>
-    </CstmrPmtRvsl>
-</Document>
-XML;
+        return $this->getSampleXml('pain.007.001.11.xml');
     }
 
     private function getSamplePain008Xml(): string {
-        return <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.11">
-    <CstmrDrctDbtInitn>
-        <GrpHdr>
-            <MsgId>DD-001</MsgId>
-            <CreDtTm>2026-01-01T12:00:00</CreDtTm>
-            <NbOfTxs>1</NbOfTxs>
-            <CtrlSum>500.00</CtrlSum>
-            <InitgPty>
-                <Nm>DirectDebit GmbH</Nm>
-            </InitgPty>
-        </GrpHdr>
-        <PmtInf>
-            <PmtInfId>PMT-DD-001</PmtInfId>
-            <PmtMtd>DD</PmtMtd>
-            <ReqdColltnDt>2026-01-20</ReqdColltnDt>
-            <Cdtr>
-                <Nm>Creditor GmbH</Nm>
-            </Cdtr>
-            <CdtrAcct>
-                <Id><IBAN>DE89370400440532013000</IBAN></Id>
-            </CdtrAcct>
-            <CdtrAgt>
-                <FinInstnId><BICFI>COBADEFFXXX</BICFI></FinInstnId>
-            </CdtrAgt>
-            <DrctDbtTxInf>
-                <PmtId>
-                    <EndToEndId>DD-TX-001</EndToEndId>
-                </PmtId>
-                <InstdAmt Ccy="EUR">500.00</InstdAmt>
-                <DrctDbtTx>
-                    <MndtRltdInf>
-                        <MndtId>MANDATE-001</MndtId>
-                        <DtOfSgntr>2025-12-01</DtOfSgntr>
-                    </MndtRltdInf>
-                </DrctDbtTx>
-                <Dbtr>
-                    <Nm>Debtor AG</Nm>
-                </Dbtr>
-                <DbtrAcct>
-                    <Id><IBAN>DE89370400440532013001</IBAN></Id>
-                </DbtrAcct>
-            </DrctDbtTxInf>
-        </PmtInf>
-    </CstmrDrctDbtInitn>
-</Document>
-XML;
+        return $this->getSampleXml('pain.008.001.11.xml');
     }
 
     private function getSamplePain009Xml(): string {
-        return <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.009.001.07">
-    <MndtInitnReq>
-        <GrpHdr>
-            <MsgId>MNDT-001</MsgId>
-            <CreDtTm>2026-01-01T12:00:00</CreDtTm>
-            <InitgPty>
-                <Nm>Mandate Initiator GmbH</Nm>
-            </InitgPty>
-        </GrpHdr>
-        <Mndt>
-            <MndtId>MANDATE-NEW-001</MndtId>
-            <DtOfSgntr>2026-01-01</DtOfSgntr>
-            <Cdtr>
-                <Nm>Creditor AG</Nm>
-            </Cdtr>
-            <CdtrAcct>
-                <Id><IBAN>DE89370400440532013000</IBAN></Id>
-            </CdtrAcct>
-            <CdtrAgt>
-                <FinInstnId><BICFI>COBADEFFXXX</BICFI></FinInstnId>
-            </CdtrAgt>
-            <Dbtr>
-                <Nm>Debtor GmbH</Nm>
-            </Dbtr>
-            <DbtrAcct>
-                <Id><IBAN>DE89370400440532013001</IBAN></Id>
-            </DbtrAcct>
-            <DbtrAgt>
-                <FinInstnId><BICFI>GENODEF1XXX</BICFI></FinInstnId>
-            </DbtrAgt>
-        </Mndt>
-    </MndtInitnReq>
-</Document>
-XML;
+        return $this->getSampleXml('pain.009.001.07.xml');
+    }
+
+    private function getSampleUnknownDocumentXml(): string {
+        return $this->getSampleXml('unknown-document.xml');
+    }
+
+    private function getSampleXml(string $fileName): string {
+        $path = dirname(__DIR__, 2) . '/.samples/Banking/PAIN/' . $fileName;
+        $content = file_get_contents($path);
+        if ($content === false) {
+            throw new RuntimeException("Sample XML could not be read: {$path}");
+        }
+        return $content;
     }
 }

@@ -19,9 +19,9 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Gemeinsame Balance-Klasse für alle MT9xx-Nachrichtentypen.
+ * Common Balance class for all MT9xx message types.
  * 
- * Repräsentiert Salden in SWIFT MT-Nachrichten:
+ * Represents balances in SWIFT MT messages:
  * - :60F: Opening Balance (Final)
  * - :60M: Opening Balance (Interim - MT942)
  * - :62F: Closing Balance (Final - MT940)
@@ -40,8 +40,8 @@ class Balance implements BalanceInterface {
 
     /**
      * @param CreditDebit $creditDebit Soll/Haben-Kennzeichen
-     * @param DateTimeImmutable|string $date Datum (Format: ymd für String)
-     * @param CurrencyCode $currency Währung
+     * @param DateTimeImmutable|string $date Date (Format: ymd for string)
+     * @param CurrencyCode $currency Currency
      * @param float $amount Betrag
      * @param string $type Balance-Typ (F=Final, M=Interim, A=Available)
      */
@@ -78,7 +78,7 @@ class Balance implements BalanceInterface {
     }
 
     /**
-     * Gibt den Balance-Typ zurück.
+     * Returns the balance type.
      * F = Final (MT940), M = Interim (MT942), A = Available
      */
     public function getType(): string {
@@ -86,14 +86,14 @@ class Balance implements BalanceInterface {
     }
 
     /**
-     * Prüft ob es sich um einen Final-Balance handelt (MT940).
+     * Checks if this is a Final balance (MT940).
      */
     public function isFinal(): bool {
         return $this->type === 'F';
     }
 
     /**
-     * Prüft ob es sich um einen Interim-Balance handelt (MT942).
+     * Checks if this is an Interim balance (MT942).
      */
     public function isInterim(): bool {
         return $this->type === 'M';
@@ -108,7 +108,7 @@ class Balance implements BalanceInterface {
     }
 
     /**
-     * Gibt den formatierten Betrag zurück.
+     * Returns the formatted amount.
      */
     public function getFormattedAmount(?string $locale = null): string {
         return CurrencyHelper::format($this->amount, $this->currency, $locale);
@@ -116,7 +116,7 @@ class Balance implements BalanceInterface {
 
     /**
      * Serialisiert im SWIFT MT-Format.
-     * Format: [C/D][Datum YYMMDD][Währung][Betrag mit Komma]
+     * Format: [C/D][Date YYMMDD][Currency][Amount with comma]
      */
     public function __toString(): string {
         return sprintf(

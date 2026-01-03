@@ -31,10 +31,10 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Builder für pain.008 Documents (Customer Direct Debit Initiation).
+ * Builder for pain.008 Documents (Customer Direct Debit Initiation).
  * 
- * Erstellt Lastschrift-Einreichungen gemäß ISO 20022.
- * Unterstützt SEPA Core und SEPA B2B Lastschriften.
+ * Creates direct debit submissions according to ISO 20022.
+ * Supports SEPA Core and SEPA B2B direct debits.
  * 
  * Struktur:
  * - GroupHeader: Nachrichten-Metadaten
@@ -90,7 +90,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Fügt eine fertige PaymentInstruction hinzu.
+     * Adds a completed PaymentInstruction.
      */
     public function addPaymentInstruction(PaymentInstruction $instruction): self {
         $clone = clone $this;
@@ -99,15 +99,15 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Startet eine neue PaymentInstruction für SEPA Core Lastschrift.
+     * Starts a new PaymentInstruction for SEPA Core direct debit.
      * Nutze addTransaction() und endPaymentInstruction() zum Fertigstellen.
      * 
-     * @param string $paymentInstructionId Eindeutige ID für diese Anweisung
-     * @param PartyIdentification $creditor Gläubiger (Empfänger der Zahlung)
-     * @param AccountIdentification $creditorAccount Konto des Gläubigers
-     * @param string $creditorSchemeId Gläubiger-Identifikation (z.B. DE98ZZZ09999999999)
+     * @param string $paymentInstructionId Unique ID for this instruction
+     * @param PartyIdentification $creditor Creditor (payment receiver)
+     * @param AccountIdentification $creditorAccount Creditor's account
+     * @param string $creditorSchemeId Creditor identification (e.g. DE98ZZZ09999999999)
      * @param SequenceType $sequenceType FIRST, RECURRING, ONE_OFF, FINAL
-     * @param FinancialInstitution|null $creditorAgent Bank des Gläubigers
+     * @param FinancialInstitution|null $creditorAgent Creditor's bank
      */
     public function beginSepaCorInstruction(
         string $paymentInstructionId,
@@ -131,7 +131,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Startet eine neue PaymentInstruction für SEPA B2B Lastschrift.
+     * Starts a new PaymentInstruction for SEPA B2B direct debit.
      */
     public function beginSepaB2BInstruction(
         string $paymentInstructionId,
@@ -155,7 +155,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Fügt eine Transaktion zur aktuellen PaymentInstruction hinzu.
+     * Adds a transaction to the current PaymentInstruction.
      * 
      * @throws RuntimeException Wenn keine PaymentInstruction begonnen wurde
      */
@@ -172,7 +172,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Setzt das gewünschte Einzugsdatum für die aktuelle PaymentInstruction.
+     * Sets the requested collection date for the current PaymentInstruction.
      */
     public function setRequestedCollectionDate(DateTimeImmutable $date): self {
         if ($this->currentInstructionBuilder === null) {
@@ -185,7 +185,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Setzt den ChargesCode für die aktuelle PaymentInstruction.
+     * Sets the ChargesCode for the current PaymentInstruction.
      */
     public function setChargesCode(ChargesCode $code): self {
         if ($this->currentInstructionBuilder === null) {
@@ -198,7 +198,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Aktiviert/Deaktiviert Batch-Buchung für die aktuelle PaymentInstruction.
+     * Enables/Disables batch booking for the current PaymentInstruction.
      */
     public function setBatchBooking(bool $batch): self {
         if ($this->currentInstructionBuilder === null) {
@@ -211,7 +211,7 @@ final class Pain008DocumentBuilder {
     }
 
     /**
-     * Beendet die aktuelle PaymentInstruction und fügt sie zum Dokument hinzu.
+     * Ends the current PaymentInstruction and adds it to the document.
      * 
      * @throws RuntimeException Wenn keine PaymentInstruction aktiv ist
      */
@@ -277,7 +277,7 @@ final class Pain008DocumentBuilder {
     /**
      * Erstellt eine einfache SEPA Core Lastschrift.
      * 
-     * Convenience-Methode für einfache Lastschriften mit einer Transaktion.
+     * Convenience method for simple direct debits with one transaction.
      */
     public static function createSepaDirectDebit(
         string $messageId,
@@ -321,7 +321,7 @@ final class Pain008DocumentBuilder {
 }
 
 /**
- * Hilfsbuilder für DirectDebit PaymentInstruction.
+ * Helper builder for DirectDebit PaymentInstruction.
  * Intern verwendet von Pain008DocumentBuilder.
  */
 final class DirectDebitInstructionBuilder {

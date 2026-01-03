@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29;
 /**
  * CAMT.029 Cancellation Status Information.
  * 
- * Enthält den Status einer Stornierungsanfrage.
+ * Contains the status of a cancellation request.
  * 
  * @package CommonToolkit\FinancialFormats\Entities\Camt\Type29
  */
@@ -65,21 +65,21 @@ class CancellationStatus {
     }
 
     /**
-     * Prüft ob die Stornierung akzeptiert wurde.
+     * Checks if the cancellation was accepted.
      */
     public function isAccepted(): bool {
         return $this->statusCode === 'ACCP' || $this->statusCode === 'ACSC';
     }
 
     /**
-     * Prüft ob die Stornierung abgelehnt wurde.
+     * Checks if the cancellation was rejected.
      */
     public function isRejected(): bool {
         return $this->statusCode === 'RJCR';
     }
 
     /**
-     * Prüft ob die Stornierung noch aussteht.
+     * Checks if the cancellation is still pending.
      */
     public function isPending(): bool {
         return $this->statusCode === 'PDNG';

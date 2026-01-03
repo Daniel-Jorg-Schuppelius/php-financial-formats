@@ -17,8 +17,8 @@ use CommonToolkit\FinancialFormats\Enums\DATEV\MetaFields\Format\Category;
 
 /**
  * DATEV BookingBatch - Feldheader (Spaltenbeschreibungen) V700.
- * Vollständige Implementierung aller 125 DATEV-Felder in korrekter Reihenfolge,
- * einschließlich der 20 Zusatzinformationsfelder (ZI-Felder).
+ * Complete implementation of all 125 DATEV fields in correct order,
+ * including the 20 supplementary information fields (ZI fields).
  * 
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/booking-batch
  */
@@ -170,7 +170,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
 
     /**
      * Liefert alle 125 Felder in der korrekten DATEV-Reihenfolge.
-     * Einschließlich der 40 Zusatzinformationsfelder (ZI-Felder 48-87).
+     * Including the 40 supplementary information fields (ZI fields 48-87).
      */
     public static function ordered(): array {
         return [
@@ -320,7 +320,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die Mindestfelder für einen gültigen BookingBatch.
+     * Returns the minimum fields for a valid BookingBatch.
      */
     public static function required(): array {
         return [
@@ -335,7 +335,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die empfohlenen Felder für Standard-Buchungen.
+     * Returns the recommended fields for standard bookings.
      */
     public static function recommended(): array {
         return array_merge(self::required(), [
@@ -347,7 +347,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert Felder für EU-Buchungen.
+     * Returns fields for EU bookings.
      */
     public static function euFields(): array {
         return [
@@ -474,35 +474,35 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Prüft, ob ein Feld verpflichtend ist.
+     * Checks if a field is required.
      */
     public function isRequired(): bool {
         return in_array($this, self::required(), true);
     }
 
     /**
-     * Prüft, ob ein Feld für EU-Buchungen relevant ist.
+     * Checks if a field is relevant for EU bookings.
      */
     public function isEuField(): bool {
         return in_array($this, self::euFields(), true);
     }
 
     /**
-     * Prüft, ob ein Feld für SEPA-Zahlungen relevant ist.
+     * Checks if a field is relevant for SEPA payments.
      */
     public function isSepaField(): bool {
         return in_array($this, self::sepaFields(), true);
     }
 
     /**
-     * Prüft, ob ein Feld ein Zusatzinformationsfeld (ZI-Feld) ist.
+     * Checks if a field is a supplementary information field (ZI field).
      */
     public function isAdditionalInfoField(): bool {
         return in_array($this, self::additionalInfoFields(), true);
     }
 
     /**
-     * Prüft, ob ein Feld ein Beleginfo-Feld ist.
+     * Checks if a field is a document info field.
      */
     public function isDocumentInfoField(): bool {
         return in_array($this, self::documentInfoFields(), true);
@@ -532,7 +532,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die maximale Feldlänge für DATEV.
+     * Returns the maximum field length for DATEV.
      */
     public function getMaxLength(): ?int {
         return match ($this) {
@@ -548,7 +548,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert das Regex-Pattern für DATEV-Validierung basierend auf der offiziellen Spezifikation.
+     * Returns the regex pattern for DATEV validation basierend auf der offiziellen Spezifikation.
      */
     public function getValidationPattern(): ?string {
         return match ($this) {
@@ -776,7 +776,7 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Gibt die Position/den Index des Feldes in der Feldreihenfolge zurück.
+     * Returns the position/index of the field in the field order.
      * 
      * @return int Die nullbasierte Position des Feldes
      */
@@ -786,28 +786,28 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert die DATEV-Kategorie für dieses Header-Format.
+     * Returns the DATEV category for this header format.
      */
     public static function getCategory(): Category {
         return Category::Buchungsstapel;
     }
 
     /**
-     * Liefert die DATEV-Version für dieses Header-Format.
+     * Returns the DATEV version for this header format.
      */
     public static function getVersion(): int {
         return 700;
     }
 
     /**
-     * Liefert die Anzahl der definierten Felder.
+     * Returns the number of defined fields.
      */
     public static function getFieldCount(): int {
         return count(self::ordered());
     }
 
     /**
-     * Prüft, ob ein Feldwert gültig ist (im Enum enthalten).
+     * Checks if a field value is valid (contained in enum).
      */
     public static function isValidFieldValue(string $value): bool {
         foreach (self::cases() as $case) {
@@ -819,15 +819,15 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Gibt an, ob das Feld im FieldHeader gequotet werden soll.
-     * DATEV FieldHeader sind standardmäßig nicht gequotet.
+     * Indicates whether the field should be quoted in the FieldHeader.
+     * DATEV FieldHeaders are not quoted by default.
      */
     public function isQuotedHeader(): bool {
         return false;
     }
 
     /**
-     * Gibt an, ob Datenwerte für dieses Feld gequotet werden sollen.
+     * Indicates whether data values for this field should be quoted.
      * Basierend auf dem Validierungspattern: Pattern mit ^["]... oder ^(["... = gequotet
      */
     public function isQuotedValue(): bool {
@@ -840,8 +840,8 @@ enum BookingBatchHeaderField: string implements FieldHeaderInterface {
     }
 
     /**
-     * Liefert den tatsächlichen Header-Namen für die CSV-Ausgabe.
-     * Weicht ggf. vom Enum-Wert ab, um Kompatibilität mit DATEV-Sample-Dateien zu gewährleisten.
+     * Returns the actual header name for CSV output.
+     * May differ from enum value to ensure compatibility with DATEV sample files.
      */
     public function headerName(): string {
         return $this->value;

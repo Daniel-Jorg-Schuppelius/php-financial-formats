@@ -22,7 +22,7 @@ use CommonToolkit\FinancialFormats\Parsers\Mt940DocumentParser;
 use RuntimeException;
 
 /**
- * SWIFT FIN Message - Vollständige SWIFT-Nachricht mit allen 5 Blöcken
+ * SWIFT FIN Message - Complete SWIFT message with all 5 blocks
  * 
  * Format:
  * {1:F01BANKBEBB2222123456}           - Basic Header
@@ -58,7 +58,7 @@ final class Message {
     }
 
     /**
-     * Gibt den Text-Block (Block 4) zurück - die eigentlichen MT-Daten
+     * Returns the Text Block (Block 4) - the actual MT data
      */
     public function getTextBlock(): string {
         return $this->textBlock;
@@ -69,70 +69,70 @@ final class Message {
     }
 
     /**
-     * Gibt den Message Type zurück
+     * Returns the Message Type
      */
     public function getMessageType(): MtType {
         return $this->applicationHeader->getMessageType();
     }
 
     /**
-     * Gibt den BIC des Senders zurück
+     * Returns the sender's BIC
      */
     public function getSenderBic(): string {
         return $this->basicHeader->getBic();
     }
 
     /**
-     * Gibt den BIC des Empfängers zurück (nur bei Input-Nachrichten)
+     * Returns the receiver's BIC (only for input messages)
      */
     public function getReceiverBic(): ?string {
         return $this->applicationHeader->getReceiverBic();
     }
 
     /**
-     * Prüft ob die Nachricht eine Output-Nachricht ist
+     * Checks if the message is an output message
      */
     public function isOutput(): bool {
         return $this->applicationHeader->isOutput();
     }
 
     /**
-     * Prüft ob die Nachricht eine Input-Nachricht ist
+     * Checks if the message is an input message
      */
     public function isInput(): bool {
         return $this->applicationHeader->isInput();
     }
 
     /**
-     * Prüft ob die Nachricht eine Training-Nachricht ist
+     * Checks if the message is a training message
      */
     public function isTraining(): bool {
         return $this->trailer?->isTraining() ?? false;
     }
 
     /**
-     * Gibt die Checksum zurück
+     * Returns the checksum
      */
     public function getChecksum(): ?string {
         return $this->trailer?->getChecksum();
     }
 
     /**
-     * Gibt die Message User Reference (MUR) zurück
+     * Returns the Message User Reference (MUR)
      */
     public function getMur(): ?string {
         return $this->userHeader?->getMur();
     }
 
     /**
-     * Gibt die UETR zurück (für gpi-Tracking)
+     * Returns the UETR (for gpi tracking)
      */
     public function getUetr(): ?string {
         return $this->userHeader?->getUetr();
     }
 
     /**
-     * Prüft ob STP aktiviert ist
+     * Checks if STP is enabled
      */
     public function isStp(): bool {
         return $this->userHeader?->isStp() ?? false;
@@ -141,13 +141,13 @@ final class Message {
     /**
      * Parst den Text-Block automatisch basierend auf dem MT-Typ.
      * 
-     * Unterstützte Typen:
-     * - MT101 → Mt101Document (Sammelüberweisung)
-     * - MT103 → Mt1DocumentAbstract (Einzelüberweisung)
-     * - MT940, MT941, MT942 → Mt9DocumentAbstract (Kontoauszüge)
+     * Supported types:
+     * - MT101 → Mt101Document (batch transfer)
+     * - MT103 → Mt1DocumentAbstract (single transfer)
+     * - MT940, MT941, MT942 → Mt9DocumentAbstract (account statements)
      * 
      * @return Mt101Document|Mt1DocumentAbstract|Mt9DocumentAbstract Das geparste Dokument
-     * @throws RuntimeException Wenn der MT-Typ nicht unterstützt wird
+     * @throws RuntimeException If the MT type is not supported
      */
     public function parseDocument(): Mt101Document|Mt1DocumentAbstract|Mt9DocumentAbstract {
         return match ($this->getMessageType()) {
@@ -161,21 +161,21 @@ final class Message {
     }
 
     /**
-     * Prüft ob der MT-Typ ein Zahlungsauftrag ist (MT10x).
+     * Checks if the MT type is a payment order (MT10x).
      */
     public function isPaymentOrder(): bool {
         return in_array($this->getMessageType(), [MtType::MT101, MtType::MT103], true);
     }
 
     /**
-     * Prüft ob der MT-Typ ein Kontoauszug ist (MT9xx).
+     * Checks if the MT type is an account statement (MT9xx).
      */
     public function isStatement(): bool {
         return in_array($this->getMessageType(), [MtType::MT940, MtType::MT941, MtType::MT942], true);
     }
 
     /**
-     * Gibt die vollständige SWIFT-Nachricht als String zurück
+     * Returns the complete SWIFT message as string
      */
     public function __toString(): string {
         return (new SwiftMessageGenerator())->generate($this);

@@ -21,16 +21,16 @@ use DateTimeImmutable;
 /**
  * MT942 Document - Interim Transaction Report.
  * 
- * Untertägige Umsatzinformation gemäß SWIFT-Standard.
- * Enthält Transaktionen seit dem letzten Report mit Interim-Salden.
+ * Intraday transaction information according to SWIFT standard.
+ * Contains transactions since the last report with interim balances.
  * 
- * Äquivalent zu CAMT.052 (Bank to Customer Account Report).
+ * Equivalent to CAMT.052 (Bank to Customer Account Report).
  * 
  * Unterschiede zu MT940:
- * - Verwendet :60M: (Interim) statt :60F: (Final) für Opening Balance
- * - Verwendet :62M: (Interim) statt :62F: (Final) für Closing Balance
- * - Kann mehrmals täglich erstellt werden
- * - Enthält Feld :34F: für Floor Limit Indicator
+ * - Uses :60M: (Interim) instead of :60F: (Final) for Opening Balance
+ * - Uses :62M: (Interim) instead of :62F: (Final) for Closing Balance
+ * - Can be created multiple times per day
+ * - Contains Field :34F: for Floor Limit Indicator
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type942
  */
@@ -74,7 +74,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Opening Balance zurück (optional bei MT942).
+     * Returns the Opening Balance (optional for MT942).
      * Feld :60M: in SWIFT-Notation.
      */
     public function getOpeningBalance(): ?Balance {
@@ -82,7 +82,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Closing Balance zurück.
+     * Returns the Closing Balance.
      * Feld :62M: in SWIFT-Notation.
      */
     public function getClosingBalance(): Balance {
@@ -90,7 +90,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den Floor Limit Indicator zurück.
+     * Returns the Floor Limit Indicator.
      * Feld :34F: - Transaktionen unter diesem Betrag werden nicht einzeln gemeldet.
      */
     public function getFloorLimitIndicator(): ?float {
@@ -98,7 +98,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt den DateTime Indicator zurück.
+     * Returns the DateTime Indicator.
      * Feld :13D: - Zeitpunkt der Erstellung des Reports.
      */
     public function getDateTimeIndicator(): ?DateTimeImmutable {
@@ -106,7 +106,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Gibt alle Transaktionen zurück.
+     * Returns all transactions.
      * @return Transaction[]
      */
     public function getTransactions(): array {
@@ -114,7 +114,7 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Fügt eine Transaktion hinzu.
+     * Adds a transaction.
      */
     public function addTransaction(Transaction $transaction): void {
         $this->transactions[] = $transaction;
@@ -149,14 +149,14 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Zählt die Soll-Buchungen.
+     * Counts the debit entries.
      */
     public function countDebitEntries(): int {
         return count(array_filter($this->transactions, fn(Transaction $txn) => $txn->isDebit()));
     }
 
     /**
-     * Zählt die Haben-Buchungen.
+     * Counts the credit entries.
      */
     public function countCreditEntries(): int {
         return count(array_filter($this->transactions, fn(Transaction $txn) => $txn->isCredit()));

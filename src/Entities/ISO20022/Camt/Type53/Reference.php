@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53;
 
 /**
- * Repräsentiert alle Referenzen einer CAMT.053 Transaktion.
+ * Represents all references of a CAMT.053 transaction.
  * 
  * Basierend auf den SEPA-Referenzfeldern:
  * - EndToEndId: Ende-zu-Ende-Identifikation (EREF+)
  * - MandateId: Mandatsreferenz (MREF+)
- * - CreditorId: Gläubiger-ID (CRED+)
+ * - CreditorId: Creditor ID (CRED+)
  * - EntryReference: Umsatzreferenz der Bank
- * - AccountServicerReference: Referenz des kontoführenden Instituts
+ * - AccountServicerReference: Reference of the account-holding institution
  * - PaymentInformationId: Zahlungsinformations-ID
  * - InstructionId: Auftrags-ID (KREF+)
  * 
@@ -73,7 +73,7 @@ final class Reference {
     }
 
     /**
-     * Gläubiger-Identifikation (CRED+).
+     * Creditor identification (CRED+).
      * Nur bei SEPA-Lastschriften.
      */
     public function getCreditorId(): ?string {
@@ -81,14 +81,14 @@ final class Reference {
     }
 
     /**
-     * Umsatzreferenz des kontoführenden Instituts.
+     * Transaction reference of the account-holding institution.
      */
     public function getEntryReference(): ?string {
         return $this->entryReference;
     }
 
     /**
-     * Referenz des kontoführenden Instituts.
+     * Reference of the account-holding institution.
      * Entspricht Subfeld 10 im MT940 :61:-Feld.
      */
     public function getAccountServicerReference(): ?string {
@@ -110,14 +110,14 @@ final class Reference {
     }
 
     /**
-     * Zusätzliche Referenz.
+     * Additional reference.
      */
     public function getAdditional(): ?string {
         return $this->additional;
     }
 
     /**
-     * Prüft, ob mindestens eine Referenz gesetzt ist.
+     * Checks if at least one reference is set.
      */
     public function hasAnyReference(): bool {
         return $this->endToEndId !== null
@@ -131,7 +131,7 @@ final class Reference {
     }
 
     /**
-     * Gibt die primäre Referenz zurück (erste gefundene).
+     * Returns the primary reference (first found).
      */
     public function getPrimaryReference(): ?string {
         return $this->endToEndId

@@ -17,11 +17,11 @@ use DateTimeImmutable;
 use RuntimeException;
 
 /**
- * Überweisungsdetails für MT10x-Nachrichten.
+ * Transfer details for MT10x messages.
  * 
- * Enthält die Kernfelder einer Überweisung:
- * - :32A: Valutadatum, Währung, Betrag
- * - :33B: Ursprungswährung und -betrag (bei Währungsumrechnung)
+ * Contains the core fields of a transfer:
+ * - :32A: Value date, currency, amount
+ * - :33B: Original currency and amount (for currency conversion)
  * - :36:  Wechselkurs
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt1
@@ -38,49 +38,49 @@ final readonly class TransferDetails {
     }
 
     /**
-     * Gibt das Valutadatum zurück.
+     * Returns the value date.
      */
     public function getValueDate(): DateTimeImmutable {
         return $this->valueDate;
     }
 
     /**
-     * Gibt die Währung zurück.
+     * Returns the currency.
      */
     public function getCurrency(): CurrencyCode {
         return $this->currency;
     }
 
     /**
-     * Gibt den Betrag zurück.
+     * Returns the amount.
      */
     public function getAmount(): float {
         return $this->amount;
     }
 
     /**
-     * Gibt die ursprüngliche Währung zurück (bei Währungsumrechnung).
+     * Returns the original currency (for currency conversion).
      */
     public function getOriginalCurrency(): ?CurrencyCode {
         return $this->originalCurrency;
     }
 
     /**
-     * Gibt den ursprünglichen Betrag zurück (bei Währungsumrechnung).
+     * Returns the original amount (for currency conversion).
      */
     public function getOriginalAmount(): ?float {
         return $this->originalAmount;
     }
 
     /**
-     * Gibt den Wechselkurs zurück.
+     * Returns the exchange rate.
      */
     public function getExchangeRate(): ?float {
         return $this->exchangeRate;
     }
 
     /**
-     * Prüft ob eine Währungsumrechnung stattfand.
+     * Checks if currency conversion occurred.
      */
     public function hasCurrencyConversion(): bool {
         return $this->originalCurrency !== null
@@ -88,7 +88,7 @@ final readonly class TransferDetails {
     }
 
     /**
-     * Gibt den formatierten Betrag zurück.
+     * Returns the formatted amount.
      */
     public function getFormattedAmount(): string {
         return number_format($this->amount, 2, ',', '.') . ' ' . $this->currency->value;
@@ -154,7 +154,7 @@ final readonly class TransferDetails {
     }
 
     /**
-     * Erweitert mit Originalwährungsdaten aus :33B:.
+     * Extended with original currency data from :33B:.
      */
     public function withOriginal(CurrencyCode $originalCurrency, float $originalAmount, ?float $exchangeRate = null): self {
         return new self(

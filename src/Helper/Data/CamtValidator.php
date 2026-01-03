@@ -20,7 +20,7 @@ use LibXMLError;
 use RuntimeException;
 
 /**
- * CAMT-Validator für XSD-Schema-Validierung.
+ * CAMT validator for XSD schema validation.
  * 
  * Validiert CAMT.052, CAMT.053 und CAMT.054 XML-Dokumente
  * gegen die entsprechenden ISO 20022 XSD-Schemas.
@@ -68,7 +68,7 @@ class CamtValidator {
     ];
 
     /**
-     * Österreichische CAMT.053 Schemas
+     * Austrian CAMT.053 schemas
      */
     private const AUSTRIAN_XSD_FILES = [
         'camt.053' => [
@@ -195,7 +195,7 @@ class CamtValidator {
     }
 
     /**
-     * Ermittelt die XSD-Datei für einen CAMT-Typ und eine Version.
+     * Determines the XSD file for a CAMT type and version.
      */
     private static function getXsdFile(CamtType $type, ?CamtVersion $version): ?string {
         $typeKey = match ($type) {
@@ -237,7 +237,7 @@ class CamtValidator {
     }
 
     /**
-     * Gibt alle verfügbaren XSD-Dateien zurück.
+     * Returns all available XSD files.
      * 
      * @return array<string, array<string, string>> Typ => Version => Dateiname
      */
@@ -303,7 +303,7 @@ final class ValidationResult {
      * @param array<string> $errors Liste der Fehler (leer bei Erfolg)
      * @param CamtType|null $type Der erkannte CAMT-Typ
      * @param CamtVersion|null $version Die erkannte CAMT-Version
-     * @param string|null $xsdFile Die verwendete XSD-Datei
+     * @param string|null $xsdFile The XSD file used
      */
     public function __construct(
         public readonly bool $valid,
@@ -315,14 +315,14 @@ final class ValidationResult {
     }
 
     /**
-     * Gibt true zurück wenn die Validierung erfolgreich war.
+     * Returns true if validation was successful.
      */
     public function isValid(): bool {
         return $this->valid;
     }
 
     /**
-     * Gibt die Fehler zurück.
+     * Returns the errors.
      * 
      * @return array<string>
      */
@@ -331,21 +331,21 @@ final class ValidationResult {
     }
 
     /**
-     * Gibt die Fehler als String zurück.
+     * Returns the errors as string.
      */
     public function getErrorsAsString(): string {
         return implode("\n", $this->errors);
     }
 
     /**
-     * Gibt den ersten Fehler zurück.
+     * Returns the first error.
      */
     public function getFirstError(): ?string {
         return $this->errors[0] ?? null;
     }
 
     /**
-     * Gibt die Anzahl der Fehler zurück.
+     * Returns the number of errors.
      */
     public function countErrors(): int {
         return count($this->errors);

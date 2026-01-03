@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Endetyp für wiederkehrende Buchungen (Feld 87).
+ * DATEV End type for recurring bookings (Field 87).
  * Definiert, wie die Wiederholung endet.
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/recurring-bookings
@@ -26,7 +26,7 @@ enum EndType: int {
     case BY_DATE    = 3; // Endet an einem bestimmten Datum
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -37,7 +37,7 @@ enum EndType: int {
     }
 
     /**
-     * Ausführliche Beschreibung für UI-Tooltips.
+     * Detailed description for UI tooltips.
      */
     public function getDescription(): string {
         return match ($this) {
@@ -48,7 +48,7 @@ enum EndType: int {
     }
 
     /**
-     * Factory für Integer-Werte.
+     * Factory for integer values.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -60,7 +60,7 @@ enum EndType: int {
     }
 
     /**
-     * Factory mit null-Rückgabe bei ungültigen Werten.
+     * Factory with null return for invalid values.
      */
     public static function tryFromInt(int $value): ?self {
         try {
@@ -71,7 +71,7 @@ enum EndType: int {
     }
 
     /**
-     * Factory für String-Werte.
+     * Factory for string values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');
@@ -82,42 +82,42 @@ enum EndType: int {
     }
 
     /**
-     * Prüft, ob unbegrenzt.
+     * Checks if unlimited.
      */
     public function isUnlimited(): bool {
         return $this === self::NO_END;
     }
 
     /**
-     * Prüft, ob nach Anzahl.
+     * Checks if by count.
      */
     public function isByCount(): bool {
         return $this === self::BY_COUNT;
     }
 
     /**
-     * Prüft, ob nach Datum.
+     * Checks if by date.
      */
     public function isByDate(): bool {
         return $this === self::BY_DATE;
     }
 
     /**
-     * Prüft, ob eine Endbedingung definiert ist.
+     * Checks if an end condition is defined.
      */
     public function hasEndCondition(): bool {
         return $this !== self::NO_END;
     }
 
     /**
-     * Prüft, ob das Feld "Anzahl" (Feld 88) relevant ist.
+     * Checks if the "Count" field (Field 88) is relevant.
      */
     public function requiresCount(): bool {
         return $this === self::BY_COUNT;
     }
 
     /**
-     * Prüft, ob das Feld "Endedatum" (Feld 89) relevant ist.
+     * Checks if the "End date" field (Field 89) is relevant.
      */
     public function requiresEndDate(): bool {
         return $this === self::BY_DATE;

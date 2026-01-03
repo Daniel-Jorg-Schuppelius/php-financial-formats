@@ -17,10 +17,10 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 
 /**
- * Builder für CAMT.038 Documents (Case Status Report Request).
+ * Builder for CAMT.038 Documents (Case Status Report Request).
  * 
- * Erstellt Anfragen zum Fallstatus.
- * Wird verwendet um den aktuellen Status eines Untersuchungsfalles abzufragen.
+ * Creates case status requests.
+ * Used to query the current status of an investigation case.
  * 
  * @package CommonToolkit\FinancialFormats\Builders\Camt
  */
@@ -36,7 +36,7 @@ final class Camt038DocumentBuilder {
 
     private function __construct(string $requestId) {
         if (strlen($requestId) > 35) {
-            throw new InvalidArgumentException('RequestId darf maximal 35 Zeichen lang sein');
+            throw new InvalidArgumentException('RequestId must not exceed 35 characters');
         }
         $this->requestId = $requestId;
         $this->creationDateTime = new DateTimeImmutable();

@@ -14,34 +14,11 @@ namespace CommonToolkit\FinancialFormats\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PaymentIdentification;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\CreditTransferTransaction;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document as Pain001Document;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader as Pain001GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstruction as Pain001PaymentInstruction;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\Document as Pain002Document;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\GroupHeader as Pain002GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalGroupInformation as Pain002OriginalGroupInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalPaymentInformation as Pain002OriginalPaymentInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionInformationAndStatus;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document as Pain007Document;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\GroupHeader as Pain007GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\OriginalGroupInformation as Pain007OriginalGroupInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\OriginalPaymentInformation as Pain007OriginalPaymentInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\ReversalReason;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\TransactionInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\DirectDebitTransaction;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain008Document;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\GroupHeader as Pain008GroupHeader;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\MandateInformation;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\PaymentInstruction as Pain008PaymentInstruction;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\{AccountIdentification, FinancialInstitution, Mandate, PartyIdentification, PaymentIdentification, RemittanceInformation};
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\{CreditTransferTransaction, Document as Pain001Document, GroupHeader as Pain001GroupHeader, PaymentInstruction as Pain001PaymentInstruction};
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\{Document as Pain002Document, GroupHeader as Pain002GroupHeader, OriginalGroupInformation as Pain002OriginalGroupInformation, OriginalPaymentInformation as Pain002OriginalPaymentInformation, StatusReason, TransactionInformationAndStatus, TransactionStatus};
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\{Document as Pain007Document, GroupHeader as Pain007GroupHeader, OriginalGroupInformation as Pain007OriginalGroupInformation, OriginalPaymentInformation as Pain007OriginalPaymentInformation, ReversalReason, TransactionInformation};
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\{DirectDebitTransaction, Document as Pain008Document, GroupHeader as Pain008GroupHeader, MandateInformation, PaymentInstruction as Pain008PaymentInstruction};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
 use CommonToolkit\FinancialFormats\Enums\ChargesCode;
 use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
@@ -58,38 +35,38 @@ use DOMXPath;
 use RuntimeException;
 
 /**
- * Generischer Parser für Pain-Dokumente.
- * 
- * Erkennt automatisch den Pain-Typ und gibt das entsprechende
- * Document-Objekt zurück.
- * 
- * Unterstützte Formate:
+ * Generic parser for Pain documents.
+ *
+ * Automatically detects the PAIN type and returns the corresponding
+ * document object.
+ *
+ * Supported formats:
  * - pain.001 (Customer Credit Transfer Initiation)
  * - pain.002 (Customer Payment Status Report)
  * - pain.007 (Customer Payment Reversal)
  * - pain.008 (Customer Direct Debit Initiation)
  * - pain.009 (Mandate Initiation Request)
- * 
+ *
  * @package CommonToolkit\FinancialFormats\Parsers
  */
 class PainParser extends Iso20022ParserAbstract {
 
     // =========================================================================
-    // ÖFFENTLICHE API
+    // PUBLIC API
     // =========================================================================
 
     /**
-     * Parst ein Pain-Dokument und erkennt den Typ automatisch.
-     * 
-     * @param string $xmlContent XML-Inhalt
-     * @return PainDocumentInterface Geparstes Dokument
-     * @throws RuntimeException Bei ungültigem XML oder unbekanntem Typ
+     * Parses a PAIN document and automatically detects the type.
+     *
+     * @param string $xmlContent XML content
+     * @return PainDocumentInterface Parsed document
+     * @throws RuntimeException If the XML is invalid or the PAIN type is unknown
      */
     public static function parse(string $xmlContent): PainDocumentInterface {
         $type = PainType::fromXml($xmlContent);
 
         if ($type === null) {
-            throw new RuntimeException('Unbekannter Pain-Dokumenttyp');
+            throw new RuntimeException('Unknown PAIN document type');
         }
 
         return match ($type) {
@@ -98,31 +75,31 @@ class PainParser extends Iso20022ParserAbstract {
             PainType::PAIN_007 => self::parsePain007($xmlContent),
             PainType::PAIN_008 => self::parsePain008($xmlContent),
             PainType::PAIN_009 => self::parsePain009($xmlContent),
-            default => throw new RuntimeException("Pain-Typ {$type->value} wird noch nicht unterstützt"),
+            default => throw new RuntimeException("PAIN type {$type->value} is not supported yet"),
         };
     }
 
     /**
-     * Parst eine Pain-XML-Datei.
-     * 
-     * @param string $filePath Pfad zur XML-Datei
-     * @return PainDocumentInterface Geparstes Dokument
-     * @throws RuntimeException Bei Datei- oder Parse-Fehlern
+     * Parses a PAIN XML file.
+     *
+     * @param string $filePath Path to the XML file
+     * @return PainDocumentInterface Parsed document
+     * @throws RuntimeException On file or parse errors
      */
     public static function parseFile(string $filePath): PainDocumentInterface {
         $content = File::getContents($filePath);
         if ($content === false) {
-            throw new RuntimeException("Datei konnte nicht gelesen werden: {$filePath}");
+            throw new RuntimeException("File could not be read: {$filePath}");
         }
         return self::parse($content);
     }
 
     /**
-     * Prüft, ob ein XML ein gültiges Pain-Dokument ist.
-     * 
-     * @param string $xmlContent XML-Inhalt
-     * @param PainType|null $expectedType Optional: Erwarteter Pain-Typ
-     * @return bool True wenn gültig
+     * Checks if an XML is a valid Pain document.
+     *
+     * @param string $xmlContent XML content
+     * @param PainType|null $expectedType Optional: expected PAIN type
+     * @return bool True if valid
      */
     public static function isValid(string $xmlContent, ?PainType $expectedType = null): bool {
         try {
@@ -147,64 +124,64 @@ class PainParser extends Iso20022ParserAbstract {
     }
 
     /**
-     * Ermittelt den Pain-Typ eines XML-Dokuments.
-     * 
-     * @param string $xmlContent XML-Inhalt
-     * @return PainType|null Pain-Typ oder null
+     * Detects the PAIN type of an XML document.
+     *
+     * @param string $xmlContent XML content
+     * @return PainType|null PAIN type or null
      */
     public static function detectType(string $xmlContent): ?PainType {
         return PainType::fromXml($xmlContent);
     }
 
     // =========================================================================
-    // ALIAS-METHODEN FÜR ABWÄRTSKOMPATIBILITÄT
+    // ALIAS METHODS FOR BACKWARDS COMPATIBILITY
     // =========================================================================
 
     /**
-     * Alias für parsePain001() - für Abwärtskompatibilität.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain001Document Das geparste Dokument
+     * Alias for parsePain001() - for backwards compatibility.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain001Document Parsed document
      */
     public static function fromXml001(string $xmlContent): Pain001Document {
         return self::parsePain001($xmlContent);
     }
 
     /**
-     * Alias für parsePain002() - für Abwärtskompatibilität.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain002Document Das geparste Dokument
+     * Alias for parsePain002() - for backwards compatibility.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain002Document Parsed document
      */
     public static function fromXml002(string $xmlContent): Pain002Document {
         return self::parsePain002($xmlContent);
     }
 
     /**
-     * Alias für parsePain007() - für Abwärtskompatibilität.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain007Document Das geparste Dokument
+     * Alias for parsePain007() - for backwards compatibility.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain007Document Parsed document
      */
     public static function fromXml007(string $xmlContent): Pain007Document {
         return self::parsePain007($xmlContent);
     }
 
     /**
-     * Alias für parsePain008() - für Abwärtskompatibilität.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain008Document Das geparste Dokument
+     * Alias for parsePain008() - for backwards compatibility.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain008Document Parsed document
      */
     public static function fromXml008(string $xmlContent): Pain008Document {
         return self::parsePain008($xmlContent);
     }
 
     /**
-     * Alias für parsePain009() - für Abwärtskompatibilität.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain009Document Das geparste Dokument
+     * Alias for parsePain009() - for backwards compatibility.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain009Document Parsed document
      */
     public static function fromXml009(string $xmlContent): Pain009Document {
         return self::parsePain009($xmlContent);
@@ -221,39 +198,39 @@ class PainParser extends Iso20022ParserAbstract {
     ];
 
     /**
-     * Parst ein pain.001 XML-Dokument.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain001Document Das geparste Dokument
-     * @throws RuntimeException Bei ungültigem XML oder fehlendem Content
+     * Parses a pain.001 XML document.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain001Document Parsed document
+     * @throws RuntimeException On invalid XML or missing content
      */
     public static function parsePain001(string $xmlContent): Pain001Document {
         ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.001', self::PAIN001_NAMESPACES);
         $xpath = $doc->getXPath();
 
-        // Prefix-Variante für Namespace-Suche
+        // Prefix variant for namespace lookup
         $nsPrefix = !empty($prefix) ? 'ns:' : '';
 
-        // Customer Credit Transfer Initiation Block finden
+        // Find Customer Credit Transfer Initiation block
         $cstmrCdtTrfInitnNode = $xpath->query("//{$nsPrefix}CstmrCdtTrfInitn")->item(0);
         if (!$cstmrCdtTrfInitnNode) {
-            // Fallback ohne Namespace
+            // Fallback without namespace
             $cstmrCdtTrfInitnNode = $xpath->query('//CstmrCdtTrfInitn')->item(0);
             $prefix = '';
         }
         if (!$cstmrCdtTrfInitnNode) {
-            throw new RuntimeException("Kein <CstmrCdtTrfInitn>-Block gefunden.");
+            throw new RuntimeException('No <CstmrCdtTrfInitn> block found.');
         }
 
-        // GroupHeader parsen
+        // Parse GroupHeader
         $grpHdrNode = $xpath->query("{$prefix}GrpHdr", $cstmrCdtTrfInitnNode)->item(0);
         if (!$grpHdrNode) {
-            throw new RuntimeException("Kein <GrpHdr>-Block gefunden.");
+            throw new RuntimeException('No <GrpHdr> block found.');
         }
 
         $groupHeader = self::parsePain001GroupHeader($xpath, $grpHdrNode, $prefix);
 
-        // PaymentInstructions parsen
+        // Parse PaymentInstructions
         $pmtInfNodes = $xpath->query("{$prefix}PmtInf", $cstmrCdtTrfInitnNode);
         $paymentInstructions = [];
 
@@ -276,13 +253,13 @@ class PainParser extends Iso20022ParserAbstract {
 
         $controlSum = !empty($controlSumStr) ? (float) $controlSumStr : null;
 
-        // InitiatingParty parsen
+        // Parse InitiatingParty
         $initgPtyNode = $xpath->query("{$prefix}InitgPty", $node)->item(0);
         $initiatingParty = $initgPtyNode
             ? self::parseParty($xpath, $initgPtyNode, $prefix)
             : new PartyIdentification(name: 'Unknown');
 
-        // ForwardingAgent parsen (optional)
+        // Parse ForwardingAgent (optional)
         $fwdgAgtNode = $xpath->query("{$prefix}FwdgAgt", $node)->item(0);
         $forwardingAgent = $fwdgAgtNode
             ? self::parseFinancialInst($xpath, $fwdgAgtNode, $prefix)
@@ -311,25 +288,25 @@ class PainParser extends Iso20022ParserAbstract {
             : new DateTimeImmutable();
         $chargesCode = ChargesCode::fromString($chrgBrStr ?: 'SLEV');
 
-        // Debtor parsen
+        // Parse Debtor
         $dbtrNode = $xpath->query("{$prefix}Dbtr", $node)->item(0);
         $debtor = $dbtrNode
             ? self::parseParty($xpath, $dbtrNode, $prefix)
             : new PartyIdentification(name: 'Unknown');
 
-        // DebtorAccount parsen
+        // Parse DebtorAccount
         $dbtrAcctNode = $xpath->query("{$prefix}DbtrAcct", $node)->item(0);
         $debtorAccount = $dbtrAcctNode
             ? self::parseAccount($xpath, $dbtrAcctNode, $prefix)
             : new AccountIdentification(iban: '');
 
-        // DebtorAgent parsen (optional)
+        // Parse DebtorAgent (optional)
         $dbtrAgtNode = $xpath->query("{$prefix}DbtrAgt", $node)->item(0);
         $debtorAgent = $dbtrAgtNode
             ? self::parseFinancialInst($xpath, $dbtrAgtNode, $prefix)
             : null;
 
-        // CreditTransferTransactions parsen
+        // Parse CreditTransferTransactions
         $cdtTrfTxInfNodes = $xpath->query("{$prefix}CdtTrfTxInf", $node);
         $transactions = [];
 
@@ -350,38 +327,38 @@ class PainParser extends Iso20022ParserAbstract {
     }
 
     private static function parsePain001CreditTransferTransaction(DOMXPath $xpath, DOMNode $node, string $prefix): CreditTransferTransaction {
-        // PaymentIdentification parsen
+        // Parse PaymentIdentification
         $pmtIdNode = $xpath->query("{$prefix}PmtId", $node)->item(0);
         $paymentIdentification = $pmtIdNode
             ? self::parsePaymentId($xpath, $pmtIdNode, $prefix)
             : PaymentIdentification::create('unknown');
 
-        // Betrag und Währung parsen
+        // Parse amount and currency
         $amtData = static::parseAmountWithCcy($xpath, "{$prefix}Amt/{$prefix}InstdAmt", $node);
         if ($amtData['amount'] === 0.0) {
-            // Fallback auf direktes Amt-Element
+            // Fallback to direct Amt element
             $amtData = static::parseAmountWithCcy($xpath, "{$prefix}Amt", $node);
         }
 
-        // Creditor parsen
+        // Parse Creditor
         $cdtrNode = $xpath->query("{$prefix}Cdtr", $node)->item(0);
         $creditor = $cdtrNode
             ? self::parseParty($xpath, $cdtrNode, $prefix)
             : new PartyIdentification(name: 'Unknown');
 
-        // CreditorAccount parsen
+        // Parse CreditorAccount
         $cdtrAcctNode = $xpath->query("{$prefix}CdtrAcct", $node)->item(0);
         $creditorAccount = $cdtrAcctNode
             ? self::parseAccount($xpath, $cdtrAcctNode, $prefix)
             : null;
 
-        // CreditorAgent parsen (optional)
+        // Parse CreditorAgent (optional)
         $cdtrAgtNode = $xpath->query("{$prefix}CdtrAgt", $node)->item(0);
         $creditorAgent = $cdtrAgtNode
             ? self::parseFinancialInst($xpath, $cdtrAgtNode, $prefix)
             : null;
 
-        // RemittanceInformation parsen (optional)
+        // Parse RemittanceInformation (optional)
         $rmtInfNode = $xpath->query("{$prefix}RmtInf", $node)->item(0);
         $remittanceInformation = self::parseRemittance($xpath, $rmtInfNode, $prefix);
 
@@ -401,25 +378,25 @@ class PainParser extends Iso20022ParserAbstract {
     // =========================================================================
 
     /**
-     * Parst ein pain.002 XML-Dokument.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain002Document Das geparste Dokument
-     * @throws RuntimeException Bei ungültigem XML
+     * Parses a pain.002 XML document.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain002Document Parsed document
+     * @throws RuntimeException On invalid XML
      */
     public static function parsePain002(string $xmlContent): Pain002Document {
         ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.002');
         $xpath = $doc->getXPath();
 
-        // GroupHeader parsen
+        // Parse GroupHeader
         $grpHdrNode = $xpath->query("//{$prefix}GrpHdr")->item(0);
         $groupHeader = self::parsePain002GroupHeader($xpath, $grpHdrNode, $prefix);
 
-        // OriginalGroupInformation parsen
+        // Parse OriginalGroupInformation
         $orgnlGrpNode = $xpath->query("//{$prefix}OrgnlGrpInfAndSts")->item(0);
         $originalGroupInfo = self::parsePain002OriginalGroupInformation($xpath, $orgnlGrpNode, $prefix);
 
-        // OriginalPaymentInformations parsen
+        // Parse OriginalPaymentInformations
         $pmtInfoNodes = $xpath->query("//{$prefix}OrgnlPmtInfAndSts");
         $paymentInfos = [];
 
@@ -439,10 +416,10 @@ class PainParser extends Iso20022ParserAbstract {
         $creDtTmStr = $xpath->query("{$prefix}CreDtTm", $node)->item(0)?->textContent;
         $creDtTm = $creDtTmStr ? new DateTimeImmutable($creDtTmStr) : new DateTimeImmutable();
 
-        // InitgPty parsen via Trait
+        // Parse InitgPty via trait
         $initgPtyNode = $xpath->query("{$prefix}InitgPty", $node)->item(0);
         $initiatingParty = $initgPtyNode ? self::parseParty($xpath, $initgPtyNode, $prefix) : null;
-        // Falls nur Name in PartyIdentification relevant
+        // If only the name in PartyIdentification is relevant
         if ($initiatingParty?->getName() === null) {
             $initiatingParty = null;
         }
@@ -467,7 +444,7 @@ class PainParser extends Iso20022ParserAbstract {
         $grpStsStr = $xpath->query("{$prefix}GrpSts", $node)->item(0)?->textContent;
         $grpSts = $grpStsStr ? TransactionStatus::tryFrom($grpStsStr) : null;
 
-        // StsRsnInf parsen
+        // Parse StsRsnInf
         $statusReasons = self::parsePain002StatusReasons($xpath, $node, $prefix);
 
         return new Pain002OriginalGroupInformation(
@@ -489,7 +466,7 @@ class PainParser extends Iso20022ParserAbstract {
 
         $statusReasons = self::parsePain002StatusReasons($xpath, $node, $prefix);
 
-        // TxInfAndSts parsen
+        // Parse TxInfAndSts
         $txNodes = $xpath->query("{$prefix}TxInfAndSts", $node);
         $txStatuses = [];
 
@@ -566,25 +543,25 @@ class PainParser extends Iso20022ParserAbstract {
     // =========================================================================
 
     /**
-     * Parst ein pain.007 XML-Dokument.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain007Document Das geparste Dokument
-     * @throws RuntimeException Bei ungültigem XML
+     * Parses a pain.007 XML document.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain007Document Parsed document
+     * @throws RuntimeException On invalid XML
      */
     public static function parsePain007(string $xmlContent): Pain007Document {
         ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.007');
         $xpath = $doc->getXPath();
 
-        // GroupHeader parsen
+        // Parse GroupHeader
         $grpHdrNode = $xpath->query("//{$prefix}GrpHdr")->item(0);
         $groupHeader = self::parsePain007GroupHeader($xpath, $grpHdrNode, $prefix);
 
-        // OriginalGroupInformation parsen
+        // Parse OriginalGroupInformation
         $orgnlGrpInfNode = $xpath->query("//{$prefix}OrgnlGrpInf")->item(0);
         $originalGroupInfo = self::parsePain007OriginalGroupInformation($xpath, $orgnlGrpInfNode, $prefix);
 
-        // OriginalPaymentInformation parsen
+        // Parse OriginalPaymentInformation
         $orgnlPmtInfAndRvslNodes = $xpath->query("//{$prefix}OrgnlPmtInfAndRvsl");
         $originalPaymentInfos = [];
 
@@ -611,7 +588,7 @@ class PainParser extends Iso20022ParserAbstract {
         $grpRvsl = $xpath->query("{$prefix}GrpRvsl", $node)->item(0)?->textContent;
         $groupReversal = $grpRvsl === 'true';
 
-        // InitgPty parsen
+        // Parse InitgPty
         $initgPtyNode = $xpath->query("{$prefix}InitgPty", $node)->item(0);
         $initiatingParty = self::parseParty($xpath, $initgPtyNode, $prefix);
 
@@ -632,7 +609,7 @@ class PainParser extends Iso20022ParserAbstract {
         $orgnlCtrlSumStr = $xpath->query("{$prefix}OrgnlCtrlSum", $node)->item(0)?->textContent;
         $orgnlCtrlSum = $orgnlCtrlSumStr !== null ? (float) $orgnlCtrlSumStr : null;
 
-        // ReversalReason parsen
+        // Parse ReversalReason
         $rvslRsnInfNode = $xpath->query("{$prefix}RvslRsnInf", $node)->item(0);
         $reversalReason = $rvslRsnInfNode ? self::parsePain007ReversalReason($xpath, $rvslRsnInfNode, $prefix) : null;
 
@@ -655,11 +632,11 @@ class PainParser extends Iso20022ParserAbstract {
         $pmtInfRvsl = $xpath->query("{$prefix}PmtInfRvsl", $node)->item(0)?->textContent;
         $paymentInfoReversal = $pmtInfRvsl === 'true';
 
-        // ReversalReason parsen
+        // Parse ReversalReason
         $rvslRsnInfNode = $xpath->query("{$prefix}RvslRsnInf", $node)->item(0);
         $reversalReason = $rvslRsnInfNode ? self::parsePain007ReversalReason($xpath, $rvslRsnInfNode, $prefix) : null;
 
-        // Transactions parsen
+        // Parse transactions
         $txInfNodes = $xpath->query("{$prefix}TxInf", $node);
         $transactions = [];
 
@@ -691,7 +668,7 @@ class PainParser extends Iso20022ParserAbstract {
             $currency = CurrencyCode::tryFrom($ccyNode->getAttribute('Ccy'));
         }
 
-        // ReversalReason parsen
+        // Parse ReversalReason
         $rvslRsnInfNode = $xpath->query("{$prefix}RvslRsnInf", $node)->item(0);
         $reversalReason = $rvslRsnInfNode ? self::parsePain007ReversalReason($xpath, $rvslRsnInfNode, $prefix) : null;
 
@@ -723,21 +700,21 @@ class PainParser extends Iso20022ParserAbstract {
     // =========================================================================
 
     /**
-     * Parst ein pain.008 XML-Dokument.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain008Document Das geparste Dokument
-     * @throws RuntimeException Bei ungültigem XML
+     * Parses a pain.008 XML document.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain008Document Parsed document
+     * @throws RuntimeException On invalid XML
      */
     public static function parsePain008(string $xmlContent): Pain008Document {
         ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.008');
         $xpath = $doc->getXPath();
 
-        // GroupHeader parsen
+        // Parse GroupHeader
         $grpHdrNode = $xpath->query("//{$prefix}GrpHdr")->item(0);
         $groupHeader = self::parsePain008GroupHeader($xpath, $grpHdrNode, $prefix);
 
-        // PaymentInstructions parsen
+        // Parse PaymentInstructions
         $pmtInfNodes = $xpath->query("//{$prefix}PmtInf");
         $paymentInstructions = [];
 
@@ -761,7 +738,7 @@ class PainParser extends Iso20022ParserAbstract {
         $ctrlSumStr = $xpath->query("{$prefix}CtrlSum", $node)->item(0)?->textContent;
         $ctrlSum = $ctrlSumStr !== null ? (float) $ctrlSumStr : null;
 
-        // InitgPty parsen (via Trait)
+        // Parse InitgPty (via trait)
         $initgPtyNode = $xpath->query("{$prefix}InitgPty", $node)->item(0);
         $initiatingParty = self::parseParty($xpath, $initgPtyNode, $prefix);
 
@@ -777,19 +754,19 @@ class PainParser extends Iso20022ParserAbstract {
         $reqdColltnDtStr = $xpath->query("{$prefix}ReqdColltnDt", $node)->item(0)?->textContent;
         $reqdColltnDt = $reqdColltnDtStr ? new DateTimeImmutable($reqdColltnDtStr) : new DateTimeImmutable();
 
-        // Creditor parsen
+        // Parse Creditor
         $cdtrNode = $xpath->query("{$prefix}Cdtr", $node)->item(0);
         $creditor = self::parseParty($xpath, $cdtrNode, $prefix);
 
-        // CreditorAccount parsen
+        // Parse CreditorAccount
         $cdtrAcctNode = $xpath->query("{$prefix}CdtrAcct", $node)->item(0);
         $creditorAccount = self::parseAccount($xpath, $cdtrAcctNode, $prefix);
 
-        // CreditorAgent parsen
+        // Parse CreditorAgent
         $cdtrAgtNode = $xpath->query("{$prefix}CdtrAgt", $node)->item(0);
         $creditorAgent = self::parseFinancialInst($xpath, $cdtrAgtNode, $prefix);
 
-        // CreditorSchemeId parsen
+        // Parse CreditorSchemeId
         $cdtrSchmeId = $xpath->query("{$prefix}CdtrSchmeId/{$prefix}Id/{$prefix}PrvtId/{$prefix}Othr/{$prefix}Id", $node)->item(0)?->textContent;
 
         // ChargeBearer
@@ -807,7 +784,7 @@ class PainParser extends Iso20022ParserAbstract {
         // ServiceLevel
         $svcLvl = $xpath->query("{$prefix}PmtTpInf/{$prefix}SvcLvl/{$prefix}Cd", $node)->item(0)?->textContent;
 
-        // DrctDbtTxInf parsen
+        // Parse DrctDbtTxInf
         $txNodes = $xpath->query("{$prefix}DrctDbtTxInf", $node);
         $transactions = [];
 
@@ -839,7 +816,7 @@ class PainParser extends Iso20022ParserAbstract {
 
         $paymentId = new PaymentIdentification($endToEndId, $instrId, $uetr);
 
-        // Betrag und Währung
+        // Amount and currency
         $amtData = static::parseAmountWithCcy($xpath, "{$prefix}InstdAmt", $node);
 
         // MandateInformation
@@ -913,26 +890,26 @@ class PainParser extends Iso20022ParserAbstract {
     // =========================================================================
 
     /**
-     * Parst ein pain.009 XML-Dokument.
-     * 
-     * @param string $xmlContent Der XML-Inhalt
-     * @return Pain009Document Das geparste Dokument
-     * @throws RuntimeException Bei ungültigem XML
+     * Parses a pain.009 XML document.
+     *
+     * @param string $xmlContent XML content
+     * @return Pain009Document Parsed document
+     * @throws RuntimeException On invalid XML
      */
     public static function parsePain009(string $xmlContent): Pain009Document {
         ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.009');
         $xpath = $doc->getXPath();
 
-        // Header parsen
+        // Parse header
         $msgId = $xpath->query("//{$prefix}GrpHdr/{$prefix}MsgId")->item(0)?->textContent ?? 'UNKNOWN';
         $creDtTmStr = $xpath->query("//{$prefix}GrpHdr/{$prefix}CreDtTm")->item(0)?->textContent;
         $creDtTm = $creDtTmStr ? new DateTimeImmutable($creDtTmStr) : new DateTimeImmutable();
 
-        // InitgPty parsen
+        // Parse InitgPty
         $initgPtyNode = $xpath->query("//{$prefix}GrpHdr/{$prefix}InitgPty")->item(0);
         $initiatingParty = self::parseParty($xpath, $initgPtyNode, $prefix);
 
-        // Mandate parsen
+        // Parse mandates
         $mndtNodes = $xpath->query("//{$prefix}Mndt");
         $mandates = [];
 

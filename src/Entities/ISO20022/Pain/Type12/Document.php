@@ -20,7 +20,7 @@ use DateTimeImmutable;
 /**
  * pain.012 Document - Mandate Acceptance Report.
  * 
- * Bestätigung/Ablehnung von Mandatsanfragen durch die Bank.
+ * Confirmation/rejection of mandate requests by the bank.
  * Antwort auf pain.009 (Initiation), pain.010 (Amendment), pain.011 (Cancellation).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type12
@@ -58,7 +58,7 @@ final class Document {
     }
 
     /**
-     * Factory für pain.009 Antwort.
+     * Factory for pain.009 response.
      */
     public static function forPain009(
         string $messageId,
@@ -69,7 +69,7 @@ final class Document {
     }
 
     /**
-     * Factory für pain.010 Antwort.
+     * Factory for pain.010 response.
      */
     public static function forPain010(
         string $messageId,
@@ -80,7 +80,7 @@ final class Document {
     }
 
     /**
-     * Factory für pain.011 Antwort.
+     * Factory for pain.011 response.
      */
     public static function forPain011(
         string $messageId,
@@ -156,7 +156,7 @@ final class Document {
         $errors = [];
 
         if (strlen($this->messageId) > 35) {
-            $errors[] = 'MsgId darf maximal 35 Zeichen lang sein';
+            $errors[] = 'MsgId must not exceed 35 characters';
         }
 
         if (empty($this->mandateAcceptances)) {
@@ -170,7 +170,7 @@ final class Document {
     }
 
     /**
-     * Generiert XML-Ausgabe für dieses Dokument.
+     * Generates XML output for this document.
      *
      * @param string|null $namespace Optionaler XML-Namespace
      * @return string Das generierte XML

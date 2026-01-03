@@ -22,10 +22,10 @@ use CommonToolkit\Helper\Data\BankHelper;
 use InvalidArgumentException;
 
 /**
- * Generator für CAMT.054 XML (Bank to Customer Debit Credit Notification).
+ * Generator for CAMT.054 XML (Bank to Customer Debit Credit Notification).
  * 
- * Generiert Soll/Haben-Avis gemäß ISO 20022 camt.054.001.xx Standard.
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Generates Debit/Credit notification according to ISO 20022 camt.054.001.xx Standard.
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
@@ -63,7 +63,7 @@ class Camt054Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt die Account-Struktur für CAMT.054 hinzu (abweichend von 052/053).
+     * Adds the account structure for CAMT.054 (different from 052/053).
      */
     private function addAccountForNotification(CamtDocumentAbstract $document): void {
         $this->builder->addElement('Acct');
@@ -96,13 +96,13 @@ class Camt054Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Erstellt ein vollständiges Entry-Element für CAMT.054.
+     * Creates a complete entry element for CAMT.054.
      */
     private function addEntryElement(Transaction $entry): void {
         // Basis-Entry mit Status, Amount, CreditDebit
         $this->beginEntry($entry);
 
-        // CAMT.054 verwendet typischerweise DtTm statt Dt
+        // CAMT.054 typically uses DtTm instead of Dt
         $this->addEntryDates($entry, true);
 
         // BkTxCd
@@ -145,7 +145,7 @@ class Camt054Generator extends CamtGeneratorAbstract {
     }
 
     /**
-     * Fügt Related Agents zur Transaktion hinzu.
+     * Adds related agents to the transaction.
      */
     private function addRelatedAgents(Transaction $entry): void {
         if ($entry->getInstructingAgentBic() === null && $entry->getDebtorAgentBic() === null) {

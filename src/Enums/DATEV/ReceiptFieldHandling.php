@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Enums\DATEV;
 use InvalidArgumentException;
 
 /**
- * DATEV Belegfeld1-Behandlung für Wiederkehrende Buchungen (Feld 1 "B1").
+ * DATEV Receipt field 1 handling for recurring bookings (Field 1 "B1").
  * Steuert, wie die Rechnungsnummer bei der Verarbeitung behandelt wird.
  *
  * @see https://developer.datev.de/de/file-format/details/datev-format/format-description/recurring-bookings
@@ -26,7 +26,7 @@ enum ReceiptFieldHandling: int {
     case AUTO_INCREMENT = 3; // Keine Erfassung, automatische Hochzählung
 
     /**
-     * Deutsche Textbezeichnung für UI/Logging.
+     * German text label for UI/Logging.
      */
     public function getLabel(): string {
         return match ($this) {
@@ -37,7 +37,7 @@ enum ReceiptFieldHandling: int {
     }
 
     /**
-     * Gibt die maximale Länge der Rechnungsnummer zurück.
+     * Returns the maximum length of the invoice number.
      */
     public function getMaxLength(): ?int {
         return match ($this) {
@@ -48,7 +48,7 @@ enum ReceiptFieldHandling: int {
     }
 
     /**
-     * Factory für Integer-Werte.
+     * Factory for integer values.
      */
     public static function fromInt(int $value): self {
         return match ($value) {
@@ -60,7 +60,7 @@ enum ReceiptFieldHandling: int {
     }
 
     /**
-     * Factory für String-Werte mit null-Rückgabe bei ungültigen Werten.
+     * Factory for string values with null return for invalid values.
      */
     public static function tryFromString(string $value): ?self {
         $trimmed = trim($value, '" ');
@@ -76,14 +76,14 @@ enum ReceiptFieldHandling: int {
     }
 
     /**
-     * Prüft, ob die Rechnungsnummer automatisch hochgezählt wird.
+     * Checks if the invoice number is automatically incremented.
      */
     public function isAutoIncrement(): bool {
         return $this === self::AUTO_INCREMENT;
     }
 
     /**
-     * Prüft, ob die Rechnungsnummer manuell eingegeben wird.
+     * Checks if the invoice number is entered manually.
      */
     public function isManual(): bool {
         return $this !== self::AUTO_INCREMENT;

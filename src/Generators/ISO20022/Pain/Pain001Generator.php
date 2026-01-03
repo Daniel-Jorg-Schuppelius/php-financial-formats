@@ -19,10 +19,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstruction;
 
 /**
- * Generiert pain.001 XML-Dokumente (Customer Credit Transfer Initiation).
+ * Generates pain.001 XML documents (Customer Credit Transfer Initiation).
  * 
- * Unterstützt pain.001.001.12 (ISO 20022 2024).
- * Nutzt ExtendedDOMDocumentBuilder für optimierte XML-Generierung.
+ * Supports pain.001.001.12 (ISO 20022 2024).
+ * Uses ExtendedDOMDocumentBuilder for optimized XML generation.
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
@@ -34,7 +34,7 @@ class Pain001Generator extends PainGeneratorAbstract {
     }
 
     /**
-     * Generiert XML aus einem pain.001 Dokument.
+     * Generates XML from a pain.001 document.
      */
     public function generate(Document $document): string {
         $this->initPainDocument('CstmrCdtTrfInitn', 'pain.001.001.12.xsd');

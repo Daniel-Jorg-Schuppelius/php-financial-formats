@@ -211,7 +211,7 @@ class Mt101DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testTransactionReferenceMaxLength(): void {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Transaction Reference darf maximal 16 Zeichen lang sein');
+        $this->expectExceptionMessage('Transaction reference must not exceed 16 characters');
 
         Mt101DocumentBuilder::create('REF-001')
             ->orderingCustomer('DE89370400440532013000', 'Firma GmbH')

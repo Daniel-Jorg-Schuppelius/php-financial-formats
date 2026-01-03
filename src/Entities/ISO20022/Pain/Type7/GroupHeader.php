@@ -16,7 +16,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use DateTimeImmutable;
 
 /**
- * Group Header für pain.007 Customer Payment Reversal (GrpHdr).
+ * Group header for pain.007 Customer Payment Reversal (GrpHdr).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type7
  */
