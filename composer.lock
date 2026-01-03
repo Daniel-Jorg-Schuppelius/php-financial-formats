@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "417a94734f1aa721dbe596f235e82a20",
+    "content-hash": "1c43beb1599c10ad354192b0c5999703",
     "packages": [
         {
             "name": "dschuppelius/php-common-toolkit",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../php-common-toolkit",
+            "version": "v0.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DSchuppelius/php-common-toolkit.git",
                 "reference": "556818bdea0f82dfaf4ce1f913e7eefff9e9be54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DSchuppelius/php-common-toolkit/zipball/556818bdea0f82dfaf4ce1f913e7eefff9e9be54",
+                "reference": "556818bdea0f82dfaf4ce1f913e7eefff9e9be54",
+                "shasum": ""
             },
             "require": {
                 "dschuppelius/php-config-toolkit": "^0.2.15",
@@ -30,16 +36,7 @@
                     "CommonToolkit\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -50,10 +47,11 @@
                 }
             ],
             "description": "Project description.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/DSchuppelius/php-common-toolkit/issues",
+                "source": "https://github.com/DSchuppelius/php-common-toolkit/tree/v0.9.1"
+            },
+            "time": "2026-01-03T18:47:54+00:00"
         },
         {
             "name": "dschuppelius/php-config-toolkit",
@@ -1966,9 +1964,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "dschuppelius/php-common-toolkit": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
