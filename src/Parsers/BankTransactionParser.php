@@ -19,7 +19,6 @@ use CommonToolkit\Helper\FileSystem\File;
 use CommonToolkit\Parsers\CSVDocumentParser;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Header\ASCII\BankTransactionHeaderDefinition;
-use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 use Exception;
 use RuntimeException;
 

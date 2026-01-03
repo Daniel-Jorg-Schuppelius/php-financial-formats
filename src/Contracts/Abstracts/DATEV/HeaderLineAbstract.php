@@ -13,34 +13,33 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV;
 
 use CommonToolkit\Contracts\Interfaces\CSV\FieldInterface;
+use CommonToolkit\Contracts\Interfaces\CSV\LineInterface;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\DATEV\FieldHeaderInterface;
 use CommonToolkit\Entities\CSV\{HeaderField, HeaderLine};
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\DATEV\Document;
 use CommonToolkit\Enums\CountryCode;
+use ERRORToolkit\Traits\ErrorLog;
 use InvalidArgumentException;
 
 /**
  * Abstract base class for DATEV header lines (column descriptions).
- * Encapsulates the common functionality of all DATEV header lines.
  * 
- * Arbeitet direkt mit den HeaderField-Enums, die FieldHeaderInterface implementieren.
+ * Erweitert die CSV HeaderLine um DATEV-spezifische Enum-Unterstützung.
+ * Die meiste Funktionalität wird von der Elternklasse geerbt.
  */
 abstract class HeaderLineAbstract extends HeaderLine {
+    use ErrorLog;
+
     /** @var class-string<FieldHeaderInterface> */
     protected string $fieldEnumClass;
-    protected array $fieldIndex = [];
 
     /**
      * @param class-string<FieldHeaderInterface> $fieldEnumClass Der HeaderField-Enum-Klassenname
      * @param string $delimiter CSV-Trennzeichen
      * @param string $enclosure CSV-Textbegrenzer
      */
-    public function __construct(
-        string $fieldEnumClass,
-        string $delimiter = Document::DEFAULT_DELIMITER,
-        string $enclosure = FieldInterface::DEFAULT_ENCLOSURE
-    ) {
+    public function __construct(string $fieldEnumClass, string $delimiter = Document::DEFAULT_DELIMITER, string $enclosure = FieldInterface::DEFAULT_ENCLOSURE) {
         if (!enum_exists($fieldEnumClass) || !is_subclass_of($fieldEnumClass, FieldHeaderInterface::class)) {
+            $this->logError("Ungültige Enum-Klasse für Header-Felder: $fieldEnumClass");
             throw new InvalidArgumentException("$fieldEnumClass muss ein Enum sein, das FieldHeaderInterface implementiert.");
         }
 
@@ -52,9 +51,6 @@ abstract class HeaderLineAbstract extends HeaderLine {
         $fields = $fieldEnumClass::ordered();
 
         foreach ($fields as $index => $field) {
-            $this->fieldIndex[$field->value] = $index;
-            // Quoting basierend auf isQuotedHeader() des Feldes
-            // headerName() für tatsächlichen CSV-Header-Namen verwenden
             $rawFields[$index] = $field->isQuotedHeader()
                 ? $enclosure . $field->headerName() . $enclosure
                 : $field->headerName();
@@ -68,31 +64,20 @@ abstract class HeaderLineAbstract extends HeaderLine {
      * 
      * @param class-string<FieldHeaderInterface> $fieldEnumClass
      */
-    public static function createMinimal(
-        string $fieldEnumClass,
-        string $delimiter = Document::DEFAULT_DELIMITER,
-        string $enclosure = FieldInterface::DEFAULT_ENCLOSURE
-    ): static {
-        $instance = new static($fieldEnumClass, $delimiter, $enclosure);
-
-        // Nur Pflichtfelder setzen
+    public static function createMinimal(string $fieldEnumClass, string $delimiter = Document::DEFAULT_DELIMITER, string $enclosure = FieldInterface::DEFAULT_ENCLOSURE): static {
+        // Nur Pflichtfelder
         /** @var FieldHeaderInterface[] $requiredFields */
         $requiredFields = $fieldEnumClass::required();
         $rawFields = [];
-        $fieldIndex = [];
 
         foreach ($requiredFields as $index => $field) {
-            // Quoting basierend auf isQuotedHeader() des Feldes
-            // headerName() für tatsächlichen CSV-Header-Namen verwenden
             $rawFields[$index] = $field->isQuotedHeader()
                 ? $enclosure . $field->headerName() . $enclosure
                 : $field->headerName();
-            $fieldIndex[$field->value] = $index;
         }
 
-        // Neu initialisieren mit reduzierten Feldern
+        $instance = new static($fieldEnumClass, $delimiter, $enclosure);
         $instance->fields = [];
-        $instance->fieldIndex = $fieldIndex;
 
         foreach ($rawFields as $rawField) {
             $instance->fields[] = new HeaderField($rawField, $enclosure);
@@ -111,33 +96,36 @@ abstract class HeaderLineAbstract extends HeaderLine {
     }
 
     /**
-     * Checks if a field is present in this header.
+     * Liefert den Index eines Feldes (Enum oder Feldname).
+     * Nutzt intern getColumnIndex() der Elternklasse.
      */
-    public function hasField(FieldHeaderInterface|string $field): bool {
-        $fieldName = $field instanceof FieldHeaderInterface ? $field->value : $field;
-        return isset($this->fieldIndex[$fieldName]);
+    public function getFieldIndex(FieldHeaderInterface|string $field): int {
+        $fieldName = $field instanceof FieldHeaderInterface ? $field->headerName() : $field;
+        return $this->getColumnIndex($fieldName) ?? -1;
     }
 
     /**
-     * Liefert den Index eines Feldes oder -1 wenn nicht gefunden.
+     * Checks if a field is present in this header.
      */
-    public function getFieldIndex(FieldHeaderInterface|string $field): int {
-        $fieldName = $field instanceof FieldHeaderInterface ? $field->value : $field;
-        return $this->fieldIndex[$fieldName] ?? -1;
+    public function hasField(FieldHeaderInterface|string $field): bool {
+        return $this->getFieldIndex($field) >= 0;
     }
 
     /**
      * Validiert den Header gegen den Enum.
      */
     public function validate(): void {
-        $fieldEnumClass = $this->fieldEnumClass;
-        $requiredFields = $fieldEnumClass::required();
-        $headerFields = array_map(fn($f) => trim($f->getValue(), '"'), $this->getFields());
+        $requiredFields = ($this->fieldEnumClass)::required();
+        $missing = [];
 
-        $requiredValues = array_map(fn($f) => $f->value, $requiredFields);
-        $missing = array_diff($requiredValues, $headerFields);
+        foreach ($requiredFields as $field) {
+            if (!$this->hasColumn($field->headerName())) {
+                $missing[] = $field->value;
+            }
+        }
 
         if (!empty($missing)) {
+            $this->logError('Verpflichtende Felder fehlen: ' . implode(', ', $missing));
             throw new InvalidArgumentException(
                 'Verpflichtende Felder fehlen: ' . implode(', ', $missing)
             );
@@ -152,10 +140,9 @@ abstract class HeaderLineAbstract extends HeaderLine {
             return false;
         }
 
-        $headerFields = array_map(fn($f) => trim($f->getValue(), '"'), $this->getFields());
         $enumValues = array_map(fn($case) => $case->value, $enumClass::cases());
 
-        foreach ($headerFields as $headerField) {
+        foreach ($this->getColumnNames() as $headerField) {
             if (!in_array($headerField, $enumValues, true)) {
                 return false;
             }
@@ -179,17 +166,24 @@ abstract class HeaderLineAbstract extends HeaderLine {
         return null;
     }
 
-    /**
-     * Returns the format name for compatibility checks.
-     * Can be overridden by concrete implementations.
-     */
-    protected function getFormatName(): string {
-        $className = static::class;
-        $baseName = basename(str_replace('\\', '/', $className));
-        return str_replace('HeaderLine', '', $baseName);
-    }
-
     protected static function createField(string $rawValue, string $enclosure): FieldInterface {
         return new HeaderField($rawValue, $enclosure, CountryCode::Germany);
+    }
+
+    // ==== Enum-basierter Feldzugriff ====
+
+    /**
+     * Retrieves a field value using a FieldHeaderInterface enum.
+     * Delegates to getValueByName() from parent class.
+     */
+    public function getFieldValue(LineInterface $row, FieldHeaderInterface $field): ?string {
+        return $this->getValueByName($row, $field->headerName());
+    }
+
+    /**
+     * Checks if a field has a non-empty value using a FieldHeaderInterface enum.
+     */
+    public function hasFieldValue(LineInterface $row, FieldHeaderInterface $field): bool {
+        return $this->hasValueByName($row, $field->headerName());
     }
 }

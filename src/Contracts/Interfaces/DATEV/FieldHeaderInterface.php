@@ -76,4 +76,9 @@ interface FieldHeaderInterface {
      * By default, the enum value is returned.
      */
     public function headerName(): string;
+
+    /**
+     * Returns the 0-based field position/index.
+     */
+    public function getPosition(): int;
 }

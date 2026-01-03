@@ -86,54 +86,45 @@ final class GLAccountDescription extends Document {
      * Returns the account number (field 1).
      */
     public function getAccountNumber(int $rowIndex): ?int {
-        $value = $this->getFieldValue($rowIndex, GLAccountDescriptionHeaderField::Konto->getPosition());
-        if ($value === null) return null;
-
-        $cleanValue = trim($value, '"');
-        if ($cleanValue === '') return null;
-
-        return (int) $cleanValue;
+        $value = $this->getField($rowIndex, GLAccountDescriptionHeaderField::Konto);
+        return $value !== null && $value !== '' && is_numeric($value) ? (int)$value : null;
     }
 
     /**
      * Setzt die Kontonummer (Feld 1).
      */
     public function setAccountNumber(int $rowIndex, int $accountNumber): void {
-        $this->setFieldValue($rowIndex, GLAccountDescriptionHeaderField::Konto->getPosition(), (string) $accountNumber);
+        $this->setField($rowIndex, GLAccountDescriptionHeaderField::Konto, $accountNumber);
     }
 
     /**
      * Returns the account label (field 2, max 40 characters).
      */
     public function getAccountDescription(int $rowIndex): ?string {
-        $value = $this->getFieldValue($rowIndex, GLAccountDescriptionHeaderField::Kontenbeschriftung->getPosition());
-        if ($value === null) return null;
-
-        return trim($value, '"');
+        $value = $this->getField($rowIndex, GLAccountDescriptionHeaderField::Kontenbeschriftung);
+        return $value !== null && $value !== '' ? $value : null;
     }
 
     /**
      * Setzt die Kontenbeschriftung (Feld 2, max 40 Zeichen).
      */
     public function setAccountDescription(int $rowIndex, string $description): void {
-        $this->setFieldValue($rowIndex, GLAccountDescriptionHeaderField::Kontenbeschriftung->getPosition(), '"' . $description . '"');
+        $this->setField($rowIndex, GLAccountDescriptionHeaderField::Kontenbeschriftung, $description);
     }
 
     /**
      * Returns the long account label (field 4, max 300 characters).
      */
     public function getLongAccountDescription(int $rowIndex): ?string {
-        $value = $this->getFieldValue($rowIndex, GLAccountDescriptionHeaderField::KontenbeschriftungLang->getPosition());
-        if ($value === null) return null;
-
-        return trim($value, '"');
+        $value = $this->getField($rowIndex, GLAccountDescriptionHeaderField::KontenbeschriftungLang);
+        return $value !== null && $value !== '' ? $value : null;
     }
 
     /**
      * Setzt die lange Kontenbeschriftung (Feld 4, max 300 Zeichen).
      */
     public function setLongAccountDescription(int $rowIndex, string $description): void {
-        $this->setFieldValue($rowIndex, GLAccountDescriptionHeaderField::KontenbeschriftungLang->getPosition(), '"' . $description . '"');
+        $this->setField($rowIndex, GLAccountDescriptionHeaderField::KontenbeschriftungLang, $description);
     }
 
     // ==== LANGUAGE FIELD ====

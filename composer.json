@@ -11,7 +11,7 @@
   ],
   "require": {
     "php": ">=8.2 <8.5",
-    "dschuppelius/php-common-toolkit": "^0.9.0"
+    "dschuppelius/php-common-toolkit": "^0.9.1"
   },
   "autoload": {
     "psr-4": {
@@ -34,5 +34,14 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit"
+  },
+  "repositories": {
+    "local-common-toolkit": {
+      "type": "path",
+      "url": "../php-common-toolkit",
+      "options": {
+        "symlink": true
+      }
+    }
   }
 }

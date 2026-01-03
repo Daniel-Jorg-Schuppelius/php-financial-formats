@@ -96,14 +96,15 @@ final class RecurringBookings extends Document {
      * Returns the receipt field 1 handling of a booking line.
      */
     public function getReceiptFieldHandlingValue(int $rowIndex): ?ReceiptFieldHandling {
-        return $this->getReceiptFieldHandling($rowIndex, RecurringBookingsHeaderField::B1->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::B1);
+        return $value !== null && $value !== '' ? ReceiptFieldHandling::tryFromString($value) : null;
     }
 
     /**
      * Setzt die Belegfeld1-Behandlung einer Buchungszeile.
      */
     public function setReceiptFieldHandlingValue(int $rowIndex, ReceiptFieldHandling $handling): void {
-        $this->setReceiptFieldHandling($rowIndex, RecurringBookingsHeaderField::B1->getPosition(), $handling);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::B1, $handling->value);
     }
 
     // ==================== UMSATZ (FELD 2-5) ====================
@@ -112,35 +113,44 @@ final class RecurringBookings extends Document {
      * Returns the turnover amount of a booking line.
      */
     public function getAmount(int $rowIndex): ?string {
-        return $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Umsatz->getPosition());
+        return $this->getField($rowIndex, RecurringBookingsHeaderField::Umsatz);
+    }
+
+    /**
+     * Setzt den Umsatzbetrag einer Buchungszeile.
+     */
+    public function setAmount(int $rowIndex, string $amount): void {
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Umsatz, $amount);
     }
 
     /**
      * Returns debit/credit of a booking line.
      */
     public function getCreditDebitValue(int $rowIndex): ?CreditDebit {
-        return $this->getCreditDebit($rowIndex, RecurringBookingsHeaderField::SollHabenKennzeichen->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::SollHabenKennzeichen);
+        return $value !== null && $value !== '' ? CreditDebit::fromDatevCode($value) : null;
     }
 
     /**
      * Setzt Soll/Haben einer Buchungszeile.
      */
     public function setCreditDebitValue(int $rowIndex, CreditDebit $creditDebit): void {
-        $this->setCreditDebit($rowIndex, RecurringBookingsHeaderField::SollHabenKennzeichen->getPosition(), $creditDebit);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::SollHabenKennzeichen, $creditDebit->toDatevCode());
     }
 
     /**
      * Returns the currency code of a booking line.
      */
     public function getCurrencyCodeValue(int $rowIndex): ?CurrencyCode {
-        return $this->getCurrencyCode($rowIndex, RecurringBookingsHeaderField::WKZUmsatz->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::WKZUmsatz);
+        return $value !== null && $value !== '' ? CurrencyCode::fromCode($value) : null;
     }
 
     /**
      * Sets the currency code of a booking line.
      */
     public function setCurrencyCodeValue(int $rowIndex, CurrencyCode $currencyCode): void {
-        $this->setCurrencyCode($rowIndex, RecurringBookingsHeaderField::WKZUmsatz->getPosition(), $currencyCode);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::WKZUmsatz, $currencyCode->value);
     }
 
     // ==================== POSTENSPERRE (FELD 21) ====================
@@ -149,14 +159,15 @@ final class RecurringBookings extends Document {
      * Returns the item lock of a booking line.
      */
     public function getItemLockValue(int $rowIndex): ?ItemLock {
-        return $this->getItemLock($rowIndex, RecurringBookingsHeaderField::Postensperre->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Postensperre);
+        return $value !== '' && is_numeric($value) ? ItemLock::fromInt((int)$value) : null;
     }
 
     /**
      * Setzt die Postensperre einer Buchungszeile.
      */
     public function setItemLockValue(int $rowIndex, ItemLock $itemLock): void {
-        $this->setItemLock($rowIndex, RecurringBookingsHeaderField::Postensperre->getPosition(), $itemLock);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Postensperre, (string)$itemLock->value);
     }
 
     // ==================== SACHVERHALT (FELD 24) ====================
@@ -165,14 +176,15 @@ final class RecurringBookings extends Document {
      * Returns the case type of a booking line (dunning interest/dunning fee).
      */
     public function getDunningSubjectValue(int $rowIndex): ?DunningSubject {
-        return $this->getDunningSubject($rowIndex, RecurringBookingsHeaderField::Sachverhalt->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Sachverhalt);
+        return $value !== null && $value !== '' ? DunningSubject::tryFromString($value) : null;
     }
 
     /**
      * Setzt den Sachverhalt einer Buchungszeile.
      */
     public function setDunningSubjectValue(int $rowIndex, DunningSubject $subject): void {
-        $this->setDunningSubject($rowIndex, RecurringBookingsHeaderField::Sachverhalt->getPosition(), $subject);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Sachverhalt, $subject->value);
     }
 
     // ==================== ZINSSPERRE (FELD 25) ====================
@@ -181,14 +193,15 @@ final class RecurringBookings extends Document {
      * Returns the interest lock of a booking line.
      */
     public function getInterestLockValue(int $rowIndex): ?InterestLock {
-        return $this->getInterestLock($rowIndex, RecurringBookingsHeaderField::Zinssperre->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Zinssperre);
+        return $value !== '' && is_numeric($value) ? InterestLock::fromInt((int)$value) : null;
     }
 
     /**
      * Setzt die Zinssperre einer Buchungszeile.
      */
     public function setInterestLockValue(int $rowIndex, InterestLock $interestLock): void {
-        $this->setInterestLock($rowIndex, RecurringBookingsHeaderField::Zinssperre->getPosition(), $interestLock);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Zinssperre, (string)$interestLock->value);
     }
 
     // ==================== ZEITINTERVALL (FELDER 81-82) ====================
@@ -197,32 +210,30 @@ final class RecurringBookings extends Document {
      * Returns the time interval type of a booking line (DAY/MON).
      */
     public function getTimeIntervalTypeValue(int $rowIndex): ?TimeIntervalType {
-        return $this->getTimeIntervalType($rowIndex, RecurringBookingsHeaderField::Zeitintervallart->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Zeitintervallart);
+        return $value !== null && $value !== '' ? TimeIntervalType::tryFromString($value) : null;
     }
 
     /**
      * Setzt die Zeitintervallart einer Buchungszeile.
      */
     public function setTimeIntervalTypeValue(int $rowIndex, TimeIntervalType $intervalType): void {
-        $this->setTimeIntervalType($rowIndex, RecurringBookingsHeaderField::Zeitintervallart->getPosition(), $intervalType);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Zeitintervallart, $intervalType->value);
     }
 
     /**
      * Returns the time interval (every n days/months).
      */
     public function getTimeInterval(int $rowIndex): ?int {
-        $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Zeitabstand->getPosition());
-        if ($value === null) return null;
-
-        $cleanValue = trim($value, '"');
-        return $cleanValue !== '' && is_numeric($cleanValue) ? (int)$cleanValue : null;
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Zeitabstand);
+        return $value !== '' && is_numeric($value) ? (int)$value : null;
     }
 
     /**
      * Setzt das Zeitintervall.
      */
     public function setTimeInterval(int $rowIndex, int $interval): void {
-        $this->setFieldValue($rowIndex, RecurringBookingsHeaderField::Zeitabstand->getPosition(), (string)$interval);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Zeitabstand, (string)$interval);
     }
 
     // ==================== WOCHENTAG (FELD 83) ====================
@@ -231,7 +242,8 @@ final class RecurringBookings extends Document {
      * Returns the weekday bitmask of a booking line.
      */
     public function getWeekdayMaskValue(int $rowIndex): ?int {
-        return $this->getWeekdayMask($rowIndex, RecurringBookingsHeaderField::Wochentag->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Wochentag);
+        return $value !== '' && is_numeric($value) ? (int)$value : null;
     }
 
     /**
@@ -248,7 +260,7 @@ final class RecurringBookings extends Document {
      * Setzt die Wochentag-Bitmaske einer Buchungszeile.
      */
     public function setWeekdayMaskValue(int $rowIndex, int $mask): void {
-        $this->setWeekdayMask($rowIndex, RecurringBookingsHeaderField::Wochentag->getPosition(), $mask);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Wochentag, (string)$mask);
     }
 
     /**
@@ -268,18 +280,15 @@ final class RecurringBookings extends Document {
      * For time interval type MON: day of month for the booking.
      */
     public function getDayOfMonth(int $rowIndex): ?int {
-        $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::OrdnungszahlTagImMonat->getPosition());
-        if ($value === null) return null;
-
-        $cleanValue = trim($value, '"');
-        return $cleanValue !== '' && is_numeric($cleanValue) ? (int)$cleanValue : null;
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::OrdnungszahlTagImMonat);
+        return $value !== '' && is_numeric($value) ? (int)$value : null;
     }
 
     /**
      * Setzt die Ordnungszahl Tag im Monat (1-31).
      */
     public function setDayOfMonth(int $rowIndex, int $day): void {
-        $this->setFieldValue($rowIndex, RecurringBookingsHeaderField::OrdnungszahlTagImMonat->getPosition(), (string)$day);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::OrdnungszahlTagImMonat, (string)$day);
     }
 
     // ==================== ORDNUNGSZAHL WOCHENTAG (FELD 86) ====================
@@ -288,14 +297,15 @@ final class RecurringBookings extends Document {
      * Returns the weekday ordinal (1=first, 5=last).
      */
     public function getWeekdayOrdinalValue(int $rowIndex): ?WeekdayOrdinal {
-        return $this->getWeekdayOrdinal($rowIndex, RecurringBookingsHeaderField::OrdnungszahlWochentag->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::OrdnungszahlWochentag);
+        return $value !== '' && is_numeric($value) ? WeekdayOrdinal::tryFrom((int)$value) : null;
     }
 
     /**
      * Setzt die Ordnungszahl des Wochentags.
      */
     public function setWeekdayOrdinalValue(int $rowIndex, WeekdayOrdinal $ordinal): void {
-        $this->setWeekdayOrdinal($rowIndex, RecurringBookingsHeaderField::OrdnungszahlWochentag->getPosition(), $ordinal);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::OrdnungszahlWochentag, (string)$ordinal->value);
     }
 
     // ==================== ENDETYP UND ENDDATUM (FELDER 80, 87) ====================
@@ -305,14 +315,14 @@ final class RecurringBookings extends Document {
      * Muss nach dem Beginndatum liegen. Format: TTMMJJJJ
      */
     public function getEndDate(int $rowIndex): ?string {
-        return $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Enddatum->getPosition());
+        return $this->getField($rowIndex, RecurringBookingsHeaderField::Enddatum);
     }
 
     /**
      * Setzt das Enddatum der Buchungsserie (Feld 80).
      */
     public function setEndDate(int $rowIndex, string $endDate): void {
-        $this->setFieldValue($rowIndex, RecurringBookingsHeaderField::Enddatum->getPosition(), $endDate);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Enddatum, $endDate);
     }
 
     /**
@@ -320,14 +330,15 @@ final class RecurringBookings extends Document {
      * 1 = kein Enddatum, 2 = Endzeitpunkt bei Anzahl Ereignissen, 3 = Endet am
      */
     public function getEndTypeValue(int $rowIndex): ?EndType {
-        return $this->getEndType($rowIndex, RecurringBookingsHeaderField::Endetyp->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Endetyp);
+        return $value !== '' && is_numeric($value) ? EndType::tryFrom((int)$value) : null;
     }
 
     /**
      * Setzt den Endetyp einer Buchungszeile.
      */
     public function setEndTypeValue(int $rowIndex, EndType $endType): void {
-        $this->setEndType($rowIndex, RecurringBookingsHeaderField::Endetyp->getPosition(), $endType);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Endetyp, (string)$endType->value);
     }
 
     // ==================== GESELLSCHAFTER (FELDER 88-89) ====================
@@ -337,17 +348,15 @@ final class RecurringBookings extends Document {
      * Must match the assigned shareholder in the central master data.
      */
     public function getPartnerName(int $rowIndex): ?string {
-        $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Gesellschaftername->getPosition());
-        if ($value === null) return null;
-
-        return trim($value, '"');
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Gesellschaftername);
+        return $value !== null && $value !== '' ? $value : null;
     }
 
     /**
      * Setzt den Gesellschafternamen (Feld 88).
      */
     public function setPartnerName(int $rowIndex, string $name): void {
-        $this->setFieldValue($rowIndex, RecurringBookingsHeaderField::Gesellschaftername->getPosition(), '"' . $name . '"');
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Gesellschaftername, $name);
     }
 
     /**
@@ -356,18 +365,15 @@ final class RecurringBookings extends Document {
      * The participant number must correspond to the official number from the assessment declaration.
      */
     public function getPartnerNumber(int $rowIndex): ?int {
-        $value = $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Beteiligtennummer->getPosition());
-        if ($value === null) return null;
-
-        $cleanValue = trim($value, '"');
-        return $cleanValue !== '' && is_numeric($cleanValue) ? (int)$cleanValue : null;
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::Beteiligtennummer);
+        return $value !== '' && is_numeric($value) ? (int)$value : null;
     }
 
     /**
      * Setzt die Beteiligtennummer (Feld 89).
      */
     public function setPartnerNumber(int $rowIndex, int $number): void {
-        $this->setFieldValue($rowIndex, RecurringBookingsHeaderField::Beteiligtennummer->getPosition(), (string)$number);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Beteiligtennummer, (string)$number);
     }
 
     // ==================== SOBIL / GENERALUMKEHR (FELDER 96-97) ====================
@@ -376,28 +382,29 @@ final class RecurringBookings extends Document {
      * Returns the special balance booking value.
      */
     public function getSoBilValue(int $rowIndex): ?ItemLock {
-        return $this->getItemLock($rowIndex, RecurringBookingsHeaderField::KennzeichenSoBilBuchung->getPosition());
+        $value = $this->getField($rowIndex, RecurringBookingsHeaderField::KennzeichenSoBilBuchung);
+        return $value !== '' && is_numeric($value) ? ItemLock::fromInt((int)$value) : null;
     }
 
     /**
      * Setzt den SoBil-Buchung-Wert.
      */
     public function setSoBilValue(int $rowIndex, ItemLock $soBil): void {
-        $this->setItemLock($rowIndex, RecurringBookingsHeaderField::KennzeichenSoBilBuchung->getPosition(), $soBil);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::KennzeichenSoBilBuchung, (string)$soBil->value);
     }
 
     /**
      * Returns the general reversal value.
      */
     public function getGeneralReversalValue(int $rowIndex): ?string {
-        return $this->getFieldValue($rowIndex, RecurringBookingsHeaderField::Generalumkehr->getPosition());
+        return $this->getField($rowIndex, RecurringBookingsHeaderField::Generalumkehr);
     }
 
     /**
      * Setzt den Generalumkehr-Wert (0, 1, oder G).
      */
     public function setGeneralReversalValue(int $rowIndex, string $value): void {
-        $this->setFieldValue($rowIndex, RecurringBookingsHeaderField::Generalumkehr->getPosition(), $value);
+        $this->setField($rowIndex, RecurringBookingsHeaderField::Generalumkehr, $value);
     }
 
     // ==================== HILFSMETHODEN ====================

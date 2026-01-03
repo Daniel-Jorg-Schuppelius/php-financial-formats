@@ -97,6 +97,43 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
+     * Retrieves the trimmed value of a specific field from a data row.
+     * 
+     * Ermöglicht typsicheren Zugriff auf Feldwerte über das BankTransactionHeaderField Enum
+     * anstatt über numerische Indizes.
+     * 
+     * Beispiel:
+     * ```php
+     * $blz = $document->getField($rowIndex, BankTransactionHeaderField::BLZ_BIC_KONTOINHABER);
+     * $iban = $document->getField($rowIndex, BankTransactionHeaderField::KONTONUMMER_IBAN_KONTOINHABER);
+     * ```
+     * 
+     * @param int $rowIndex Der Zeilenindex (0-basiert)
+     * @param BankTransactionHeaderField $field Das gewünschte Feld
+     * @return string|null Der getrimmte Feldwert oder null wenn Zeile/Feld nicht existiert
+     */
+    public function getField(int $rowIndex, BankTransactionHeaderField $field): ?string {
+        $row = $this->getRow($rowIndex);
+        if ($row === null) {
+            return null;
+        }
+
+        return $this->getHeader()?->getFieldValue($row, $field);
+    }
+
+    /**
+     * Checks if a specific field exists and has a non-empty value.
+     * 
+     * @param int $rowIndex Der Zeilenindex (0-basiert)
+     * @param BankTransactionHeaderField $field Das zu prüfende Feld
+     * @return bool True wenn das Feld existiert und einen nicht-leeren Wert hat
+     */
+    public function hasField(int $rowIndex, BankTransactionHeaderField $field): bool {
+        $value = $this->getField($rowIndex, $field);
+        return $value !== null && $value !== '';
+    }
+
+    /**
      * Validates the ASCII BankTransaction format.
      * 
      * @throws RuntimeException On validation errors
@@ -159,20 +196,15 @@ final class BankTransaction extends CSVDocument {
         ];
     }
 
-    // ==== Banking-spezifische Methoden ====
-
     /**
      * Checks if the document contains valid bank data.
      */
     public function hasValidBankData(): bool {
-        foreach ($this->rows as $row) {
-            $fields = $row->getFields();
-            if (count($fields) < 11) continue;
-
-            $blz = trim($fields[0]->getValue());
-            $account = trim($fields[1]->getValue());
-
-            if (!empty($blz) && !empty($account)) {
+        foreach ($this->rows as $index => $row) {
+            if (
+                $this->hasField($index, BankTransactionHeaderField::BLZ_BIC_KONTOINHABER) &&
+                $this->hasField($index, BankTransactionHeaderField::KONTONUMMER_IBAN_KONTOINHABER)
+            ) {
                 return true;
             }
         }
@@ -187,14 +219,16 @@ final class BankTransaction extends CSVDocument {
             return null;
         }
 
-        $fields = $this->rows[$rowIndex]->getFields();
-        if (count($fields) < 2) {
+        $blz = $this->getField($rowIndex, BankTransactionHeaderField::BLZ_BIC_KONTOINHABER);
+        $account = $this->getField($rowIndex, BankTransactionHeaderField::KONTONUMMER_IBAN_KONTOINHABER);
+
+        if ($blz === null || $account === null) {
             return null;
         }
 
         return [
-            'blz_bic' => trim($fields[0]->getValue()),
-            'account_number' => trim($fields[1]->getValue()),
+            'blz_bic' => $blz,
+            'account_number' => $account,
         ];
     }
 
@@ -206,16 +240,16 @@ final class BankTransaction extends CSVDocument {
             return null;
         }
 
-        $fields = $this->rows[$rowIndex]->getFields();
-        if (count($fields) < 11) {
+        // Prüfe ob die erforderlichen Felder existieren (mindestens 11 Felder)
+        if ($this->getField($rowIndex, BankTransactionHeaderField::KONTONUMMER_IBAN_AUFTRAGGEBER) === null) {
             return null;
         }
 
         return [
-            'name1' => trim($fields[7]->getValue()),
-            'name2' => trim($fields[8]->getValue()),
-            'blz_bic' => trim($fields[9]->getValue()),
-            'account_number' => trim($fields[10]->getValue()),
+            'name1' => $this->getField($rowIndex, BankTransactionHeaderField::AUFTRAGGEBERNAME_1) ?? '',
+            'name2' => $this->getField($rowIndex, BankTransactionHeaderField::AUFTRAGGEBERNAME_2) ?? '',
+            'blz_bic' => $this->getField($rowIndex, BankTransactionHeaderField::BLZ_BIC_AUFTRAGGEBER) ?? '',
+            'account_number' => $this->getField($rowIndex, BankTransactionHeaderField::KONTONUMMER_IBAN_AUFTRAGGEBER) ?? '',
         ];
     }
 
@@ -227,45 +261,52 @@ final class BankTransaction extends CSVDocument {
             return null;
         }
 
-        $fields = $this->rows[$rowIndex]->getFields();
-        if (count($fields) < 17) {
+        // Prüfe ob die erforderlichen Felder existieren (mindestens 17 Felder für Währung)
+        $bookingDate = $this->getField($rowIndex, BankTransactionHeaderField::BUCHUNGSDATUM);
+        if ($bookingDate === null) {
             return null;
         }
 
-        // Für 34-Feld Format:
-        // - Auszugsnummer ist Feld 3 (Index 2)
-        // - Buchungsdatum ist Feld 6 (Index 5)
-        // - Valutadatum ist Feld 5 (Index 4)
-        // - Betrag ist Feld 7 (Index 6)
-        // - Currency ist bei Position 17 (Index 16) falls vorhanden
-
-        $currency = count($fields) > 16 ? trim($fields[16]->getValue()) : $currencyCode->value;
+        $currency = $this->getField($rowIndex, BankTransactionHeaderField::WAEHRUNG);
 
         return [
-            'statement_number' => trim($fields[2]->getValue()),
-            'booking_date' => trim($fields[5]->getValue()),
-            'valuta_date' => trim($fields[4]->getValue()),
-            'amount' => trim($fields[6]->getValue()),
-            'currency' => $currency,
+            'statement_number' => $this->getField($rowIndex, BankTransactionHeaderField::AUSZUGSNUMMER) ?? '',
+            'booking_date' => $bookingDate,
+            'valuta_date' => $this->getField($rowIndex, BankTransactionHeaderField::VALUTA) ?? '',
+            'amount' => $this->getField($rowIndex, BankTransactionHeaderField::UMSATZ) ?? '',
+            'currency' => !empty($currency) ? $currency : $currencyCode->value,
         ];
     }
 
     /**
      * Returns remittance purposes for a specific line.
+     * 
      */
     public function getUsagePurposes(int $rowIndex): array {
         if (!isset($this->rows[$rowIndex])) {
             return [];
         }
 
-        $fields = $this->rows[$rowIndex]->getFields();
-        if (count($fields) < 14) {
-            return [];
-        }
+        $purposeFields = [
+            BankTransactionHeaderField::VERWENDUNGSZWECK_1,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_2,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_3,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_4,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_5,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_6,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_7,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_8,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_9,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_10,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_11,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_12,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_13,
+            BankTransactionHeaderField::VERWENDUNGSZWECK_14,
+        ];
 
         $purposes = [];
-        for ($i = 11; $i <= 13; $i++) {
-            $purpose = trim($fields[$i]->getValue());
+        foreach ($purposeFields as $field) {
+            $purpose = $this->getField($rowIndex, $field);
             if (!empty($purpose)) {
                 $purposes[] = $purpose;
             }
@@ -283,20 +324,15 @@ final class BankTransaction extends CSVDocument {
         $dates = [];
         $totalTransactions = count($this->rows);
 
-        foreach ($this->rows as $row) {
-            $fields = $row->getFields();
-            if (count($fields) < 7) continue;
-
+        foreach ($this->rows as $index => $row) {
             // Betrag summieren
-            $amount = (float) trim($fields[6]->getValue());
+            $amount = (float) ($this->getField($index, BankTransactionHeaderField::UMSATZ) ?? '0');
             $totalAmount += $amount;
 
             // Datum sammeln
-            if (count($fields) >= 6) {
-                $date = trim($fields[5]->getValue());
-                if (!empty($date)) {
-                    $dates[] = $date;
-                }
+            $date = $this->getField($index, BankTransactionHeaderField::BUCHUNGSDATUM);
+            if (!empty($date)) {
+                $dates[] = $date;
             }
         }
 
@@ -322,39 +358,25 @@ final class BankTransaction extends CSVDocument {
      * @return array<string, string> Additional amounts with currencies
      */
     public function getAdditionalAmounts(int $rowIndex): array {
-        $row = $this->getRow($rowIndex);
-        if ($row === null) {
+        if (!isset($this->rows[$rowIndex])) {
             return [];
         }
 
-        $fields = $row->getFields();
+        $fieldMapping = [
+            'original_amount' => BankTransactionHeaderField::URSPRUNGSBETRAG,
+            'original_currency' => BankTransactionHeaderField::WAEHRUNG_URSPRUNGSBETRAG,
+            'equivalent_amount' => BankTransactionHeaderField::AEQUIVALENZBETRAG,
+            'equivalent_currency' => BankTransactionHeaderField::WAEHRUNG_AEQUIVALENZBETRAG,
+            'fee_amount' => BankTransactionHeaderField::GEBUEHR,
+            'fee_currency' => BankTransactionHeaderField::WAEHRUNG_GEBUEHR,
+        ];
+
         $additionalAmounts = [];
-
-        // Felder 26-34 für zusätzliche Beträge (Index 25-33)
-        // Feld 27 (Index 26): Ursprungsbetrag
-        // Feld 28 (Index 27): Ursprungswährung
-        // Feld 29 (Index 28): Äquivalentbetrag
-        // Feld 30 (Index 29): Äquivalentwährung
-        // Feld 31 (Index 30): Gebührenbetrag
-        // Feld 32 (Index 31): Gebührenwährung
-
-        if (count($fields) >= 27) {
-            $additionalAmounts['original_amount'] = trim($fields[26]->getValue());
-        }
-        if (count($fields) >= 28) {
-            $additionalAmounts['original_currency'] = trim($fields[27]->getValue());
-        }
-        if (count($fields) >= 29) {
-            $additionalAmounts['equivalent_amount'] = trim($fields[28]->getValue());
-        }
-        if (count($fields) >= 30) {
-            $additionalAmounts['equivalent_currency'] = trim($fields[29]->getValue());
-        }
-        if (count($fields) >= 31) {
-            $additionalAmounts['fee_amount'] = trim($fields[30]->getValue());
-        }
-        if (count($fields) >= 32) {
-            $additionalAmounts['fee_currency'] = trim($fields[31]->getValue());
+        foreach ($fieldMapping as $key => $field) {
+            $value = $this->getField($rowIndex, $field);
+            if ($value !== null) {
+                $additionalAmounts[$key] = $value;
+            }
         }
 
         return $additionalAmounts;

@@ -4,21 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01807f2c8558bc3ccbb535cdcc5970f2",
+    "content-hash": "417a94734f1aa721dbe596f235e82a20",
     "packages": [
         {
             "name": "dschuppelius/php-common-toolkit",
-            "version": "v0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/DSchuppelius/php-common-toolkit.git",
-                "reference": "653c553eb0e52389a678f3855edf41276604c2b6"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/DSchuppelius/php-common-toolkit/zipball/653c553eb0e52389a678f3855edf41276604c2b6",
-                "reference": "653c553eb0e52389a678f3855edf41276604c2b6",
-                "shasum": ""
+                "type": "path",
+                "url": "../php-common-toolkit",
+                "reference": "556818bdea0f82dfaf4ce1f913e7eefff9e9be54"
             },
             "require": {
                 "dschuppelius/php-config-toolkit": "^0.2.15",
@@ -36,7 +30,16 @@
                     "CommonToolkit\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -47,11 +50,10 @@
                 }
             ],
             "description": "Project description.",
-            "support": {
-                "issues": "https://github.com/DSchuppelius/php-common-toolkit/issues",
-                "source": "https://github.com/DSchuppelius/php-common-toolkit/tree/v0.9"
-            },
-            "time": "2026-01-02T13:08:36+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "dschuppelius/php-config-toolkit",
@@ -1964,7 +1966,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "dschuppelius/php-common-toolkit": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

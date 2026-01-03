@@ -25,6 +25,7 @@ use RuntimeException;
 class BankTransactionParserTest extends BaseTestCase {
 
     private string $sampleCSV;
+    private string $datevSampleCSV;
 
     protected function setUp(): void {
         parent::setUp();
@@ -34,6 +35,8 @@ class BankTransactionParserTest extends BaseTestCase {
             '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";"EUR";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""',
             '"70030000";"1234567";"434";"30.12.15";"30.12.15";"30.12.15";-25.50;"FIRMA ABC GMBH";"MÜNCHEN";"70150000";"1111111";"Miete Januar";"Objekt Muster";"";"";"005";"EUR";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";"";""'
         ]);
+
+        $this->datevSampleCSV = '"70030000";"1234567";433;29.12.15;29.12.15;29.12.15;10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";';
     }
 
     public function testFromStringSuccess(): void {
@@ -43,6 +46,45 @@ class BankTransactionParserTest extends BaseTestCase {
         $this->assertEquals(2, count($document->getRows()));
         $this->assertEquals('ASCII-Weiterverarbeitungsdatei', $document->getFormatType());
         $this->assertTrue($document->isAsciiProcessingFormat());
+    }
+
+    public function testDatevSampleCSVParsing(): void {
+        // Test das DATEV-Sample mit 16 Feldern und Leerzeichen nach Semikolons
+        $document = BankTransactionParser::fromString($this->datevSampleCSV);
+
+        $this->assertInstanceOf(BankTransaction::class, $document);
+        $this->assertEquals(1, count($document->getRows()));
+        $this->assertTrue($document->isAsciiProcessingFormat());
+
+        // Prüfe die Kontoinhaberdaten
+        $accountData = $document->getAccountHolderBankData(0);
+        $this->assertNotNull($accountData);
+        $this->assertEquals('70030000', $accountData['blz_bic']);
+        $this->assertEquals('1234567', $accountData['account_number']);
+
+        // Prüfe die Auftraggeberdaten (Zahlungspflichtiger)
+        $payerData = $document->getPayerBankData(0);
+        $this->assertNotNull($payerData);
+        $this->assertEquals('HANS MUSTERMANN', $payerData['name1']);
+        $this->assertEquals('80550000', $payerData['blz_bic']);
+        $this->assertEquals('7654321', $payerData['account_number']);
+
+        // Prüfe die Transaktionsdaten
+        $transactionData = $document->getTransactionData(0);
+        $this->assertNotNull($transactionData);
+        $this->assertEquals('433', $transactionData['statement_number']);
+        $this->assertEquals('29.12.15', $transactionData['booking_date']);
+        $this->assertEquals('10.00', $transactionData['amount']);
+
+        // Prüfe die Verwendungszwecke
+        $purposes = $document->getUsagePurposes(0);
+        $this->assertContains('Kd.Nr. 12345', $purposes);
+        $this->assertContains('RECHNUNG v. 12.12.15', $purposes);
+
+        // Prüfe die Transaktionszusammenfassung
+        $summary = $document->getTransactionSummary();
+        $this->assertEquals(1, $summary['total_transactions']);
+        $this->assertEquals(10.00, $summary['total_amount']);
     }
 
     public function testFromStringEmptyFile(): void {
@@ -161,7 +203,14 @@ class BankTransactionParserTest extends BaseTestCase {
 
     public function testGetAdditionalAmounts(): void {
         // CSV mit zusätzlichen Beträgen - genau 34 Felder 
-        $csvWithAdditionalAmounts = '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";"EUR";"";"";"";"";"";"";"";"";"";"100.00";"USD";"200.00";"EUR";"5.00";"EUR";"";""';
+        // Felder nach DATEV-Dokumentation:
+        // - Feld 25 (Index 24): Ursprungsbetrag = 100.00
+        // - Feld 26 (Index 25): Währung Ursprungsbetrag = USD
+        // - Feld 27 (Index 26): Äquivalenzbetrag = 200.00
+        // - Feld 28 (Index 27): Währung Äquivalenzbetrag = EUR
+        // - Feld 29 (Index 28): Gebühr = 5.00
+        // - Feld 30 (Index 29): Währung Gebühr = EUR
+        $csvWithAdditionalAmounts = '"70030000";"1234567";"433";"29.12.15";"29.12.15";"29.12.15";10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";"EUR";"";"";"";"";"";"";"";"100.00";"USD";"200.00";"EUR";"5.00";"EUR";"";"";"";""';
 
         $document = BankTransactionParser::fromString($csvWithAdditionalAmounts);
         $amounts = $document->getAdditionalAmounts(0);
