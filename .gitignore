@@ -411,3 +411,5 @@ phpunit.xml
 
 /data/blz-aktuell-txt-data.txt
 /data/verzeichnis-der-erreichbaren-zahlungsdienstleister-data.csv
+
+/docs/Formatbeschreibung MT940-SWIFT - DATEV Hilfe-Center.pdf

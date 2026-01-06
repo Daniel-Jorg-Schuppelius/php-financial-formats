@@ -29,16 +29,28 @@ class Reference {
 
     /**
      * @param string $transactionCode 3-stelliger Transaktionscode (z.B. TRF, CHK)
-     * @param string $reference Kundenreferenz (max. 16 Zeichen inkl. Code)
+     * @param string $reference Kundenreferenz (max. 16 Zeichen)
      * @param string|null $bankReference Bankreferenz nach //
      */
     public function __construct(string $transactionCode, string $reference, ?string $bankReference = null) {
-        $combined = $transactionCode . $reference;
-        if (strlen($combined) > 16) {
-            throw new RuntimeException("MT9xx-Referenzüberschreitung: max. 16 Zeichen erlaubt, übergeben: " . $combined);
+        $code = strtoupper($transactionCode);
+        if (str_starts_with($code, 'N') && strlen($code) >= 4) {
+            $code = substr($code, 1);
+        }
+        if (strlen($code) > 3) {
+            $code = substr($code, 0, 3);
+        }
+        if (strlen($code) !== 3) {
+            throw new RuntimeException("MT9xx-Transaktionscode ungültig: $transactionCode");
+        }
+        if (strlen($reference) > 16) {
+            throw new RuntimeException("MT9xx-Referenzüberschreitung: max. 16 Zeichen erlaubt, übergeben: " . $reference);
+        }
+        if ($bankReference !== null && strlen($bankReference) > 16) {
+            throw new RuntimeException("MT9xx-Bankreferenzüberschreitung: max. 16 Zeichen erlaubt, übergeben: " . $bankReference);
         }
 
-        $this->transactionCode = $transactionCode;
+        $this->transactionCode = $code;
         $this->reference = $reference;
         $this->bankReference = $bankReference;
     }
@@ -58,6 +70,13 @@ class Reference {
     }
 
     /**
+     * Returns the booking key (Subfield 6 in :61:).
+     */
+    public function getBookingKey(): string {
+        return 'N' . $this->transactionCode;
+    }
+
+    /**
      * Returns the bank reference (after //).
      */
     public function getBankReference(): ?string {
@@ -69,7 +88,7 @@ class Reference {
      * Format: N[Code][Referenz]//[Bankreferenz]
      */
     public function __toString(): string {
-        $result = 'N' . $this->transactionCode . $this->reference;
+        $result = $this->getBookingKey() . $this->reference;
         if ($this->bankReference !== null) {
             $result .= '//' . $this->bankReference;
         }

@@ -14,6 +14,7 @@ namespace Tests\Parsers;
 
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
+use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToMt940Converter;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 use CommonToolkit\FinancialFormats\Parsers\BankTransactionParser;
 use Tests\Contracts\BaseTestCase;
@@ -26,6 +27,7 @@ class BankTransactionParserTest extends BaseTestCase {
 
     private string $sampleCSV;
     private string $datevSampleCSV;
+    private string $liveSampleCSV;
 
     protected function setUp(): void {
         parent::setUp();
@@ -37,6 +39,11 @@ class BankTransactionParserTest extends BaseTestCase {
         ]);
 
         $this->datevSampleCSV = '"70030000";"1234567";433;29.12.15;29.12.15;29.12.15;10.00;"HANS MUSTERMANN";"";"80550000";"7654321";"Kd.Nr. 12345";"RECHNUNG v. 12.12.15";"";"";"051";';
+
+        $this->liveSampleCSV = implode("\n", [
+            '10080000;0012345678;;;01.07.2021;01.07.2021;-52,50;;;;;"SEPA Lastschrifteinzug von ";"01.07. 01.07. SEPA Lastschr";"ifteinzug von - 52,50 Rundf";"unk ARD, ZDF, DRadio Verwen";;EUR;"SEPA Lastschrifteinzug von";"dungszweck/ Kundenreferenz ";"Rundfunk 07.2021 - 09.2021 ";"Beitragsnr. 000000000 Aende";"rungen ganz bequem: www.run";"dfunkbeitrag.de 000000000 2";"000000000000000 Glaubiger-I";;;;;;;"D DE0000000000000000 Mand-I";"D 0000000000000 RCUR Wieder";"holungslastschrift         ";',
+            '10080000;0012345678;;;01.07.2021;01.07.2021;-163,84;;;;;"SEPA Lastschrifteinzug von ";"01.07. 01.07. SEPA Lastschr";"ifteinzug von - 163,84 Deut";"sche Bank AG Verwendungszwe";;EUR;"SEPA Lastschrifteinzug von";"ck/ Kundenreferenz Baufinan";"zierung 000 0000000 00, Lei";"stungen zum 01.07.2021 0000";"0000000000 Glaubiger-ID DE0";"000000000000000 Mand-ID LEN";"000000000000000 OTHR Sonst.";;;;;;;" Transakt. RCUR Wiederholun";"gslastschrift              ";;'
+        ]);
     }
 
     public function testFromStringSuccess(): void {
@@ -85,6 +92,47 @@ class BankTransactionParserTest extends BaseTestCase {
         $summary = $document->getTransactionSummary();
         $this->assertEquals(1, $summary['total_transactions']);
         $this->assertEquals(10.00, $summary['total_amount']);
+    }
+
+    public function testLiveSampleCSVParsing(): void {
+        // Testet das Parsen des realistischen Live-Sample-CSV mit komplexen Verwendungszwecken
+        $document = BankTransactionParser::fromString($this->liveSampleCSV);
+
+        $this->assertInstanceOf(BankTransaction::class, $document);
+        $this->assertEquals(2, count($document->getRows()));
+        $this->assertTrue($document->isAsciiProcessingFormat());
+
+        // Prüfe die wichtigsten Felder der ersten Zeile
+        $accountData = $document->getAccountHolderBankData(0);
+        $this->assertNotNull($accountData);
+        $this->assertEquals('10080000', $accountData['blz_bic']);
+        $this->assertEquals('0012345678', $accountData['account_number']);
+
+        $transactionData = $document->getTransactionData(0);
+        $this->assertNotNull($transactionData);
+        $this->assertEquals('-52,50', $transactionData['amount']);
+        $this->assertEquals('EUR', $transactionData['currency']);
+        $this->assertEquals('01.07.2021', $transactionData['booking_date']);
+
+        // Prüfe, dass Verwendungszwecke extrahiert werden
+        $purposes = $document->getUsagePurposes(0);
+        $this->assertNotEmpty($purposes);
+        $this->assertStringContainsString('SEPA Lastschrifteinzug', implode(' ', $purposes));
+    }
+
+    public function testBankTransactiontoMt940(): void {
+        $document = BankTransactionParser::fromString($this->liveSampleCSV);
+
+        // Teste die Umwandlung in MT940-Format
+        $mt940Document = BankTransactionToMt940Converter::convert($document);
+        $mt940String = $mt940Document->__toString();
+
+        $this->assertNotEmpty($mt940String);
+        $this->assertStringNotContainsString(':86:SEPA Lastschrifteinzug von0', $mt940String); // Prüfe, dass der Verwendungszweck korrekt formatiert ist ":86:SEPA Lastschrifteinzug von"
+        $this->assertStringContainsString(':20:', $mt940String); // Transaktionsreferenznummer
+        $this->assertStringContainsString(':25:', $mt940String); // Kontonummer
+        $this->assertStringContainsString(':61:', $mt940String); // Kontoauszugszeile
+        $this->assertStringContainsString(':86:', $mt940String); // Verwendungszweck
     }
 
     public function testFromStringEmptyFile(): void {

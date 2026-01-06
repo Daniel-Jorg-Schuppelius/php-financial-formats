@@ -57,11 +57,7 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
      * @return Mt940Document
      * @throws RuntimeException Bei fehlenden Pflichtfeldern
      */
-    public static function convert(
-        BankTransaction $document,
-        ?float $openingBalanceAmount = null,
-        ?CreditDebit $openingBalanceCreditDebit = null
-    ): Mt940Document {
+    public static function convert(BankTransaction $document, ?float $openingBalanceAmount = null, ?CreditDebit $openingBalanceCreditDebit = null): Mt940Document {
         $rows = $document->getRows();
 
         if (empty($rows)) {
@@ -238,7 +234,7 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             }
         }
 
-        $purpose = implode(' ', $purposeParts);
+        $purpose = implode('', $purposeParts);
 
         try {
             $reference = new Reference($transactionCode, $referenceStr);

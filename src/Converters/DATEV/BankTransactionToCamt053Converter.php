@@ -364,6 +364,6 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
                 $purposeParts[] = $vz;
             }
         }
-        return !empty($purposeParts) ? implode(' ', $purposeParts) : null;
+        return !empty($purposeParts) ? implode('', $purposeParts) : null;
     }
 }
