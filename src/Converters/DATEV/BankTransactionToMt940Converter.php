@@ -25,6 +25,7 @@ use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField as F;
+use CommonToolkit\FinancialFormats\Enums\Mt\GvcCode;
 use DateTimeImmutable;
 use RuntimeException;
 use Throwable;
@@ -219,13 +220,7 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
 
         // Auftraggeber-Name (Felder 8-9)
         $name1 = self::getFieldRaw($fields, F::AUFTRAGGEBERNAME_1);
-        if (!empty($name1)) {
-            $purposeParts[] = $name1;
-        }
         $name2 = self::getFieldRaw($fields, F::AUFTRAGGEBERNAME_2);
-        if (!empty($name2)) {
-            $purposeParts[] = $name2;
-        }
 
         // Alle Verwendungszweck-Felder sammeln
         foreach (self::getPurposeFields() as $vzFeld) {
@@ -235,7 +230,66 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             }
         }
 
-        $purpose = trim(implode('', $purposeParts));
+        // Purpose im DATEV-Format erstellen: GVC?00Buchungstext?20VWZ1?21VWZ2...?32Name1?33Name2
+        // Der numerische GVC-Code (z.B. "116") wird nur verwendet, wenn er 3 Ziffern hat
+        // Der Buchungsschlüssel (TRF, MSC, etc.) ist NICHT der GVC-Code!
+        $gvcCodeStr = self::getField($fields, F::GESCHAEFTSVORGANGSCODE);
+        $gvcCode = '';
+        if (!empty($gvcCodeStr) && preg_match('/^\d{3}$/', $gvcCodeStr)) {
+            $gvcCode = $gvcCodeStr;
+        }
+
+        // Buchungstext aus dem ersten Verwendungszweck-Teil oder BUCHUNGSTEXT-Feld extrahieren
+        $buchungstext = self::getFieldRaw($fields, F::BUCHUNGSTEXT);
+        if (empty($buchungstext)) {
+            $buchungstext = self::getFieldRaw($fields, F::VERWENDUNGSZWECK_1);
+        }
+
+        // Wenn kein GVC-Code vorhanden, versuche ihn aus dem Buchungstext abzuleiten
+        // Berücksichtige dabei ob es ein Geldeingang (Credit) oder Geldausgang (Debit) ist
+        if (empty($gvcCode) && !empty($buchungstext)) {
+            $isDebit = $amountData['creditDebit'] === CreditDebit::DEBIT;
+            $derivedGvc = GvcCode::tryFromBookingText($buchungstext, $isDebit);
+            if ($derivedGvc !== null) {
+                $gvcCode = $derivedGvc->value;
+            }
+        }
+
+        $purposeStr = $gvcCode;
+        if (!empty($buchungstext)) {
+            $purposeStr .= '?00' . substr($buchungstext, 0, 27);
+        }
+
+        // Verwendungszweck-Zeilen als ?20-?29, ?60-?63
+        $vzFields = array_filter($purposeParts, fn($p) => !empty($p));
+        $fieldKey = 20;
+        foreach ($vzFields as $vzPart) {
+            if ($fieldKey > 29 && $fieldKey < 60) {
+                $fieldKey = 60;
+            }
+            if ($fieldKey > 63) {
+                break;
+            }
+            $purposeStr .= sprintf('?%02d%s', $fieldKey++, substr($vzPart, 0, 27));
+        }
+
+        // Auftraggeber-Name
+        if (!empty($name1)) {
+            $purposeStr .= '?32' . substr($name1, 0, 27);
+        }
+        if (!empty($name2)) {
+            $purposeStr .= '?33' . substr($name2, 0, 27);
+        }
+
+        // BLZ/BIC und Kontonummer/IBAN
+        if (!empty($payerBlz)) {
+            $purposeStr .= '?30' . substr($payerBlz, 0, 11);
+        }
+        if (!empty($payerAccount)) {
+            $purposeStr .= '?31' . substr($payerAccount, 0, 34);
+        }
+
+        $purpose = $purposeStr;
 
         try {
             $reference = new Reference($transactionCode, $referenceStr);

@@ -16,6 +16,8 @@ use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
 use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToMt940Converter;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
+use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
+use CommonToolkit\FinancialFormats\Generators\Mt\Mt940Generator;
 use CommonToolkit\FinancialFormats\Parsers\BankTransactionParser;
 use Tests\Contracts\BaseTestCase;
 use RuntimeException;
@@ -125,10 +127,11 @@ class BankTransactionParserTest extends BaseTestCase {
 
         // Teste die Umwandlung in MT940-Format
         $mt940Document = BankTransactionToMt940Converter::convert($document);
-        $mt940String = $mt940Document->__toString();
+        $mt940String = (new Mt940Generator())->generate($mt940Document, Mt940OutputFormat::DATEV);
 
         $this->assertNotEmpty($mt940String);
-        $this->assertStringContainsString(':86:SEPA Lastschrifteinzug von', $mt940String);
+        // GVC 105 = SEPA Lastschrift Core (Debit - Geld wird abgebucht)
+        $this->assertStringContainsString(':86:105?00SEPA Lastschrifteinzug von', $mt940String);
         $this->assertStringContainsString(':20:', $mt940String); // Transaktionsreferenznummer
         $this->assertStringContainsString(':25:', $mt940String); // Kontonummer
         $this->assertStringContainsString(':61:', $mt940String); // Kontoauszugszeile

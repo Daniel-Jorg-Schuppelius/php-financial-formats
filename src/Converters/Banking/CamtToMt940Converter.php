@@ -20,9 +20,11 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction as 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document as Camt054Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Transaction as Camt054Transaction;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance as Mt9Balance;
+use CommonToolkit\FinancialFormats\Entities\Mt9\Purpose as Mt9Purpose;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference as Mt9Reference;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction as Mt940Transaction;
+use CommonToolkit\FinancialFormats\Enums\Mt\GvcCode;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
@@ -236,7 +238,7 @@ final class CamtToMt940Converter {
      */
     private static function convertTransactionFrom053(Camt053Transaction $camtTxn): Mt940Transaction {
         $reference = self::createReference($camtTxn);
-        $purpose = self::buildPurpose053($camtTxn);
+        $purpose = self::buildPurposeObject053($camtTxn);
 
         return new Mt940Transaction(
             bookingDate: $camtTxn->getBookingDate(),
@@ -358,6 +360,76 @@ final class CamtToMt940Converter {
         }
 
         return implode(' ', $parts);
+    }
+
+    /**
+     * Builds a Purpose object from a CAMT.053 transaction with GVC code.
+     *
+     * Derives the GVC code from:
+     * 1. Proprietary transaction code (if 3-digit numeric)
+     * 2. ISO 20022 Domain/Family/SubFamily codes
+     * 3. Booking text analysis as fallback
+     */
+    private static function buildPurposeObject053(Camt053Transaction $camtTxn): Mt9Purpose {
+        $ref = $camtTxn->getReference();
+        $creditDebit = $camtTxn->getCreditDebit();
+        $isReturn = $camtTxn->getReturnReason() !== null;
+
+        // Try to get GVC from proprietary transaction code first
+        $gvcCode = null;
+        $transactionCode = $camtTxn->getTransactionCode();
+        if ($transactionCode !== null && preg_match('/^\d{3}$/', $transactionCode)) {
+            $gvcCode = GvcCode::tryFromValue($transactionCode);
+        }
+
+        // Try to derive from ISO 20022 codes
+        if ($gvcCode === null) {
+            $gvcCode = GvcCode::tryFromCamtCodes(
+                $camtTxn->getDomainCode(),
+                $camtTxn->getFamilyCode(),
+                $camtTxn->getSubFamilyCode(),
+                $creditDebit,
+                $isReturn
+            );
+        }
+
+        // Fallback: derive from purpose/additional info text
+        if ($gvcCode === null) {
+            $bookingText = $camtTxn->getAdditionalInfo() ?? $camtTxn->getPurpose() ?? '';
+            if (!empty($bookingText)) {
+                $isDebit = $creditDebit === CreditDebit::DEBIT;
+                $gvcCode = GvcCode::tryFromBookingText($bookingText, $isDebit);
+            }
+        }
+
+        // Build booking text from GVC description or additional info
+        $bookingText = $camtTxn->getAdditionalInfo();
+        if ($bookingText === null && $gvcCode !== null) {
+            $bookingText = $gvcCode->description();
+        }
+
+        // Build purpose lines from SEPA data
+        $purposeLines = [];
+        if ($camtTxn->getPurpose() !== null) {
+            $purposeLines[] = $camtTxn->getPurpose();
+        }
+
+        // Build rawText in SEPA keyword format for backward compatibility
+        $rawText = self::buildPurpose053($camtTxn);
+
+        return new Mt9Purpose(
+            gvcCode: $gvcCode,
+            bookingText: $bookingText,
+            purposeLines: $purposeLines,
+            payerBlz: $camtTxn->getCounterpartyBic(),
+            payerAccount: $camtTxn->getCounterpartyIban(),
+            payerName1: $camtTxn->getCounterpartyName(),
+            rawText: $rawText,
+            endToEndReference: $ref->getEndToEndId() !== 'NOTPROVIDED' ? $ref->getEndToEndId() : null,
+            mandateReference: $ref->getMandateId(),
+            creditorId: $ref->getCreditorId(),
+            remittanceInfo: $camtTxn->getPurpose()
+        );
     }
 
     /**

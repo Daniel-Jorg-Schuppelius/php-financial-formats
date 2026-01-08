@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Enums\Mt;
 
+use CommonToolkit\Enums\CreditDebit;
+use CommonToolkit\FinancialFormats\Enums\Camt\TransactionDomain;
+use CommonToolkit\FinancialFormats\Enums\Camt\TransactionFamily;
+use CommonToolkit\FinancialFormats\Enums\Camt\TransactionSubFamily;
 use InvalidArgumentException;
 
 /**
@@ -877,5 +881,468 @@ enum GvcCode: string {
      */
     public static function fromString(string $code): self {
         return self::fromValue($code);
+    }
+
+    /**
+     * Tries to derive the GVC code from a booking text (Buchungstext).
+     * 
+     * This is useful when DATEV ASCII files don't contain an explicit
+     * GVC code but have descriptive booking text.
+     * 
+     * Supports German and English terms:
+     * - Lastschrift / Direct Debit (DD) → 104/105 (Debit) or 171/174 (Credit)
+     * - Überweisung / Credit Transfer (CT) → 116 (Debit) or 166 (Credit)
+     * 
+     * @param string $bookingText The booking text to analyze
+     * @param bool $isDebit True if the transaction is a debit (money goes out), false for credit
+     * @return self|null The matching GVC code or null
+     */
+    public static function tryFromBookingText(string $bookingText, bool $isDebit = true): ?self {
+        $text = strtoupper(trim($bookingText));
+
+        // =====================================================================
+        // Retoure/Rückgabe/Return/Storno - VOR Lastschrift prüfen!
+        // Da "Retoure Lastschrift" sonst als Lastschrift erkannt wird
+        // =====================================================================
+        if (self::containsReturnKeyword($text)) {
+            return $isDebit ? self::SEPA_DD_RETURN_CORE : self::SEPA_CT_RETURN;
+        }
+
+        // =====================================================================
+        // SEPA Lastschrift / Direct Debit (DD)
+        // Debit (Zahlungspflichtiger): Geld wird vom Konto abgebucht
+        // Credit (Gläubiger/Einzieher): Lastschrifteinzug kommt auf das Konto
+        // =====================================================================
+
+        // B2B Lastschrift (104/174)
+        if (self::containsDirectDebitKeyword($text) && self::containsB2BKeyword($text)) {
+            return $isDebit ? self::SEPA_DD_SINGLE_B2B : self::SEPA_DD_COLLECTION_B2B;
+        }
+
+        // Core Lastschrift (105/171)
+        if (self::containsDirectDebitKeyword($text)) {
+            return $isDebit ? self::SEPA_DD_SINGLE_CORE : self::SEPA_DD_COLLECTION_CORE;
+        }
+
+        // =====================================================================
+        // SEPA Überweisung / Credit Transfer (CT)
+        // Debit: 116 - Überweisung vom Konto
+        // Credit: 166 - Überweisung auf das Konto
+        // =====================================================================
+        if (self::containsCreditTransferKeyword($text)) {
+            // Instant/Echtzeit-Überweisung (118/168)
+            if (self::containsInstantKeyword($text)) {
+                return $isDebit ? self::SEPA_CT_INSTANT_SINGLE_DEBIT : self::SEPA_CT_INSTANT_CREDIT;
+            }
+            return $isDebit ? self::SEPA_CT_SINGLE_DEBIT : self::SEPA_CT_SINGLE_CREDIT;
+        }
+
+        // =====================================================================
+        // Gutschrift / Credit (immer Credit)
+        // =====================================================================
+        if (str_contains($text, 'GUTSCHRIFT') || str_contains($text, 'CREDIT NOTE') || str_contains($text, 'HABEN')) {
+            return self::SEPA_CT_SINGLE_CREDIT;
+        }
+
+        // =====================================================================
+        // Dauerauftrag / Standing Order
+        // Debit: 117 - Dauerauftrag vom Konto
+        // Credit: 152 - Dauerauftrag auf das Konto
+        // =====================================================================
+        if (self::containsStandingOrderKeyword($text)) {
+            return $isDebit ? self::SEPA_CT_STANDING_ORDER_DEBIT : self::SEPA_STANDING_ORDER_CREDIT;
+        }
+
+        // =====================================================================
+        // Echtzeit-/Instant-Überweisung (ohne explizite Überweisung)
+        // =====================================================================
+        if (self::containsInstantKeyword($text)) {
+            return $isDebit ? self::SEPA_CT_INSTANT_SINGLE_DEBIT : self::SEPA_CT_INSTANT_CREDIT;
+        }
+
+        // =====================================================================
+        // Gehalt/Lohn/Salary - immer Credit
+        // =====================================================================
+        if (
+            str_contains($text, 'GEHALT') || str_contains($text, 'LOHN') ||
+            str_contains($text, 'SALARY') || str_contains($text, 'WAGES')
+        ) {
+            return self::SEPA_CT_SINGLE_SALARY;
+        }
+
+        // =====================================================================
+        // VWL (Vermögenswirksame Leistungen)
+        // =====================================================================
+        if (str_contains($text, 'VWL') || str_contains($text, 'VERMÖGENSW') || str_contains($text, 'VERMOEGENSW')) {
+            return self::SEPA_CT_SINGLE_VWL;
+        }
+
+        // =====================================================================
+        // Kartenzahlung/Card Payment
+        // =====================================================================
+        if (self::containsCardPaymentKeyword($text)) {
+            return self::SEPA_CARD_CLEARING_SINGLE;
+        }
+
+        // =====================================================================
+        // Bargeld / Cash
+        // =====================================================================
+        if (
+            str_contains($text, 'EINZAHLUNG') || str_contains($text, 'BAREINZAHLUNG') ||
+            str_contains($text, 'CASH DEPOSIT') || str_contains($text, 'DEPOSIT')
+        ) {
+            return self::CASH_DEPOSIT;
+        }
+        if (
+            str_contains($text, 'AUSZAHLUNG') || str_contains($text, 'BARAUSZAHLUNG') ||
+            str_contains($text, 'GELDAUTOMAT') || str_contains($text, 'ATM') ||
+            str_contains($text, 'CASH WITHDRAWAL') || str_contains($text, 'WITHDRAWAL')
+        ) {
+            return self::CASH_WITHDRAWAL;
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks if text contains Direct Debit keywords (DE/EN).
+     */
+    private static function containsDirectDebitKeyword(string $text): bool {
+        return str_contains($text, 'LASTSCHRIFT') ||
+            str_contains($text, 'DIRECT DEBIT') ||
+            str_contains($text, 'DIRECTDEBIT') ||
+            str_contains($text, 'EINZUG') ||
+            str_contains($text, 'ABBUCHUNG');
+    }
+
+    /**
+     * Checks if text contains Credit Transfer / Überweisung keywords (DE/EN).
+     */
+    private static function containsCreditTransferKeyword(string $text): bool {
+        return str_contains($text, 'ÜBERWEISUNG') ||
+            str_contains($text, 'UEBERWEISUNG') ||
+            str_contains($text, 'UBERWEISUNG') ||  // ü→u ohne e
+            str_contains($text, 'CREDIT TRANSFER') ||
+            str_contains($text, 'CREDITTRANSFER') ||
+            str_contains($text, 'BANK TRANSFER') ||
+            str_contains($text, 'BANKTRANSFER') ||
+            str_contains($text, 'WIRE TRANSFER');
+    }
+
+    /**
+     * Checks if text contains B2B keywords.
+     */
+    private static function containsB2BKeyword(string $text): bool {
+        return str_contains($text, 'B2B') ||
+            str_contains($text, 'BUSINESS') ||
+            str_contains($text, 'FIRMEN');
+    }
+
+    /**
+     * Checks if text contains Instant/Echtzeit keywords.
+     */
+    private static function containsInstantKeyword(string $text): bool {
+        return str_contains($text, 'ECHTZEIT') ||
+            str_contains($text, 'INSTANT') ||
+            str_contains($text, 'REAL-TIME') ||
+            str_contains($text, 'REALTIME') ||
+            str_contains($text, 'SCT INST');
+    }
+
+    /**
+     * Checks if text contains Standing Order keywords.
+     */
+    private static function containsStandingOrderKeyword(string $text): bool {
+        return str_contains($text, 'DAUERAUFTRAG') ||
+            str_contains($text, 'DAUER-AUFTRAG') ||
+            str_contains($text, 'STANDING ORDER') ||
+            str_contains($text, 'STANDINGORDER') ||
+            str_contains($text, 'RECURRING');
+    }
+
+    /**
+     * Checks if text contains Return/Retoure keywords.
+     */
+    private static function containsReturnKeyword(string $text): bool {
+        return str_contains($text, 'RETOURE') ||
+            str_contains($text, 'RÜCKGABE') ||
+            str_contains($text, 'RUECKGABE') ||
+            str_contains($text, 'RUCKGABE') ||  // ü→u ohne e
+            str_contains($text, 'RETURN') ||
+            str_contains($text, 'REVERSAL') ||
+            str_contains($text, 'STORNO') ||
+            str_contains($text, 'RÜCKLAST') ||
+            str_contains($text, 'RUECKLAST') ||
+            str_contains($text, 'RUCKLAST');  // Rücklastschrift
+    }
+
+    /**
+     * Checks if text contains Card Payment keywords.
+     */
+    private static function containsCardPaymentKeyword(string $text): bool {
+        return str_contains($text, 'KARTENZAHLUNG') ||
+            str_contains($text, 'KARTEN-ZAHLUNG') ||
+            str_contains($text, 'EC-ZAHLUNG') ||
+            str_contains($text, 'CARD PAYMENT') ||
+            str_contains($text, 'CARDPAYMENT') ||
+            str_contains($text, 'CARD CLEARING') ||
+            str_contains($text, 'DEBIT CARD') ||
+            str_contains($text, 'CREDIT CARD') ||
+            str_contains($text, 'POS ') ||
+            str_contains($text, ' POS');
+    }
+
+    /**
+     * Tries to derive the GVC code from ISO 20022 CAMT transaction codes.
+     *
+     * Maps the ISO 20022 BankTransactionCode structure (Domain/Family/SubFamily)
+     * to the German GVC codes used in MT940.
+     *
+     * Common mappings:
+     * - PMNT/RCDT/ESCT (SEPA Credit Transfer received) → 166 (Credit)
+     * - PMNT/ICDT/ESCT (SEPA Credit Transfer issued) → 116 (Debit)
+     * - PMNT/RDDT/ESDD (SEPA Direct Debit received) → 105 (Debit)
+     * - PMNT/IDDT/ESDD (SEPA Direct Debit issued) → 171 (Credit)
+     * - PMNT/RCDT/STDO (Standing Order received) → 152 (Credit)
+     * - PMNT/ICDT/STDO (Standing Order issued) → 117 (Debit)
+     *
+     * @param TransactionDomain|string|null $domain ISO 20022 Domain (e.g., PMNT, CAMT)
+     * @param TransactionFamily|string|null $family ISO 20022 Family (e.g., RCDT, ICDT, RDDT, IDDT)
+     * @param TransactionSubFamily|string|null $subFamily ISO 20022 SubFamily (e.g., ESCT, ESDD, BBDD)
+     * @param CreditDebit $creditDebit The credit/debit indicator
+     * @param bool $isReturn True if this is a return/reversal transaction
+     * @return self|null The matching GVC code or null
+     */
+    public static function tryFromCamtCodes(
+        TransactionDomain|string|null $domain,
+        TransactionFamily|string|null $family,
+        TransactionSubFamily|string|null $subFamily,
+        CreditDebit $creditDebit,
+        bool $isReturn = false
+    ): ?self {
+        // Convert to string values
+        $domainStr = $domain instanceof TransactionDomain ? $domain->value : ($domain ?? '');
+        $familyStr = $family instanceof TransactionFamily ? $family->value : ($family ?? '');
+        $subFamilyStr = $subFamily instanceof TransactionSubFamily ? $subFamily->value : ($subFamily ?? '');
+
+        $isDebit = $creditDebit === CreditDebit::DEBIT;
+
+        // Only process PMNT (Payments) domain
+        if ($domainStr !== 'PMNT') {
+            return null;
+        }
+
+        // =====================================================================
+        // Return/Reversal transactions
+        // =====================================================================
+        if ($isReturn || in_array($subFamilyStr, ['RRTN', 'PRDD', 'UPDD', 'ARET', 'AREV'], true)) {
+            // RRTN = Return of Credit Transfer, PRDD/UPDD = Return of Direct Debit
+            if (in_array($subFamilyStr, ['PRDD', 'UPDD'], true)) {
+                // Direct Debit Return
+                return $isDebit ? self::SEPA_DD_RETURN_CORE : self::SEPA_DD_RETURN_CORE;
+            }
+            // Credit Transfer Return
+            return $isDebit ? self::SEPA_DD_RETURN_CORE : self::SEPA_CT_RETURN;
+        }
+
+        // =====================================================================
+        // SEPA Credit Transfer (ESCT)
+        // =====================================================================
+        if ($subFamilyStr === 'ESCT') {
+            // RCDT = Received Credit Transfer → Credit (Geld kommt)
+            // ICDT = Issued Credit Transfer → Debit (Geld geht)
+            return $isDebit ? self::SEPA_CT_SINGLE_DEBIT : self::SEPA_CT_SINGLE_CREDIT;
+        }
+
+        // =====================================================================
+        // SEPA Instant Credit Transfer (INST)
+        // =====================================================================
+        if (in_array($subFamilyStr, ['INST', 'ESCI'], true)) {
+            return $isDebit ? self::SEPA_CT_INSTANT_SINGLE_DEBIT : self::SEPA_CT_INSTANT_CREDIT;
+        }
+
+        // =====================================================================
+        // SEPA Core Direct Debit (ESDD)
+        // =====================================================================
+        if ($subFamilyStr === 'ESDD') {
+            // RDDT = Received Direct Debit → Debit (Geld geht durch Lastschrift)
+            // IDDT = Issued Direct Debit → Credit (Lastschrifteinzug kommt)
+            return $isDebit ? self::SEPA_DD_SINGLE_CORE : self::SEPA_DD_COLLECTION_CORE;
+        }
+
+        // =====================================================================
+        // SEPA B2B Direct Debit (BBDD)
+        // =====================================================================
+        if ($subFamilyStr === 'BBDD') {
+            return $isDebit ? self::SEPA_DD_SINGLE_B2B : self::SEPA_DD_COLLECTION_B2B;
+        }
+
+        // =====================================================================
+        // Standing Order (STDO)
+        // =====================================================================
+        if ($subFamilyStr === 'STDO') {
+            return $isDebit ? self::SEPA_CT_STANDING_ORDER_DEBIT : self::SEPA_STANDING_ORDER_CREDIT;
+        }
+
+        // =====================================================================
+        // Salary/Wages (SALA)
+        // =====================================================================
+        if ($subFamilyStr === 'SALA') {
+            return self::SEPA_CT_SINGLE_SALARY;
+        }
+
+        // =====================================================================
+        // Card Payments (CCRD family)
+        // =====================================================================
+        if ($familyStr === 'CCRD') {
+            return self::SEPA_CARD_CLEARING_SINGLE;
+        }
+
+        // =====================================================================
+        // Counter/Cash transactions (CNTR family)
+        // =====================================================================
+        if ($familyStr === 'CNTR') {
+            if (in_array($subFamilyStr, ['BCDP', 'CDPT'], true)) {
+                return self::CASH_DEPOSIT;
+            }
+            if (in_array($subFamilyStr, ['BCWD', 'CWDL', 'ATMW'], true)) {
+                return self::CASH_WITHDRAWAL;
+            }
+        }
+
+        // =====================================================================
+        // Domestic Credit Transfer (DMCT)
+        // =====================================================================
+        if ($subFamilyStr === 'DMCT') {
+            return $isDebit ? self::SEPA_CT_SINGLE_DEBIT : self::SEPA_CT_SINGLE_CREDIT;
+        }
+
+        // =====================================================================
+        // Financial Institution transfers (FICT/FIDD)
+        // =====================================================================
+        if ($subFamilyStr === 'FICT') {
+            return $isDebit ? self::SEPA_CT_SINGLE_DEBIT : self::SEPA_CT_SINGLE_CREDIT;
+        }
+        if ($subFamilyStr === 'FIDD') {
+            return $isDebit ? self::SEPA_DD_SINGLE_CORE : self::SEPA_DD_COLLECTION_CORE;
+        }
+
+        // =====================================================================
+        // Automatic Transfer (AUTT)
+        // =====================================================================
+        if ($subFamilyStr === 'AUTT') {
+            return $isDebit ? self::SEPA_CT_STANDING_ORDER_DEBIT : self::SEPA_STANDING_ORDER_CREDIT;
+        }
+
+        // =====================================================================
+        // Generic mapping based on Family only
+        // =====================================================================
+        return match ($familyStr) {
+            'RCDT', 'ICDT' => $isDebit ? self::SEPA_CT_SINGLE_DEBIT : self::SEPA_CT_SINGLE_CREDIT,
+            'RDDT', 'IDDT' => $isDebit ? self::SEPA_DD_SINGLE_CORE : self::SEPA_DD_COLLECTION_CORE,
+            default => null,
+        };
+    }
+
+    /**
+     * Returns the ISO 20022 BankTransactionCode components for this GVC code.
+     *
+     * This is the reverse mapping of tryFromCamtCodes().
+     * Used when converting from MT940/DATEV to CAMT format.
+     *
+     * @param CreditDebit $creditDebit The credit/debit indicator
+     * @return array{domain: TransactionDomain|null, family: TransactionFamily|null, subFamily: TransactionSubFamily|null}
+     */
+    public function toCamtCodes(CreditDebit $creditDebit): array {
+        $isDebit = $creditDebit === CreditDebit::DEBIT;
+
+        // Default: Payments domain
+        $domain = TransactionDomain::PMNT;
+
+        // Determine Family based on credit/debit and transaction type
+        $family = match (true) {
+            $this->isSepa() && $this->isDirectDebit() => $isDebit ? TransactionFamily::RDDT : TransactionFamily::IDDT,
+            $this->isSepa() => $isDebit ? TransactionFamily::ICDT : TransactionFamily::RCDT,
+            default => $isDebit ? TransactionFamily::ICDT : TransactionFamily::RCDT,
+        };
+
+        // Determine SubFamily based on specific GVC code
+        $subFamily = match ($this) {
+            // SEPA Credit Transfer
+            self::SEPA_CT_SINGLE_CREDIT,
+            self::SEPA_CT_SINGLE_DEBIT,
+            self::SEPA_CT_SINGLE_SALARY,
+            self::SEPA_CT_SINGLE_VWL,
+            self::SEPA_CT_SINGLE_PUBLIC => TransactionSubFamily::ESCT,
+
+            // SEPA Instant
+            self::SEPA_CT_INSTANT_CREDIT,
+            self::SEPA_CT_INSTANT_SINGLE_DEBIT => TransactionSubFamily::tryFrom('INST') ?? TransactionSubFamily::ESCT,
+
+            // SEPA Standing Order
+            self::SEPA_CT_STANDING_ORDER_DEBIT,
+            self::SEPA_STANDING_ORDER_CREDIT => TransactionSubFamily::STDO,
+
+            // SEPA Direct Debit Core
+            self::SEPA_DD_SINGLE_CORE,
+            self::SEPA_DD_COLLECTION_CORE => TransactionSubFamily::ESDD,
+
+            // SEPA Direct Debit B2B
+            self::SEPA_DD_SINGLE_B2B,
+            self::SEPA_DD_COLLECTION_B2B => TransactionSubFamily::BBDD,
+
+            // Returns
+            self::SEPA_CT_RETURN => TransactionSubFamily::RRTN,
+            self::SEPA_DD_RETURN_CORE,
+            self::SEPA_DD_RETURN_B2B => TransactionSubFamily::UPDD,
+
+            // Card payments (various types)
+            self::SEPA_CARD_CLEARING_SINGLE,
+            self::SEPA_CARD_CLEARING_RETURN,
+            self::SEPA_CARD_CLEARING_REFUND,
+            self::SEPA_CARD_CLEARING_BATCH_DEBIT,
+            self::SEPA_CARD_CLEARING_BATCH_CREDIT,
+            self::SEPA_CARD_CLEARING_REVERSAL => null, // Will set family to CCRD below
+
+            // Cash transactions
+            self::CASH_DEPOSIT => TransactionSubFamily::tryFrom('BCDP') ?? TransactionSubFamily::tryFrom('CDPT'),
+            self::CASH_WITHDRAWAL => TransactionSubFamily::tryFrom('BCWD') ?? TransactionSubFamily::tryFrom('CWDL'),
+
+            // Default
+            default => TransactionSubFamily::tryFrom('OTHR'),
+        };
+
+        // Special handling for card payments
+        if (in_array($this, [
+            self::SEPA_CARD_CLEARING_SINGLE,
+            self::SEPA_CARD_CLEARING_RETURN,
+            self::SEPA_CARD_CLEARING_REFUND,
+            self::SEPA_CARD_CLEARING_BATCH_DEBIT,
+            self::SEPA_CARD_CLEARING_BATCH_CREDIT,
+            self::SEPA_CARD_CLEARING_REVERSAL,
+        ], true)) {
+            $family = TransactionFamily::CCRD;
+            $subFamily = TransactionSubFamily::tryFrom('POSD') ?? TransactionSubFamily::tryFrom('CWDL');
+        }
+
+        // Special handling for cash transactions
+        if (in_array($this, [self::CASH_DEPOSIT, self::CASH_WITHDRAWAL], true)) {
+            $family = TransactionFamily::CNTR;
+        }
+
+        return [
+            'domain' => $domain,
+            'family' => $family,
+            'subFamily' => $subFamily,
+        ];
+    }
+
+    /**
+     * Checks if this GVC code represents a Direct Debit transaction.
+     */
+    public function isDirectDebit(): bool {
+        $code = (int) $this->value;
+        // GVC codes 104-109 (DD received) and 171-179 (DD collection) are Direct Debit
+        return ($code >= 104 && $code <= 109) || ($code >= 171 && $code <= 179);
     }
 }

@@ -22,6 +22,7 @@ use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField as F;
+use CommonToolkit\FinancialFormats\Enums\Mt\GvcCode;
 use CommonToolkit\Helper\Data\BankHelper;
 use DateTimeImmutable;
 use RuntimeException;
@@ -253,10 +254,36 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
         $currency = self::parseCurrency(self::getField($fields, F::WAEHRUNG));
 
         // Geschäftsvorgangscode (optional)
-        $transactionCode = self::getField($fields, F::GESCHAEFTSVORGANGSCODE);
-        if (empty($transactionCode) || strlen($transactionCode) < 3) {
-            $transactionCode = self::DEFAULT_TRANSACTION_CODE;
+        $transactionCodeStr = self::getField($fields, F::GESCHAEFTSVORGANGSCODE);
+
+        // Try to get GVC code from field or derive from booking text
+        $gvcCode = null;
+        if (!empty($transactionCodeStr) && preg_match('/^\d{3}$/', $transactionCodeStr)) {
+            $gvcCode = GvcCode::tryFromValue($transactionCodeStr);
         }
+
+        // Fallback: derive from booking text
+        if ($gvcCode === null) {
+            $buchungstext = self::getField($fields, F::BUCHUNGSTEXT) ?? '';
+            if (!empty($buchungstext)) {
+                $isDebit = $amountData['creditDebit'] === CreditDebit::DEBIT;
+                $gvcCode = GvcCode::tryFromBookingText($buchungstext, $isDebit);
+            }
+        }
+
+        // Map GVC to ISO 20022 codes
+        $domainCode = null;
+        $familyCode = null;
+        $subFamilyCode = null;
+        if ($gvcCode !== null) {
+            $camtCodes = $gvcCode->toCamtCodes($amountData['creditDebit']);
+            $domainCode = $camtCodes['domain'];
+            $familyCode = $camtCodes['family'];
+            $subFamilyCode = $camtCodes['subFamily'];
+        }
+
+        // Use GVC code value as transactionCode
+        $transactionCode = $gvcCode?->value ?? self::DEFAULT_TRANSACTION_CODE;
 
         // Auftraggeber-Daten
         $payerBlz = self::getField($fields, F::BLZ_BIC_AUFTRAGGEBER);
@@ -300,6 +327,9 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
             purpose: $purpose,
             additionalInfo: $additionalInfo,
             transactionCode: $transactionCode,
+            domainCode: $domainCode,
+            familyCode: $familyCode,
+            subFamilyCode: $subFamilyCode,
             counterpartyName: $counterpartyName,
             counterpartyIban: $counterpartyIban,
             counterpartyBic: $counterpartyBic
