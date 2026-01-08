@@ -35,19 +35,22 @@ abstract class MtTransactionAbstract {
     protected float $amount;
     protected CreditDebit $creditDebit;
     protected CurrencyCode $currency;
+    protected bool $isReversal;
 
     public function __construct(
         DateTimeImmutable $bookingDate,
         ?DateTimeImmutable $valutaDate,
         float $amount,
         CreditDebit $creditDebit,
-        CurrencyCode $currency
+        CurrencyCode $currency,
+        bool $isReversal = false
     ) {
         $this->bookingDate = $bookingDate;
         $this->valutaDate = $valutaDate;
         $this->amount = round(abs($amount), 2);
         $this->creditDebit = $creditDebit;
         $this->currency = $currency;
+        $this->isReversal = $isReversal;
     }
 
     /**
@@ -111,6 +114,24 @@ abstract class MtTransactionAbstract {
      */
     public function isCredit(): bool {
         return $this->creditDebit === CreditDebit::CREDIT;
+    }
+
+    /**
+     * Checks if this is a reversal (Storno) entry.
+     */
+    public function isReversal(): bool {
+        return $this->isReversal;
+    }
+
+    /**
+     * Returns the MT940 direction code in SWIFT format (C, D, RC, RD).
+     * 
+     * Format: R prefix for reversals per SWIFT standard.
+     * DATEV documentation (Dok-Nr. 9226962) also specifies: RC = Storno Credit, RD = Storno Debit
+     */
+    public function getMt940DirectionCode(): string {
+        $base = $this->creditDebit->toMt940Code();
+        return $this->isReversal ? 'R' . $base : $base;
     }
 
     /**

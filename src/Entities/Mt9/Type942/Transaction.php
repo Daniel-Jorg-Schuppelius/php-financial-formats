@@ -44,7 +44,8 @@ class Transaction extends MtTransactionAbstract {
         CreditDebit $creditDebit,
         CurrencyCode $currency,
         Reference $reference,
-        Purpose|string|null $purpose = null
+        Purpose|string|null $purpose = null,
+        bool $isReversal = false
     ) {
         $bookingDateParsed = $bookingDate instanceof DateTimeImmutable
             ? $bookingDate
@@ -62,7 +63,8 @@ class Transaction extends MtTransactionAbstract {
             $valutaDateParsed,
             $amount,
             $creditDebit,
-            $currency
+            $currency,
+            $isReversal
         );
 
         $this->reference = $reference;

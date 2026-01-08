@@ -180,4 +180,74 @@ MT940;
         // Aktuelle Implementierung: RC wird als CREDIT interpretiert
         $this->assertSame(CreditDebit::CREDIT, $transaction->getCreditDebit());
     }
+
+    public function testParseWithDebitReversalDR(): void {
+        // DR (Debit Reversal) = Storno einer Lastschrift
+        // Format häufig bei deutschen Banken: :61:JJMMTTMMDDR...
+        $mt940 = <<<'MT940'
+:20:STMT-2025-005
+:25:DE89370400440532013000
+:28C:005/001
+:60F:C210701EUR1000,00
+:61:2107010701DR52,50NMSCNONREF
+:86:999?00Storno Lastschrift
+:62F:C210701EUR947,50
+-}
+MT940;
+
+        $document = Mt940DocumentParser::parse($mt940);
+        $transaction = $document->getTransactions()[0];
+
+        // DR wird als DEBIT interpretiert (Lastschrift-Storno)
+        $this->assertSame(CreditDebit::DEBIT, $transaction->getCreditDebit());
+        $this->assertTrue($transaction->isReversal());
+        $this->assertSame('RD', $transaction->getMt940DirectionCode());
+        $this->assertEquals(52.50, $transaction->getAmount());
+        $this->assertSame('MSC', $transaction->getReference()->getTransactionCode());
+    }
+
+    public function testParseWithCreditReversalCR(): void {
+        // CR (Credit Reversal) = Storno einer Gutschrift
+        // Alternative Notation zu RC
+        $mt940 = <<<'MT940'
+:20:STMT-2025-006
+:25:DE89370400440532013000
+:28C:006/001
+:60F:C210801EUR2000,00
+:61:2108010801CR150,00NTRF123456
+:86:020?00Storno Eingang
+:62F:C210801EUR2150,00
+-}
+MT940;
+
+        $document = Mt940DocumentParser::parse($mt940);
+        $transaction = $document->getTransactions()[0];
+
+        // CR wird als CREDIT interpretiert (Gutschrift-Storno)
+        $this->assertSame(CreditDebit::CREDIT, $transaction->getCreditDebit());
+        $this->assertTrue($transaction->isReversal());
+        $this->assertSame('RC', $transaction->getMt940DirectionCode());
+        $this->assertEquals(150.00, $transaction->getAmount());
+    }
+
+    public function testNonReversalTransactionHasIsReversalFalse(): void {
+        $mt940 = <<<'MT940'
+:20:STMT-2025-007
+:25:DE89370400440532013000
+:28C:007/001
+:60F:C210901EUR5000,00
+:61:2109010901C200,00NTRFEINGANG
+:86:051?00Eingang
+:62F:C210901EUR5200,00
+-}
+MT940;
+
+        $document = Mt940DocumentParser::parse($mt940);
+        $transaction = $document->getTransactions()[0];
+
+        // Normale Transaktion ohne R-Prefix
+        $this->assertSame(CreditDebit::CREDIT, $transaction->getCreditDebit());
+        $this->assertFalse($transaction->isReversal());
+        $this->assertSame('C', $transaction->getMt940DirectionCode());
+    }
 }

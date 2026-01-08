@@ -149,9 +149,11 @@ final class Mt940DocumentParser {
                     //
                     // Example: :61:2201010101C100,00NTRFNONREF//123456
                     // Example with Funds Code: :61:090528D1,2FCHG494935/DEV//67914
+                    // Example with Debit Reversal: :61:2107010701DR52,50NMSCNONREF
 
                     // Extended regex supporting all SWIFT-compliant formats
-                    if (preg_match('/^:61:(\d{6})(\d{4})?(R?[CD])([A-Z])?([0-9]+,?\d*)([SNF])([A-Z0-9]{3})([^\/]*?)(?:\/\/(.*))?$/i', $bookingLine, $match)) {
+                    // Credit/Debit Mark: C, D, RC, RD (reversal before), CR, DR (reversal after)
+                    if (preg_match('/^:61:(\d{6})(\d{4})?(R?[CD]R?)([A-Z])?([0-9]+,?\d*)([SNF])([A-Z0-9]{3})([^\/]*?)(?:\/\/(.*))?$/i', $bookingLine, $match)) {
                         // Valutadatum ist immer das erste Datum (JJMMTT)
                         $valutaDate = DateTimeImmutable::createFromFormat('ymd', $match[1]) ?: throw new RuntimeException("Ungültiges Valutadatum");
 
@@ -165,6 +167,7 @@ final class Mt940DocumentParser {
                         }
 
                         $creditDebit = CreditDebit::fromMt940Code($match[3]);
+                        $isReversal = str_contains(strtoupper($match[3]), 'R'); // RC, RD, CR, DR
                         // $match[4] wäre der optionale Währungsbuchstabe (letzte Stelle ISO-Code)
                         $amount = (float) CurrencyHelper::deToUs($match[5]);
                         $bookingKey = $match[6];
@@ -186,7 +189,8 @@ final class Mt940DocumentParser {
                             currency: $openingBalance?->getCurrency() ?? CurrencyCode::Euro,
                             reference: new Reference($transactionCode, $reference ?: 'NONREF', $bankReference ?: null, $bookingKey),
                             purpose: $purpose,
-                            supplementaryDetails: $supplementaryDetails
+                            supplementaryDetails: $supplementaryDetails,
+                            isReversal: $isReversal
                         );
                     }
                 } catch (Throwable $e) {

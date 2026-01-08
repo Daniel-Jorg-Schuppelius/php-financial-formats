@@ -44,7 +44,8 @@ class Transaction extends MtTransactionAbstract {
         CurrencyCode $currency,
         Reference $reference,
         Purpose|string|null $purpose = null,
-        ?string $supplementaryDetails = null
+        ?string $supplementaryDetails = null,
+        bool $isReversal = false
     ) {
         $bookingDateParsed = $bookingDate instanceof DateTimeImmutable
             ? $bookingDate
@@ -62,7 +63,8 @@ class Transaction extends MtTransactionAbstract {
             $valutaDateParsed,
             $amount,
             $creditDebit,
-            $currency
+            $currency,
+            $isReversal
         );
 
         $this->reference = $reference;
@@ -141,7 +143,8 @@ class Transaction extends MtTransactionAbstract {
             $bookingDateStr = $this->bookingDate->format('md');
         }
 
-        $direction = $this->creditDebit->toMt940Code();
+        // Both SWIFT and DATEV use RC/RD format per DATEV documentation (Dok-Nr. 9226962)
+        $direction = $this->getMt940DirectionCode();
 
         $currencyCode = $this->currency->value;
         $currencyChar = ($currencyCode !== '' && strtoupper($currencyCode) !== 'EUR')

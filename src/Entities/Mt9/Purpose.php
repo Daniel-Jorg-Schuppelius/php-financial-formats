@@ -329,7 +329,7 @@ class Purpose {
             }
         }
 
-        $rawText = !empty($rawParts) ? implode(' ', $rawParts) : null;
+        $rawText = !empty($rawParts) ? implode('', $rawParts) : null;
 
         // Convert string values to enums
         $gvcCodeEnum = $gvcCode !== null ? GvcCode::tryFromString($gvcCode) : null;
@@ -706,17 +706,17 @@ class Purpose {
     }
 
     /**
-     * Checks if this is a credit transaction based on GVC code.
+     * Checks if this is an instant (real-time) transaction based on GVC code.
      */
-    public function isCreditTransaction(): bool {
-        return $this->gvcCode !== null && $this->gvcCode->isCredit();
+    public function isInstantTransaction(): bool {
+        return $this->gvcCode !== null && $this->gvcCode->isInstant();
     }
 
     /**
-     * Checks if this is a debit transaction based on GVC code.
+     * Checks if this is a B2B transaction based on GVC code.
      */
-    public function isDebitTransaction(): bool {
-        return $this->gvcCode !== null && $this->gvcCode->isDebit();
+    public function isB2BTransaction(): bool {
+        return $this->gvcCode !== null && $this->gvcCode->isB2B();
     }
 
     /**
@@ -793,6 +793,10 @@ class Purpose {
 
     /**
      * Returns the complete purpose of payment as string.
+     * 
+     * Note: purposeLines may have been split at 27-character boundaries during
+     * MT940 parsing, potentially breaking words. For export, consider using
+     * getContinuousPurposeText() which doesn't add spaces.
      */
     public function getPurposeText(): string {
         $parts = $this->purposeLines;
@@ -800,6 +804,18 @@ class Purpose {
             $parts[] = $this->rawText;
         }
         return trim(implode(' ', $parts));
+    }
+
+    /**
+     * Returns the continuous purpose text without adding spaces between segments.
+     * Use this for MT940 export where line breaks are arbitrary (not word boundaries).
+     */
+    public function getContinuousPurposeText(): string {
+        $parts = $this->purposeLines;
+        if (!empty($this->rawText)) {
+            $parts[] = $this->rawText;
+        }
+        return trim(implode('', $parts));
     }
 
     /**
@@ -826,6 +842,31 @@ class Purpose {
     }
 
     /**
+     * Returns all information as continuous text without artificial spaces.
+     * Use this for MT940 export where line breaks are arbitrary.
+     */
+    public function getContinuousFullText(): string {
+        $parts = [];
+
+        if (!empty($this->bookingText)) {
+            $parts[] = $this->bookingText;
+        }
+
+        $purpose = $this->getContinuousPurposeText();
+        if (!empty($purpose)) {
+            // Add space after booking text, but not between purpose segments
+            $parts[] = $purpose;
+        }
+
+        $payerName = $this->getPayerName();
+        if (!empty($payerName)) {
+            $parts[] = $payerName;
+        }
+
+        return trim(implode(' ', $parts));
+    }
+
+    /**
      * Konvertiert das Purpose-Objekt in MT940 :86: Format-Zeilen.
      *
      * @param Mt940OutputFormat $format Output format (SWIFT or DATEV)
@@ -835,7 +876,8 @@ class Purpose {
             return $this->toDatevLines();
         }
 
-        $text = $this->rawText ?? $this->getFullText();
+        // Use rawText if available, otherwise build continuous text without artificial spaces
+        $text = $this->rawText ?? $this->getContinuousFullText();
         $text = trim($text);
         if ($text === '') {
             return [];
@@ -854,19 +896,22 @@ class Purpose {
 
     /**
      * Konvertiert in DATEV-strukturierte :86: Zeilen.
+     * 
+     * Format: :86:GVC?00Buchungstext?10Primanoten?20VWZ1?21VWZ2...?30BLZ?31Kto?32Name1?33Name2?34TKE
      */
     public function toDatevLines(): array {
         $lines = [];
 
-        // Erste Zeile: GVC-Code + Buchungstext oder Raw-Text
+        // Erste Zeile: GVC-Code + ?00 + Buchungstext
         $gvcCodeStr = $this->gvcCode?->value ?? '';
         $firstLine = $gvcCodeStr;
+
         if (!empty($this->bookingText)) {
-            $firstLine .= $this->bookingText;
+            $firstLine .= '?00' . $this->bookingText;
         } elseif (!empty($this->rawText)) {
-            // Raw-Text in 27-Zeichen-Segmente aufteilen
+            // Raw-Text: ?00 + erstes Segment, Rest als ?20-?29, ?60-?63
             $segments = str_split($this->rawText, 27);
-            $firstLine .= array_shift($segments) ?? '';
+            $firstLine .= '?00' . (array_shift($segments) ?? '');
             $lines[] = ':86:' . $firstLine;
 
             // Rest als Verwendungszweck-Zeilen

@@ -39,7 +39,7 @@ class Mt9PurposeTest extends BaseTestCase {
 
         $purpose = Purpose::fromRawLines($lines);
 
-        $this->assertEquals(GvcCode::SEPA_CREDIT_TRANSFER, $purpose->getGvcCode());
+        $this->assertEquals(GvcCode::SEPA_CT_SINGLE_CREDIT, $purpose->getGvcCode());
         $this->assertEquals('FOLGELASTSCHRIFT', $purpose->getBookingText());
         $this->assertEquals('123456', $purpose->getPrimanotenNr());
         $this->assertCount(5, $purpose->getPurposeLines());
@@ -74,7 +74,7 @@ class Mt9PurposeTest extends BaseTestCase {
 
     public function testGetPurposeText(): void {
         $purpose = new Purpose(
-            gvcCode: GvcCode::TRANSFER,
+            gvcCode: GvcCode::FOREIGN_TRANSFER,
             purposeLines: ['Verwendungszweck Zeile 1', 'Zeile 2', 'Zeile 3']
         );
 
@@ -97,7 +97,7 @@ class Mt9PurposeTest extends BaseTestCase {
 
     public function testToMt940Lines(): void {
         $purpose = new Purpose(
-            gvcCode: GvcCode::TRANSFER,
+            gvcCode: GvcCode::FOREIGN_TRANSFER,
             bookingText: 'ÜBERWEISUNG',
             primanotenNr: '12345',
             purposeLines: ['Verwendungszweck Zeile 1', 'Zeile 2'],
@@ -128,7 +128,7 @@ class Mt9PurposeTest extends BaseTestCase {
 
     public function testToDatevLines(): void {
         $purpose = new Purpose(
-            gvcCode: GvcCode::TRANSFER,
+            gvcCode: GvcCode::FOREIGN_TRANSFER,
             bookingText: 'ÜBERWEISUNG',
             primanotenNr: '12345',
             purposeLines: ['Verwendungszweck Zeile 1', 'Zeile 2'],
@@ -140,7 +140,7 @@ class Mt9PurposeTest extends BaseTestCase {
 
         $lines = $purpose->toDatevLines();
 
-        $this->assertStringStartsWith(':86:020', $lines[0]);
+        $this->assertStringStartsWith(':86:206', $lines[0]);
         $this->assertContains('?1012345', $lines);
         $this->assertContains('?20Verwendungszweck Zeile 1', $lines);
         $this->assertContains('?21Zeile 2', $lines);
@@ -190,7 +190,6 @@ class Mt9PurposeTest extends BaseTestCase {
 
         $purpose = Purpose::fromString($raw);
 
-        $this->assertEquals(GvcCode::SEPA_CREDIT_TRANSFER, $purpose->getGvcCode());
         $this->assertEquals('SEPA-ÜBERWEISUNG', $purpose->getBookingText());
         $this->assertEquals('PRIM123', $purpose->getPrimanotenNr());
         $this->assertEquals('ORDER-2025-0001', $purpose->getEndToEndReference());
@@ -276,18 +275,25 @@ class Mt9PurposeTest extends BaseTestCase {
 
         $gvcEnum = $purpose->getGvcCode();
         $this->assertNotNull($gvcEnum);
-        $this->assertEquals(GvcCode::SEPA_CREDIT_TRANSFER, $gvcEnum);
+        $this->assertEquals(GvcCode::SEPA_CT_SINGLE_CREDIT, $gvcEnum);
         $this->assertTrue($gvcEnum->isSepa());
-        $this->assertTrue($gvcEnum->isCredit());
     }
 
     public function testGetGvcCodeEnumUnknown(): void {
         // Unknown GVC code should return null
+        $lines = ['000'];
+        $purpose = Purpose::fromRawLines($lines);
+
+        // 000 ist kein bekannter GVC-Code, also null
+        $this->assertNull($purpose->getGvcCode());
+    }
+
+    public function testGetGvcCodeEnumUnstructured(): void {
+        // GVC code 999 is now a valid code (UNSTRUCTURED)
         $lines = ['999'];
         $purpose = Purpose::fromRawLines($lines);
 
-        // 999 ist kein bekannter GVC-Code, also null
-        $this->assertNull($purpose->getGvcCode());
+        $this->assertEquals(GvcCode::UNSTRUCTURED, $purpose->getGvcCode());
     }
 
     public function testGetTextKeyExtEnum(): void {
@@ -315,9 +321,27 @@ class Mt9PurposeTest extends BaseTestCase {
         $purpose = Purpose::fromString($raw);
 
         $this->assertTrue($purpose->isSepaTransaction());
-        $this->assertTrue($purpose->isCreditTransaction());
-        $this->assertFalse($purpose->isDebitTransaction());
         $this->assertFalse($purpose->isReturnTransaction());
+        $this->assertFalse($purpose->isInstantTransaction());
+        $this->assertFalse($purpose->isB2BTransaction());
+    }
+
+    public function testIsInstantTransaction(): void {
+        $raw = "168?00SEPA-ECHTZEITÜBERWEISUNG";
+        $purpose = Purpose::fromString($raw);
+
+        $this->assertTrue($purpose->isSepaTransaction());
+        $this->assertTrue($purpose->isInstantTransaction());
+        $this->assertFalse($purpose->isReturnTransaction());
+    }
+
+    public function testIsB2BTransaction(): void {
+        $raw = "104?00SEPA-LASTSCHRIFT B2B";
+        $purpose = Purpose::fromString($raw);
+
+        $this->assertTrue($purpose->isSepaTransaction());
+        $this->assertTrue($purpose->isB2BTransaction());
+        $this->assertFalse($purpose->isInstantTransaction());
     }
 
     public function testToSwiftKeywordString(): void {
