@@ -260,6 +260,12 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             $purposeStr .= '?00' . substr($buchungstext, 0, 27);
         }
 
+        // Primanoten-Nr. (?10) - aus Auszugsnummer ableiten
+        $primanotenNr = self::getField($fields, F::AUSZUGSNUMMER);
+        if (!empty($primanotenNr)) {
+            $purposeStr .= '?10' . substr($primanotenNr, 0, 5);
+        }
+
         // Verwendungszweck-Zeilen als ?20-?29, ?60-?63
         $vzFields = array_filter($purposeParts, fn($p) => !empty($p));
         $fieldKey = 20;
