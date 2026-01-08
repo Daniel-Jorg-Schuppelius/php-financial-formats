@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "dschuppelius/php-common-toolkit",
-            "version": "v0.9.1",
+            "version": "v0.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DSchuppelius/php-common-toolkit.git",
-                "reference": "556818bdea0f82dfaf4ce1f913e7eefff9e9be54"
+                "reference": "927a0e8787c400251e61e340364a370c192bd265"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DSchuppelius/php-common-toolkit/zipball/556818bdea0f82dfaf4ce1f913e7eefff9e9be54",
-                "reference": "556818bdea0f82dfaf4ce1f913e7eefff9e9be54",
+                "url": "https://api.github.com/repos/DSchuppelius/php-common-toolkit/zipball/927a0e8787c400251e61e340364a370c192bd265",
+                "reference": "927a0e8787c400251e61e340364a370c192bd265",
                 "shasum": ""
             },
             "require": {
@@ -49,22 +49,22 @@
             "description": "Project description.",
             "support": {
                 "issues": "https://github.com/DSchuppelius/php-common-toolkit/issues",
-                "source": "https://github.com/DSchuppelius/php-common-toolkit/tree/v0.9.1"
+                "source": "https://github.com/DSchuppelius/php-common-toolkit/tree/v0.9.3"
             },
-            "time": "2026-01-03T18:47:54+00:00"
+            "time": "2026-01-05T19:33:18+00:00"
         },
         {
             "name": "dschuppelius/php-config-toolkit",
-            "version": "v0.2.19",
+            "version": "v0.2.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DSchuppelius/php-config-toolkit.git",
-                "reference": "0f213d5de0a813d1e1650ad423d253ade9a1505a"
+                "reference": "ec5f38986613dcc97e7cd8009b5582ee49890868"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DSchuppelius/php-config-toolkit/zipball/0f213d5de0a813d1e1650ad423d253ade9a1505a",
-                "reference": "0f213d5de0a813d1e1650ad423d253ade9a1505a",
+                "url": "https://api.github.com/repos/DSchuppelius/php-config-toolkit/zipball/ec5f38986613dcc97e7cd8009b5582ee49890868",
+                "reference": "ec5f38986613dcc97e7cd8009b5582ee49890868",
                 "shasum": ""
             },
             "require": {
@@ -93,22 +93,22 @@
             "description": "Ein Toolkit für JSON-basierte Konfigurationsverwaltung",
             "support": {
                 "issues": "https://github.com/DSchuppelius/php-config-toolkit/issues",
-                "source": "https://github.com/DSchuppelius/php-config-toolkit/tree/v0.2.19"
+                "source": "https://github.com/DSchuppelius/php-config-toolkit/tree/v0.2.20"
             },
-            "time": "2025-12-30T11:30:06+00:00"
+            "time": "2026-01-07T20:51:25+00:00"
         },
         {
             "name": "dschuppelius/php-error-toolkit",
-            "version": "v1.4",
+            "version": "v1.4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DSchuppelius/php-error-toolkit.git",
-                "reference": "233a18448ba56091094060dd4633772a4ac6dc26"
+                "reference": "26a5845e549acc211b3ff05e898579a3c3f0df70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DSchuppelius/php-error-toolkit/zipball/233a18448ba56091094060dd4633772a4ac6dc26",
-                "reference": "233a18448ba56091094060dd4633772a4ac6dc26",
+                "url": "https://api.github.com/repos/DSchuppelius/php-error-toolkit/zipball/26a5845e549acc211b3ff05e898579a3c3f0df70",
+                "reference": "26a5845e549acc211b3ff05e898579a3c3f0df70",
                 "shasum": ""
             },
             "require": {
@@ -137,9 +137,9 @@
             "description": "Reused codes for my api php sdks",
             "support": {
                 "issues": "https://github.com/DSchuppelius/php-error-toolkit/issues",
-                "source": "https://github.com/DSchuppelius/php-error-toolkit/tree/v1.4"
+                "source": "https://github.com/DSchuppelius/php-error-toolkit/tree/v1.4.1.1"
             },
-            "time": "2025-12-29T14:17:51+00:00"
+            "time": "2026-01-05T19:05:54+00:00"
         },
         {
             "name": "psr/log",
@@ -1964,12 +1964,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.2 <8.5"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
