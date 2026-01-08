@@ -14,9 +14,14 @@ namespace Tests\Parsers;
 
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\Common\CSV\TruncationStrategy;
+use CommonToolkit\FinancialFormats\Converters\Banking\CamtToMt940Converter;
+use CommonToolkit\FinancialFormats\Converters\Banking\Mt940ToCamtConverter;
+use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToCamt053Converter;
 use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToMt940Converter;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
+use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt053Generator;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt940Generator;
 use CommonToolkit\FinancialFormats\Parsers\BankTransactionParser;
 use Tests\Contracts\BaseTestCase;
@@ -131,11 +136,190 @@ class BankTransactionParserTest extends BaseTestCase {
 
         $this->assertNotEmpty($mt940String);
         // GVC 105 = SEPA Lastschrift Core (Debit - Geld wird abgebucht)
-        $this->assertStringContainsString(':86:105?00SEPA Lastschrifteinzug von', $mt940String);
+        // Primanoten-Nr. 701 = generiert aus Buchungsdatum 01.07. (Monat ohne führende Null + Tag)
+        $this->assertStringContainsString(":86:105?00SEPA Lastschrifteinzug von\r\n?10701", $mt940String);
         $this->assertStringContainsString(':20:', $mt940String); // Transaktionsreferenznummer
         $this->assertStringContainsString(':25:', $mt940String); // Kontonummer
         $this->assertStringContainsString(':61:', $mt940String); // Kontoauszugszeile
         $this->assertStringContainsString(':86:', $mt940String); // Verwendungszweck
+    }
+
+    /**
+     * Vergleiche BankTransaction → CAMT → MT940 mit BankTransaction → MT940 (direkt)
+     * 
+     * Beide Pfade sollten konsistente Strukturen erzeugen.
+     */
+    public function testBankTransactionViaCamtToMt940VsDirectMt940(): void {
+        $document = BankTransactionParser::fromString($this->liveSampleCSV);
+
+        // Pfad 1: BankTransaction → MT940 (direkt)
+        $mt940Direct = BankTransactionToMt940Converter::convert($document);
+        $mt940DirectString = (new Mt940Generator())->generate($mt940Direct, Mt940OutputFormat::DATEV);
+
+        // Pfad 2: BankTransaction → CAMT → MT940
+        $camt053 = BankTransactionToCamt053Converter::convert($document);
+        $this->assertNotNull($camt053, 'CAMT.053 Konvertierung sollte erfolgreich sein');
+
+        $mt940ViaCamt = CamtToMt940Converter::convert($camt053);
+        $this->assertNotNull($mt940ViaCamt, 'CAMT zu MT940 Konvertierung sollte erfolgreich sein');
+        $mt940ViaCamtString = (new Mt940Generator())->generate($mt940ViaCamt, Mt940OutputFormat::DATEV);
+
+        // Beide Pfade sollten die gleiche Anzahl Transaktionen haben
+        $this->assertCount(
+            count($mt940Direct->getTransactions()),
+            $mt940ViaCamt->getTransactions(),
+            'Beide Pfade sollten gleiche Anzahl Transaktionen haben'
+        );
+
+        // Beide sollten Konto-Info haben (Format kann unterschiedlich sein: BLZ/Konto vs IBAN)
+        $this->assertNotEmpty($mt940Direct->getAccountId(), 'Direkter Pfad sollte AccountId haben');
+        $this->assertNotEmpty($mt940ViaCamt->getAccountId(), 'Via-CAMT Pfad sollte AccountId haben');
+
+        // Beide sollten MT940-Pflichtfelder enthalten
+        foreach ([$mt940DirectString, $mt940ViaCamtString] as $mt940String) {
+            $this->assertStringContainsString(':20:', $mt940String);
+            $this->assertStringContainsString(':25:', $mt940String);
+            $this->assertStringContainsString(':61:', $mt940String);
+            $this->assertStringContainsString(':86:', $mt940String);
+        }
+
+        // Beträge sollten übereinstimmen
+        $directTxns = $mt940Direct->getTransactions();
+        $viaCamtTxns = $mt940ViaCamt->getTransactions();
+        for ($i = 0; $i < count($directTxns); $i++) {
+            $this->assertEquals(
+                $directTxns[$i]->getAmount(),
+                $viaCamtTxns[$i]->getAmount(),
+                "Betrag von Transaktion $i sollte übereinstimmen"
+            );
+            $this->assertEquals(
+                $directTxns[$i]->getCreditDebit(),
+                $viaCamtTxns[$i]->getCreditDebit(),
+                "CreditDebit von Transaktion $i sollte übereinstimmen"
+            );
+            // Buchungsdatum sollte übereinstimmen
+            $this->assertEquals(
+                $directTxns[$i]->getDate()->format('Y-m-d'),
+                $viaCamtTxns[$i]->getDate()->format('Y-m-d'),
+                "Buchungsdatum von Transaktion $i sollte übereinstimmen"
+            );
+        }
+
+        // Generierte MT940-Strings vergleichen (Kernfelder)
+        // Die Dokumente sind nicht 1:1 identisch (unterschiedliche AccountId-Formate),
+        // aber die Transaktionsdaten sollten übereinstimmen
+        $this->assertStringContainsString(
+            ':61:' . $directTxns[0]->getDate()->format('ymd'),
+            $mt940ViaCamtString,
+            'Via-CAMT MT940 sollte gleiches Buchungsdatum in :61: haben'
+        );
+
+        // Extrahiere :61: Zeilen aus beiden Dokumenten und vergleiche
+        preg_match_all('/:61:(\d{6}[CD]\d+,\d+\w+)/', $mt940DirectString, $directMatches);
+        preg_match_all('/:61:(\d{6}[CD]\d+,\d+\w+)/', $mt940ViaCamtString, $viaCamtMatches);
+
+        $this->assertCount(
+            count($directMatches[0]),
+            $viaCamtMatches[0],
+            'Beide MT940-Dokumente sollten gleiche Anzahl :61: Zeilen haben'
+        );
+
+        // Vergleiche die Beträge in den :61: Zeilen
+        for ($i = 0; $i < count($directTxns); $i++) {
+            $expectedAmount = number_format($directTxns[$i]->getAmount(), 2, ',', '');
+            $this->assertStringContainsString(
+                $expectedAmount,
+                $mt940ViaCamtString,
+                "Via-CAMT MT940 sollte Betrag $expectedAmount enthalten"
+            );
+        }
+    }
+
+    /**
+     * Vergleiche BankTransaction → MT940 → CAMT mit BankTransaction → CAMT (direkt)
+     * 
+     * Beide Pfade sollten konsistente Strukturen erzeugen.
+     */
+    public function testBankTransactionViaMt940ToCamtVsDirectCamt(): void {
+        $document = BankTransactionParser::fromString($this->liveSampleCSV);
+
+        // Pfad 1: BankTransaction → CAMT (direkt)
+        $camtDirect = BankTransactionToCamt053Converter::convert($document);
+        $this->assertNotNull($camtDirect, 'Direkte CAMT.053 Konvertierung sollte erfolgreich sein');
+
+        // Pfad 2: BankTransaction → MT940 → CAMT
+        $mt940 = BankTransactionToMt940Converter::convert($document);
+        $camtViaMt940 = Mt940ToCamtConverter::convert($mt940, CamtType::CAMT053);
+        $this->assertNotNull($camtViaMt940, 'MT940 zu CAMT Konvertierung sollte erfolgreich sein');
+
+        // Beide Pfade sollten die gleiche Anzahl Transaktionen haben
+        $this->assertCount(
+            count($camtDirect->getEntries()),
+            $camtViaMt940->getEntries(),
+            'Beide Pfade sollten gleiche Anzahl Transaktionen haben'
+        );
+
+        // Beträge und CreditDebit sollten übereinstimmen
+        $directTxns = $camtDirect->getEntries();
+        $viaMt940Txns = $camtViaMt940->getEntries();
+        for ($i = 0; $i < count($directTxns); $i++) {
+            $this->assertEquals(
+                $directTxns[$i]->getAmount(),
+                $viaMt940Txns[$i]->getAmount(),
+                "Betrag von Transaktion $i sollte übereinstimmen"
+            );
+            $this->assertEquals(
+                $directTxns[$i]->getCreditDebit(),
+                $viaMt940Txns[$i]->getCreditDebit(),
+                "CreditDebit von Transaktion $i sollte übereinstimmen"
+            );
+            // Buchungsdatum sollte übereinstimmen
+            $this->assertEquals(
+                $directTxns[$i]->getBookingDate()->format('Y-m-d'),
+                $viaMt940Txns[$i]->getBookingDate()->format('Y-m-d'),
+                "Buchungsdatum von Transaktion $i sollte übereinstimmen"
+            );
+            // Währung sollte übereinstimmen
+            $this->assertEquals(
+                $directTxns[$i]->getCurrency(),
+                $viaMt940Txns[$i]->getCurrency(),
+                "Währung von Transaktion $i sollte übereinstimmen"
+            );
+        }
+
+        // AccountServicerReference (Primanoten-Nr.) sollte vorhanden und gleich sein
+        for ($i = 0; $i < count($directTxns); $i++) {
+            $directRef = $directTxns[$i]->getAccountServicerReference();
+            $viaMt940Ref = $viaMt940Txns[$i]->getAccountServicerReference();
+
+            // Beide sollten eine Referenz haben (aus Datum generiert)
+            $this->assertNotNull($directRef, "Direkte CAMT Transaktion $i sollte AccountServicerReference haben");
+            $this->assertNotNull($viaMt940Ref, "Via-MT940 CAMT Transaktion $i sollte AccountServicerReference haben");
+
+            // Die Referenzen sollten übereinstimmen (gleiche Quelle: Buchungsdatum)
+            $this->assertEquals(
+                $directRef,
+                $viaMt940Ref,
+                "AccountServicerReference von Transaktion $i sollte übereinstimmen"
+            );
+        }
+
+        // Generierte CAMT-XML vergleichen
+        $camtDirectXml = (new Camt053Generator())->generate($camtDirect);
+        $camtViaMt940Xml = (new Camt053Generator())->generate($camtViaMt940);
+
+        // Beide sollten gültiges XML sein
+        $this->assertStringContainsString('<?xml', $camtDirectXml);
+        $this->assertStringContainsString('<?xml', $camtViaMt940Xml);
+        $this->assertStringContainsString('<BkToCstmrStmt>', $camtDirectXml);
+        $this->assertStringContainsString('<BkToCstmrStmt>', $camtViaMt940Xml);
+
+        // Beträge sollten in beiden XMLs erscheinen
+        foreach ($directTxns as $txn) {
+            $amountStr = number_format($txn->getAmount(), 2, '.', '');
+            $this->assertStringContainsString($amountStr, $camtDirectXml, "Direktes CAMT sollte Betrag $amountStr enthalten");
+            $this->assertStringContainsString($amountStr, $camtViaMt940Xml, "Via-MT940 CAMT sollte Betrag $amountStr enthalten");
+        }
     }
 
     public function testFromStringEmptyFile(): void {

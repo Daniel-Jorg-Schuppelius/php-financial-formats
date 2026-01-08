@@ -190,23 +190,28 @@ final class Mt940ToCamtConverter {
      */
     private static function convertTransactionTo053(Mt940Transaction $mt940Txn): Camt053Transaction {
         $mt940Ref = $mt940Txn->getReference();
+        $purposeObject = $mt940Txn->getPurposeObject();
+        $purposeRaw = $mt940Txn->getPurposeRaw();
 
         // Referenzen aus MT940 Purpose extrahieren (SEPA-Format)
-        $references = self::extractReferencesFromPurpose($mt940Txn->getPurpose());
+        $references = self::extractReferencesFromPurpose($purposeRaw);
+
+        // Primanoten-Nr. aus Purpose als AccountServicerReference
+        $accountServicerReference = $purposeObject?->getPrimanotenNr();
 
         $reference = new Camt053Reference(
             endToEndId: $references['endToEndId'],
             mandateId: $references['mandateId'],
             creditorId: $references['creditorId'],
             entryReference: $mt940Ref->getReference(),
-            accountServicerReference: null,
+            accountServicerReference: $accountServicerReference,
             paymentInformationId: null,
             instructionId: $references['instructionId'],
             additional: null
         );
 
         // Counterparty aus Purpose extrahieren
-        $counterparty = self::extractCounterpartyFromPurpose($mt940Txn->getPurpose());
+        $counterparty = self::extractCounterpartyFromPurpose($purposeRaw);
 
         return new Camt053Transaction(
             bookingDate: $mt940Txn->getDate(),
@@ -216,10 +221,10 @@ final class Mt940ToCamtConverter {
             creditDebit: $mt940Txn->getCreditDebit(),
             reference: $reference,
             entryReference: $mt940Ref->getReference(),
-            accountServicerReference: null,
+            accountServicerReference: $accountServicerReference,
             status: 'BOOK',
             isReversal: false,
-            purpose: self::cleanPurpose($mt940Txn->getPurpose()),
+            purpose: self::cleanPurpose($purposeRaw),
             additionalInfo: null,
             transactionCode: self::mapTransactionCode($mt940Ref->getTransactionCode()),
             counterpartyName: $counterparty['name'],
@@ -234,6 +239,9 @@ final class Mt940ToCamtConverter {
     private static function convertTransactionTo052(Mt940Transaction $mt940Txn): Camt052Transaction {
         $mt940Ref = $mt940Txn->getReference();
 
+        // Primanoten-Nr. aus Purpose als AccountServicerReference
+        $accountServicerReference = $mt940Txn->getPurposeObject()?->getPrimanotenNr();
+
         return new Camt052Transaction(
             bookingDate: $mt940Txn->getDate(),
             valutaDate: $mt940Txn->getValutaDate(),
@@ -241,7 +249,7 @@ final class Mt940ToCamtConverter {
             currency: $mt940Txn->getCurrency(),
             creditDebit: $mt940Txn->getCreditDebit(),
             entryReference: $mt940Ref->getReference(),
-            accountServicerReference: null,
+            accountServicerReference: $accountServicerReference,
             status: 'BOOK',
             isReversal: false
         );
@@ -253,6 +261,9 @@ final class Mt940ToCamtConverter {
     private static function convertTransactionTo054(Mt940Transaction $mt940Txn): Camt054Transaction {
         $mt940Ref = $mt940Txn->getReference();
 
+        // Primanoten-Nr. aus Purpose als AccountServicerReference
+        $accountServicerReference = $mt940Txn->getPurposeObject()?->getPrimanotenNr();
+
         return new Camt054Transaction(
             bookingDate: $mt940Txn->getDate(),
             valutaDate: $mt940Txn->getValutaDate(),
@@ -260,7 +271,7 @@ final class Mt940ToCamtConverter {
             currency: $mt940Txn->getCurrency(),
             creditDebit: $mt940Txn->getCreditDebit(),
             entryReference: $mt940Ref->getReference(),
-            accountServicerReference: null,
+            accountServicerReference: $accountServicerReference,
             status: 'BOOK',
             isReversal: false
         );

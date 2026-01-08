@@ -260,10 +260,13 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             $purposeStr .= '?00' . substr($buchungstext, 0, 27);
         }
 
-        // Primanoten-Nr. (?10) - aus Auszugsnummer ableiten
+        // Primanoten-Nr. (?10) - aus Auszugsnummer oder Buchungsdatum ableiten
         $primanotenNr = self::getField($fields, F::AUSZUGSNUMMER);
         if (!empty($primanotenNr)) {
             $purposeStr .= '?10' . substr($primanotenNr, 0, 5);
+        } else {
+            // Fallback: Primanoten-Nr. aus Buchungsdatum generieren (MDD = Monat ohne führende Null + Tag)
+            $purposeStr .= '?10' . ltrim($bookingDate->format('m'), '0') . $bookingDate->format('d');
         }
 
         // Verwendungszweck-Zeilen als ?20-?29, ?60-?63

@@ -293,6 +293,12 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
         $entryReference = date('dmy') . sprintf('%010d', abs(crc32($bookingDateStr . $amountStr)));
         $entryReference = substr($entryReference, 0, 25);
 
+        // AccountServicerReference (Primanoten-Nr.) aus Auszugsnummer oder Buchungsdatum
+        $auszugsnummer = self::getField($fields, F::AUSZUGSNUMMER);
+        $accountServicerReference = !empty($auszugsnummer)
+            ? substr($auszugsnummer, 0, 5)
+            : ltrim($bookingDate->format('m'), '0') . $bookingDate->format('d');
+
         // End-to-End-ID aus Verwendungszweck-Feldern
         $endToEndId = self::extractEndToEndId($fields);
 
@@ -301,7 +307,7 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
             mandateId: null,
             creditorId: null,
             entryReference: $entryReference,
-            accountServicerReference: null
+            accountServicerReference: $accountServicerReference
         );
 
         // Counterparty aus Auftraggeber-Daten
@@ -321,7 +327,7 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
             creditDebit: $amountData['creditDebit'],
             reference: $reference,
             entryReference: $entryReference,
-            accountServicerReference: null,
+            accountServicerReference: $accountServicerReference,
             status: 'BOOK',
             isReversal: false,
             purpose: $purpose,
