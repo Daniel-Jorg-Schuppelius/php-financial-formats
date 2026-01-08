@@ -201,7 +201,9 @@ class Purpose {
         $fullText = implode('', $lines);
 
         // Check if this is SWIFT format (contains /XXX/ patterns)
-        $isSwiftFormat = preg_match('/\/[A-Z]{2,}\//', $fullText);
+        // But NOT if it's clearly DATEV format (contains ?xx markers)
+        $hasDatevMarkers = preg_match('/\?\d{2}/', $fullText);
+        $isSwiftFormat = !$hasDatevMarkers && preg_match('/\/[A-Z]{2,}\//', $fullText);
 
         if ($isSwiftFormat) {
             // Parse SWIFT Keywords

@@ -255,6 +255,12 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             }
         }
 
+        // Falls der Buchungstext mit dem GVC-Code beginnt, diesen entfernen
+        // z.B. "106 Kartenzahlung" → "Kartenzahlung"
+        if (!empty($gvcCode) && !empty($buchungstext)) {
+            $buchungstext = preg_replace('/^' . preg_quote($gvcCode, '/') . '\s*/', '', $buchungstext);
+        }
+
         $purposeStr = $gvcCode;
         if (!empty($buchungstext)) {
             $purposeStr .= '?00' . substr($buchungstext, 0, 27);
