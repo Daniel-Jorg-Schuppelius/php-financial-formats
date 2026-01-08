@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PaymentIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
 use CommonToolkit\Enums\CurrencyCode;
 
 /**

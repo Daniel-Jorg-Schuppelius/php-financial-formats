@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type942;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Entities\Mt9\Purpose;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
@@ -33,7 +34,8 @@ use RuntimeException;
  */
 class Transaction extends MtTransactionAbstract {
     private Reference $reference;
-    private ?string $purpose;
+    private ?Purpose $purpose;
+    private ?string $purposeRaw;
 
     public function __construct(
         DateTimeImmutable|string $bookingDate,
@@ -42,7 +44,7 @@ class Transaction extends MtTransactionAbstract {
         CreditDebit $creditDebit,
         CurrencyCode $currency,
         Reference $reference,
-        ?string $purpose = null
+        Purpose|string|null $purpose = null
     ) {
         $bookingDateParsed = $bookingDate instanceof DateTimeImmutable
             ? $bookingDate
@@ -51,8 +53,7 @@ class Transaction extends MtTransactionAbstract {
 
         $valutaDateParsed = match (true) {
             $valutaDate instanceof DateTimeImmutable => $valutaDate,
-            is_string($valutaDate) => (DateTimeImmutable::createFromFormat('Ymd', $bookingDateParsed->format('Y') . $valutaDate)
-                ?: throw new RuntimeException("Ungültiges Valutadatum: $valutaDate")),
+            is_string($valutaDate) => $this->parseValutaDateString($bookingDateParsed, $valutaDate),
             default => null
         };
 
@@ -65,7 +66,16 @@ class Transaction extends MtTransactionAbstract {
         );
 
         $this->reference = $reference;
-        $this->purpose = $purpose;
+        if ($purpose instanceof Purpose) {
+            $this->purpose = $purpose;
+            $this->purposeRaw = $purpose->getFullText();
+        } elseif (is_string($purpose) && trim($purpose) !== '') {
+            $this->purpose = Purpose::fromString($purpose);
+            $this->purposeRaw = $purpose;
+        } else {
+            $this->purpose = null;
+            $this->purposeRaw = null;
+        }
     }
 
     /**
@@ -79,7 +89,7 @@ class Transaction extends MtTransactionAbstract {
      * Returns the purpose of payment (Field :86:).
      */
     public function getPurpose(): ?string {
-        return $this->purpose;
+        return $this->purposeRaw;
     }
 
     /**
@@ -98,26 +108,41 @@ class Transaction extends MtTransactionAbstract {
         $direction = $this->creditDebit->toMt940Code();
 
         $lines = [
-            sprintf(':61:%s%s%s%s%s', $valutaStr, $bookingDateStr, $direction, $amountStr, (string) $this->reference),
+            sprintf(':61:%s%s%s%s%s%s', $valutaStr, $bookingDateStr, $direction, $this->getCurrencyChar(), $amountStr, $this->reference->getBookingKeyWithCode() . ($this->reference->getReference() !== '' ? $this->reference->getReference() : 'NONREF')),
         ];
+        if ($this->reference->getBankReference() !== null) {
+            $lines[0] .= '//' . $this->reference->getBankReference();
+        }
 
-        // :86: Mehrzweckfeld
-        $segments = str_split($this->purpose ?? '', 27);
-        $first = array_shift($segments);
-        $lines[] = ':86:' . ($first ?? '');
-
-        $i = 20;
-        foreach ($segments as $segment) {
-            if ($i > 29 && $i < 60) {
-                $i = 60;
+        if ($this->purpose !== null) {
+            foreach ($this->purpose->toMt940Lines() as $line) {
+                $lines[] = $line;
             }
-            if ($i > 63) {
-                break;
-            }
-            $lines[] = sprintf('?%02d%s', $i++, $segment);
         }
 
         return $lines;
+    }
+
+    private function parseValutaDateString(DateTimeImmutable $bookingDate, string $valutaDate): DateTimeImmutable {
+        $valutaDate = trim($valutaDate);
+        if (preg_match('/^\d{6}$/', $valutaDate)) {
+            $parsed = DateTimeImmutable::createFromFormat('ymd', $valutaDate);
+        } elseif (preg_match('/^\d{4}$/', $valutaDate)) {
+            $parsed = DateTimeImmutable::createFromFormat('Ymd', $bookingDate->format('Y') . $valutaDate);
+        } elseif (preg_match('/^\d{8}$/', $valutaDate)) {
+            $parsed = DateTimeImmutable::createFromFormat('Ymd', $valutaDate);
+        } else {
+            $parsed = false;
+        }
+
+        return $parsed ?: throw new RuntimeException("Ungültiges Valutadatum: $valutaDate");
+    }
+
+    private function getCurrencyChar(): string {
+        $currencyCode = $this->currency->value;
+        return ($currencyCode !== '' && strtoupper($currencyCode) !== 'EUR')
+            ? substr($currencyCode, -1)
+            : '';
     }
 
     public function __toString(): string {

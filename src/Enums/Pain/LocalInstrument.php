@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums;
+namespace CommonToolkit\FinancialFormats\Enums\Pain;
 
 /**
  * Local Instrument for SEPA payments (LclInstrm).
@@ -21,7 +21,7 @@ namespace CommonToolkit\FinancialFormats\Enums;
  */
 enum LocalInstrument: string {
     case SEPA_CORE = 'CORE';          // SEPA Core
-    case SEPA_B2B = 'B2B';            // SEPA B2B
+    case SEPA_B2B  = 'B2B';           // SEPA B2B
     case SEPA_COR1 = 'COR1';          // SEPA Core (1 Tag)
     case SEPA_INST = 'INST';          // SEPA Instant
 
@@ -31,7 +31,7 @@ enum LocalInstrument: string {
     public function description(): string {
         return match ($this) {
             self::SEPA_CORE => 'SEPA Core Lastschrift',
-            self::SEPA_B2B => 'SEPA B2B Lastschrift (Firmenlastschrift)',
+            self::SEPA_B2B  => 'SEPA B2B Lastschrift (Firmenlastschrift)',
             self::SEPA_COR1 => 'SEPA Core Lastschrift (verkürzte Frist)',
             self::SEPA_INST => 'SEPA Instant',
         };

@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Contracts\Interfaces;
 
 use CommonToolkit\Contracts\Interfaces\XML\XmlDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
-use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
 
 /**
  * Interface for all CAMT documents.

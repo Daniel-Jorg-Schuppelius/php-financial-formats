@@ -60,7 +60,7 @@ class BankTransactionRoundtripTest extends BaseTestCase {
                 'VERWENDUNGSZWECK_2' => 'Zahlung Dezember',
                 'VERWENDUNGSZWECK_3' => '',
                 'VERWENDUNGSZWECK_4' => '',
-                'GESCHAEFTSVORGANGSCODE' => 'NTRF',
+                'GESCHAEFTSVORGANGSCODE' => 'TRF',
                 'WAEHRUNG' => 'EUR',
                 'BUCHUNGSTEXT' => 'TRF'
             ])
@@ -167,7 +167,7 @@ class BankTransactionRoundtripTest extends BaseTestCase {
                 'BUCHUNGSDATUM' => '25.12.2025',
                 'UMSATZ' => '+500,00',
                 'VERWENDUNGSZWECK_1' => 'Einzahlung 1',
-                'GESCHAEFTSVORGANGSCODE' => 'NTRF',
+                'GESCHAEFTSVORGANGSCODE' => 'TRF',
                 'WAEHRUNG' => 'EUR'
             ])
             ->addTransaction([
@@ -356,7 +356,7 @@ class BankTransactionRoundtripTest extends BaseTestCase {
                 'VERWENDUNGSZWECK_1' => 'Test Zeile 1',
                 'VERWENDUNGSZWECK_2' => 'Test Zeile 2',
                 'VERWENDUNGSZWECK_3' => 'Test Zeile 3',
-                'GESCHAEFTSVORGANGSCODE' => 'NTRF',
+                'GESCHAEFTSVORGANGSCODE' => 'TRF',
                 'WAEHRUNG' => 'EUR'
             ])
             ->build();
@@ -405,7 +405,7 @@ class BankTransactionRoundtripTest extends BaseTestCase {
                     'VALUTA' => '21.12.2025',
                     'BUCHUNGSDATUM' => '21.12.2025',
                     'UMSATZ' => $amount,
-                    'GESCHAEFTSVORGANGSCODE' => 'NTRF',
+                    'GESCHAEFTSVORGANGSCODE' => 'TRF',
                     'WAEHRUNG' => 'EUR'
                 ])
                 ->build();
@@ -499,6 +499,7 @@ class BankTransactionRoundtripTest extends BaseTestCase {
 
         // Parse CAMT.053 Sample-Datei
         $originalContent = file_get_contents($sampleFile);
+        /** @var \CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document $camt053Original **/
         $camt053Original = CamtParser::parse($originalContent);
 
         // CAMT.053 → BankTransaction

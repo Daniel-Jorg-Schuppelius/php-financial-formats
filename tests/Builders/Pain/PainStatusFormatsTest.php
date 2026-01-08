@@ -31,9 +31,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\GroupHeader as Pain008GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\MandateInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\PaymentInstruction;
-use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\PainType;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 use CommonToolkit\FinancialFormats\Parsers\PainParser;
 use DateTimeImmutable;
 

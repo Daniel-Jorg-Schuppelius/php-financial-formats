@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Parsers;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\Parsers\ExtendedDOMDocumentParser;

@@ -15,8 +15,8 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
 use DateTimeImmutable;
 
 /**

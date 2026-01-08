@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Documen
 use CommonToolkit\FinancialFormats\Entities\Swift\ApplicationHeader;
 use CommonToolkit\FinancialFormats\Entities\Swift\BasicHeader;
 use CommonToolkit\FinancialFormats\Entities\Swift\Message;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use RuntimeException;
 use Tests\Contracts\BaseTestCase;
 

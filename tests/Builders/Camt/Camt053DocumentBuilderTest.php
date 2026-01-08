@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Reference;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Parsers\CamtParser;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Tests\Parsers;
 
 use CommonToolkit\FinancialFormats\Entities\Swift\Message;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Parsers\SwiftMessageParser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

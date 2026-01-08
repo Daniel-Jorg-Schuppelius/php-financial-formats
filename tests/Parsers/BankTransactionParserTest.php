@@ -128,7 +128,7 @@ class BankTransactionParserTest extends BaseTestCase {
         $mt940String = $mt940Document->__toString();
 
         $this->assertNotEmpty($mt940String);
-        $this->assertStringNotContainsString(':86:SEPA Lastschrifteinzug von0', $mt940String); // Prüfe, dass der Verwendungszweck korrekt formatiert ist ":86:SEPA Lastschrifteinzug von"
+        $this->assertStringContainsString(':86:SEPA Lastschrifteinzug von', $mt940String);
         $this->assertStringContainsString(':20:', $mt940String); // Transaktionsreferenznummer
         $this->assertStringContainsString(':25:', $mt940String); // Kontonummer
         $this->assertStringContainsString(':61:', $mt940String); // Kontoauszugszeile

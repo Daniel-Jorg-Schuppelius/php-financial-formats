@@ -85,7 +85,7 @@ final class CamtToMt940ConverterTest extends BaseTestCase {
             isReversal: false,
             purpose: 'Gehalt Januar 2025',
             additionalInfo: null,
-            transactionCode: 'NTRF',
+            transactionCode: 'TRF',
             counterpartyName: 'Arbeitgeber GmbH',
             counterpartyIban: 'DE12345678901234567890',
             counterpartyBic: 'DEUTDEDBXXX'

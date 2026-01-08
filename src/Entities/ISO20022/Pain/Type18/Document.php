@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Enums\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Pain\Pain018Generator;
 use DateTimeImmutable;
 

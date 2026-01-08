@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain;
 
-use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 use DateTimeImmutable;
 
 /**

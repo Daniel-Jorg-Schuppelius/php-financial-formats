@@ -108,7 +108,7 @@ $document = $builder
 
 ```php
 use CommonToolkit\FinancialFormats\Builders\Pain\Pain008DocumentBuilder;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 
 $document = Pain008DocumentBuilder::createSepaDirectDebit(
     messageId: 'DD-001',

@@ -15,6 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type940;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtTransactionAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Purpose;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
+use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\Helper\Data\CurrencyHelper;
@@ -33,6 +34,7 @@ class Transaction extends MtTransactionAbstract {
     private Reference $reference;
     private ?Purpose $purpose;
     private ?string $purposeRaw;
+    private ?string $supplementaryDetails;
 
     public function __construct(
         DateTimeImmutable|string $bookingDate,
@@ -41,7 +43,8 @@ class Transaction extends MtTransactionAbstract {
         CreditDebit $creditDebit,
         CurrencyCode $currency,
         Reference $reference,
-        Purpose|string|null $purpose = null
+        Purpose|string|null $purpose = null,
+        ?string $supplementaryDetails = null
     ) {
         $bookingDateParsed = $bookingDate instanceof DateTimeImmutable
             ? $bookingDate
@@ -73,6 +76,7 @@ class Transaction extends MtTransactionAbstract {
             $this->purpose = null;
             $this->purposeRaw = null;
         }
+        $this->supplementaryDetails = $supplementaryDetails;
     }
 
     /**
@@ -83,16 +87,48 @@ class Transaction extends MtTransactionAbstract {
     }
 
     /**
-     * Returns the purpose of payment (Field :86:).
+     * Returns the raw purpose text (Field :86:).
+     * 
+     * @deprecated Use getPurposeRaw() or getPurposeObject() instead.
      */
     public function getPurpose(): ?string {
         return $this->purposeRaw;
     }
 
     /**
-     * Generiert die SWIFT MT :61: und :86: Zeilen.
+     * Returns the raw purpose text (Field :86:).
      */
-    private function toMt940Lines(): array {
+    public function getPurposeRaw(): ?string {
+        return $this->purposeRaw;
+    }
+
+    /**
+     * Returns the parsed purpose object with structured fields.
+     * 
+     * Supports:
+     * - DATEV/DFÜ format (?00, ?10, ?20-?29, ?30-?34, ?60-?63)
+     * - SWIFT keywords (/EREF/, /REMI/, /ORDP/, /BENM/, etc.)
+     * - SEPA keywords (EREF+, MREF+, CRED+, SVWZ+, etc.)
+     */
+    public function getPurposeObject(): ?Purpose {
+        return $this->purpose;
+    }
+
+    /**
+     * Returns the supplementary details (Subfield 9 of :61:).
+     * Contains additional information like exchange rate /EXCH/ or other details.
+     * Maximum 34 characters.
+     */
+    public function getSupplementaryDetails(): ?string {
+        return $this->supplementaryDetails;
+    }
+
+    /**
+     * Generiert die SWIFT MT :61: und :86: Zeilen.
+     *
+     * @param Mt940OutputFormat $format Output format (SWIFT or DATEV)
+     */
+    public function toMt940Lines(Mt940OutputFormat $format = Mt940OutputFormat::SWIFT): array {
         $amountStr = CurrencyHelper::usToDe((string) $this->amount);
 
         // Laut DATEV-Spezifikation (Dok.-Nr. 9226962):
@@ -107,12 +143,12 @@ class Transaction extends MtTransactionAbstract {
 
         $direction = $this->creditDebit->toMt940Code();
 
-        $currencyCode = (string) $this->currency;
+        $currencyCode = $this->currency->value;
         $currencyChar = ($currencyCode !== '' && strtoupper($currencyCode) !== 'EUR')
             ? substr($currencyCode, -1)
             : '';
 
-        $bookingKey = $this->reference->getBookingKey();
+        $bookingKey = $this->reference->getBookingKeyWithCode();
         $referenceStr = $this->reference->getReference() !== '' ? $this->reference->getReference() : 'NONREF';
 
         $lines = [
@@ -122,13 +158,25 @@ class Transaction extends MtTransactionAbstract {
             $lines[0] .= '//' . $this->reference->getBankReference();
         }
 
+        // Subfield 9: Supplementary Details [34x] - optional, on next line
+        if ($this->supplementaryDetails !== null && $this->supplementaryDetails !== '') {
+            $lines[] = substr($this->supplementaryDetails, 0, 34);
+        }
+
         if ($this->purpose !== null) {
-            foreach ($this->purpose->toMt940Lines() as $line) {
+            foreach ($this->purpose->toMt940Lines($format) as $line) {
                 $lines[] = $line;
             }
         }
 
         return $lines;
+    }
+
+    /**
+     * Generates MT940 lines in DATEV format.
+     */
+    public function toDatevLines(): array {
+        return $this->toMt940Lines(Mt940OutputFormat::DATEV);
     }
 
     private function parseValutaDateString(DateTimeImmutable $bookingDate, string $valutaDate): DateTimeImmutable {

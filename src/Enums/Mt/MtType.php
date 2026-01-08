@@ -10,7 +10,9 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums;
+namespace CommonToolkit\FinancialFormats\Enums\Mt;
+
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 
 /**
  * MT message types according to SWIFT specification.

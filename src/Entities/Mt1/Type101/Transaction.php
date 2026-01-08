@@ -14,7 +14,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt1\Type101;
 
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
 use DateTimeImmutable;
 
 /**

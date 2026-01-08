@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Entities\Swift\BasicHeader;
 use CommonToolkit\FinancialFormats\Entities\Swift\Message;
 use CommonToolkit\FinancialFormats\Entities\Swift\Trailer;
 use CommonToolkit\FinancialFormats\Entities\Swift\UserHeader;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Swift\SwiftMessageGenerator;
 use Tests\Contracts\BaseTestCase;
 

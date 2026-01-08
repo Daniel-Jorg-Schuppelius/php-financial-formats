@@ -40,7 +40,7 @@ class BankTransactionToMt940ConverterTest extends BaseTestCase {
             BankTransactionHeaderField::VERWENDUNGSZWECK_2->value => 'Projekt ABC',
             BankTransactionHeaderField::VERWENDUNGSZWECK_3->value => '',
             BankTransactionHeaderField::VERWENDUNGSZWECK_4->value => '',
-            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'NTRF',
+            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'TRF',
             BankTransactionHeaderField::WAEHRUNG->value => 'EUR',
         ])->build();
 

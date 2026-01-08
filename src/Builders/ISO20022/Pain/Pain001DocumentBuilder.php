@@ -21,8 +21,8 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\CreditTransferTr
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstruction;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 use RuntimeException;

@@ -37,7 +37,7 @@ abstract class BankTransactionConverterAbstract {
     protected const DATE_FORMAT = 'd.m.Y';
 
     /** Standard-Transaktionscode wenn keiner angegeben. */
-    protected const DEFAULT_TRANSACTION_CODE = 'NTRF';
+    protected const DEFAULT_TRANSACTION_CODE = 'TRF';
 
     /** Default currency wenn keine angegeben. */
     protected const DEFAULT_CURRENCY = 'EUR';
@@ -76,6 +76,18 @@ abstract class BankTransactionConverterAbstract {
     protected static function getField(array $fields, F $field): string {
         $idx = $field->index();
         return ($idx >= 0 && count($fields) > $idx) ? trim($fields[$idx]->getValue()) : '';
+    }
+
+    /**
+     * Gets the value of a field preserving trailing spaces (for purpose fields).
+     * 
+     * @param array $fields Array der DataField-Objekte
+     * @param F $field Header field definition
+     * @return string Field value or empty string
+     */
+    protected static function getFieldRaw(array $fields, F $field): string {
+        $idx = $field->index();
+        return ($idx >= 0 && count($fields) > $idx) ? ltrim($fields[$idx]->getValue()) : '';
     }
 
     /**

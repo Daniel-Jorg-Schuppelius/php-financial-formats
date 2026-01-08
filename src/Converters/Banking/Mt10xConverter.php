@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Document as Mt101Document;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Transaction as Mt101Transaction;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type103\Document as Mt103Document;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
 use DateTimeImmutable;
 
 /**

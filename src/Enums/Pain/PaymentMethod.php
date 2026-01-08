@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums;
+namespace CommonToolkit\FinancialFormats\Enums\Pain;
 
 /**
  * Payment method for pain messages (PmtMtd).

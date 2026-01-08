@@ -50,8 +50,38 @@ abstract class Mt9GeneratorAbstract {
      */
     protected function appendHeaderFields(array &$lines, MtDocumentAbstract $document): void {
         $lines[] = ':20:' . $document->getReferenceId();
+
+        // :21: Related Reference - optional
+        if ($document->getRelatedReference() !== null) {
+            $lines[] = ':21:' . $document->getRelatedReference();
+        }
+
         $lines[] = ':25:' . $document->getAccountId();
         $lines[] = ':28C:' . $document->getStatementNumber();
+    }
+
+    /**
+     * Formats a purpose/information field with line wrapping.
+     * MT940 :86: field allows max 6 lines of 65 characters each.
+     * 
+     * @param string $tag Tag prefix (e.g. ':86:')
+     * @param string $content The content to format
+     * @param int $lineLength Maximum characters per line (default 65)
+     * @param int $maxLines Maximum number of lines (default 6)
+     */
+    protected function formatPurpose(string $tag, string $content, int $lineLength = 65, int $maxLines = 6): string {
+        // First line includes tag, subsequent lines are continuations
+        $firstLineLength = $lineLength - strlen($tag) + 4; // Adjust for tag
+        $result = $tag . substr($content, 0, $firstLineLength);
+
+        if (strlen($content) > $firstLineLength) {
+            $remaining = substr($content, $firstLineLength);
+            $lines = str_split($remaining, $lineLength);
+            $lines = array_slice($lines, 0, $maxLines - 1); // Limit to remaining lines
+            $result .= self::LINE_SEPARATOR . implode(self::LINE_SEPARATOR, $lines);
+        }
+
+        return $result;
     }
 
     /**

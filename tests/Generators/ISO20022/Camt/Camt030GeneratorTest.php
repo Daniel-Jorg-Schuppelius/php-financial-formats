@@ -14,8 +14,8 @@ namespace Tests\Generators\ISO20022\Camt;
 
 use CommonToolkit\FinancialFormats\Builders\ISO20022\Camt\Camt030DocumentBuilder;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt030Generator;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
-use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Contracts\BaseTestCase;
 

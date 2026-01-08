@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Tests\Entities\Swift;
 
 use CommonToolkit\FinancialFormats\Entities\Swift\ApplicationHeader;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use DateTimeImmutable;
 use Tests\Contracts\BaseTestCase;
 

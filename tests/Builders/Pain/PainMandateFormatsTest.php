@@ -51,10 +51,10 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\Document as Pai
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\MandateCopyRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18\Document as Pain018Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18\MandateSuspensionRequest;
-use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\MandateStatus;
-use CommonToolkit\FinancialFormats\Enums\PainType;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\Pain\MandateStatus;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 use CommonToolkit\FinancialFormats\Parsers\PainParser;
 use DateTimeImmutable;
 

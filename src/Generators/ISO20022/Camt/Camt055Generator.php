@@ -17,8 +17,8 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\OriginalPaymentInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\PaymentCancellationRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\UnderlyingTransaction;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
-use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
 
 /**
  * Generator for CAMT.055 XML (Customer Payment Cancellation Request).

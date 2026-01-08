@@ -14,7 +14,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type941;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt941Generator;
 use DateTimeImmutable;
 
@@ -46,14 +46,16 @@ class Document extends MtDocumentAbstract {
         Balance $closingBalance,
         ?Balance $closingAvailableBalance = null,
         array $forwardAvailableBalances = [],
-        ?DateTimeImmutable $creationDateTime = null
+        ?DateTimeImmutable $creationDateTime = null,
+        ?string $relatedReference = null
     ) {
         parent::__construct(
             $accountId,
             $referenceId,
             $statementNumber,
             $openingBalance->getCurrency(),
-            $creationDateTime
+            $creationDateTime,
+            $relatedReference
         );
 
         $this->openingBalance = $openingBalance;

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums;
+namespace CommonToolkit\FinancialFormats\Enums\Mt;
 
 /**
  * Charges code for MT10x transfers (Field :71A:).
@@ -43,9 +43,9 @@ enum ChargesCode: string {
      */
     public function description(): string {
         return match ($this) {
-            self::BEN => 'Begünstigter trägt alle Gebühren',
-            self::OUR => 'Auftraggeber trägt alle Gebühren',
-            self::SHA => 'Gebühren werden geteilt',
+            self::BEN  => 'Begünstigter trägt alle Gebühren',
+            self::OUR  => 'Auftraggeber trägt alle Gebühren',
+            self::SHA  => 'Gebühren werden geteilt',
             self::SLEV => 'Gemäß Service-Level-Vereinbarung (SEPA)',
         };
     }

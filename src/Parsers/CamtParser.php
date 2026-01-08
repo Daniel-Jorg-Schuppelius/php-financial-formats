@@ -33,7 +33,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\UnderlyingTrans
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document as Camt056Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\PaymentCancellationRequest as Camt056CancellationRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\UnderlyingTransaction as Camt056UnderlyingTransaction;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Helper\Data\CamtValidator;

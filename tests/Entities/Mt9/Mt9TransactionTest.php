@@ -20,7 +20,7 @@ use Tests\Contracts\BaseTestCase;
 class Mt9TransactionTest extends BaseTestCase {
 
     private function createReference(): Reference {
-        return new Reference('NTRF', 'ABC123XYZ');
+        return new Reference('TRF', 'ABC123XYZ');
     }
 
     public function testGetterMethodsReturnCorrectValues(): void {
@@ -38,7 +38,7 @@ class Mt9TransactionTest extends BaseTestCase {
         $this->assertEquals(1234.56, $transaction->getAmount());
         $this->assertEquals('C', $transaction->getCreditDebit()->toMt940Code());
         $this->assertEquals('EUR', $transaction->getCurrency()->value);
-        $this->assertEquals('NTRF', $transaction->getReference()->getTransactionCode());
+        $this->assertEquals('TRF', $transaction->getReference()->getTransactionCode());
         $this->assertEquals('ABC123XYZ', $transaction->getReference()->getReference());
         $this->assertEquals('Testzahlung', $transaction->getPurpose());
     }
@@ -86,7 +86,7 @@ class Mt9TransactionTest extends BaseTestCase {
     }
 
     public function testToMt940LinesGeneratesCorrectFormat(): void {
-        $reference = new Reference('NTRF', 'ABC123XYZ');
+        $reference = new Reference('TRF', 'ABC123XYZ');
         $transaction = new Transaction(
             bookingDate: DateTimeImmutable::createFromFormat('ymd', '240501'),
             valutaDate: null,
@@ -105,15 +105,21 @@ class Mt9TransactionTest extends BaseTestCase {
         // Zweite Zeile beginnt mit :86:
         $this->assertStringStartsWith(':86:', $lines[1]);
 
-        // Nachfolgende Zeilen (falls vorhanden) beginnen mit ?20, ?21, ...
-        for ($i = 2; $i < count($lines); $i++) {
-            $this->assertMatchesRegularExpression('/^\?2\d/', $lines[$i]);
+        // SWIFT MT940: :86: Narrative bis 6*65x
+        $this->assertLessThanOrEqual(6, count($lines) - 1);
+        for ($i = 1; $i < count($lines); $i++) {
+            $line = $lines[$i];
+            if ($i === 1) {
+                $this->assertLessThanOrEqual(69, strlen($line)); // :86: + 65
+            } else {
+                $this->assertLessThanOrEqual(65, strlen($line));
+            }
         }
 
         // Purpose extrahieren und normalisieren
         $purposeLines = array_slice($lines, 1);
         $plainPurpose = preg_replace('/^:86:/', '', array_shift($purposeLines));
-        $plainPurpose .= implode('', array_map(fn($l) => preg_replace('/^\?\d{2}/', '', $l), $purposeLines));
+        $plainPurpose .= implode('', $purposeLines);
 
         $this->assertStringContainsString('Rechnung', $plainPurpose);
         $this->assertStringContainsString('123456', $plainPurpose);

@@ -14,7 +14,7 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type940;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt940Generator;
 use DateTimeImmutable;
 
@@ -32,7 +32,9 @@ class Document extends MtDocumentAbstract {
     private Balance $openingBalance;
     private Balance $closingBalance;
     private ?Balance $closingAvailableBalance;
-    private ?Balance $forwardAvailableBalance;
+    /** @var Balance[] */
+    private array $forwardAvailableBalances;
+    private ?string $statementInfo;
 
     /** @var Transaction[] */
     private array $transactions = [];
@@ -45,21 +47,32 @@ class Document extends MtDocumentAbstract {
         Balance $closingBalance,
         array $transactions = [],
         ?Balance $closingAvailableBalance = null,
-        ?Balance $forwardAvailableBalance = null,
-        ?DateTimeImmutable $creationDateTime = null
+        Balance|array|null $forwardAvailableBalances = null,
+        ?DateTimeImmutable $creationDateTime = null,
+        ?string $relatedReference = null,
+        ?string $statementInfo = null
     ) {
         parent::__construct(
             $accountId,
             $referenceId,
             $statementNumber,
             $openingBalance->getCurrency(),
-            $creationDateTime
+            $creationDateTime,
+            $relatedReference
         );
 
         $this->openingBalance = $openingBalance;
         $this->closingBalance = $closingBalance;
         $this->closingAvailableBalance = $closingAvailableBalance;
-        $this->forwardAvailableBalance = $forwardAvailableBalance;
+        // Support both single Balance and array for backwards compatibility
+        if ($forwardAvailableBalances instanceof Balance) {
+            $this->forwardAvailableBalances = [$forwardAvailableBalances];
+        } elseif (is_array($forwardAvailableBalances)) {
+            $this->forwardAvailableBalances = $forwardAvailableBalances;
+        } else {
+            $this->forwardAvailableBalances = [];
+        }
+        $this->statementInfo = $statementInfo;
         $this->transactions = $transactions;
     }
 
@@ -92,11 +105,31 @@ class Document extends MtDocumentAbstract {
     }
 
     /**
-     * Returns the Forward Available Balance.
+     * Returns the first Forward Available Balance for backwards compatibility.
      * Feld :65: in SWIFT-Notation (optional).
+     * @deprecated Use getForwardAvailableBalances() for multiple balances
      */
     public function getForwardAvailableBalance(): ?Balance {
-        return $this->forwardAvailableBalance;
+        return $this->forwardAvailableBalances[0] ?? null;
+    }
+
+    /**
+     * Returns all Forward Available Balances.
+     * Feld :65: in SWIFT-Notation (optional, can be repeated).
+     * Indicates funds available at future dates.
+     * @return Balance[]
+     */
+    public function getForwardAvailableBalances(): array {
+        return $this->forwardAvailableBalances;
+    }
+
+    /**
+     * Returns the statement-level information.
+     * Feld :86: nach :62: in SWIFT-Notation (optional).
+     * Contains additional information about the statement as a whole.
+     */
+    public function getStatementInfo(): ?string {
+        return $this->statementInfo;
     }
 
     /**

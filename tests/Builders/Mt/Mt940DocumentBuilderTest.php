@@ -69,7 +69,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testDocumentWithTransaction(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 1000.00);
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -94,7 +94,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testCalculateClosingBalance(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 1000.00);
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -118,7 +118,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testReverseCalculateOpeningBalance(): void {
         $closingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 1500.00);
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -146,7 +146,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
 
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 1000.00);
         $closingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 2000.00); // Falsch!
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -194,7 +194,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testDebitTransactionReducesBalance(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 1000.00);
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -218,7 +218,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testBalanceTurnsDebit(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 100.00);
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -247,7 +247,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testBuilderToStringRoundtrip(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 10000.00);
-        $reference = new Reference('NTRF', 'REF123');
+        $reference = new Reference('TRF', 'REF123');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),
@@ -291,9 +291,9 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testBuilderToStringRoundtripWithMultipleTransactions(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 5000.00);
-        $reference1 = new Reference('NTRF', 'REF001');
-        $reference2 = new Reference('NTRF', 'REF002');
-        $reference3 = new Reference('NTRF', 'REF003');
+        $reference1 = new Reference('TRF', 'REF001');
+        $reference2 = new Reference('TRF', 'REF002');
+        $reference3 = new Reference('TRF', 'REF003');
 
         $transactions = [
             new Transaction(
@@ -347,7 +347,7 @@ class Mt940DocumentBuilderTest extends BaseTestCase {
     #[Test]
     public function testRoundtripPreservesTransactionDetails(): void {
         $openingBalance = new Balance(CreditDebit::CREDIT, new DateTimeImmutable('2025-01-15'), CurrencyCode::Euro, 1000.00);
-        $reference = new Reference('NTRF', 'REF-DETAILS');
+        $reference = new Reference('TRF', 'REF-DETAILS');
 
         $transaction = new Transaction(
             new DateTimeImmutable('2025-01-15'),

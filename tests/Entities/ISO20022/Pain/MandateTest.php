@@ -16,8 +16,8 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 use DateTimeImmutable;
 use Tests\Contracts\BaseTestCase;
 

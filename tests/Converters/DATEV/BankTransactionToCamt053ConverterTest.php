@@ -47,7 +47,7 @@ final class BankTransactionToCamt053ConverterTest extends BaseTestCase {
             BankTransactionHeaderField::VERWENDUNGSZWECK_2->value => 'Projekt ABC',
             BankTransactionHeaderField::VERWENDUNGSZWECK_3->value => '',
             BankTransactionHeaderField::VERWENDUNGSZWECK_4->value => '',
-            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'NTRF',
+            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'TRF',
             BankTransactionHeaderField::WAEHRUNG->value => 'EUR',
         ])->build();
 
@@ -86,7 +86,7 @@ final class BankTransactionToCamt053ConverterTest extends BaseTestCase {
             BankTransactionHeaderField::UMSATZ->value => '-500,50',
             BankTransactionHeaderField::AUFTRAGGEBERNAME_1->value => 'Lieferant XY',
             BankTransactionHeaderField::VERWENDUNGSZWECK_1->value => 'Warenlieferung',
-            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'NTRF',
+            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'TRF',
             BankTransactionHeaderField::WAEHRUNG->value => 'EUR',
         ])->build();
 
@@ -285,7 +285,7 @@ final class BankTransactionToCamt053ConverterTest extends BaseTestCase {
             BankTransactionHeaderField::VERWENDUNGSZWECK_1->value => 'EREF+E2E123456',
             BankTransactionHeaderField::VERWENDUNGSZWECK_2->value => 'Test Verwendungszweck',
             BankTransactionHeaderField::VERWENDUNGSZWECK_4->value => 'Test Buchungstext',
-            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'NTRF',
+            BankTransactionHeaderField::GESCHAEFTSVORGANGSCODE->value => 'TRF',
             BankTransactionHeaderField::WAEHRUNG->value => 'EUR',
         ])->build();
 

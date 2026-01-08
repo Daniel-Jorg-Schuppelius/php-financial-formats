@@ -15,6 +15,7 @@ namespace CommonToolkit\FinancialFormats\Generators\Mt;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\Mt9GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
+use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
 
 /**
  * Generator for MT940 Customer Statement Message.
@@ -26,11 +27,12 @@ use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
 class Mt940Generator extends Mt9GeneratorAbstract {
     /**
      * Generates the MT940 SWIFT message.
-     * 
+     *
      * @param MtDocumentAbstract $document Das MT940-Dokument
+     * @param Mt940OutputFormat $format Output format (SWIFT or DATEV)
      * @return string Die formatierte SWIFT-Nachricht
      */
-    public function generate(MtDocumentAbstract $document): string {
+    public function generate(MtDocumentAbstract $document, Mt940OutputFormat $format = Mt940OutputFormat::SWIFT): string {
         if (!$document instanceof Document) {
             throw new \InvalidArgumentException('Expected Mt9\Type940\Document');
         }
@@ -45,7 +47,9 @@ class Mt940Generator extends Mt9GeneratorAbstract {
 
         // Transaktionen
         foreach ($document->getTransactions() as $txn) {
-            $lines[] = (string) $txn;
+            foreach ($txn->toMt940Lines($format) as $line) {
+                $lines[] = $line;
+            }
         }
 
         // Closing Balance (:62F:)
@@ -56,9 +60,14 @@ class Mt940Generator extends Mt9GeneratorAbstract {
             $lines[] = $this->formatBalance(':64:', $document->getClosingAvailableBalance());
         }
 
-        // Forward Available Balance (:65:) - optional
-        if ($document->getForwardAvailableBalance() !== null) {
-            $lines[] = $this->formatBalance(':65:', $document->getForwardAvailableBalance());
+        // Forward Available Balances (:65:) - optional, can be repeated
+        foreach ($document->getForwardAvailableBalances() as $forwardBalance) {
+            $lines[] = $this->formatBalance(':65:', $forwardBalance);
+        }
+
+        // Statement-Level Information (:86: after balances) - optional
+        if ($document->getStatementInfo() !== null) {
+            $lines[] = $this->formatPurpose(':86:', $document->getStatementInfo());
         }
 
         $this->appendEndMarker($lines);

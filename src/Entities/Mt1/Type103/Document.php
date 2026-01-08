@@ -15,9 +15,9 @@ namespace CommonToolkit\FinancialFormats\Entities\Mt1\Type103;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\MtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
-use CommonToolkit\FinancialFormats\Enums\BankOperationCode;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\BankOperationCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt103Generator;
 use DateTimeImmutable;
 

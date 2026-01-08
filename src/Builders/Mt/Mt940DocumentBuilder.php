@@ -31,13 +31,30 @@ use RuntimeException;
 final class Mt940DocumentBuilder {
     private string $accountId;
     private string $referenceId = 'COMMON';
+    private ?string $relatedReference = null;
     private string $statementNumber = '00000';
+    private bool $skipBalanceValidation = false;
 
     /** @var Transaction[] */
     private array $transactions = [];
 
     private ?Balance $openingBalance = null;
     private ?Balance $closingBalance = null;
+    private ?Balance $closingAvailableBalance = null;
+    /** @var Balance[] */
+    private array $forwardAvailableBalances = [];
+    private ?string $statementInfo = null;
+
+    /**
+     * Skip balance validation when building from parsed data.
+     * Real-world bank data may have rounding differences or intermediate transactions.
+     */
+    public function skipBalanceValidation(bool $skip = true): self {
+        $clone = clone $this;
+        $clone->skipBalanceValidation = $skip;
+        return $clone;
+    }
+
     public function setAccountId(string $accountId): self {
         $clone = clone $this;
         $clone->accountId = $accountId;
@@ -47,6 +64,16 @@ final class Mt940DocumentBuilder {
     public function setReferenceId(string $referenceId): self {
         $clone = clone $this;
         $clone->referenceId = $referenceId;
+        return $clone;
+    }
+
+    /**
+     * Set the Related Reference (:21:).
+     * Contains the field 20 of the MT 920 request message if this statement was requested.
+     */
+    public function setRelatedReference(?string $relatedReference): self {
+        $clone = clone $this;
+        $clone->relatedReference = $relatedReference;
         return $clone;
     }
 
@@ -84,6 +111,57 @@ final class Mt940DocumentBuilder {
         return $clone;
     }
 
+    /**
+     * Set the Closing Available Balance (:64:).
+     * Indicates funds available to the account owner.
+     */
+    public function setClosingAvailableBalance(?Balance $balance): self {
+        $clone = clone $this;
+        $clone->closingAvailableBalance = $balance;
+        return $clone;
+    }
+
+    /**
+     * Set the Forward Available Balance (:65:).
+     * Indicates funds available at a future date.
+     * @deprecated Use addForwardAvailableBalance() for multiple balances
+     */
+    public function setForwardAvailableBalance(?Balance $balance): self {
+        $clone = clone $this;
+        $clone->forwardAvailableBalances = $balance !== null ? [$balance] : [];
+        return $clone;
+    }
+
+    /**
+     * Add a Forward Available Balance (:65:).
+     * Can be repeated for multiple future dates.
+     */
+    public function addForwardAvailableBalance(Balance $balance): self {
+        $clone = clone $this;
+        $clone->forwardAvailableBalances[] = $balance;
+        return $clone;
+    }
+
+    /**
+     * Set all Forward Available Balances (:65:).
+     * @param Balance[] $balances
+     */
+    public function setForwardAvailableBalances(array $balances): self {
+        $clone = clone $this;
+        $clone->forwardAvailableBalances = $balances;
+        return $clone;
+    }
+
+    /**
+     * Set the Statement-Level Information (:86: after :62:).
+     * Contains additional information about the statement as a whole.
+     */
+    public function setStatementInfo(?string $statementInfo): self {
+        $clone = clone $this;
+        $clone->statementInfo = $statementInfo;
+        return $clone;
+    }
+
     public function build(): Document {
         if (!$this->openingBalance && !$this->closingBalance) {
             throw new RuntimeException("Mindestens ein Saldo (Opening oder Closing) muss angegeben werden.");
@@ -98,13 +176,28 @@ final class Mt940DocumentBuilder {
         } else {
             $opening = $this->openingBalance;
             $closing = $this->closingBalance;
-            $expected = $this->calculateClosingBalance($opening);
-            if ((string) $expected !== (string) $closing) {
-                throw new RuntimeException("Opening- und Closing-Salden stimmen nicht überein. Erwartet: " . $expected);
+
+            if (!$this->skipBalanceValidation) {
+                $expected = $this->calculateClosingBalance($opening);
+                if ((string) $expected !== (string) $closing) {
+                    throw new RuntimeException("Opening- und Closing-Salden stimmen nicht überein. Erwartet: " . $expected);
+                }
             }
         }
 
-        return new Document($this->accountId, $this->referenceId, $this->statementNumber, $opening, $closing, $this->transactions);
+        return new Document(
+            $this->accountId,
+            $this->referenceId,
+            $this->statementNumber,
+            $opening,
+            $closing,
+            $this->transactions,
+            $this->closingAvailableBalance,
+            $this->forwardAvailableBalances,
+            null, // creationDateTime
+            $this->relatedReference,
+            $this->statementInfo
+        );
     }
 
     private function calculateClosingBalance(Balance $opening): Balance {

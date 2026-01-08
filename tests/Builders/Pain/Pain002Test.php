@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Tests\Builders\Pain;
 use CommonToolkit\FinancialFormats\Builders\ISO20022\Pain\Pain002DocumentBuilder;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
-use CommonToolkit\FinancialFormats\Enums\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;

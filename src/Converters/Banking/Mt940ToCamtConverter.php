@@ -23,7 +23,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Transaction as 
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance as Mt9Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction as Mt940Transaction;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Helper\Data\BankHelper;
 use DateTimeImmutable;
 

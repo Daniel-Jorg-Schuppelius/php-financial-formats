@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Tests\Builders\Camt;
 use CommonToolkit\FinancialFormats\Builders\ISO20022\Camt\Camt054DocumentBuilder;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Transaction;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Parsers\CamtParser;

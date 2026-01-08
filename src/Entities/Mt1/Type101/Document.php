@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\Mt1\Type101;
 
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt101Generator;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;

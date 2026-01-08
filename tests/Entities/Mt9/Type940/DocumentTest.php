@@ -15,7 +15,7 @@ namespace Tests\Entities\Mt9\Type940;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
@@ -81,7 +81,7 @@ class DocumentTest extends BaseTestCase {
             closingBalance: $closingBalance,
             transactions: [],
             closingAvailableBalance: $closingAvailable,
-            forwardAvailableBalance: null,
+            forwardAvailableBalances: null,
             creationDateTime: new DateTimeImmutable('2025-01-15T10:30:00')
         );
 

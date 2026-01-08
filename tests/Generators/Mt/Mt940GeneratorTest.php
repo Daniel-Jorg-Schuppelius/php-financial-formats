@@ -13,7 +13,11 @@ declare(strict_types=1);
 namespace Tests\Generators\Mt;
 
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
+use CommonToolkit\FinancialFormats\Entities\Mt9\Purpose;
+use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
+use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction;
+use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt940Generator;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
@@ -136,7 +140,7 @@ class Mt940GeneratorTest extends BaseTestCase {
             closingBalance: $this->createClosingBalance(),
             transactions: [],
             closingAvailableBalance: null,
-            forwardAvailableBalance: $forwardAvailable
+            forwardAvailableBalances: $forwardAvailable
         );
 
         $output = $this->generator->generate($document);
@@ -167,5 +171,69 @@ class Mt940GeneratorTest extends BaseTestCase {
         $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract::class);
 
         $this->generator->generate($wrongDocument);
+    }
+
+    public function testGenerateWithDatevFormat(): void {
+        $purpose = Purpose::fromString('?00SEPA Lastschrift?10001?20EREF+ABC123?21MREF+MND456?30COBADEFFXXX?31DE89370400440532013000?32Max Mustermann?33GmbH?34992');
+
+        $transaction = new Transaction(
+            bookingDate: new DateTimeImmutable('2025-01-15'),
+            valutaDate: new DateTimeImmutable('2025-01-15'),
+            amount: 500.00,
+            creditDebit: CreditDebit::DEBIT,
+            currency: CurrencyCode::Euro,
+            reference: new Reference('005', 'TRN123456'),
+            purpose: $purpose
+        );
+
+        $document = new Document(
+            accountId: 'DE89370400440532013000',
+            referenceId: 'REF-001',
+            statementNumber: '001',
+            openingBalance: $this->createOpeningBalance(),
+            closingBalance: $this->createClosingBalance(),
+            transactions: [$transaction]
+        );
+
+        $output = $this->generator->generate($document, Mt940OutputFormat::DATEV);
+
+        // DATEV format should contain structured ?xx subfields
+        $this->assertStringContainsString(':86:', $output);
+        // GVC + Buchungstext on first line, then ?10, ?20-?29, ?30-?34
+        $this->assertStringContainsString('?10', $output);
+        $this->assertStringContainsString('?20', $output);
+        $this->assertStringContainsString('?30', $output);
+        $this->assertStringContainsString('?31', $output);
+        $this->assertStringContainsString('?32', $output);
+    }
+
+    public function testGenerateWithSwiftFormat(): void {
+        $purpose = Purpose::fromString('?00SEPA Lastschrift?20EREF+ABC123?21MREF+MND456?32Max Mustermann');
+
+        $transaction = new Transaction(
+            bookingDate: new DateTimeImmutable('2025-01-15'),
+            valutaDate: new DateTimeImmutable('2025-01-15'),
+            amount: 500.00,
+            creditDebit: CreditDebit::DEBIT,
+            currency: CurrencyCode::Euro,
+            reference: new Reference('005', 'TRN123456'),
+            purpose: $purpose
+        );
+
+        $document = new Document(
+            accountId: 'DE89370400440532013000',
+            referenceId: 'REF-001',
+            statementNumber: '001',
+            openingBalance: $this->createOpeningBalance(),
+            closingBalance: $this->createClosingBalance(),
+            transactions: [$transaction]
+        );
+
+        $output = $this->generator->generate($document, Mt940OutputFormat::SWIFT);
+
+        // SWIFT format should NOT contain ?xx subfields
+        $this->assertStringContainsString(':86:', $output);
+        $this->assertStringNotContainsString('?00', $output);
+        $this->assertStringNotContainsString('?20', $output);
     }
 }

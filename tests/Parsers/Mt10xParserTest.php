@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Tests\Parsers;
 
-use CommonToolkit\FinancialFormats\Enums\BankOperationCode;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\BankOperationCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Parsers\Mt10xParser;
 use Tests\Contracts\BaseTestCase;

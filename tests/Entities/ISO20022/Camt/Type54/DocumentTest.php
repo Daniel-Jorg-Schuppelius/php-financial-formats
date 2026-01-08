@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Tests\Entities\ISO20022\Camt\Type54;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 use Tests\Contracts\BaseTestCase;

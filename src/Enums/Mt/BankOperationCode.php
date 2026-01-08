@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums;
+namespace CommonToolkit\FinancialFormats\Enums\Mt;
 
 /**
  * Bank Operation Code for MT10x transfers (Field :23B:).

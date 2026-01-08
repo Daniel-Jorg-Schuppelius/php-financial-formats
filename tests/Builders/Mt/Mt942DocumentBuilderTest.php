@@ -57,7 +57,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             500.00,
             CreditDebit::CREDIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123')
+            new Reference('TRF', 'REF123')
         );
 
         $document = $this->builder
@@ -80,7 +80,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             500.00,
             CreditDebit::CREDIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123')
+            new Reference('TRF', 'REF123')
         );
 
         $document = $this->builder
@@ -107,7 +107,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             500.00,
             CreditDebit::CREDIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123')
+            new Reference('TRF', 'REF123')
         );
 
         $this->builder
@@ -127,7 +127,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             500.00,
             CreditDebit::CREDIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123'),
+            new Reference('TRF', 'REF123'),
             'Zahlung 1'
         );
         $transaction2 = new Transaction(
@@ -136,7 +136,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             200.00,
             CreditDebit::DEBIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF456'),
+            new Reference('TRF', 'REF456'),
             'Zahlung 2'
         );
 
@@ -160,7 +160,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
                 500.00,
                 CreditDebit::CREDIT,
                 CurrencyCode::Euro,
-                new Reference('NTRF', 'REF123')
+                new Reference('TRF', 'REF123')
             ),
             new Transaction(
                 new DateTimeImmutable('2025-01-01'),
@@ -168,7 +168,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
                 200.00,
                 CreditDebit::DEBIT,
                 CurrencyCode::Euro,
-                new Reference('NTRF', 'REF456')
+                new Reference('TRF', 'REF456')
             ),
         ];
 
@@ -277,7 +277,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             300.00,
             CreditDebit::DEBIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123')
+            new Reference('TRF', 'REF123')
         );
 
         $document = $this->builder
@@ -300,7 +300,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             500.00,
             CreditDebit::DEBIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123')
+            new Reference('TRF', 'REF123')
         );
 
         $document = $this->builder
@@ -323,7 +323,7 @@ class Mt942DocumentBuilderTest extends BaseTestCase {
             500.00,
             CreditDebit::CREDIT,
             CurrencyCode::Euro,
-            new Reference('NTRF', 'REF123')
+            new Reference('TRF', 'REF123')
         );
 
         $document = $this->builder

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Tests\Entities\Mt9;
 
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
+use CommonToolkit\FinancialFormats\Enums\Mt\TransactionTypeIndicator;
 use RuntimeException;
 use Tests\Contracts\BaseTestCase;
 
@@ -44,21 +45,21 @@ class ReferenceTest extends BaseTestCase {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('MT9xx-Referenzüberschreitung');
 
-        // TRF + 14 Zeichen = 17 Zeichen > max 16
+        // 17 Zeichen > max 16
         new Reference(
             transactionCode: 'TRF',
-            reference: '12345678901234' // 14 chars + 3 = 17
+            reference: '12345678901234567'
         );
     }
 
     public function testMaxLengthReferenceAccepted(): void {
-        // TRF (3) + 13 Zeichen = 16 -> OK
+        // 16 Zeichen -> OK
         $reference = new Reference(
             transactionCode: 'TRF',
-            reference: '1234567890123'
+            reference: '1234567890123456'
         );
 
-        $this->assertSame('1234567890123', $reference->getReference());
+        $this->assertSame('1234567890123456', $reference->getReference());
     }
 
     public function testToStringWithoutBankReference(): void {
@@ -71,6 +72,12 @@ class ReferenceTest extends BaseTestCase {
         $reference = new Reference('CHK', 'REF456', 'BANK789');
 
         $this->assertSame('NCHKREF456//BANK789', (string)$reference);
+    }
+
+    public function testToStringWithCustomBookingKey(): void {
+        $reference = new Reference('TRF', 'REF123', null, 'F');
+
+        $this->assertSame('FTRFREF123', (string)$reference);
     }
 
     public function testFromSwiftFieldWithNPrefix(): void {
@@ -87,6 +94,15 @@ class ReferenceTest extends BaseTestCase {
         $this->assertSame('REF67890', $reference->getReference());
     }
 
+    public function testFromSwiftFieldWithBookingKey(): void {
+        $reference = Reference::fromSwiftField('FTRFREF123');
+
+        $this->assertSame('TRF', $reference->getTransactionCode());
+        $this->assertSame('REF123', $reference->getReference());
+        $this->assertSame(TransactionTypeIndicator::OTHER, $reference->getBookingKey());
+        $this->assertSame('FTRF', $reference->getBookingKeyWithCode());
+    }
+
     public function testFromSwiftFieldWithBankReference(): void {
         $reference = Reference::fromSwiftField('NTRFREF123//BANKREF');
 
@@ -96,10 +112,10 @@ class ReferenceTest extends BaseTestCase {
     }
 
     public function testFromSwiftFieldFallback(): void {
-        // Kein gültiges Format (weniger als 3 Großbuchstaben) -> Fallback zu TRF
+        // 3!c + Referenz wird akzeptiert (auch numerisch)
         $reference = Reference::fromSwiftField('12345');
 
-        $this->assertSame('TRF', $reference->getTransactionCode());
-        $this->assertSame('12345', $reference->getReference());
+        $this->assertSame('123', $reference->getTransactionCode());
+        $this->assertSame('45', $reference->getReference());
     }
 }

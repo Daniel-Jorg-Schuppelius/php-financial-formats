@@ -18,6 +18,8 @@ use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Transaction as Mt940Transaction;
+use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
+use CommonToolkit\FinancialFormats\Generators\Mt\Mt940Generator;
 use CommonToolkit\Entities\CSV\DataLine;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\Enums\CreditDebit;
@@ -197,9 +199,8 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
         $transactionCode = self::getField($fields, F::GESCHAEFTSVORGANGSCODE);
         if (empty($transactionCode) || strlen($transactionCode) < 3) {
             $transactionCode = self::DEFAULT_TRANSACTION_CODE;
-        } else {
-            // Kürze auf 4 Zeichen für MT940-Kompatibilität
-            $transactionCode = substr($transactionCode, 0, 4);
+        } elseif (strlen($transactionCode) > 3) {
+            $transactionCode = substr($transactionCode, 0, 3);
         }
 
         // Referenz aus Auftraggeber-Daten zusammenstellen
@@ -217,30 +218,30 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
         $purposeParts = [];
 
         // Auftraggeber-Name (Felder 8-9)
-        $name1 = self::getField($fields, F::AUFTRAGGEBERNAME_1);
+        $name1 = self::getFieldRaw($fields, F::AUFTRAGGEBERNAME_1);
         if (!empty($name1)) {
             $purposeParts[] = $name1;
         }
-        $name2 = self::getField($fields, F::AUFTRAGGEBERNAME_2);
+        $name2 = self::getFieldRaw($fields, F::AUFTRAGGEBERNAME_2);
         if (!empty($name2)) {
             $purposeParts[] = $name2;
         }
 
         // Alle Verwendungszweck-Felder sammeln
         foreach (self::getPurposeFields() as $vzFeld) {
-            $vz = self::getField($fields, $vzFeld);
+            $vz = self::getFieldRaw($fields, $vzFeld);
             if (!empty($vz)) {
                 $purposeParts[] = $vz;
             }
         }
 
-        $purpose = implode('', $purposeParts);
+        $purpose = trim(implode('', $purposeParts));
 
         try {
             $reference = new Reference($transactionCode, $referenceStr);
         } catch (Throwable) {
             // Fallback bei ungültiger Referenz
-            $reference = new Reference('NTRF', 'NONREF');
+            $reference = new Reference('TRF', 'NONREF');
         }
 
         return new Mt940Transaction(
@@ -272,5 +273,43 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             }
         }
         return $results;
+    }
+
+    /**
+     * Konvertiert ein DATEV BankTransaction-Dokument direkt in einen MT940-String.
+     * 
+     * @param BankTransaction $document DATEV ASCII-Weiterverarbeitungsdokument
+     * @param Mt940OutputFormat $format Ausgabeformat (SWIFT oder DATEV)
+     * @param float|null $openingBalanceAmount Anfangssaldo (optional)
+     * @param CreditDebit|null $openingBalanceCreditDebit Credit/Debit des Anfangssaldos
+     * @return string MT940-formatierter String
+     */
+    public static function convertToString(
+        BankTransaction $document,
+        Mt940OutputFormat $format = Mt940OutputFormat::DATEV,
+        ?float $openingBalanceAmount = null,
+        ?CreditDebit $openingBalanceCreditDebit = null
+    ): string {
+        $mt940Document = self::convert($document, $openingBalanceAmount, $openingBalanceCreditDebit);
+        $generator = new Mt940Generator();
+        return $generator->generate($mt940Document, $format);
+    }
+
+    /**
+     * Konvertiert ein DATEV BankTransaction-Dokument in einen DATEV-kompatiblen MT940-String.
+     * 
+     * Shortcut für convertToString() mit Mt940OutputFormat::DATEV.
+     * 
+     * @param BankTransaction $document DATEV ASCII-Weiterverarbeitungsdokument
+     * @param float|null $openingBalanceAmount Anfangssaldo (optional)
+     * @param CreditDebit|null $openingBalanceCreditDebit Credit/Debit des Anfangssaldos
+     * @return string DATEV-kompatible MT940-formatierter String mit ?xx Subfeldern
+     */
+    public static function convertToDatevString(
+        BankTransaction $document,
+        ?float $openingBalanceAmount = null,
+        ?CreditDebit $openingBalanceCreditDebit = null
+    ): string {
+        return self::convertToString($document, Mt940OutputFormat::DATEV, $openingBalanceAmount, $openingBalanceCreditDebit);
     }
 }

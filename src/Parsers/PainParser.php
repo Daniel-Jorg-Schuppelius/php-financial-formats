@@ -20,11 +20,11 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\{Document as Pai
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\{Document as Pain007Document, GroupHeader as Pain007GroupHeader, OriginalGroupInformation as Pain007OriginalGroupInformation, OriginalPaymentInformation as Pain007OriginalPaymentInformation, ReversalReason, TransactionInformation};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\{DirectDebitTransaction, Document as Pain008Document, GroupHeader as Pain008GroupHeader, MandateInformation, PaymentInstruction as Pain008PaymentInstruction};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\PainType;
-use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\Helper\FileSystem\File;
 use DateTimeImmutable;

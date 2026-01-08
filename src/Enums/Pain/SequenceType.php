@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums;
+namespace CommonToolkit\FinancialFormats\Enums\Pain;
 
 /**
  * Sequence Type for SEPA direct debits (SeqTp).
@@ -20,20 +20,20 @@ namespace CommonToolkit\FinancialFormats\Enums;
  * @package CommonToolkit\Enums\Common\Banking
  */
 enum SequenceType: string {
-    case FIRST = 'FRST';      // Erstlastschrift
+    case FIRST     = 'FRST';  // Erstlastschrift
     case RECURRING = 'RCUR';  // Wiederkehrende Lastschrift
-    case FINAL = 'FNAL';      // Letzte Lastschrift
-    case ONE_OFF = 'OOFF';    // Einmalige Lastschrift
+    case FINAL     = 'FNAL';  // Letzte Lastschrift
+    case ONE_OFF   = 'OOFF';  // Einmalige Lastschrift
 
     /**
      * Returns the description.
      */
     public function description(): string {
         return match ($this) {
-            self::FIRST => 'Erstlastschrift',
+            self::FIRST     => 'Erstlastschrift',
             self::RECURRING => 'Wiederkehrende Lastschrift',
-            self::FINAL => 'Letzte Lastschrift',
-            self::ONE_OFF => 'Einmalige Lastschrift',
+            self::FINAL     => 'Letzte Lastschrift',
+            self::ONE_OFF   => 'Einmalige Lastschrift',
         };
     }
 

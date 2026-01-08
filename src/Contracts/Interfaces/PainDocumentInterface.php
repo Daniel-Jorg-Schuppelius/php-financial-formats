@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Contracts\Interfaces;
 
 use CommonToolkit\Contracts\Interfaces\XML\XmlDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
 
 /**
  * Interface for all Pain documents.

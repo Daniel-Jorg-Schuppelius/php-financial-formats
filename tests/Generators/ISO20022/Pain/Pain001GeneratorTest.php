@@ -21,7 +21,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstruction;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Pain\Pain001Generator;
-use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 use Tests\Contracts\BaseTestCase;

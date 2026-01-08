@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\Document as Pain
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document as Pain007Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain008Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
-use CommonToolkit\FinancialFormats\Enums\PainType;
+use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
 use CommonToolkit\FinancialFormats\Parsers\PainParser;
 use RuntimeException;
 use Tests\Contracts\BaseTestCase;

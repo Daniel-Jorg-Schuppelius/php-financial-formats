@@ -119,7 +119,7 @@ final class MtInterConverter {
             closingBalance: $mt942->getClosingBalance(),
             transactions: $mt940Transactions,
             closingAvailableBalance: null,
-            forwardAvailableBalance: null,
+            forwardAvailableBalances: null,
             creationDateTime: $mt942->getCreationDateTime()
         );
     }
@@ -139,7 +139,7 @@ final class MtInterConverter {
             closingBalance: $mt941->getClosingBalance(),
             transactions: [], // Keine Transaktionen in MT941
             closingAvailableBalance: $mt941->getClosingAvailableBalance(),
-            forwardAvailableBalance: null,
+            forwardAvailableBalances: null,
             creationDateTime: $mt941->getCreationDateTime()
         );
     }

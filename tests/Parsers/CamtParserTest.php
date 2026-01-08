@@ -34,7 +34,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57\Document as Cam
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58\Document as Camt058Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\Document as Camt059Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type87\Document as Camt087Document;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\FinancialFormats\Parsers\CamtParser;
 use Tests\Contracts\BaseTestCase;

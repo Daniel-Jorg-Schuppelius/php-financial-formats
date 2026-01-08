@@ -17,7 +17,7 @@ use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Document;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Transaction;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
 use DateTimeImmutable;
 use InvalidArgumentException;
 

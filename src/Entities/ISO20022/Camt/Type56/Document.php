@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\CamtType;
-use CommonToolkit\FinancialFormats\Enums\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt056Generator;
 use CommonToolkit\FinancialFormats\Traits\XmlDocumentExportTrait;
 use DateTimeImmutable;

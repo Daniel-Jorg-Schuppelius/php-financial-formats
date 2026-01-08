@@ -14,8 +14,8 @@ namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1;
 
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 

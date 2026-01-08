@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9;
 
-use CommonToolkit\FinancialFormats\Enums\MtType;
+use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 
@@ -30,6 +30,7 @@ use DateTimeImmutable;
 abstract class MtDocumentAbstract {
     protected string $accountId;
     protected string $referenceId;
+    protected ?string $relatedReference;
     protected string $statementNumber;
     protected CurrencyCode $currency;
     protected DateTimeImmutable $creationDateTime;
@@ -39,10 +40,12 @@ abstract class MtDocumentAbstract {
         string $referenceId,
         string $statementNumber,
         CurrencyCode $currency,
-        ?DateTimeImmutable $creationDateTime = null
+        ?DateTimeImmutable $creationDateTime = null,
+        ?string $relatedReference = null
     ) {
         $this->accountId = $accountId;
         $this->referenceId = $referenceId;
+        $this->relatedReference = $relatedReference;
         $this->statementNumber = $statementNumber;
         $this->currency = $currency;
         $this->creationDateTime = $creationDateTime ?? new DateTimeImmutable();
@@ -67,6 +70,15 @@ abstract class MtDocumentAbstract {
      */
     public function getReferenceId(): string {
         return $this->referenceId;
+    }
+
+    /**
+     * Returns the related reference (optional).
+     * Feld :21: in SWIFT-Notation.
+     * Contains the field 20 of the MT 920 request message if this statement was requested.
+     */
+    public function getRelatedReference(): ?string {
+        return $this->relatedReference;
     }
 
     /**

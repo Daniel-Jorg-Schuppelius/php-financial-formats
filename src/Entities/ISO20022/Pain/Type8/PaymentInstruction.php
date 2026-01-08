@@ -15,10 +15,10 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Enums\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\PaymentMethod;
-use CommonToolkit\FinancialFormats\Enums\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
+use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
 use DateTimeImmutable;
 
 /**
