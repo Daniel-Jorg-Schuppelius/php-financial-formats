@@ -148,6 +148,27 @@ final readonly class Party {
     }
 
     /**
+     * Serialisiert im SWIFT-Format (Option H - /Kontonummer + Name/Adresse).
+     * 
+     * Format:
+     * /Kontonummer
+     * Name
+     * Adresszeile 1
+     * Adresszeile 2
+     */
+    public function toOptionH(): string {
+        $lines = [];
+        if ($this->account !== null) {
+            $lines[] = '/' . $this->account;
+        }
+        if ($this->name !== null) {
+            $lines[] = $this->name;
+        }
+        $lines = array_merge($lines, $this->getAddressLines());
+        return implode("\n", $lines);
+    }
+
+    /**
      * Parst eine Partei aus einem SWIFT-Feldinhalt.
      */
     public static function fromSwiftField(string $content): self {

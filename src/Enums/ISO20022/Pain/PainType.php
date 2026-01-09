@@ -55,23 +55,34 @@ enum PainType: string {
     case PAIN_018 = 'pain.018';
 
     /**
-     * Returns the namespace prefix.
+     * Returns the namespace prefix using the default version.
+     * 
+     * @deprecated Use getNamespace(PainVersion) for explicit version control.
      */
     public function namespacePrefix(): string {
-        return match ($this) {
-            self::PAIN_001 => 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.12',
-            self::PAIN_002 => 'urn:iso:std:iso:20022:tech:xsd:pain.002.001.14',
-            self::PAIN_007 => 'urn:iso:std:iso:20022:tech:xsd:pain.007.001.12',
-            self::PAIN_008 => 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.11',
-            self::PAIN_009 => 'urn:iso:std:iso:20022:tech:xsd:pain.009.001.08',
-            self::PAIN_010 => 'urn:iso:std:iso:20022:tech:xsd:pain.010.001.08',
-            self::PAIN_011 => 'urn:iso:std:iso:20022:tech:xsd:pain.011.001.08',
-            self::PAIN_012 => 'urn:iso:std:iso:20022:tech:xsd:pain.012.001.08',
-            self::PAIN_013 => 'urn:iso:std:iso:20022:tech:xsd:pain.013.001.10',
-            self::PAIN_014 => 'urn:iso:std:iso:20022:tech:xsd:pain.014.001.10',
-            self::PAIN_017 => 'urn:iso:std:iso:20022:tech:xsd:pain.017.001.04',
-            self::PAIN_018 => 'urn:iso:std:iso:20022:tech:xsd:pain.018.001.04',
-        };
+        return PainVersion::getDefault($this)->getNamespace($this);
+    }
+
+    /**
+     * Returns the namespace for a specific version.
+     */
+    public function getNamespace(?PainVersion $version = null): string {
+        $version ??= PainVersion::getDefault($this);
+        return $version->getNamespace($this);
+    }
+
+    /**
+     * Returns the default version for this Pain type.
+     */
+    public function getDefaultVersion(): PainVersion {
+        return PainVersion::getDefault($this);
+    }
+
+    /**
+     * Returns all supported versions for this Pain type.
+     */
+    public function getSupportedVersions(): array {
+        return PainVersion::getSupportedVersions($this);
     }
 
     /**
@@ -91,6 +102,26 @@ enum PainType: string {
             self::PAIN_014 => 'Statusbericht Zahlungsanfrage',
             self::PAIN_017 => 'Mandatskopie-Anfrage',
             self::PAIN_018 => 'Mandatssuspendierung',
+        };
+    }
+
+    /**
+     * Returns the ISO 20022 message name (English).
+     */
+    public function getMessageName(): string {
+        return match ($this) {
+            self::PAIN_001 => 'Customer Credit Transfer Initiation',
+            self::PAIN_002 => 'Customer Payment Status Report',
+            self::PAIN_007 => 'Customer Payment Reversal',
+            self::PAIN_008 => 'Customer Direct Debit Initiation',
+            self::PAIN_009 => 'Mandate Initiation Request',
+            self::PAIN_010 => 'Mandate Amendment Request',
+            self::PAIN_011 => 'Mandate Cancellation Request',
+            self::PAIN_012 => 'Mandate Acceptance Report',
+            self::PAIN_013 => 'Creditor Payment Activation Request',
+            self::PAIN_014 => 'Creditor Payment Activation Request Status Report',
+            self::PAIN_017 => 'Mandate Copy Request',
+            self::PAIN_018 => 'Mandate Suspension Request',
         };
     }
 
@@ -176,18 +207,18 @@ enum PainType: string {
     /**
      * Ermittelt den Pain-Typ aus einem XML-Dokument.
      * 
-     * Sucht nach dem Namespace prefix im XML-Inhalt.
-     * Specifically checks xmlns attributes to avoid mismatches.
+     * Uses regex to match xmlns namespace declarations to avoid false matches
+     * on elements like OrgnlMsgNmId that might contain different message types.
      */
     public static function fromXml(string $xmlContent): ?self {
-        // Suche nach xmlns= oder xmlns: Deklarationen für Pain-Namespaces
-        // z.B. xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.12"
-        foreach (self::cases() as $case) {
-            // Prüfe auf Namespace-URI mit Version
-            // Muster: pain.XXX.YYY (z.B. pain.001.001, pain.002.001, etc.)
-            $pattern = 'xsd:' . preg_quote($case->value, '/') . '\.\d{3}';
-            if (preg_match('/' . $pattern . '/', $xmlContent)) {
-                return $case;
+        // Match xmlns declarations: xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.12"
+        // or xmlns:xxx="urn:iso:std:iso:20022:tech:xsd:pain.001.001.12"
+        if (preg_match('/xmlns[^=]*=\s*["\']urn:iso:std:iso:20022:tech:xsd:(pain\.\d{3})\.001\.\d{2}["\']/', $xmlContent, $matches)) {
+            $painTypeString = $matches[1];
+            foreach (self::cases() as $case) {
+                if ($case->value === $painTypeString) {
+                    return $case;
+                }
             }
         }
         return null;

@@ -22,9 +22,19 @@ namespace CommonToolkit\FinancialFormats\Enums\ISO20022\Camt;
  */
 enum CamtVersion: string {
     /**
+     * Version 01 - Initial version (rare)
+     */
+    case V01 = '01';
+
+    /**
      * Version 02 - Initiale weit verbreitete Version
      */
     case V02 = '02';
+
+    /**
+     * Version 03 - Early extensions
+     */
+    case V03 = '03';
 
     /**
      * Version 04 - Extensions for SEPA
@@ -118,7 +128,9 @@ enum CamtVersion: string {
      */
     public function getDescription(): string {
         return match ($this) {
-            self::V02 => 'ISO 20022 Version 02 (Initial)',
+            self::V01 => 'ISO 20022 Version 01 (Initial)',
+            self::V02 => 'ISO 20022 Version 02',
+            self::V03 => 'ISO 20022 Version 03',
             self::V04 => 'ISO 20022 Version 04 (SEPA)',
             self::V05 => 'ISO 20022 Version 05',
             self::V06 => 'ISO 20022 Version 06',
