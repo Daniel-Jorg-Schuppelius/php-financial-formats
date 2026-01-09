@@ -10,21 +10,22 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Parsers;
+namespace CommonToolkit\FinancialFormats\Parsers\ISO20022;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\{AccountIdentification, FinancialInstitution, Mandate, PartyIdentification, PaymentIdentification, RemittanceInformation};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\{CreditTransferTransaction, Document as Pain001Document, GroupHeader as Pain001GroupHeader, PaymentInstruction as Pain001PaymentInstruction};
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\{Document as Pain002Document, GroupHeader as Pain002GroupHeader, OriginalGroupInformation as Pain002OriginalGroupInformation, OriginalPaymentInformation as Pain002OriginalPaymentInformation, StatusReason, TransactionInformationAndStatus, TransactionStatus};
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\{Document as Pain002Document, GroupHeader as Pain002GroupHeader, OriginalGroupInformation as Pain002OriginalGroupInformation, OriginalPaymentInformation as Pain002OriginalPaymentInformation, StatusReason, TransactionInformationAndStatus};
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\TransactionStatus;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\{Document as Pain007Document, GroupHeader as Pain007GroupHeader, OriginalGroupInformation as Pain007OriginalGroupInformation, OriginalPaymentInformation as Pain007OriginalPaymentInformation, ReversalReason, TransactionInformation};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\{DirectDebitTransaction, Document as Pain008Document, GroupHeader as Pain008GroupHeader, MandateInformation, PaymentInstruction as Pain008PaymentInstruction};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
 use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
-use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
-use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\SequenceType;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\Helper\FileSystem\File;
 use DateTimeImmutable;

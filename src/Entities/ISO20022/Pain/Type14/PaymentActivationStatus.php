@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type14;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\TransactionStatus;
 
 /**
  * Payment activation status for pain.014.

@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums\Camt;
+namespace CommonToolkit\FinancialFormats\Enums\ISO20022\Camt;
 
 /**
  * OrganisationIdentification - ISO 20022 External Code List

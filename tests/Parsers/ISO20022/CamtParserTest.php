@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Parsers;
+namespace CommonToolkit\FinancialFormats\Tests\Parsers\ISO20022;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type26\Document as Camt026Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type27\Document as Camt027Document;
@@ -34,9 +34,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57\Document as Cam
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type58\Document as Camt058Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\Document as Camt059Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type87\Document as Camt087Document;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
-use CommonToolkit\FinancialFormats\Parsers\CamtParser;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtParser;
 use Tests\Contracts\BaseTestCase;
 
 /**
@@ -47,7 +47,7 @@ class CamtParserTest extends BaseTestCase {
 
     protected function setUp(): void {
         parent::setUp();
-        $this->samplesPath = dirname(__DIR__, 2) . '/.samples/Banking/CAMT/';
+        $this->samplesPath = dirname(__DIR__, 3) . '/.samples/Banking/CAMT/';
     }
 
     // ============================================================
@@ -87,9 +87,9 @@ class CamtParserTest extends BaseTestCase {
         $firstEntry = $document->getEntries()[0];
         $this->assertEquals(100000.0, $firstEntry->getAmount());
         $this->assertTrue($firstEntry->isCredit());
-        $this->assertEquals(\CommonToolkit\FinancialFormats\Enums\Camt\TransactionDomain::PMNT, $firstEntry->getDomainCode());
-        $this->assertEquals(\CommonToolkit\FinancialFormats\Enums\Camt\TransactionFamily::CNTR, $firstEntry->getFamilyCode());
-        $this->assertEquals(\CommonToolkit\FinancialFormats\Enums\Camt\TransactionSubFamily::CDPT, $firstEntry->getSubFamilyCode());
+        $this->assertEquals(\CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionDomain::PMNT, $firstEntry->getDomainCode());
+        $this->assertEquals(\CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionFamily::CNTR, $firstEntry->getFamilyCode());
+        $this->assertEquals(\CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionSubFamily::CDPT, $firstEntry->getSubFamilyCode());
     }
 
     public function testParseCamt052Barscheckauszahlung(): void {

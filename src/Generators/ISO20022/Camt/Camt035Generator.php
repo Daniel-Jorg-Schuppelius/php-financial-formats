@@ -14,8 +14,8 @@ namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type35\Document;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 
 /**
  * Generator for CAMT.035 XML (Proprietary Format Investigation).

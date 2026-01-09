@@ -14,11 +14,11 @@ namespace Tests\Entities\ISO20022\Camt\Type53;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Reference;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction;
-use CommonToolkit\FinancialFormats\Enums\Camt\ReturnReason;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionDomain;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionFamily;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionPurpose;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionSubFamily;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReturnReason;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionDomain;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionFamily;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionPurpose;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionSubFamily;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;

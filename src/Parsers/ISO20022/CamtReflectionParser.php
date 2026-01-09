@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Parsers;
+namespace CommonToolkit\FinancialFormats\Parsers\ISO20022;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\Parsers\ExtendedDOMDocumentParser;

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Parsers;
+namespace CommonToolkit\FinancialFormats\Tests\Parsers\ISO20022;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document as Pain001Document;
@@ -18,8 +18,8 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\Document as Pain
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document as Pain007Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain008Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9\Document as Pain009Document;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
-use CommonToolkit\FinancialFormats\Parsers\PainParser;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\PainParser;
 use RuntimeException;
 use Tests\Contracts\BaseTestCase;
 
@@ -269,7 +269,7 @@ class PainParserTest extends BaseTestCase {
     }
 
     private function getSampleXml(string $fileName): string {
-        $path = dirname(__DIR__, 2) . '/.samples/Banking/PAIN/' . $fileName;
+        $path = dirname(__DIR__, 3) . '/.samples/Banking/PAIN/' . $fileName;
         $content = file_get_contents($path);
         if ($content === false) {
             throw new RuntimeException("Sample XML could not be read: {$path}");

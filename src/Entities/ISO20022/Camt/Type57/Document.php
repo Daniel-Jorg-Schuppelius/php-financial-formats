@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type57;
 
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt057Generator;
 use CommonToolkit\FinancialFormats\Traits\XmlDocumentExportTrait;
 use DateTimeImmutable;

@@ -15,8 +15,8 @@ namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Iso20022GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use DOMDocument;
 use DOMElement;
 

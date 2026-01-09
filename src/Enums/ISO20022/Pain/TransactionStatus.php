@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
+namespace CommonToolkit\FinancialFormats\Enums\ISO20022\Pain;
 
 /**
  * Transaction status for pain.002 (TxSts).

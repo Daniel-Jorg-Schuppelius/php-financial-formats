@@ -16,8 +16,8 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGenerat
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationDetails;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\TransactionInformationAndStatus;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 
 /**
  * Generator for CAMT.029 XML (Resolution of Investigation).

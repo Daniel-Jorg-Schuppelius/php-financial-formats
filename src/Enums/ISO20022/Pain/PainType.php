@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums\Pain;
+namespace CommonToolkit\FinancialFormats\Enums\ISO20022\Pain;
 
 /**
  * ISO 20022 Payment Initiation (pain) Message Types.

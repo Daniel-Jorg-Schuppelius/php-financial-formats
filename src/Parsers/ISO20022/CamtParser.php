@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Parsers;
+namespace CommonToolkit\FinancialFormats\Parsers\ISO20022;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
@@ -33,7 +33,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type55\UnderlyingTrans
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document as Camt056Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\PaymentCancellationRequest as Camt056CancellationRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\UnderlyingTransaction as Camt056UnderlyingTransaction;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Helper\Data\CamtValidator;
@@ -422,8 +422,8 @@ class CamtParser extends Iso20022ParserAbstract {
             $purpose = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Prtry", $txDtls);
             $purposeCode = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Cd", $txDtls);
 
-            // Remittance Info
-            $additionalInfo = static::xpathStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
+            // Remittance Info (kann mehrere Ustrd-Elemente haben)
+            $additionalInfo = static::xpathMultiStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
 
             // Return Reason
             $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
@@ -491,17 +491,29 @@ class CamtParser extends Iso20022ParserAbstract {
         $purpose = null;
         $purposeCode = null;
         $additionalInfo = null;
+        $remittanceInfo = null;
         $returnReason = null;
 
         if ($txDtls) {
             $purpose = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Prtry", $txDtls);
             $purposeCode = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Cd", $txDtls);
+            // Remittance Info (kann mehrere Ustrd-Elemente haben)
+            $remittanceInfo = static::xpathMultiStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
             $additionalInfo = static::xpathStringStatic($xpath, "{$p}AddtlTxInf", $txDtls);
             $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
         }
 
-        if ($additionalInfo === null) {
+        // Fallback: Wenn keine remittanceInfo, verwende additionalInfo
+        if ($remittanceInfo === null && $additionalInfo === null) {
             $additionalInfo = static::xpathStringStatic($xpath, "{$p}AddtlNtryInf", $entry);
+        }
+
+        // Kombiniere remittanceInfo und additionalInfo für das additionalInfo-Feld
+        $combinedInfo = $remittanceInfo;
+        if ($combinedInfo === null) {
+            $combinedInfo = $additionalInfo;
+        } elseif ($additionalInfo !== null && $additionalInfo !== $remittanceInfo) {
+            $combinedInfo = $remittanceInfo . ' ' . $additionalInfo;
         }
 
         return new Camt052Transaction(
@@ -516,7 +528,7 @@ class CamtParser extends Iso20022ParserAbstract {
             isReversal: $basics['isReversal'],
             purpose: $purpose,
             purposeCode: $purposeCode,
-            additionalInfo: $additionalInfo,
+            additionalInfo: $combinedInfo,
             bankTransactionCode: $basics['bankTxCode'],
             domainCode: $basics['domainCode'],
             familyCode: $basics['familyCode'],
@@ -550,7 +562,8 @@ class CamtParser extends Iso20022ParserAbstract {
         if ($txDtls) {
             $instructionId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}InstrId", $txDtls);
             $endToEndId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}EndToEndId", $txDtls);
-            $remittanceInfo = static::xpathStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
+            // Remittance Info (kann mehrere Ustrd-Elemente haben)
+            $remittanceInfo = static::xpathMultiStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
             $purposeCode = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Cd", $txDtls);
             $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
             $localInstrumentCode = static::xpathStringWithFallbackStatic($xpath, [
@@ -770,7 +783,8 @@ class CamtParser extends Iso20022ParserAbstract {
                 $cdtrNm = $xpath->evaluate("string({$p}OrgnlTxRef/{$p}Cdtr/{$p}Nm)", $txInfNode) ?: null;
                 $cdtrIban = $xpath->evaluate("string({$p}OrgnlTxRef/{$p}CdtrAcct/{$p}Id/{$p}IBAN)", $txInfNode) ?: null;
                 $cdtrBic = $xpath->evaluate("string({$p}OrgnlTxRef/{$p}CdtrAgt/{$p}FinInstnId/{$p}BICFI)", $txInfNode) ?: null;
-                $rmtInf = $xpath->evaluate("string({$p}OrgnlTxRef/{$p}RmtInf/{$p}Ustrd)", $txInfNode) ?: null;
+                // Remittance Info (kann mehrere Ustrd-Elemente haben)
+                $rmtInf = static::xpathMultiStringStatic($xpath, "{$p}OrgnlTxRef/{$p}RmtInf/{$p}Ustrd", $txInfNode);
 
                 $underlying->addTransactionInformation(new Camt055CancellationRequest(
                     cancellationId: $cxlId,

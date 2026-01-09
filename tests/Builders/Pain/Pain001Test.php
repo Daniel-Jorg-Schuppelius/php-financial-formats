@@ -25,11 +25,11 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstruction;
 use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
 use CommonToolkit\Enums\CountryCode;
 use CommonToolkit\Enums\CurrencyCode;
-use CommonToolkit\FinancialFormats\Parsers\PainParser;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\PainParser;
 use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
 

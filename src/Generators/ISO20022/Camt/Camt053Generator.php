@@ -17,8 +17,8 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGenerat
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Reference;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use InvalidArgumentException;
 
 /**

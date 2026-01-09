@@ -15,7 +15,7 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type9;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\PainDocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Pain\Pain009Generator;
 use DateTimeImmutable;
 

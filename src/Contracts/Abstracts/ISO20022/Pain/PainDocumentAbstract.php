@@ -14,7 +14,7 @@ namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain;
 
 use CommonToolkit\Contracts\Abstracts\XML\DomainXmlDocumentAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
 
 /**
  * Abstract base class for all Pain documents.

@@ -14,8 +14,8 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt052Generator;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;

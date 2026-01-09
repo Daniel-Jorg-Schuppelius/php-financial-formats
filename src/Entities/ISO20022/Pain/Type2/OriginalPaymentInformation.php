@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\TransactionStatus;
+
 /**
  * Original payment information and status for pain.002 (OrgnlPmtInfAndSts).
  * 

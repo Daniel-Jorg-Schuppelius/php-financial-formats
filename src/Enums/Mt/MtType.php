@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Enums\Mt;
 
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 
 /**
  * MT message types according to SWIFT specification.

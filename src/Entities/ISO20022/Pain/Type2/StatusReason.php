@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
 
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\StatusReasonCode;
+
 /**
  * Status reason information for pain.002 (StsRsnInf).
  * 
@@ -20,22 +22,29 @@ namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2;
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type2
  */
 final readonly class StatusReason {
+    private ?StatusReasonCode $code;
+
     /**
-     * @param string|null $code Reason Code (Rsn/Cd)
+     * @param StatusReasonCode|string|null $code Reason Code (Rsn/Cd)
      * @param string|null $proprietary Proprietary Reason (Rsn/Prtry)
      * @param string[] $additionalInfo Additional information (AddtlInf)
      */
     public function __construct(
-        private ?string $code = null,
+        StatusReasonCode|string|null $code = null,
         private ?string $proprietary = null,
         private array $additionalInfo = []
     ) {
+        if (is_string($code)) {
+            $this->code = StatusReasonCode::tryFrom($code);
+        } else {
+            $this->code = $code;
+        }
     }
 
     /**
      * Creates from an ISO reason code.
      */
-    public static function fromCode(string $code, array $additionalInfo = []): self {
+    public static function fromCode(StatusReasonCode|string $code, array $additionalInfo = []): self {
         return new self($code, null, $additionalInfo);
     }
 
@@ -46,8 +55,12 @@ final readonly class StatusReason {
         return new self(null, $proprietary, $additionalInfo);
     }
 
-    public function getCode(): ?string {
+    public function getCode(): ?StatusReasonCode {
         return $this->code;
+    }
+
+    public function getCodeString(): ?string {
+        return $this->code?->value;
     }
 
     public function getProprietary(): ?string {
@@ -65,16 +78,6 @@ final readonly class StatusReason {
      * Returns the reason (code or proprietary).
      */
     public function getReason(): ?string {
-        return $this->code ?? $this->proprietary;
-    }
-
-    /**
-     * Versucht den Code als StatusReasonCode zu interpretieren.
-     */
-    public function getReasonCode(): ?StatusReasonCode {
-        if ($this->code === null) {
-            return null;
-        }
-        return StatusReasonCode::tryFrom($this->code);
+        return $this->code?->value ?? $this->proprietary;
     }
 }

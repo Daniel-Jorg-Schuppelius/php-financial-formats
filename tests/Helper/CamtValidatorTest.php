@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Tests\Helper;
 
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\FinancialFormats\Helper\Data\CamtValidator;
 use CommonToolkit\FinancialFormats\Helper\Data\ValidationResult;
 use PHPUnit\Framework\Attributes\DataProvider;

@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\Parsers;
+namespace CommonToolkit\FinancialFormats\Tests\Parsers\ISO20022;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type31\Document as Camt031Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type34\Document as Camt034Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type35\Document as Camt035Document;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Parsers\CamtReflectionParser;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtReflectionParser;
 use CommonToolkit\FinancialFormats\Registries\CamtParserRegistry;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +31,7 @@ class CamtReflectionParserTest extends TestCase {
     }
 
     public function testParseCamt031ViaReflection(): void {
-        $xmlContent = file_get_contents(__DIR__ . '/../../.samples/Banking/CAMT/sample_camt031.xml');
+        $xmlContent = file_get_contents(__DIR__ . '/../../../.samples/Banking/CAMT/sample_camt031.xml');
 
         $document = CamtReflectionParser::parse($xmlContent, CamtType::CAMT031);
 
@@ -42,7 +42,7 @@ class CamtReflectionParserTest extends TestCase {
     }
 
     public function testParseCamt034ViaReflection(): void {
-        $xmlContent = file_get_contents(__DIR__ . '/../../.samples/Banking/CAMT/sample_camt034.xml');
+        $xmlContent = file_get_contents(__DIR__ . '/../../../.samples/Banking/CAMT/sample_camt034.xml');
 
         $document = CamtReflectionParser::parse($xmlContent, CamtType::CAMT034);
 
@@ -52,7 +52,7 @@ class CamtReflectionParserTest extends TestCase {
     }
 
     public function testParseCamt035ViaReflection(): void {
-        $xmlContent = file_get_contents(__DIR__ . '/../../.samples/Banking/CAMT/sample_camt035.xml');
+        $xmlContent = file_get_contents(__DIR__ . '/../../../.samples/Banking/CAMT/sample_camt035.xml');
 
         $document = CamtReflectionParser::parse($xmlContent, CamtType::CAMT035);
 
@@ -62,10 +62,10 @@ class CamtReflectionParserTest extends TestCase {
     }
 
     public function testCompareReflectionWithOriginalParser(): void {
-        $xmlContent = file_get_contents(__DIR__ . '/../../.samples/Banking/CAMT/sample_camt031.xml');
+        $xmlContent = file_get_contents(__DIR__ . '/../../../.samples/Banking/CAMT/sample_camt031.xml');
 
         // Parse mit Original-Parser (nutzt Reflection für CAMT031)
-        $originalDoc = \CommonToolkit\FinancialFormats\Parsers\CamtParser::parse($xmlContent);
+        $originalDoc = \CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtParser::parse($xmlContent);
 
         // Parse mit Reflection-Parser direkt
         $reflectionDoc = CamtReflectionParser::parse($xmlContent, CamtType::CAMT031);

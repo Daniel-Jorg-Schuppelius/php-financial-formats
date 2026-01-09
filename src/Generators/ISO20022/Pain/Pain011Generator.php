@@ -132,8 +132,8 @@ class Pain011Generator extends PainGeneratorAbstract {
         $this->builder->addElement('CxlRsn');
         $this->builder->addElement('Rsn');
 
-        if ($reason->getCode()) {
-            $this->builder->addChild('Cd', $reason->getCode());
+        if ($reason->getCodeString()) {
+            $this->builder->addChild('Cd', $reason->getCodeString());
         } elseif ($reason->getProprietary()) {
             $this->builder->addChild('Prtry', $reason->getProprietary());
         }

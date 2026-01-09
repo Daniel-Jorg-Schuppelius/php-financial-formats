@@ -15,7 +15,7 @@ namespace Tests\Entities\ISO20022\Camt\Type52;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Transaction;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;

@@ -12,41 +12,54 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7;
 
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\StatusReasonCode;
+
 /**
  * Reversal reason for pain.007 (RvslRsnInf).
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type7
  */
 final readonly class ReversalReason {
+    private ?StatusReasonCode $code;
+
     public function __construct(
-        private ?string $code = null,
+        StatusReasonCode|string|null $code = null,
         private ?string $proprietary = null,
         private array $additionalInfo = []
     ) {
+        if (is_string($code)) {
+            $this->code = StatusReasonCode::tryFrom($code);
+        } else {
+            $this->code = $code;
+        }
     }
 
-    public static function fromCode(string $code, array $additionalInfo = []): self {
+    public static function fromCode(StatusReasonCode|string $code, array $additionalInfo = []): self {
         return new self($code, null, $additionalInfo);
     }
 
     public static function customerRequest(?string $additionalInfo = null): self {
-        return new self('CUST', null, $additionalInfo ? [$additionalInfo] : []);
+        return new self(StatusReasonCode::CUST, null, $additionalInfo ? [$additionalInfo] : []);
     }
 
     public static function duplicate(): self {
-        return new self('DUPL', null, ['Doppelte Transaktion']);
+        return new self(StatusReasonCode::DUPL, null, ['Doppelte Transaktion']);
     }
 
     public static function technicalError(): self {
-        return new self('TECH', null, ['Technischer Fehler']);
+        return new self(StatusReasonCode::TECH, null, ['Technischer Fehler']);
     }
 
     public static function fraudulent(): self {
-        return new self('FRAD', null, ['Betrugsverdacht']);
+        return new self(StatusReasonCode::FRAD, null, ['Betrugsverdacht']);
     }
 
-    public function getCode(): ?string {
+    public function getCode(): ?StatusReasonCode {
         return $this->code;
+    }
+
+    public function getCodeString(): ?string {
+        return $this->code?->value;
     }
 
     public function getProprietary(): ?string {
@@ -58,6 +71,6 @@ final readonly class ReversalReason {
     }
 
     public function getReason(): ?string {
-        return $this->code ?? $this->proprietary;
+        return $this->code?->value ?? $this->proprietary;
     }
 }

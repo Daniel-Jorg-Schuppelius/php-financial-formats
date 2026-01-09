@@ -27,7 +27,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\TransactionStatus;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document as Pain007Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\GroupHeader as Pain007GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\OriginalGroupInformation;
@@ -51,11 +51,11 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\Document as Pai
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\MandateCopyRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18\Document as Pain018Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type18\MandateSuspensionRequest;
-use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\Pain\MandateStatus;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
-use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
-use CommonToolkit\FinancialFormats\Parsers\PainParser;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\MandateStatus;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\SequenceType;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\PainParser;
 use DateTimeImmutable;
 
 /**
@@ -68,7 +68,7 @@ class PainMandateFormatsTest extends BaseTestCase {
     public function testPain007ReversalReasonCreation(): void {
         $reason = ReversalReason::customerRequest('Kundenanfrage');
 
-        $this->assertEquals('CUST', $reason->getCode());
+        $this->assertEquals('CUST', $reason->getCodeString());
         $this->assertNull($reason->getProprietary());
         $this->assertContains('Kundenanfrage', $reason->getAdditionalInfo());
     }
@@ -287,13 +287,13 @@ class PainMandateFormatsTest extends BaseTestCase {
 
     public function testPain011CancellationReasonCreation(): void {
         $reason = CancellationReason::customerRequest();
-        $this->assertEquals('CUST', $reason->getCode());
+        $this->assertEquals('CUST', $reason->getCodeString());
 
         $reason = CancellationReason::accountClosed();
-        $this->assertEquals('AC01', $reason->getCode());
+        $this->assertEquals('AC01', $reason->getCodeString());
 
         $reason = CancellationReason::fraudulent();
-        $this->assertEquals('FRAD', $reason->getCode());
+        $this->assertEquals('FRAD', $reason->getCodeString());
     }
 
     public function testPain011DocumentCreation(): void {
@@ -718,10 +718,10 @@ class PainMandateFormatsTest extends BaseTestCase {
         $reason3 = CancellationReason::fraudulent();
         $reason4 = CancellationReason::fromCode('FF05', 'Falsches Format');
 
-        $this->assertEquals('CUST', $reason1->getCode());
-        $this->assertEquals('AC01', $reason2->getCode());
-        $this->assertEquals('FRAD', $reason3->getCode());
-        $this->assertEquals('FF05', $reason4->getCode());
+        $this->assertEquals('CUST', $reason1->getCodeString());
+        $this->assertEquals('AC01', $reason2->getCodeString());
+        $this->assertEquals('FRAD', $reason3->getCodeString());
+        $this->assertEquals('FF05', $reason4->getCodeString());
         $this->assertEquals('Falsches Format', $reason4->getAdditionalInfo()[0]);
     }
 
@@ -738,7 +738,7 @@ class PainMandateFormatsTest extends BaseTestCase {
         $this->assertFalse($status->isAccepted());
         $this->assertFalse($status->isPending());
         $this->assertEquals(TransactionStatus::REJECTED, $status->getStatus());
-        $this->assertEquals('AC04', $status->getStatusReason()->getCode());
+        $this->assertEquals('AC04', $status->getStatusReason()->getCodeString());
     }
 
     public function testPain013MultiplePaymentRequests(): void {

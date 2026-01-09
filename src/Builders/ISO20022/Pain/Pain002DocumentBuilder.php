@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalGroupInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalPaymentInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionInformationAndStatus;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\TransactionStatus;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
 use DateTimeImmutable;
 use RuntimeException;

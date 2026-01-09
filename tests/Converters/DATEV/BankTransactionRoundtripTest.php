@@ -19,7 +19,7 @@ use CommonToolkit\FinancialFormats\Converters\DATEV\Camt053ToBankTransactionConv
 use CommonToolkit\FinancialFormats\Converters\DATEV\Mt940ToBankTransactionConverter;
 use CommonToolkit\FinancialFormats\Entities\DATEV\Documents\BankTransaction;
 use CommonToolkit\FinancialFormats\Parsers\BankTransactionParser;
-use CommonToolkit\FinancialFormats\Parsers\CamtParser;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtParser;
 use CommonToolkit\FinancialFormats\Parsers\Mt940DocumentParser;
 use Tests\Contracts\BaseTestCase;
 

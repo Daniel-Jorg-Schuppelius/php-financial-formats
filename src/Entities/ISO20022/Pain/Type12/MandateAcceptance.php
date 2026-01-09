@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type12;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Mandate;
-use CommonToolkit\FinancialFormats\Enums\Pain\MandateStatus;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\MandateStatus;
 use DateTimeImmutable;
 
 /**

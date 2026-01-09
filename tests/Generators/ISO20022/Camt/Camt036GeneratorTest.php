@@ -14,8 +14,8 @@ namespace Tests\Generators\ISO20022\Camt;
 
 use CommonToolkit\FinancialFormats\Builders\ISO20022\Camt\Camt036DocumentBuilder;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt036Generator;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;

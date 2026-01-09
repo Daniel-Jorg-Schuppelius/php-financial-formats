@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Enums\Camt\BalanceSubType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\BalanceSubType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;

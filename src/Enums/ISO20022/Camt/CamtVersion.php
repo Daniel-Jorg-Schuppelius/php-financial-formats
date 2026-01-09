@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums\Camt;
+namespace CommonToolkit\FinancialFormats\Enums\ISO20022\Camt;
 
 /**
  * CAMT message versions according to ISO 20022.

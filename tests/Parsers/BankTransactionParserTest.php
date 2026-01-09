@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Converters\Banking\CamtToMt940Converter;
 use CommonToolkit\FinancialFormats\Converters\Banking\Mt940ToCamtConverter;
 use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToCamt053Converter;
 use CommonToolkit\FinancialFormats\Converters\DATEV\BankTransactionToMt940Converter;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\DATEV\HeaderFields\ASCII\BankTransactionHeaderField;
 use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt053Generator;

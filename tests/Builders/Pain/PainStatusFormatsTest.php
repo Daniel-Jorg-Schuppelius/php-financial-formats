@@ -23,18 +23,18 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\GroupHeader as P
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalGroupInformation as Pain002OriginalGroupInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\OriginalPaymentInformation as Pain002OriginalPaymentInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReason;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\StatusReasonCode;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\StatusReasonCode;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionInformationAndStatus;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type2\TransactionStatus;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\TransactionStatus;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\DirectDebitTransaction;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\Document as Pain008Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\GroupHeader as Pain008GroupHeader;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\MandateInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8\PaymentInstruction;
-use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
-use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
-use CommonToolkit\FinancialFormats\Parsers\PainParser;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\SequenceType;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\PainParser;
 use DateTimeImmutable;
 
 /**
@@ -72,7 +72,8 @@ class PainStatusFormatsTest extends BaseTestCase {
     public function testPain002StatusReasonFromCode(): void {
         $reason = StatusReason::fromCode('AC01', ['Kontoinformationen falsch']);
 
-        $this->assertEquals('AC01', $reason->getCode());
+        $this->assertEquals(StatusReasonCode::AC01, $reason->getCode());
+        $this->assertEquals('AC01', $reason->getCodeString());
         $this->assertNull($reason->getProprietary());
         $this->assertEquals('AC01', $reason->getReason());
         $this->assertContains('Kontoinformationen falsch', $reason->getAdditionalInfo());
@@ -82,20 +83,19 @@ class PainStatusFormatsTest extends BaseTestCase {
         $reason = StatusReason::fromProprietary('CUSTOM_CODE', ['Interner Fehler']);
 
         $this->assertNull($reason->getCode());
+        $this->assertNull($reason->getCodeString());
         $this->assertEquals('CUSTOM_CODE', $reason->getProprietary());
         $this->assertEquals('CUSTOM_CODE', $reason->getReason());
     }
 
     public function testPain002StatusReasonCodeParsing(): void {
         $reason = StatusReason::fromCode('AC01');
-        $reasonCode = $reason->getReasonCode();
+        $reasonCode = $reason->getCode();
 
-        if ($reasonCode !== null) {
-            $this->assertInstanceOf(StatusReasonCode::class, $reasonCode);
-        } else {
-            // StatusReasonCode may not have AC01, that's ok
-            $this->assertNull($reasonCode);
-        }
+        $this->assertNotNull($reasonCode);
+        $this->assertInstanceOf(StatusReasonCode::class, $reasonCode);
+        $this->assertEquals(StatusReasonCode::AC01, $reasonCode);
+        $this->assertEquals('Incorrect Account Number', $reasonCode->getDescription());
     }
 
     public function testPain002TransactionInformationAndStatusAccepted(): void {
@@ -113,7 +113,7 @@ class PainStatusFormatsTest extends BaseTestCase {
         $this->assertEquals('E2E-456', $txStatus->getOriginalEndToEndId());
         $this->assertEquals(TransactionStatus::REJECTED, $txStatus->getStatus());
         $this->assertCount(1, $txStatus->getStatusReasons());
-        $this->assertEquals('AC01', $txStatus->getStatusReasons()[0]->getCode());
+        $this->assertEquals('AC01', $txStatus->getStatusReasons()[0]->getCodeString());
     }
 
     public function testPain002OriginalGroupInformationForPain001(): void {

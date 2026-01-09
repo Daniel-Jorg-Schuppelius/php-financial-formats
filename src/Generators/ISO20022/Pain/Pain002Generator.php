@@ -140,11 +140,11 @@ class Pain002Generator extends PainGeneratorAbstract {
     private function addStatusReason(StatusReason $reason): void {
         $this->builder->addElement('StsRsnInf');
 
-        if ($reason->getCode() !== null || $reason->getProprietary() !== null) {
+        if ($reason->getCodeString() !== null || $reason->getProprietary() !== null) {
             $this->builder->addElement('Rsn');
 
-            if ($reason->getCode() !== null) {
-                $this->builder->addChild('Cd', $this->escape($reason->getCode()));
+            if ($reason->getCodeString() !== null) {
+                $this->builder->addChild('Cd', $this->escape($reason->getCodeString()));
             } elseif ($reason->getProprietary() !== null) {
                 $this->builder->addChild('Prtry', $this->escape($reason->getProprietary()));
             }

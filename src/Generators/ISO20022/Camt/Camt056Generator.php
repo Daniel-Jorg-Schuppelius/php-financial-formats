@@ -16,8 +16,8 @@ use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGenerat
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\PaymentCancellationRequest;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type56\UnderlyingTransaction;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 
 /**
  * Generator for CAMT.056 XML (FI To FI Payment Cancellation Request).

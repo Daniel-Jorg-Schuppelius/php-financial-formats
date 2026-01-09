@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Enums\Mt;
 
 use CommonToolkit\Enums\CreditDebit;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionDomain;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionFamily;
-use CommonToolkit\FinancialFormats\Enums\Camt\TransactionSubFamily;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionDomain;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionFamily;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionSubFamily;
 use InvalidArgumentException;
 
 /**

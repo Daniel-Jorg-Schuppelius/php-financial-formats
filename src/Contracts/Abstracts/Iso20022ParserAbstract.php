@@ -477,8 +477,8 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @return string|null Die Verwendungszweck-Information
      */
     protected static function parseRemittanceInfoString(DOMXPath $xpath, DOMNode $context, string $prefix): ?string {
-        // Unstrukturierte Remittance-Info
-        $ustrd = static::xpathStringStatic($xpath, "{$prefix}RmtInf/{$prefix}Ustrd", $context);
+        // Unstrukturierte Remittance-Info (kann mehrere Ustrd-Elemente haben)
+        $ustrd = static::xpathMultiStringStatic($xpath, "{$prefix}RmtInf/{$prefix}Ustrd", $context);
         if ($ustrd !== null) {
             return $ustrd;
         }
@@ -532,7 +532,42 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
             ? $xpath->evaluate($expression, $context)
             : $xpath->evaluate($expression);
 
-        return !empty($result) ? (string)$result : null;
+        // Trim whitespace - trailing/leading spaces in XML text nodes have no semantic meaning
+        $result = trim((string)$result);
+
+        return $result !== '' ? $result : null;
+    }
+
+    /**
+     * Evaluates XPath for multiple nodes and concatenates their text content.
+     * 
+     * Useful for elements like RmtInf/Ustrd that can appear multiple times.
+     * All values are trimmed and concatenated with a space separator.
+     * 
+     * @param DOMXPath $xpath XPath-Objekt
+     * @param string $expression XPath-Ausdruck (without string() wrapper)
+     * @param DOMNode|null $context Kontext-Node (optional)
+     * @param string $separator Separator between multiple values
+     * @return string|null Concatenated result or null if empty
+     */
+    protected static function xpathMultiStringStatic(DOMXPath $xpath, string $expression, ?DOMNode $context = null, string $separator = ' '): ?string {
+        $nodes = $context !== null
+            ? $xpath->query($expression, $context)
+            : $xpath->query($expression);
+
+        if ($nodes === false || $nodes->length === 0) {
+            return null;
+        }
+
+        $parts = [];
+        foreach ($nodes as $node) {
+            $text = trim($node->textContent);
+            if ($text !== '') {
+                $parts[] = $text;
+            }
+        }
+
+        return !empty($parts) ? implode($separator, $parts) : null;
     }
 
     /**

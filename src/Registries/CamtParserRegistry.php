@@ -39,8 +39,8 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\Document as Cam
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type59\StatusItem;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type87\Document as Camt087Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type87\ModificationRequest;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Parsers\CamtReflectionParser;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtReflectionParser;
 use DOMNode;
 use DOMXPath;
 

@@ -16,9 +16,9 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\Mt\ChargesCode;
-use CommonToolkit\FinancialFormats\Enums\Pain\LocalInstrument;
-use CommonToolkit\FinancialFormats\Enums\Pain\PaymentMethod;
-use CommonToolkit\FinancialFormats\Enums\Pain\SequenceType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\LocalInstrument;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PaymentMethod;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\SequenceType;
 use DateTimeImmutable;
 
 /**

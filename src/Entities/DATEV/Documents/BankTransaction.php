@@ -355,7 +355,7 @@ final class BankTransaction extends CSVDocument {
      * @return string The concatenated purpose text or empty string
      */
     public function getFullUsagePurpose(int $rowIndex): string {
-        return implode('', $this->getUsagePurposes($rowIndex));
+        return trim(implode('', $this->getUsagePurposes($rowIndex)));
     }
 
     /**

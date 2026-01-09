@@ -16,10 +16,10 @@ use CommonToolkit\FinancialFormats\Builders\ISO20022\Camt\Camt052DocumentBuilder
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Transaction;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
-use CommonToolkit\FinancialFormats\Parsers\CamtParser;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtParser;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;

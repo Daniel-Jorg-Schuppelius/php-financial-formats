@@ -14,8 +14,8 @@ namespace Tests\Generators\ISO20022\Camt;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54\Document;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt054Generator;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtType;
-use CommonToolkit\FinancialFormats\Enums\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 use Tests\Contracts\BaseTestCase;

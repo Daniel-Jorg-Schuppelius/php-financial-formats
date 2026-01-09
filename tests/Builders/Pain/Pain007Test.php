@@ -18,7 +18,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\OriginalPaymentInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\TransactionInformation;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type7\ReversalReason;
-use CommonToolkit\FinancialFormats\Enums\Pain\PainType;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -119,7 +119,7 @@ class Pain007Test extends BaseTestCase {
 
         $paymentInfo = $document->getOriginalPaymentInformations()[0];
         $this->assertNotNull($paymentInfo->getReversalReason());
-        $this->assertSame('MD06', $paymentInfo->getReversalReason()->getCode());
+        $this->assertSame('MD06', $paymentInfo->getReversalReason()->getCodeString());
     }
 
     #[Test]
