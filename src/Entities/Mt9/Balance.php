@@ -108,6 +108,13 @@ class Balance implements BalanceInterface {
     }
 
     /**
+     * Returns the signed amount (positive for Credit, negative for Debit).
+     */
+    public function getSignedAmount(): float {
+        return $this->isCredit() ? $this->amount : -$this->amount;
+    }
+
+    /**
      * Returns the formatted amount.
      */
     public function getFormattedAmount(?string $locale = null): string {

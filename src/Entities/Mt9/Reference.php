@@ -118,6 +118,14 @@ class Reference {
     }
 
     /**
+     * Returns the SWIFT-formatted reference string.
+     * Alias for __toString() for explicit API usage.
+     */
+    public function toSwift(): string {
+        return $this->__toString();
+    }
+
+    /**
      * Parst eine Referenz aus einem SWIFT MT :61: Feld.
      */
     public static function fromSwiftField(string $field): self {
