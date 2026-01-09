@@ -13,7 +13,10 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\FinancialInstitutionIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReturnReason;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TechnicalInputChannel;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionDomain;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionFamily;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionPurpose;
@@ -39,10 +42,17 @@ final class Transaction extends CamtTransactionAbstract {
     private ?TransactionFamily $familyCode;
     private ?TransactionSubFamily $subFamilyCode;
     private ?ReturnReason $returnReason;
+    private ?TechnicalInputChannel $technicalInputChannel;
     private ?string $counterpartyName;
     private ?string $counterpartyIban;
     private ?string $counterpartyBic;
     private ?string $remittanceInfo;
+
+    // Extended party identification
+    private ?PartyIdentification $debtor;
+    private ?PartyIdentification $creditor;
+    private ?FinancialInstitutionIdentification $debtorAgent;
+    private ?FinancialInstitutionIdentification $creditorAgent;
 
     public function __construct(
         DateTimeImmutable $bookingDate,
@@ -62,10 +72,15 @@ final class Transaction extends CamtTransactionAbstract {
         TransactionFamily|string|null $familyCode = null,
         TransactionSubFamily|string|null $subFamilyCode = null,
         ReturnReason|string|null $returnReason = null,
+        TechnicalInputChannel|string|null $technicalInputChannel = null,
         ?string $counterpartyName = null,
         ?string $counterpartyIban = null,
         ?string $counterpartyBic = null,
-        ?string $remittanceInfo = null
+        ?string $remittanceInfo = null,
+        ?PartyIdentification $debtor = null,
+        ?PartyIdentification $creditor = null,
+        ?FinancialInstitutionIdentification $debtorAgent = null,
+        ?FinancialInstitutionIdentification $creditorAgent = null
     ) {
         parent::__construct(
             $bookingDate,
@@ -87,10 +102,15 @@ final class Transaction extends CamtTransactionAbstract {
         $this->familyCode = $familyCode instanceof TransactionFamily ? $familyCode : TransactionFamily::tryFrom($familyCode ?? '');
         $this->subFamilyCode = $subFamilyCode instanceof TransactionSubFamily ? $subFamilyCode : TransactionSubFamily::tryFrom($subFamilyCode ?? '');
         $this->returnReason = $returnReason instanceof ReturnReason ? $returnReason : ReturnReason::tryFrom($returnReason ?? '');
+        $this->technicalInputChannel = $technicalInputChannel instanceof TechnicalInputChannel ? $technicalInputChannel : TechnicalInputChannel::tryFrom($technicalInputChannel ?? '');
         $this->counterpartyName = $counterpartyName;
         $this->counterpartyIban = $counterpartyIban;
         $this->counterpartyBic = $counterpartyBic;
         $this->remittanceInfo = $remittanceInfo;
+        $this->debtor = $debtor;
+        $this->creditor = $creditor;
+        $this->debtorAgent = $debtorAgent;
+        $this->creditorAgent = $creditorAgent;
     }
 
     public function getPurpose(): ?string {
@@ -107,6 +127,10 @@ final class Transaction extends CamtTransactionAbstract {
 
     public function getReturnReason(): ?ReturnReason {
         return $this->returnReason;
+    }
+
+    public function getTechnicalInputChannel(): ?TechnicalInputChannel {
+        return $this->technicalInputChannel;
     }
 
     public function getBankTransactionCode(): ?string {
@@ -139,6 +163,22 @@ final class Transaction extends CamtTransactionAbstract {
 
     public function getRemittanceInfo(): ?string {
         return $this->remittanceInfo;
+    }
+
+    public function getDebtor(): ?PartyIdentification {
+        return $this->debtor;
+    }
+
+    public function getCreditor(): ?PartyIdentification {
+        return $this->creditor;
+    }
+
+    public function getDebtorAgent(): ?FinancialInstitutionIdentification {
+        return $this->debtorAgent;
+    }
+
+    public function getCreditorAgent(): ?FinancialInstitutionIdentification {
+        return $this->creditorAgent;
     }
 
     /**

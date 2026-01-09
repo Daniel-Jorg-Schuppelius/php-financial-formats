@@ -100,6 +100,7 @@ class Camt053ToBankTransactionConverterTest extends BaseTestCase {
             null,
             null,
             null, // returnReason
+            null, // technicalInputChannel
             'Stadtwerke GmbH',
             'DE555444333222111',
             'GENODES1'

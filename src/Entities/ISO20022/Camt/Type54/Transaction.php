@@ -13,7 +13,10 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54;
 
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\FinancialInstitutionIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReturnReason;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TechnicalInputChannel;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionDomain;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionFamily;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\TransactionPurpose;
@@ -43,11 +46,20 @@ final class Transaction extends CamtTransactionAbstract {
     private ?TransactionFamily $familyCode;
     private ?TransactionSubFamily $subFamilyCode;
     private ?ReturnReason $returnReason;
+    private ?TechnicalInputChannel $technicalInputChannel;
     private ?string $localInstrumentCode;
     private ?string $instructingAgentBic;
     private ?string $instructedAgentBic;
     private ?string $debtorAgentBic;
     private ?string $creditorAgentBic;
+
+    // Extended party identification
+    private ?PartyIdentification $debtor;
+    private ?PartyIdentification $creditor;
+    private ?FinancialInstitutionIdentification $debtorAgent;
+    private ?FinancialInstitutionIdentification $creditorAgent;
+    private ?FinancialInstitutionIdentification $instructingAgent;
+    private ?FinancialInstitutionIdentification $instructedAgent;
 
     public function __construct(
         DateTimeImmutable $bookingDate,
@@ -68,11 +80,18 @@ final class Transaction extends CamtTransactionAbstract {
         TransactionFamily|string|null $familyCode = null,
         TransactionSubFamily|string|null $subFamilyCode = null,
         ReturnReason|string|null $returnReason = null,
+        TechnicalInputChannel|string|null $technicalInputChannel = null,
         ?string $localInstrumentCode = null,
         ?string $instructingAgentBic = null,
         ?string $instructedAgentBic = null,
         ?string $debtorAgentBic = null,
-        ?string $creditorAgentBic = null
+        ?string $creditorAgentBic = null,
+        ?PartyIdentification $debtor = null,
+        ?PartyIdentification $creditor = null,
+        ?FinancialInstitutionIdentification $debtorAgent = null,
+        ?FinancialInstitutionIdentification $creditorAgent = null,
+        ?FinancialInstitutionIdentification $instructingAgent = null,
+        ?FinancialInstitutionIdentification $instructedAgent = null
     ) {
         parent::__construct(
             $bookingDate,
@@ -95,11 +114,18 @@ final class Transaction extends CamtTransactionAbstract {
         $this->familyCode = $familyCode instanceof TransactionFamily ? $familyCode : TransactionFamily::tryFrom($familyCode ?? '');
         $this->subFamilyCode = $subFamilyCode instanceof TransactionSubFamily ? $subFamilyCode : TransactionSubFamily::tryFrom($subFamilyCode ?? '');
         $this->returnReason = $returnReason instanceof ReturnReason ? $returnReason : ReturnReason::tryFrom($returnReason ?? '');
+        $this->technicalInputChannel = $technicalInputChannel instanceof TechnicalInputChannel ? $technicalInputChannel : TechnicalInputChannel::tryFrom($technicalInputChannel ?? '');
         $this->localInstrumentCode = $localInstrumentCode;
         $this->instructingAgentBic = $instructingAgentBic;
         $this->instructedAgentBic = $instructedAgentBic;
         $this->debtorAgentBic = $debtorAgentBic;
         $this->creditorAgentBic = $creditorAgentBic;
+        $this->debtor = $debtor;
+        $this->creditor = $creditor;
+        $this->debtorAgent = $debtorAgent;
+        $this->creditorAgent = $creditorAgent;
+        $this->instructingAgent = $instructingAgent;
+        $this->instructedAgent = $instructedAgent;
     }
 
     public function getInstructionId(): ?string {
@@ -120,6 +146,10 @@ final class Transaction extends CamtTransactionAbstract {
 
     public function getReturnReason(): ?ReturnReason {
         return $this->returnReason;
+    }
+
+    public function getTechnicalInputChannel(): ?TechnicalInputChannel {
+        return $this->technicalInputChannel;
     }
 
     public function getBankTransactionCode(): ?string {
@@ -175,6 +205,30 @@ final class Transaction extends CamtTransactionAbstract {
 
     public function getCreditorAgentBic(): ?string {
         return $this->creditorAgentBic;
+    }
+
+    public function getDebtor(): ?PartyIdentification {
+        return $this->debtor;
+    }
+
+    public function getCreditor(): ?PartyIdentification {
+        return $this->creditor;
+    }
+
+    public function getDebtorAgent(): ?FinancialInstitutionIdentification {
+        return $this->debtorAgent;
+    }
+
+    public function getCreditorAgent(): ?FinancialInstitutionIdentification {
+        return $this->creditorAgent;
+    }
+
+    public function getInstructingAgent(): ?FinancialInstitutionIdentification {
+        return $this->instructingAgent;
+    }
+
+    public function getInstructedAgent(): ?FinancialInstitutionIdentification {
+        return $this->instructedAgent;
     }
 
     /**

@@ -24,7 +24,7 @@ $xsdFiles = [
     __DIR__ . '/../data/xsd/camt/RB6.0_camt.053_codelists.xsd',
 ];
 
-$outputDir = __DIR__ . '/../src/Enums/Camt';
+$outputDir = __DIR__ . '/../src/Enums/ISO20022/Camt';
 
 // Mapping: XSD simpleType Name => PHP Enum Name
 $typeMapping = [
@@ -40,6 +40,8 @@ $typeMapping = [
     'ISO_ExternalFinancialInstitutionIdentification1Code' => 'FinancialInstitutionIdentification',
     'ISO_ExternalOrganisationIdentification1Code' => 'OrganisationIdentification',
     'ISO_ExternalPersonIdentification1Code' => 'PersonIdentification',
+    'ISO_ExternalReportingSource1Code' => 'ReportingSource',
+    'ISO_ExternalTechnicalInputChannel1Code' => 'TechnicalInputChannel',
 ];
 
 $dryRun = in_array('--dry-run', $argv);
@@ -252,7 +254,7 @@ function generateEnumCode(string $enumName, string $xsdType, array $cases): stri
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Enums\Camt;
+namespace CommonToolkit\FinancialFormats\Enums\ISO20022\Camt;
 
 /**
  * {$enumName} - ISO 20022 External Code List

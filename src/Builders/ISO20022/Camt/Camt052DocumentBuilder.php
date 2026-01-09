@@ -20,6 +20,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52\Transaction;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type941\Document as Mt941Document;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type942\Document as Mt942Document;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReportingSource;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
@@ -43,6 +44,7 @@ final class Camt052DocumentBuilder {
     private ?string $servicerBic = null;
     private ?string $messageId = null;
     private ?string $sequenceNumber = null;
+    private ?ReportingSource $reportingSource = null;
 
     private ?Balance $openingBalance = null;
     private ?Balance $closingBalance = null;
@@ -174,6 +176,7 @@ final class Camt052DocumentBuilder {
             $this->servicerBic,
             $this->messageId,
             $this->sequenceNumber,
+            $this->reportingSource,
             $opening,
             $closing
         );

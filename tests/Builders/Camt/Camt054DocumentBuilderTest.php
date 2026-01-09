@@ -168,6 +168,7 @@ class Camt054DocumentBuilderTest extends BaseTestCase {
             null, // familyCode
             null, // subFamilyCode
             null, // returnReason
+            null, // technicalInputChannel
             null, // localInstrumentCode
             'ZYBUDEFFSEK', // instructingAgentBic
             'MARKDEFFSCL', // instructedAgentBic

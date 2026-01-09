@@ -16,6 +16,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReportingSource;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Camt\Camt053Generator;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
@@ -45,6 +46,7 @@ class Document extends CamtDocumentAbstract {
         ?string $servicerBic = null,
         ?string $messageId = null,
         ?string $sequenceNumber = null,
+        ReportingSource|string|null $reportingSource = null,
         ?Balance $openingBalance = null,
         ?Balance $closingBalance = null
     ) {
@@ -56,7 +58,8 @@ class Document extends CamtDocumentAbstract {
             $accountOwner,
             $servicerBic,
             $messageId,
-            $sequenceNumber
+            $sequenceNumber,
+            $reportingSource
         );
 
         $this->openingBalance = $openingBalance;

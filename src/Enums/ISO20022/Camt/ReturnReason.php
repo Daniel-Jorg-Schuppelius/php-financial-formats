@@ -1,6 +1,6 @@
 <?php
 /*
- * Created on   : Sat Dec 27 2025
+ * Created on   : Fri Jan 09 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
  * Filename     : ReturnReason.php
@@ -383,7 +383,7 @@ enum ReturnReason: string {
     case TM01 = 'TM01';
 
     /**
-     * Returns the name/title of the code.
+     * Gibt den Namen/Titel des Codes zurück.
      */
     public function name(): string {
         return match ($this) {
@@ -451,7 +451,7 @@ enum ReturnReason: string {
     }
 
     /**
-     * Returns the definition/description of the code.
+     * Gibt die Definition/Beschreibung des Codes zurück.
      */
     public function definition(): string {
         return match ($this) {
@@ -526,7 +526,7 @@ enum ReturnReason: string {
     }
 
     /**
-     * Checks if the value is a valid code.
+     * Prüft ob der Wert ein gültiger Code ist.
      */
     public static function isValid(string $value): bool {
         return self::tryFrom(strtoupper(trim($value))) !== null;

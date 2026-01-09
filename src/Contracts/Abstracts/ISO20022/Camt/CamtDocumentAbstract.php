@@ -17,6 +17,7 @@ use CommonToolkit\Entities\XML\Document as XmlDocument;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
+use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReportingSource;
 use CommonToolkit\Enums\CurrencyCode;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -42,6 +43,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     protected ?string $servicerBic;
     protected ?string $messageId;
     protected ?string $sequenceNumber;
+    protected ?ReportingSource $reportingSource;
 
     // Pagination support
     protected ?int $pageNumber = null;
@@ -59,6 +61,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
      * @param string|null $servicerBic BIC of the account-holding bank
      * @param string|null $messageId Nachrichten-ID (aus GrpHdr)
      * @param string|null $sequenceNumber Sequenznummer
+     * @param ReportingSource|string|null $reportingSource Reporting source code
      */
     public function __construct(
         string $id,
@@ -68,7 +71,8 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
         ?string $accountOwner = null,
         ?string $servicerBic = null,
         ?string $messageId = null,
-        ?string $sequenceNumber = null
+        ?string $sequenceNumber = null,
+        ReportingSource|string|null $reportingSource = null
     ) {
         $this->id = $id;
 
@@ -87,6 +91,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
         $this->servicerBic = $servicerBic;
         $this->messageId = $messageId;
         $this->sequenceNumber = $sequenceNumber;
+        $this->reportingSource = $reportingSource instanceof ReportingSource ? $reportingSource : ReportingSource::tryFrom($reportingSource ?? '');
     }
 
     /**
@@ -131,6 +136,10 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
 
     public function getSequenceNumber(): ?string {
         return $this->sequenceNumber;
+    }
+
+    public function getReportingSource(): ?ReportingSource {
+        return $this->reportingSource;
     }
 
     public function getPageNumber(): ?int {
