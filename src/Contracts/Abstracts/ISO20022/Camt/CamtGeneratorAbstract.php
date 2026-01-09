@@ -33,9 +33,22 @@ use DOMElement;
  */
 abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
+     * Whether to include xsi:schemaLocation in the generated XML.
+     */
+    protected bool $includeSchemaLocation = false;
+
+    /**
      * Returns the CAMT type of this generator.
      */
     abstract public function getCamtType(): CamtType;
+
+    /**
+     * Sets whether to include xsi:schemaLocation attribute.
+     */
+    public function setIncludeSchemaLocation(bool $include): static {
+        $this->includeSchemaLocation = $include;
+        return $this;
+    }
 
     /**
      * Initialisiert das CAMT-Dokument mit Root-Element.
@@ -45,7 +58,8 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
      */
     protected function initCamtDocument(string $rootChildElement, CamtVersion $version): void {
         $namespace = $version->getNamespace($this->getCamtType());
-        $this->initDocument($rootChildElement, $namespace);
+        $schemaLocation = $this->includeSchemaLocation ? $version->getSchemaLocation($this->getCamtType()) : null;
+        $this->initDocument($rootChildElement, $namespace, $schemaLocation);
     }
 
     /**
@@ -60,6 +74,36 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
             ->addChild('CreDtTm', $this->formatDateTime($document->getCreationDateTime()));
 
         $this->builder->end(); // GrpHdr
+
+        return $this;
+    }
+
+    /**
+     * Adds statement pagination element.
+     * 
+     * According to ISO 20022 camt.053: StmtPgntn contains:
+     * - PgNb (Page Number): The current page number
+     * - LastPgInd (Last Page Indicator): true if this is the last page
+     */
+    protected function addStatementPagination(CamtDocumentAbstract $document): self {
+        $pageNumber = $document->getPageNumber();
+        $lastPageIndicator = $document->isLastPage();
+
+        if ($pageNumber === null && $lastPageIndicator === null) {
+            return $this;
+        }
+
+        $this->builder->addElement('StmtPgntn');
+
+        if ($pageNumber !== null) {
+            $this->builder->addChild('PgNb', (string) $pageNumber);
+        }
+
+        if ($lastPageIndicator !== null) {
+            $this->builder->addChild('LastPgInd', $lastPageIndicator ? 'true' : 'false');
+        }
+
+        $this->builder->end(); // StmtPgntn
 
         return $this;
     }

@@ -43,6 +43,10 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     protected ?string $messageId;
     protected ?string $sequenceNumber;
 
+    // Pagination support
+    protected ?int $pageNumber = null;
+    protected ?bool $lastPageIndicator = null;
+
     /** @var CamtTransactionAbstract[] */
     protected array $entries = [];
 
@@ -127,6 +131,33 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
 
     public function getSequenceNumber(): ?string {
         return $this->sequenceNumber;
+    }
+
+    public function getPageNumber(): ?int {
+        return $this->pageNumber;
+    }
+
+    public function setPageNumber(?int $pageNumber): static {
+        $this->pageNumber = $pageNumber;
+        return $this;
+    }
+
+    public function isLastPage(): ?bool {
+        return $this->lastPageIndicator;
+    }
+
+    public function setLastPageIndicator(?bool $lastPageIndicator): static {
+        $this->lastPageIndicator = $lastPageIndicator;
+        return $this;
+    }
+
+    /**
+     * Sets pagination in one call.
+     */
+    public function setPagination(int $pageNumber, bool $isLastPage): static {
+        $this->pageNumber = $pageNumber;
+        $this->lastPageIndicator = $isLastPage;
+        return $this;
     }
 
     /**

@@ -137,4 +137,58 @@ class Camt053GeneratorTest extends BaseTestCase {
 
         $this->generator->generate($wrongDocument);
     }
+
+    public function testGenerateWithPagination(): void {
+        $document = $this->createDocument()
+            ->setPagination(1, true);
+
+        $xml = $this->generator->generate($document);
+
+        $this->assertStringContainsString('<StmtPgntn>', $xml);
+        $this->assertStringContainsString('<PgNb>1</PgNb>', $xml);
+        $this->assertStringContainsString('<LastPgInd>true</LastPgInd>', $xml);
+    }
+
+    public function testGenerateWithPaginationMultiplePages(): void {
+        $document = $this->createDocument()
+            ->setPagination(2, false);
+
+        $xml = $this->generator->generate($document);
+
+        $this->assertStringContainsString('<PgNb>2</PgNb>', $xml);
+        $this->assertStringContainsString('<LastPgInd>false</LastPgInd>', $xml);
+    }
+
+    public function testGenerateWithoutPagination(): void {
+        $document = $this->createDocument();
+
+        $xml = $this->generator->generate($document);
+
+        $this->assertStringNotContainsString('<StmtPgntn>', $xml);
+    }
+
+    public function testGenerateWithSchemaLocation(): void {
+        $this->generator->setIncludeSchemaLocation(true);
+        $document = $this->createDocument();
+
+        $xml = $this->generator->generate($document, CamtVersion::V08);
+
+        $this->assertStringContainsString('xsi:schemaLocation', $xml);
+        $this->assertStringContainsString('camt.053.001.08.xsd', $xml);
+    }
+
+    public function testGenerateWithoutSchemaLocation(): void {
+        $this->generator->setIncludeSchemaLocation(false);
+        $document = $this->createDocument();
+
+        $xml = $this->generator->generate($document);
+
+        $this->assertStringNotContainsString('xsi:schemaLocation', $xml);
+    }
+
+    public function testSetIncludeSchemaLocationReturnsSelf(): void {
+        $result = $this->generator->setIncludeSchemaLocation(true);
+
+        $this->assertSame($this->generator, $result);
+    }
 }

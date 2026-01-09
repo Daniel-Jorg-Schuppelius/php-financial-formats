@@ -84,6 +84,13 @@ enum CamtVersion: string {
     }
 
     /**
+     * Returns the schema location for a CAMT type.
+     */
+    public function getSchemaLocation(CamtType $type): string {
+        return "{$type->value}.001.{$this->value}.xsd";
+    }
+
+    /**
      * Returns the version number as integer.
      */
     public function toInt(): int {

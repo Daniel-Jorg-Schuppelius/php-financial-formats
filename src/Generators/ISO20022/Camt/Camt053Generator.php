@@ -48,6 +48,10 @@ class Camt053Generator extends CamtGeneratorAbstract {
         // Stmt (Statement)
         $this->builder->addElement('Stmt');
         $this->builder->addChild('Id', $this->escape($document->getId()));
+
+        // Statement Pagination
+        $this->addStatementPagination($document);
+
         $this->addChildIfNotEmpty('ElctrncSeqNb', $document->getSequenceNumber());
         $this->builder->addChild('CreDtTm', $this->formatDateTime($document->getCreationDateTime()));
 
