@@ -79,7 +79,10 @@ abstract class BankTransactionConverterAbstract {
     }
 
     /**
-     * Gets the value of a field preserving trailing spaces (for purpose fields).
+     * Gets the value of a field preserving all spaces (for purpose fields).
+     * 
+     * This is important for VERWENDUNGSZWECK fields where both leading
+     * and trailing spaces are significant for proper 27-character block alignment.
      * 
      * @param array $fields Array der DataField-Objekte
      * @param F $field Header field definition
@@ -87,7 +90,7 @@ abstract class BankTransactionConverterAbstract {
      */
     protected static function getFieldRaw(array $fields, F $field): string {
         $idx = $field->index();
-        return ($idx >= 0 && count($fields) > $idx) ? ltrim($fields[$idx]->getValue()) : '';
+        return ($idx >= 0 && count($fields) > $idx) ? $fields[$idx]->getValue() : '';
     }
 
     /**

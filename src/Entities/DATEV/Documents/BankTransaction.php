@@ -122,14 +122,14 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
-     * Retrieves the raw value of a specific field preserving trailing spaces.
+     * Retrieves the raw value of a specific field preserving all spaces.
      * 
-     * This is important for VERWENDUNGSZWECK fields where trailing spaces
-     * are significant for proper 27-character block alignment.
+     * This is important for VERWENDUNGSZWECK fields where both leading
+     * and trailing spaces are significant for proper 27-character block alignment.
      * 
      * @param int $rowIndex Der Zeilenindex (0-basiert)
      * @param BankTransactionHeaderField $field Das gewünschte Feld
-     * @return string Der Feldwert mit erhaltenen trailing spaces oder leer
+     * @return string Der Feldwert mit erhaltenen spaces oder leer
      */
     public function getFieldRaw(int $rowIndex, BankTransactionHeaderField $field): string {
         $row = $this->getRow($rowIndex);
@@ -143,8 +143,8 @@ final class BankTransaction extends CSVDocument {
             return '';
         }
 
-        // ltrim only - preserve trailing spaces
-        return ltrim($fields[$idx]->getValue());
+        // No trimming - preserve all spaces for proper 27-char alignment
+        return $fields[$idx]->getValue();
     }
 
     /**
