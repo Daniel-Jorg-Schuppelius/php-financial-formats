@@ -133,6 +133,23 @@ class BankTransactionTest extends BaseTestCase {
         $this->assertSame('Januar 2025', $purposes[2]);
     }
 
+    public function testGetFullUsagePurpose(): void {
+        $row = $this->createFullTestRow();
+        $document = new BankTransaction(rows: [$row]);
+
+        $fullPurpose = $document->getFullUsagePurpose(0);
+
+        $this->assertSame('Rechnung Nr. 12345Kunde: MustermannJanuar 2025', $fullPurpose);
+    }
+
+    public function testGetFullUsagePurposeEmpty(): void {
+        $document = new BankTransaction();
+
+        $fullPurpose = $document->getFullUsagePurpose(0);
+
+        $this->assertSame('', $fullPurpose);
+    }
+
     public function testGetUsagePurposesWithEmptyFields(): void {
         $document = new BankTransaction();
 

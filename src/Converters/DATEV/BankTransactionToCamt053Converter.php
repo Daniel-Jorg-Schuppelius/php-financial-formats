@@ -83,8 +83,8 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
         $firstDate = null;
         $lastDate = null;
 
-        foreach ($rows as $row) {
-            $txn = self::convertTransaction($row);
+        foreach ($rows as $rowIndex => $row) {
+            $txn = self::convertTransaction($document, $rowIndex);
             if ($txn !== null) {
                 $transactions[] = $txn;
 
@@ -223,8 +223,16 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
 
     /**
      * Konvertiert eine einzelne DATEV-Datenzeile in eine CAMT.053-Transaktion.
+     * 
+     * @param BankTransaction $document Das DATEV-Dokument
+     * @param int $rowIndex Der Zeilenindex
+     * @return Camt053Transaction|null
      */
-    private static function convertTransaction(DataLine $row): ?Camt053Transaction {
+    private static function convertTransaction(BankTransaction $document, int $rowIndex): ?Camt053Transaction {
+        $row = $document->getRow($rowIndex);
+        if ($row === null) {
+            return null;
+        }
         $fields = $row->getFields();
 
         // Mindestens 7 Felder erforderlich (Pflichtfelder 1, 2, 6, 7)
@@ -300,7 +308,7 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
             : ltrim($bookingDate->format('m'), '0') . $bookingDate->format('d');
 
         // End-to-End-ID aus Verwendungszweck-Feldern
-        $endToEndId = self::extractEndToEndId($fields);
+        $endToEndId = self::extractEndToEndId($document, $rowIndex);
 
         $reference = new Reference(
             endToEndId: $endToEndId,
@@ -315,8 +323,9 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
         $counterpartyIban = self::buildCounterpartyIban($payerBlz, $payerAccount);
         $counterpartyBic = BankHelper::isBIC($payerBlz) ? $payerBlz : null;
 
-        // Purpose und AdditionalInfo
-        $purpose = self::buildPurpose($fields);
+        // Purpose aus dem Dokument holen (alle Verwendungszweck-Felder zusammengefasst)
+        $fullPurpose = $document->getFullUsagePurpose($rowIndex);
+        $purpose = !empty($fullPurpose) ? $fullPurpose : null;
         $additionalInfo = self::getField($fields, F::BUCHUNGSTEXT) ?: null;
 
         return new Camt053Transaction(
@@ -344,14 +353,15 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
 
     /**
      * Extrahiert End-to-End-ID aus Verwendungszweck-Feldern.
+     * 
+     * @param BankTransaction $document Das DATEV-Dokument
+     * @param int $rowIndex Der Zeilenindex
+     * @return string|null
      */
-    private static function extractEndToEndId(array $fields): ?string {
-        $verwendungszweckFelder = [F::VERWENDUNGSZWECK_1, F::VERWENDUNGSZWECK_2, F::VERWENDUNGSZWECK_3];
-        foreach ($verwendungszweckFelder as $vzFeld) {
-            $vz = self::getField($fields, $vzFeld);
-            if (preg_match('/EREF\+([^\s+]+)/', $vz, $matches)) {
-                return $matches[1];
-            }
+    private static function extractEndToEndId(BankTransaction $document, int $rowIndex): ?string {
+        $fullPurpose = $document->getFullUsagePurpose($rowIndex);
+        if (preg_match('/EREF\+([^\s+]+)/', $fullPurpose, $matches)) {
+            return $matches[1];
         }
         return null;
     }
@@ -386,20 +396,5 @@ final class BankTransactionToCamt053Converter extends BankTransactionConverterAb
             return BankHelper::generateGermanIBAN($payerBlz, $payerAccount);
         }
         return null;
-    }
-
-    /**
-     * Baut den Purpose aus Verwendungszweck-Feldern.
-     */
-    private static function buildPurpose(array $fields): ?string {
-        $verwendungszweckFelder = [F::VERWENDUNGSZWECK_1, F::VERWENDUNGSZWECK_2, F::VERWENDUNGSZWECK_3];
-        $purposeParts = [];
-        foreach ($verwendungszweckFelder as $vzFeld) {
-            $vz = self::getField($fields, $vzFeld);
-            if (!empty($vz)) {
-                $purposeParts[] = $vz;
-            }
-        }
-        return !empty($purposeParts) ? implode('', $purposeParts) : null;
     }
 }

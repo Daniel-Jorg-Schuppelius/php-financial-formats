@@ -203,13 +203,16 @@ final class Mt940DocumentBuilder {
     private function calculateClosingBalance(Balance $opening): Balance {
         $total = $opening->isDebit() ? -$opening->getAmount() : $opening->getAmount();
 
+        // Letztes Transaktionsdatum ermitteln
+        $lastDate = $opening->getDate();
         foreach ($this->transactions as $txn) {
             $sign = $txn->getCreditDebit() === CreditDebit::CREDIT ? 1 : -1;
             $total += $sign * $txn->getAmount();
+            $lastDate = $txn->getDate(); // Letztes Datum speichern
         }
 
         $direction = $total >= 0 ? CreditDebit::CREDIT : CreditDebit::DEBIT;
-        return new Balance($direction, $opening->getDate(), $opening->getCurrency(), abs($total));
+        return new Balance($direction, $lastDate, $opening->getCurrency(), abs($total));
     }
 
     private function reverseCalculateBalance(Balance $closing): Balance {

@@ -78,8 +78,8 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
         $firstDate = null;
         $lastDate = null;
 
-        foreach ($rows as $row) {
-            $txn = self::convertTransaction($row);
+        foreach ($rows as $rowIndex => $row) {
+            $txn = self::convertTransaction($document, $rowIndex);
             if ($txn !== null) {
                 $transactions[] = $txn;
 
@@ -166,8 +166,16 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
 
     /**
      * Konvertiert eine einzelne DATEV-Datenzeile in eine MT940-Transaktion.
+     * 
+     * @param BankTransaction $document Das DATEV-Dokument
+     * @param int $rowIndex Der Zeilenindex
+     * @return Mt940Transaction|null
      */
-    private static function convertTransaction(DataLine $row): ?Mt940Transaction {
+    private static function convertTransaction(BankTransaction $document, int $rowIndex): ?Mt940Transaction {
+        $row = $document->getRow($rowIndex);
+        if ($row === null) {
+            return null;
+        }
         $fields = $row->getFields();
 
         // Mindestens 7 Felder erforderlich (Pflichtfelder 1, 2, 6, 7)
@@ -216,19 +224,12 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
         }
 
         // Purpose aus Auftraggeber-Name und Verwendungszweck zusammenstellen
-        $purposeParts = [];
-
         // Auftraggeber-Name (Felder 8-9)
         $name1 = self::getFieldRaw($fields, F::AUFTRAGGEBERNAME_1);
         $name2 = self::getFieldRaw($fields, F::AUFTRAGGEBERNAME_2);
 
-        // Alle Verwendungszweck-Felder sammeln
-        foreach (self::getPurposeFields() as $vzFeld) {
-            $vz = self::getFieldRaw($fields, $vzFeld);
-            if (!empty($vz)) {
-                $purposeParts[] = $vz;
-            }
-        }
+        // Alle Verwendungszweck-Felder als zusammenhängenden String holen
+        $fullPurpose = $document->getFullUsagePurpose($rowIndex);
 
         // Purpose im DATEV-Format erstellen: GVC?00Buchungstext?20VWZ1?21VWZ2...?32Name1?33Name2
         // Der numerische GVC-Code (z.B. "116") wird nur verwendet, wenn er 3 Ziffern hat
@@ -276,7 +277,8 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
         }
 
         // Verwendungszweck-Zeilen als ?20-?29, ?60-?63
-        $vzFields = array_filter($purposeParts, fn($p) => !empty($p));
+        // Verwendungszweck in 27-Zeichen-Blöcke aufteilen
+        $vzFields = !empty($fullPurpose) ? str_split($fullPurpose, 27) : [];
         $fieldKey = 20;
         foreach ($vzFields as $vzPart) {
             if ($fieldKey > 29 && $fieldKey < 60) {
@@ -285,7 +287,7 @@ final class BankTransactionToMt940Converter extends BankTransactionConverterAbst
             if ($fieldKey > 63) {
                 break;
             }
-            $purposeStr .= sprintf('?%02d%s', $fieldKey++, substr($vzPart, 0, 27));
+            $purposeStr .= sprintf('?%02d%s', $fieldKey++, $vzPart);
         }
 
         // Auftraggeber-Name

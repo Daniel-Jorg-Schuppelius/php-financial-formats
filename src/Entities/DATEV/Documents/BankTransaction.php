@@ -122,6 +122,32 @@ final class BankTransaction extends CSVDocument {
     }
 
     /**
+     * Retrieves the raw value of a specific field preserving trailing spaces.
+     * 
+     * This is important for VERWENDUNGSZWECK fields where trailing spaces
+     * are significant for proper 27-character block alignment.
+     * 
+     * @param int $rowIndex Der Zeilenindex (0-basiert)
+     * @param BankTransactionHeaderField $field Das gewünschte Feld
+     * @return string Der Feldwert mit erhaltenen trailing spaces oder leer
+     */
+    public function getFieldRaw(int $rowIndex, BankTransactionHeaderField $field): string {
+        $row = $this->getRow($rowIndex);
+        if ($row === null) {
+            return '';
+        }
+
+        $idx = $field->index();
+        $fields = $row->getFields();
+        if ($idx < 0 || $idx >= count($fields)) {
+            return '';
+        }
+
+        // ltrim only - preserve trailing spaces
+        return ltrim($fields[$idx]->getValue());
+    }
+
+    /**
      * Checks if a specific field exists and has a non-empty value.
      * 
      * @param int $rowIndex Der Zeilenindex (0-basiert)
@@ -281,6 +307,8 @@ final class BankTransaction extends CSVDocument {
     /**
      * Returns remittance purposes for a specific line.
      * 
+     * Uses getFieldRaw to preserve trailing spaces which are significant
+     * for proper 27-character block alignment in MT940 format.
      */
     public function getUsagePurposes(int $rowIndex): array {
         if (!isset($this->rows[$rowIndex])) {
@@ -306,13 +334,28 @@ final class BankTransaction extends CSVDocument {
 
         $purposes = [];
         foreach ($purposeFields as $field) {
-            $purpose = $this->getField($rowIndex, $field);
+            $purpose = $this->getFieldRaw($rowIndex, $field);
             if (!empty($purpose)) {
                 $purposes[] = $purpose;
             }
         }
 
         return $purposes;
+    }
+
+    /**
+     * Returns all remittance purposes concatenated as a single string.
+     * 
+     * This method combines all non-empty VERWENDUNGSZWECK fields (1-14) into
+     * a single continuous string, preserving the original order and spacing.
+     * Useful for MT940 conversion where the purpose text needs to be re-split
+     * into 27-character blocks.
+     * 
+     * @param int $rowIndex Der Zeilenindex (0-basiert)
+     * @return string The concatenated purpose text or empty string
+     */
+    public function getFullUsagePurpose(int $rowIndex): string {
+        return implode('', $this->getUsagePurposes($rowIndex));
     }
 
     /**
