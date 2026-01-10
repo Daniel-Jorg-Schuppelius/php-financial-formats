@@ -102,4 +102,102 @@ class ApplicationHeaderTest extends BaseTestCase {
         $this->assertNull($header->getOutputDate());
         $this->assertNull($header->getOutputTime());
     }
+
+    public function testGetDeliveryMonitorAndObsolescencePeriod(): void {
+        $header = new ApplicationHeader(
+            isOutput: false,
+            messageType: MtType::MT940,
+            receiverBic: 'COBADEFFXXX',
+            priority: 'N',
+            deliveryMonitor: '3',
+            obsolescencePeriod: '003'
+        );
+
+        $this->assertSame('3', $header->getDeliveryMonitor());
+        $this->assertSame('003', $header->getObsolescencePeriod());
+    }
+
+    public function testToStringInputHeader(): void {
+        $header = new ApplicationHeader(
+            isOutput: false,
+            messageType: MtType::MT940,
+            receiverBic: 'COBADEFFXXX',
+            priority: 'N',
+            deliveryMonitor: '3',
+            obsolescencePeriod: '003'
+        );
+
+        $expected = '{2:I940COBADEFFXXXN3003}';
+        $this->assertSame($expected, (string)$header);
+    }
+
+    public function testToStringInputHeaderWithDefaultPriority(): void {
+        $header = new ApplicationHeader(
+            isOutput: false,
+            messageType: MtType::MT940,
+            receiverBic: 'COBADEFFXXX'
+        );
+
+        $expected = '{2:I940COBADEFFXXXN}';
+        $this->assertSame($expected, (string)$header);
+    }
+
+    public function testToStringOutputHeader(): void {
+        $inputDate = new DateTimeImmutable('2025-01-15');
+        $outputDate = new DateTimeImmutable('2025-01-15');
+
+        $header = new ApplicationHeader(
+            isOutput: true,
+            messageType: MtType::MT940,
+            priority: 'N',
+            inputTime: '1200',
+            inputDate: $inputDate,
+            messageInputReference: 'COBADEFF1234567890123456',
+            outputDate: $outputDate,
+            outputTime: '121500'
+        );
+
+        $expected = '{2:O9401200250115COBADEFF1234567890123456250115121500N}';
+        $this->assertSame($expected, (string)$header);
+    }
+
+    public function testParseInputHeader(): void {
+        $raw = 'I940COBADEFFXXXAN3003';
+        $header = ApplicationHeader::parse($raw);
+
+        $this->assertFalse($header->isOutput());
+        $this->assertTrue($header->isInput());
+        $this->assertSame(MtType::MT940, $header->getMessageType());
+        $this->assertSame('COBADEFFXXXA', $header->getReceiverBic());
+        $this->assertSame('N', $header->getPriority());
+        $this->assertSame('3', $header->getDeliveryMonitor());
+        $this->assertSame('003', $header->getObsolescencePeriod());
+    }
+
+    public function testParseInputHeaderMinimal(): void {
+        $raw = 'I940COBADEFFXXXAN';
+        $header = ApplicationHeader::parse($raw);
+
+        $this->assertFalse($header->isOutput());
+        $this->assertSame('COBADEFFXXXA', $header->getReceiverBic());
+        $this->assertSame('N', $header->getPriority());
+        $this->assertNull($header->getDeliveryMonitor());
+        $this->assertNull($header->getObsolescencePeriod());
+    }
+
+    public function testParseOutputHeader(): void {
+        $raw = 'O9401200250115COBADEFF12345678901234560000250115121500N';
+        $header = ApplicationHeader::parse($raw);
+
+        $this->assertTrue($header->isOutput());
+        $this->assertFalse($header->isInput());
+        $this->assertSame(MtType::MT940, $header->getMessageType());
+        $this->assertSame('1200', $header->getInputTime());
+        $this->assertInstanceOf(DateTimeImmutable::class, $header->getInputDate());
+        $this->assertSame('2025-01-15', $header->getInputDate()->format('Y-m-d'));
+        $this->assertNotNull($header->getMessageInputReference());
+        $this->assertInstanceOf(DateTimeImmutable::class, $header->getOutputDate());
+        $this->assertSame('121500', $header->getOutputTime());
+        $this->assertSame('N', $header->getPriority());
+    }
 }

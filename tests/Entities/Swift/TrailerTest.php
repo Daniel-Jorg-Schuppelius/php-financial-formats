@@ -79,4 +79,64 @@ class TrailerTest extends BaseTestCase {
         $this->assertTrue($pdmTrailer->isPossibleDuplicateMessage());
         $this->assertFalse($normalTrailer->isPossibleDuplicateMessage());
     }
+
+    public function testIsDelayed(): void {
+        $delayedTrailer = new Trailer(['DLM' => '']);
+        $normalTrailer = new Trailer();
+
+        $this->assertTrue($delayedTrailer->isDelayed());
+        $this->assertFalse($normalTrailer->isDelayed());
+    }
+
+    public function testIsSystemOriginated(): void {
+        $sysTrailer = new Trailer(['SYS' => '']);
+        $normalTrailer = new Trailer();
+
+        $this->assertTrue($sysTrailer->isSystemOriginated());
+        $this->assertFalse($normalTrailer->isSystemOriginated());
+    }
+
+    public function testHasField(): void {
+        $trailer = new Trailer(['CHK' => '123456789ABC', 'TNG' => '']);
+
+        $this->assertTrue($trailer->hasField('CHK'));
+        $this->assertTrue($trailer->hasField('TNG'));
+        $this->assertFalse($trailer->hasField('PDE'));
+    }
+
+    public function testToStringWithEmptyFields(): void {
+        $trailer = new Trailer();
+
+        $this->assertSame('', (string)$trailer);
+    }
+
+    public function testToStringWithFields(): void {
+        $trailer = new Trailer([
+            'CHK' => '123456789ABC',
+            'TNG' => ''
+        ]);
+
+        $result = (string)$trailer;
+        $this->assertStringStartsWith('{5:', $result);
+        $this->assertStringContainsString('{CHK:123456789ABC}', $result);
+        $this->assertStringContainsString('{TNG:}', $result);
+        $this->assertStringEndsWith('}', $result);
+    }
+
+    public function testParseWithMultipleFields(): void {
+        $raw = '{CHK:123456789ABC}{TNG:}{PDE:1348120811BANKFRPPAXXX2222123456}';
+        $trailer = Trailer::parse($raw);
+
+        $this->assertSame('123456789ABC', $trailer->getChecksum());
+        $this->assertTrue($trailer->isTraining());
+        $this->assertTrue($trailer->isPossibleDuplicateEmission());
+        $this->assertSame('1348120811BANKFRPPAXXX2222123456', $trailer->getField('PDE'));
+    }
+
+    public function testParseEmptyString(): void {
+        $trailer = Trailer::parse('');
+
+        $this->assertEmpty($trailer->getFields());
+        $this->assertNull($trailer->getChecksum());
+    }
 }

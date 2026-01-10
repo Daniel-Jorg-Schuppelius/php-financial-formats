@@ -56,7 +56,7 @@ XmlParserAbstract (php-common-toolkit)
 ### Parsing CAMT.053 (Bank Statement)
 
 ```php
-use CommonToolkit\FinancialFormats\Parsers\CamtParser;
+use CommonToolkit\FinancialFormats\Parsers\ISO20022\CamtParser;
 
 $document = CamtParser::parseFile('bank-statement.xml');
 

@@ -377,7 +377,7 @@ class Camt053DocumentBuilderTest extends BaseTestCase {
 
         // Konvertiere zu XML und parse zurück
         $xml = $document1->toXml();
-        $document2 = CamtParser::parse($xml);
+        $document2 = CamtParser::parseCamt053($xml);
 
         // Vergleiche Kerndaten
         $this->assertEquals($document1->getId(), $document2->getId());
@@ -430,7 +430,7 @@ class Camt053DocumentBuilderTest extends BaseTestCase {
             ->build();
 
         $xml = $document1->toXml();
-        $document2 = CamtParser::parse($xml);
+        $document2 = CamtParser::parseCamt053($xml);
 
         $this->assertEquals(2, $document2->countEntries());
 

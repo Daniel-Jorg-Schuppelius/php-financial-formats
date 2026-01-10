@@ -107,7 +107,7 @@ final readonly class PostalAddress {
     }
 
     /**
-     * Erstellt eine einfache Adresse.
+     * Creates a simple address.
      */
     public static function simple(
         string $streetName,

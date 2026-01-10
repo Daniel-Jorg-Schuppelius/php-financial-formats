@@ -89,4 +89,77 @@ class BasicHeaderTest extends BaseTestCase {
         $this->assertTrue($finHeader->isFin());
         $this->assertFalse($gpaHeader->isFin());
     }
+
+    public function testIsGpaForGpaApplication(): void {
+        $gpaHeader = new BasicHeader(
+            applicationId: 'A',
+            serviceId: '01',
+            logicalTerminalAddress: 'COBADEFFAXXX'
+        );
+
+        $finHeader = new BasicHeader(
+            applicationId: 'F',
+            serviceId: '01',
+            logicalTerminalAddress: 'COBADEFFAXXX'
+        );
+
+        $this->assertTrue($gpaHeader->isGpa());
+        $this->assertFalse($finHeader->isGpa());
+    }
+
+    public function testToStringWithoutSessionAndSequence(): void {
+        $header = new BasicHeader(
+            applicationId: 'F',
+            serviceId: '01',
+            logicalTerminalAddress: 'COBADEFFAXXX'
+        );
+
+        $expected = '{1:F01COBADEFFAXXX}';
+        $this->assertSame($expected, (string)$header);
+    }
+
+    public function testToStringWithSessionAndSequence(): void {
+        $header = new BasicHeader(
+            applicationId: 'F',
+            serviceId: '01',
+            logicalTerminalAddress: 'COBADEFFAXXX',
+            sessionNumber: '1234',
+            sequenceNumber: '567890'
+        );
+
+        $expected = '{1:F01COBADEFFAXXX1234567890}';
+        $this->assertSame($expected, (string)$header);
+    }
+
+    public function testParseMinimal(): void {
+        $raw = 'F01COBADEFFAXXX';
+        $header = BasicHeader::parse($raw);
+
+        $this->assertSame('F', $header->getApplicationId());
+        $this->assertSame('01', $header->getServiceId());
+        $this->assertSame('COBADEFFAXXX', $header->getLogicalTerminalAddress());
+        $this->assertNull($header->getSessionNumber());
+        $this->assertNull($header->getSequenceNumber());
+    }
+
+    public function testParseWithSessionAndSequence(): void {
+        $raw = 'F01COBADEFFAXXX1234567890';
+        $header = BasicHeader::parse($raw);
+
+        $this->assertSame('F', $header->getApplicationId());
+        $this->assertSame('01', $header->getServiceId());
+        $this->assertSame('COBADEFFAXXX', $header->getLogicalTerminalAddress());
+        $this->assertSame('1234', $header->getSessionNumber());
+        $this->assertSame('567890', $header->getSequenceNumber());
+    }
+
+    public function testParseGpaHeader(): void {
+        $raw = 'A21COBADEFFAXXX';
+        $header = BasicHeader::parse($raw);
+
+        $this->assertSame('A', $header->getApplicationId());
+        $this->assertSame('21', $header->getServiceId());
+        $this->assertTrue($header->isGpa());
+        $this->assertFalse($header->isFin());
+    }
 }

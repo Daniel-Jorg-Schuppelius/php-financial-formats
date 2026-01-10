@@ -18,6 +18,8 @@ use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document as Mt940Documen
 use CommonToolkit\FinancialFormats\Entities\Swift\ApplicationHeader;
 use CommonToolkit\FinancialFormats\Entities\Swift\BasicHeader;
 use CommonToolkit\FinancialFormats\Entities\Swift\Message;
+use CommonToolkit\FinancialFormats\Entities\Swift\Trailer;
+use CommonToolkit\FinancialFormats\Entities\Swift\UserHeader;
 use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use RuntimeException;
 use Tests\Contracts\BaseTestCase;
@@ -178,5 +180,204 @@ MT940;
         $this->assertTrue($mt941->isStatement());
         $this->assertTrue($mt942->isStatement());
         $this->assertFalse($mt103->isStatement());
+    }
+
+    public function testGetBasicHeader(): void {
+        $basicHeader = new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001');
+        $applicationHeader = new ApplicationHeader(false, MtType::MT940);
+
+        $message = new Message(
+            basicHeader: $basicHeader,
+            applicationHeader: $applicationHeader,
+            textBlock: ''
+        );
+
+        $this->assertSame($basicHeader, $message->getBasicHeader());
+    }
+
+    public function testGetApplicationHeader(): void {
+        $basicHeader = new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001');
+        $applicationHeader = new ApplicationHeader(false, MtType::MT940);
+
+        $message = new Message(
+            basicHeader: $basicHeader,
+            applicationHeader: $applicationHeader,
+            textBlock: ''
+        );
+
+        $this->assertSame($applicationHeader, $message->getApplicationHeader());
+    }
+
+    public function testGetUserHeader(): void {
+        $basicHeader = new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001');
+        $applicationHeader = new ApplicationHeader(false, MtType::MT940);
+        $userHeader = new UserHeader(['108' => 'MUR12345']);
+
+        $message = new Message(
+            basicHeader: $basicHeader,
+            applicationHeader: $applicationHeader,
+            textBlock: '',
+            userHeader: $userHeader
+        );
+
+        $this->assertSame($userHeader, $message->getUserHeader());
+    }
+
+    public function testGetTrailer(): void {
+        $basicHeader = new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001');
+        $applicationHeader = new ApplicationHeader(false, MtType::MT940);
+        $trailer = new Trailer(['CHK' => '123456789ABC']);
+
+        $message = new Message(
+            basicHeader: $basicHeader,
+            applicationHeader: $applicationHeader,
+            textBlock: '',
+            trailer: $trailer
+        );
+
+        $this->assertSame($trailer, $message->getTrailer());
+    }
+
+    public function testGetTextBlock(): void {
+        $textBlock = ':20:REF001';
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: $textBlock
+        );
+
+        $this->assertSame($textBlock, $message->getTextBlock());
+    }
+
+    public function testGetMessageType(): void {
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT103),
+            textBlock: ''
+        );
+
+        $this->assertSame(MtType::MT103, $message->getMessageType());
+    }
+
+    public function testGetSenderBic(): void {
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: ''
+        );
+
+        $this->assertSame('DEUTDEFF', $message->getSenderBic());
+    }
+
+    public function testGetReceiverBic(): void {
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940, 'COBADEFFXXX'),
+            textBlock: ''
+        );
+
+        $this->assertSame('COBADEFFXXX', $message->getReceiverBic());
+    }
+
+    public function testIsOutputAndIsInput(): void {
+        $outputMessage = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(true, MtType::MT940),
+            textBlock: ''
+        );
+
+        $inputMessage = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: ''
+        );
+
+        $this->assertTrue($outputMessage->isOutput());
+        $this->assertFalse($outputMessage->isInput());
+        $this->assertFalse($inputMessage->isOutput());
+        $this->assertTrue($inputMessage->isInput());
+    }
+
+    public function testIsTraining(): void {
+        $trainingMessage = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: '',
+            trailer: new Trailer(['TNG' => ''])
+        );
+
+        $normalMessage = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: ''
+        );
+
+        $this->assertTrue($trainingMessage->isTraining());
+        $this->assertFalse($normalMessage->isTraining());
+    }
+
+    public function testGetChecksum(): void {
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: '',
+            trailer: new Trailer(['CHK' => 'ABCDEF123456'])
+        );
+
+        $this->assertSame('ABCDEF123456', $message->getChecksum());
+    }
+
+    public function testGetMur(): void {
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: '',
+            userHeader: new UserHeader(['108' => 'MUR12345678901234'])
+        );
+
+        $this->assertSame('MUR12345678901234', $message->getMur());
+    }
+
+    public function testGetUetr(): void {
+        $uetr = '123e4567-e89b-12d3-a456-426614174000';
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940),
+            textBlock: '',
+            userHeader: new UserHeader(['121' => $uetr])
+        );
+
+        $this->assertSame($uetr, $message->getUetr());
+    }
+
+    public function testIsStp(): void {
+        $stpMessage = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT103),
+            textBlock: '',
+            userHeader: new UserHeader(['119' => 'STP'])
+        );
+
+        $normalMessage = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT103),
+            textBlock: ''
+        );
+
+        $this->assertTrue($stpMessage->isStp());
+        $this->assertFalse($normalMessage->isStp());
+    }
+
+    public function testToString(): void {
+        $message = new Message(
+            basicHeader: new BasicHeader('F', '01', 'DEUTDEFFAXXX', '0000', '000001'),
+            applicationHeader: new ApplicationHeader(false, MtType::MT940, 'COBADEFFXXX'),
+            textBlock: ':20:REF001'
+        );
+
+        $result = (string)$message;
+        $this->assertStringContainsString('{1:', $result);
+        $this->assertStringContainsString('{2:', $result);
+        $this->assertStringContainsString('{4:', $result);
     }
 }

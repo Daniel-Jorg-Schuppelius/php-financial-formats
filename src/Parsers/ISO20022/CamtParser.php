@@ -15,6 +15,9 @@ namespace CommonToolkit\FinancialFormats\Parsers\ISO20022;
 use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance as CamtBalance;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\FinancialInstitutionIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\GenericIdentification;
+use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\PartyIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationDetails as Camt029CancellationDetails;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationStatus as Camt029CancellationStatus;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document as Camt029Document;
@@ -141,6 +144,12 @@ class CamtParser extends Iso20022ParserAbstract {
             }
         }
 
+        // Reporting Source
+        $reportingSource = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}RptgSrc/{$p}Cd",
+            "{$p}RptgSrc/{$p}Prtry"
+        ], $stmtNode);
+
         $document = new Camt053Document(
             id: $xpath->evaluate("string({$p}Id)", $stmtNode),
             creationDateTime: $xpath->evaluate("string({$p}CreDtTm)", $stmtNode),
@@ -153,6 +162,7 @@ class CamtParser extends Iso20022ParserAbstract {
             messageId: $xpath->evaluate("string(//{$p}GrpHdr/{$p}MsgId)") ?: null,
             sequenceNumber: $xpath->evaluate("string({$p}ElctrncSeqNb)", $stmtNode)
                 ?: $xpath->evaluate("string({$p}LglSeqNb)", $stmtNode) ?: null,
+            reportingSource: $reportingSource,
             openingBalance: $openingBalance,
             closingBalance: $closingBalance
         );
@@ -200,6 +210,12 @@ class CamtParser extends Iso20022ParserAbstract {
             }
         }
 
+        // Reporting Source
+        $reportingSource = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}RptgSrc/{$p}Cd",
+            "{$p}RptgSrc/{$p}Prtry"
+        ], $rptNode);
+
         $document = new Camt052Document(
             id: $xpath->evaluate("string({$p}Id)", $rptNode),
             creationDateTime: $xpath->evaluate("string({$p}CreDtTm)", $rptNode),
@@ -211,6 +227,7 @@ class CamtParser extends Iso20022ParserAbstract {
                 ?: $xpath->evaluate("string({$p}Acct/{$p}Svcr/{$p}FinInstnId/{$p}BIC)", $rptNode) ?: null,
             messageId: $xpath->evaluate("string(//{$p}GrpHdr/{$p}MsgId)") ?: null,
             sequenceNumber: $xpath->evaluate("string({$p}ElctrncSeqNb)", $rptNode) ?: null,
+            reportingSource: $reportingSource,
             openingBalance: $openingBalance,
             closingBalance: $closingBalance
         );
@@ -243,6 +260,12 @@ class CamtParser extends Iso20022ParserAbstract {
         // Basisdaten
         $currency = $doc->xpathString("{$p}Acct/{$p}Ccy", $ntfctnNode) ?? 'EUR';
 
+        // Reporting Source
+        $reportingSource = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}RptgSrc/{$p}Cd",
+            "{$p}RptgSrc/{$p}Prtry"
+        ], $ntfctnNode);
+
         $document = new Camt054Document(
             id: $xpath->evaluate("string({$p}Id)", $ntfctnNode),
             creationDateTime: $xpath->evaluate("string(//{$p}GrpHdr/{$p}CreDtTm)") ?: 'now',
@@ -250,7 +273,8 @@ class CamtParser extends Iso20022ParserAbstract {
                 ?: $xpath->evaluate("string({$p}Acct/{$p}Id/{$p}Othr/{$p}Id)", $ntfctnNode),
             currency: $currency,
             accountOwner: $xpath->evaluate("string({$p}Acct/{$p}Ownr/{$p}Id/{$p}OrgId/{$p}AnyBIC)", $ntfctnNode) ?: null,
-            messageId: $xpath->evaluate("string(//{$p}GrpHdr/{$p}MsgId)") ?: null
+            messageId: $xpath->evaluate("string(//{$p}GrpHdr/{$p}MsgId)") ?: null,
+            reportingSource: $reportingSource
         );
 
         // Transaktionen parsen
@@ -363,6 +387,12 @@ class CamtParser extends Iso20022ParserAbstract {
         // TxDtls Block
         $txDtls = $xpath->query("{$p}NtryDtls/{$p}TxDtls", $entry)->item(0);
 
+        // Technical Input Channel (on Entry level)
+        $techInputChannel = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}TechInptChanl/{$p}Cd",
+            "{$p}TechInptChanl/{$p}Prtry"
+        ], $entry);
+
         return [
             'amount' => $amount,
             'currency' => $currency,
@@ -377,6 +407,7 @@ class CamtParser extends Iso20022ParserAbstract {
             'domainCode' => $bankTxCode['domain'],
             'familyCode' => $bankTxCode['family'],
             'subFamilyCode' => $bankTxCode['subFamily'],
+            'technicalInputChannel' => $techInputChannel,
             'txDtls' => $txDtls,
         ];
     }
@@ -404,6 +435,10 @@ class CamtParser extends Iso20022ParserAbstract {
         $counterpartyName = null;
         $counterpartyIban = null;
         $counterpartyBic = null;
+        $debtor = null;
+        $creditor = null;
+        $debtorAgent = null;
+        $creditorAgent = null;
 
         if ($txDtls) {
             // Referenzen parsen
@@ -434,6 +469,12 @@ class CamtParser extends Iso20022ParserAbstract {
             $counterpartyName = $counterparty['name'];
             $counterpartyIban = $counterparty['iban'];
             $counterpartyBic = $counterparty['bic'];
+
+            // Full party identifications
+            $debtor = self::parsePartyIdentificationFromPath($xpath, $txDtls, "RltdPties/{$p}Dbtr", $p);
+            $creditor = self::parsePartyIdentificationFromPath($xpath, $txDtls, "RltdPties/{$p}Cdtr", $p);
+            $debtorAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}DbtrAgt", $p);
+            $creditorAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}CdtrAgt", $p);
         }
 
         // Fallback für Additional Info
@@ -471,9 +512,14 @@ class CamtParser extends Iso20022ParserAbstract {
             familyCode: $basics['familyCode'],
             subFamilyCode: $basics['subFamilyCode'],
             returnReason: $returnReason,
+            technicalInputChannel: $basics['technicalInputChannel'],
             counterpartyName: $counterpartyName,
             counterpartyIban: $counterpartyIban,
-            counterpartyBic: $counterpartyBic
+            counterpartyBic: $counterpartyBic,
+            debtor: $debtor ?? null,
+            creditor: $creditor ?? null,
+            debtorAgent: $debtorAgent ?? null,
+            creditorAgent: $creditorAgent ?? null
         );
     }
 
@@ -493,6 +539,13 @@ class CamtParser extends Iso20022ParserAbstract {
         $additionalInfo = null;
         $remittanceInfo = null;
         $returnReason = null;
+        $counterpartyName = null;
+        $counterpartyIban = null;
+        $counterpartyBic = null;
+        $debtor = null;
+        $creditor = null;
+        $debtorAgent = null;
+        $creditorAgent = null;
 
         if ($txDtls) {
             $purpose = static::xpathStringStatic($xpath, "{$p}Purp/{$p}Prtry", $txDtls);
@@ -501,6 +554,19 @@ class CamtParser extends Iso20022ParserAbstract {
             $remittanceInfo = static::xpathMultiStringStatic($xpath, "{$p}RmtInf/{$p}Ustrd", $txDtls);
             $additionalInfo = static::xpathStringStatic($xpath, "{$p}AddtlTxInf", $txDtls);
             $returnReason = static::xpathStringStatic($xpath, "{$p}RtrInf/{$p}Rsn/{$p}Cd", $txDtls);
+
+            // Counterparty - je nach Credit/Debit
+            $partyType = $basics['creditDebit'] === CreditDebit::CREDIT ? 'Dbtr' : 'Cdtr';
+            $counterparty = static::parsePartyInfo($xpath, $txDtls, $partyType, $p);
+            $counterpartyName = $counterparty['name'];
+            $counterpartyIban = $counterparty['iban'];
+            $counterpartyBic = $counterparty['bic'];
+
+            // Full party identifications
+            $debtor = self::parsePartyIdentificationFromPath($xpath, $txDtls, "RltdPties/{$p}Dbtr", $p);
+            $creditor = self::parsePartyIdentificationFromPath($xpath, $txDtls, "RltdPties/{$p}Cdtr", $p);
+            $debtorAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}DbtrAgt", $p);
+            $creditorAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}CdtrAgt", $p);
         }
 
         // Fallback: Wenn keine remittanceInfo, verwende additionalInfo
@@ -533,7 +599,15 @@ class CamtParser extends Iso20022ParserAbstract {
             domainCode: $basics['domainCode'],
             familyCode: $basics['familyCode'],
             subFamilyCode: $basics['subFamilyCode'],
-            returnReason: $returnReason
+            returnReason: $returnReason,
+            technicalInputChannel: $basics['technicalInputChannel'],
+            counterpartyName: $counterpartyName,
+            counterpartyIban: $counterpartyIban,
+            counterpartyBic: $counterpartyBic,
+            debtor: $debtor,
+            creditor: $creditor,
+            debtorAgent: $debtorAgent,
+            creditorAgent: $creditorAgent
         );
     }
 
@@ -558,6 +632,12 @@ class CamtParser extends Iso20022ParserAbstract {
         $instructedAgentBic = null;
         $debtorAgentBic = null;
         $creditorAgentBic = null;
+        $debtor = null;
+        $creditor = null;
+        $debtorAgent = null;
+        $creditorAgent = null;
+        $instructingAgent = null;
+        $instructedAgent = null;
 
         if ($txDtls) {
             $instructionId = static::xpathStringStatic($xpath, "{$p}Refs/{$p}InstrId", $txDtls);
@@ -576,6 +656,14 @@ class CamtParser extends Iso20022ParserAbstract {
             $instructedAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}InstdAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
             $debtorAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}DbtrAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
             $creditorAgentBic = static::xpathStringStatic($xpath, "{$p}RltdAgts/{$p}CdtrAgt/{$p}FinInstnId/{$p}BICFI", $txDtls);
+
+            // Full party identifications
+            $debtor = self::parsePartyIdentificationFromPath($xpath, $txDtls, "RltdPties/{$p}Dbtr", $p);
+            $creditor = self::parsePartyIdentificationFromPath($xpath, $txDtls, "RltdPties/{$p}Cdtr", $p);
+            $debtorAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}DbtrAgt", $p);
+            $creditorAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}CdtrAgt", $p);
+            $instructingAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}InstgAgt", $p);
+            $instructedAgent = self::parseFinancialInstitutionIdentification($xpath, $txDtls, "RltdAgts/{$p}InstdAgt", $p);
         }
 
         return new Camt054Transaction(
@@ -597,13 +685,126 @@ class CamtParser extends Iso20022ParserAbstract {
             familyCode: $basics['familyCode'],
             subFamilyCode: $basics['subFamilyCode'],
             returnReason: $returnReason,
+            technicalInputChannel: $basics['technicalInputChannel'],
             localInstrumentCode: $localInstrumentCode,
             instructingAgentBic: $instructingAgentBic,
             instructedAgentBic: $instructedAgentBic,
             debtorAgentBic: $debtorAgentBic,
-            creditorAgentBic: $creditorAgentBic
+            creditorAgentBic: $creditorAgentBic,
+            debtor: $debtor,
+            creditor: $creditor,
+            debtorAgent: $debtorAgent,
+            creditorAgent: $creditorAgent,
+            instructingAgent: $instructingAgent,
+            instructedAgent: $instructedAgent
         );
     }
+
+    // =========================================================================
+    // PARTY IDENTIFICATION PARSING METHODS
+    // =========================================================================
+
+    /**
+     * Parses full PartyIdentification from XML node.
+     * 
+     * @param DOMXPath $xpath XPath object
+     * @param DOMNode $context Context node
+     * @param string $partyPath Path to party element (e.g., "RltdPties/Dbtr")
+     * @param string $p Namespace prefix
+     * @return PartyIdentification|null
+     */
+    private static function parsePartyIdentificationFromPath(DOMXPath $xpath, DOMNode $context, string $partyPath, string $p): ?PartyIdentification {
+        $partyNode = $xpath->query("{$p}{$partyPath}", $context)->item(0);
+        if (!$partyNode) {
+            return null;
+        }
+
+        $name = static::xpathStringStatic($xpath, "{$p}Nm", $partyNode);
+        $bicOrBei = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}Id/{$p}OrgId/{$p}AnyBIC",
+            "{$p}Id/{$p}OrgId/{$p}LEI"
+        ], $partyNode);
+
+        // Organisation identification
+        $orgId = null;
+        $orgIdValue = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}Id/{$p}OrgId/{$p}Othr/{$p}Id",
+        ], $partyNode);
+        if ($orgIdValue) {
+            $orgSchemeCode = static::xpathStringStatic($xpath, "{$p}Id/{$p}OrgId/{$p}Othr/{$p}SchmeNm/{$p}Cd", $partyNode);
+            $orgSchemeProprietary = static::xpathStringStatic($xpath, "{$p}Id/{$p}OrgId/{$p}Othr/{$p}SchmeNm/{$p}Prtry", $partyNode);
+            $orgIssuer = static::xpathStringStatic($xpath, "{$p}Id/{$p}OrgId/{$p}Othr/{$p}Issr", $partyNode);
+            $orgId = new GenericIdentification($orgIdValue, $orgSchemeCode, $orgSchemeProprietary, $orgIssuer);
+        }
+
+        // Person identification
+        $personId = null;
+        $birthDate = null;
+        $birthPlace = null;
+        $personIdValue = static::xpathStringStatic($xpath, "{$p}Id/{$p}PrvtId/{$p}Othr/{$p}Id", $partyNode);
+        if ($personIdValue) {
+            $personSchemeCode = static::xpathStringStatic($xpath, "{$p}Id/{$p}PrvtId/{$p}Othr/{$p}SchmeNm/{$p}Cd", $partyNode);
+            $personSchemeProprietary = static::xpathStringStatic($xpath, "{$p}Id/{$p}PrvtId/{$p}Othr/{$p}SchmeNm/{$p}Prtry", $partyNode);
+            $personIssuer = static::xpathStringStatic($xpath, "{$p}Id/{$p}PrvtId/{$p}Othr/{$p}Issr", $partyNode);
+            $personId = new GenericIdentification($personIdValue, $personSchemeCode, $personSchemeProprietary, $personIssuer);
+
+            // Birth data
+            $birthDateStr = static::xpathStringStatic($xpath, "{$p}Id/{$p}PrvtId/{$p}DtAndPlcOfBirth/{$p}BirthDt", $partyNode);
+            $birthDate = $birthDateStr ? new \DateTimeImmutable($birthDateStr) : null;
+            $birthPlace = static::xpathStringStatic($xpath, "{$p}Id/{$p}PrvtId/{$p}DtAndPlcOfBirth/{$p}CityOfBirth", $partyNode);
+        }
+
+        // Only return if we have at least a name or identification
+        if ($name === null && $bicOrBei === null && $orgId === null && $personId === null) {
+            return null;
+        }
+
+        return new PartyIdentification(
+            name: $name,
+            bicOrBei: $bicOrBei,
+            organisationId: $orgId,
+            birthDate: $birthDate,
+            birthPlace: $birthPlace,
+            personId: $personId
+        );
+    }
+
+    /**
+     * Parses full FinancialInstitutionIdentification from XML node.
+     * 
+     * @param DOMXPath $xpath XPath object
+     * @param DOMNode $context Context node
+     * @param string $agentPath Path to agent element (e.g., "RltdAgts/DbtrAgt")
+     * @param string $p Namespace prefix
+     * @return FinancialInstitutionIdentification|null
+     */
+    private static function parseFinancialInstitutionIdentification(DOMXPath $xpath, DOMNode $context, string $agentPath, string $p): ?FinancialInstitutionIdentification {
+        $agentNode = $xpath->query("{$p}{$agentPath}/{$p}FinInstnId", $context)->item(0);
+        if (!$agentNode) {
+            return null;
+        }
+
+        $bic = static::xpathStringWithFallbackStatic($xpath, [
+            "{$p}BICFI",
+            "{$p}BIC"
+        ], $agentNode);
+
+        // Clearing system identification
+        $clearingSystemCode = static::xpathStringStatic($xpath, "{$p}ClrSysMmbId/{$p}ClrSysId/{$p}Cd", $agentNode);
+        $clearingMemberId = static::xpathStringStatic($xpath, "{$p}ClrSysMmbId/{$p}MmbId", $agentNode);
+
+        // Only return if we have at least BIC or clearing info
+        if ($bic === null && $clearingSystemCode === null && $clearingMemberId === null) {
+            return null;
+        }
+
+        return new FinancialInstitutionIdentification(
+            bic: $bic,
+            clearingSystemCode: $clearingSystemCode,
+            clearingMemberId: $clearingMemberId
+        );
+    }
+
     /**
      * Parst ein CAMT.029 Dokument (Resolution of Investigation).
      */
