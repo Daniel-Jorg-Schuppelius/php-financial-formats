@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\Swift;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\MtDocumentAbstract as Mt1DocumentAbstract;
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract as Mt9DocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\DocumentAbstract as Mt1DocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\DocumentAbstract as Mt9DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type101\Document as Mt101Document;
 use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Swift\SwiftMessageGenerator;

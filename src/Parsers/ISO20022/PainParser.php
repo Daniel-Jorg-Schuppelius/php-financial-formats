@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Parsers\ISO20022;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\PainDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\{AccountIdentification, FinancialInstitution, Mandate, PartyIdentification, PaymentIdentification, RemittanceInformation};
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\{CreditTransferTransaction, Document as Pain001Document, GroupHeader as Pain001GroupHeader, PaymentInstruction as Pain001PaymentInstruction};
@@ -50,7 +50,7 @@ use RuntimeException;
  *
  * @package CommonToolkit\FinancialFormats\Parsers
  */
-class PainParser extends Iso20022ParserAbstract {
+class PainParser extends ParserAbstract {
 
     // =========================================================================
     // PUBLIC API
@@ -206,7 +206,7 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException On invalid XML or missing content
      */
     public static function parsePain001(string $xmlContent): Pain001Document {
-        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.001', self::PAIN001_NAMESPACES);
+        ['doc' => $doc, 'prefix' => $prefix] = self::createISO20022Document($xmlContent, 'pain.001', self::PAIN001_NAMESPACES);
         $xpath = $doc->getXPath();
 
         // Prefix variant for namespace lookup
@@ -386,7 +386,7 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException On invalid XML
      */
     public static function parsePain002(string $xmlContent): Pain002Document {
-        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.002');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createISO20022Document($xmlContent, 'pain.002');
         $xpath = $doc->getXPath();
 
         // Parse GroupHeader
@@ -551,7 +551,7 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException On invalid XML
      */
     public static function parsePain007(string $xmlContent): Pain007Document {
-        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.007');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createISO20022Document($xmlContent, 'pain.007');
         $xpath = $doc->getXPath();
 
         // Parse GroupHeader
@@ -708,7 +708,7 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException On invalid XML
      */
     public static function parsePain008(string $xmlContent): Pain008Document {
-        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.008');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createISO20022Document($xmlContent, 'pain.008');
         $xpath = $doc->getXPath();
 
         // Parse GroupHeader
@@ -898,7 +898,7 @@ class PainParser extends Iso20022ParserAbstract {
      * @throws RuntimeException On invalid XML
      */
     public static function parsePain009(string $xmlContent): Pain009Document {
-        ['doc' => $doc, 'prefix' => $prefix] = self::createIso20022Document($xmlContent, 'pain.009');
+        ['doc' => $doc, 'prefix' => $prefix] = self::createISO20022Document($xmlContent, 'pain.009');
         $xpath = $doc->getXPath();
 
         // Parse header

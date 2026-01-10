@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Pain;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\PainGeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\CreditTransferTransaction;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\GroupHeader;
@@ -26,7 +26,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type1\PaymentInstructi
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
-class Pain001Generator extends PainGeneratorAbstract {
+class Pain001Generator extends GeneratorAbstract {
     private const DEFAULT_NAMESPACE = 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.12';
 
     public function __construct(string $namespace = self::DEFAULT_NAMESPACE) {
@@ -37,7 +37,7 @@ class Pain001Generator extends PainGeneratorAbstract {
      * Generates XML from a pain.001 document.
      */
     public function generate(Document $document): string {
-        $this->initPainDocument('CstmrCdtTrfInitn', 'pain.001.001.12.xsd');
+        $this->initPainDocument('CstmrCdtTrfInitn');
 
         $this->addGroupHeader($document->getGroupHeader());
 

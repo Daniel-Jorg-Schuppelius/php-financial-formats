@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\Mt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt2\Mt2GeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt2\GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt2\Type200\Document;
 use InvalidArgumentException;
 
@@ -23,7 +23,7 @@ use InvalidArgumentException;
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
-class Mt200Generator extends Mt2GeneratorAbstract {
+class Mt200Generator extends GeneratorAbstract {
     /**
      * Generates the MT200 SWIFT message.
      * 

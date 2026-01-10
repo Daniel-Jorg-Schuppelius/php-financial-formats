@@ -14,6 +14,7 @@ namespace CommonToolkit\FinancialFormats\Traits;
 
 use CommonToolkit\Contracts\Interfaces\XML\XmlElementInterface;
 use CommonToolkit\Entities\XML\Document as XmlDocument;
+use CommonToolkit\Entities\XML\XsdValidationResult;
 use CommonToolkit\Helper\FileSystem\File;
 use DOMDocument;
 use DOMNode;
@@ -103,6 +104,16 @@ trait XmlDocumentExportTrait {
      */
     public function validateAgainstXsd(string $xsdFile): array {
         return $this->toXmlDocument()->validateAgainstXsd($xsdFile);
+    }
+
+    /**
+     * Validates the document against an XSD schema with typed result.
+     * 
+     * @param string $xsdFile Path to the XSD schema file
+     * @return XsdValidationResult Typed validation result
+     */
+    public function validateAgainstXsdTyped(string $xsdFile): XsdValidationResult {
+        return $this->toXmlDocument()->validateAgainstXsdTyped($xsdFile);
     }
 
     /**

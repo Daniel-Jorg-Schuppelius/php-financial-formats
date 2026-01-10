@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Tests\Helper;
 
+use CommonToolkit\Entities\XML\XsdValidationResult;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\FinancialFormats\Helper\Data\CamtValidator;
-use CommonToolkit\FinancialFormats\Helper\Data\ValidationResult;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Contracts\BaseTestCase;
 
@@ -50,155 +50,163 @@ class CamtValidatorTest extends BaseTestCase {
 
     public function testDetectVersionFromNamespace(): void {
         $xml02 = '<?xml version="1.0"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02"></Document>';
-        $xml08 = '<?xml version="1.0"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.08"></Document>';
+$xml08 = '
+<?xml version="1.0"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.08"></Document>';
 
-        $this->assertEquals(CamtVersion::V02, CamtValidator::detectVersion($xml02));
-        $this->assertEquals(CamtVersion::V08, CamtValidator::detectVersion($xml08));
-    }
-
-    public function testValidateCamt052Sample(): void {
-        $file = $this->samplesPath . '01_EBICS_camt.052_Bareinzahlung_auf_Dot.xml';
-        if (!file_exists($file)) {
-            $this->markTestSkipped('Sample file not found');
-        }
-
-        $result = CamtValidator::validateFile($file);
-
-        $this->assertInstanceOf(ValidationResult::class, $result);
-        $this->assertEquals(CamtType::CAMT052, $result->type);
-
-        // Ausgabe für Debugging
-        if (!$result->isValid()) {
-            echo "\nValidierungsfehler für " . basename($file) . ":\n";
-            foreach ($result->getErrors() as $error) {
-                echo "  - $error\n";
-            }
-        }
-    }
-
-    public function testValidateCamt053Sample(): void {
-        $file = $this->samplesPath . '11_EBICS_camt.053_Kontoauszug_mit_allen_Umsätzen.xml';
-        if (!file_exists($file)) {
-            $this->markTestSkipped('Sample file not found');
-        }
-
-        $result = CamtValidator::validateFile($file);
-
-        $this->assertInstanceOf(ValidationResult::class, $result);
-        $this->assertEquals(CamtType::CAMT053, $result->type);
-    }
-
-    public function testValidateAllCamt052Samples(): void {
-        $files = glob($this->samplesPath . '*camt.052*.xml');
-
-        foreach ($files as $file) {
-            $result = CamtValidator::validateFile($file);
-
-            $this->assertInstanceOf(ValidationResult::class, $result, basename($file));
-            $this->assertEquals(CamtType::CAMT052, $result->type, basename($file));
-        }
-    }
-
-    public function testValidateAllCamt053Samples(): void {
-        $files = glob($this->samplesPath . '*camt.053*.xml');
-
-        foreach ($files as $file) {
-            $result = CamtValidator::validateFile($file);
-
-            $this->assertInstanceOf(ValidationResult::class, $result, basename($file));
-            $this->assertEquals(CamtType::CAMT053, $result->type, basename($file));
-        }
-    }
-
-    public function testValidateInvalidXml(): void {
-        $invalidXml = '<?xml version="1.0"?><Document><Invalid></Document>';
-
-        $result = CamtValidator::validate($invalidXml);
-
-        $this->assertFalse($result->isValid());
-        $this->assertNotEmpty($result->getErrors());
-    }
-
-    public function testValidateUnknownType(): void {
-        $unknownXml = '<?xml version="1.0"?><Unknown xmlns="urn:unknown"></Unknown>';
-
-        $result = CamtValidator::validate($unknownXml);
-
-        $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('Unbekannter CAMT-Dokumenttyp', $result->getFirstError());
-    }
-
-    public function testValidateFileNotFound(): void {
-        $result = CamtValidator::validateFile('/nonexistent/path/file.xml');
-
-        $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('Datei nicht gefunden', $result->getFirstError());
-    }
-
-    public function testValidationResultMethods(): void {
-        $result = new ValidationResult(
-            valid: false,
-            errors: ['Fehler 1', 'Fehler 2', 'Fehler 3'],
-            type: CamtType::CAMT053,
-            version: CamtVersion::V02,
-            xsdFile: '/path/to/schema.xsd'
-        );
-
-        $this->assertFalse($result->isValid());
-        $this->assertEquals(3, $result->countErrors());
-        $this->assertEquals('Fehler 1', $result->getFirstError());
-        $this->assertStringContainsString('Fehler 2', $result->getErrorsAsString());
-        $this->assertEquals(CamtType::CAMT053, $result->type);
-        $this->assertEquals(CamtVersion::V02, $result->version);
-        $this->assertEquals('/path/to/schema.xsd', $result->xsdFile);
-    }
-
-    public function testValidateWithExplicitType(): void {
-        $file = $this->samplesPath . '01_EBICS_camt.052_Bareinzahlung_auf_Dot.xml';
-        if (!file_exists($file)) {
-            $this->markTestSkipped('Sample file not found');
-        }
-
-        $result = CamtValidator::validateFile($file, CamtType::CAMT052);
-
-        $this->assertEquals(CamtType::CAMT052, $result->type);
-    }
-
-    public function testValidateWithExplicitVersion(): void {
-        $file = $this->samplesPath . '01_EBICS_camt.052_Bareinzahlung_auf_Dot.xml';
-        if (!file_exists($file)) {
-            $this->markTestSkipped('Sample file not found');
-        }
-
-        $result = CamtValidator::validateFile($file, null, CamtVersion::V02);
-
-        $this->assertEquals(CamtVersion::V02, $result->version);
-    }
-
-    #[DataProvider('xsdFilesProvider')]
-    public function testXsdFileExists(string $filename): void {
-        $file = $this->xsdPath . $filename;
-        $this->assertFileExists($file, "XSD-Datei $filename sollte existieren");
-    }
-
-    /**
-     * @return array<string, array{string}>
-     */
-    public static function xsdFilesProvider(): array {
-        return [
-            'camt.052.001.02' => ['camt.052.001.02.xsd'],
-            'camt.052.001.06' => ['camt.052.001.06.xsd'],
-            'camt.052.001.08' => ['camt.052.001.08.xsd'],
-            'camt.052.001.10' => ['camt.052.001.10.xsd'],
-            'camt.052.001.12' => ['camt.052.001.12.xsd'],
-            'camt.052.001.13' => ['camt.052.001.13.xsd'],
-            'camt.053.001.02' => ['camt.053.001.02.xsd'],
-            'camt.053.001.04' => ['camt.053.001.04.xsd'],
-            'camt.053.001.08' => ['camt.053.001.08.xsd'],
-            'camt.053.001.10' => ['camt.053.001.10.xsd'],
-            'camt.053.001.12' => ['camt.053.001.12.xsd'],
-            'camt.053.001.13' => ['camt.053.001.13.xsd'],
-            'camt.054.001.13' => ['camt.054.001.13.xsd'],
-        ];
-    }
+$this->assertEquals('02', CamtValidator::detectVersion($xml02));
+$this->assertEquals('08', CamtValidator::detectVersion($xml08));
 }
+
+public function testValidateCamt052Sample(): void {
+$file = $this->samplesPath . '01_EBICS_camt.052_Bareinzahlung_auf_Dot.xml';
+if (!file_exists($file)) {
+$this->markTestSkipped('Sample file not found');
+}
+
+$result = CamtValidator::validateFile($file);
+
+$this->assertInstanceOf(XsdValidationResult::class, $result);
+$this->assertEquals(CamtType::CAMT052, $result->type);
+
+// Ausgabe für Debugging
+if (!$result->isValid()) {
+echo "\nValidation errors for " . basename($file) . ":\n";
+foreach ($result->getErrors() as $error) {
+echo " - $error\n";
+}
+}
+}
+
+public function testValidateCamt053Sample(): void {
+$file = $this->samplesPath . '11_EBICS_camt.053_Kontoauszug_mit_allen_Umsätzen.xml';
+if (!file_exists($file)) {
+$this->markTestSkipped('Sample file not found');
+}
+
+$result = CamtValidator::validateFile($file);
+
+$this->assertInstanceOf(XsdValidationResult::class, $result);
+$this->assertEquals(CamtType::CAMT053, $result->type);
+}
+
+public function testValidateAllCamt052Samples(): void {
+$files = glob($this->samplesPath . '*camt.052*.xml');
+
+foreach ($files as $file) {
+$result = CamtValidator::validateFile($file);
+
+$this->assertInstanceOf(XsdValidationResult::class, $result, basename($file));
+$this->assertEquals(CamtType::CAMT052, $result->type, basename($file));
+}
+}
+
+public function testValidateAllCamt053Samples(): void {
+$files = glob($this->samplesPath . '*camt.053*.xml');
+
+foreach ($files as $file) {
+$result = CamtValidator::validateFile($file);
+
+$this->assertInstanceOf(XsdValidationResult::class, $result, basename($file));
+$this->assertEquals(CamtType::CAMT053, $result->type, basename($file));
+}
+}
+
+public function testValidateInvalidXml(): void {
+$invalidXml = '
+<?xml version="1.0"?>
+<Document>
+    <Invalid>
+</Document>';
+
+$result = CamtValidator::validate($invalidXml);
+
+$this->assertFalse($result->isValid());
+$this->assertNotEmpty($result->getErrors());
+}
+
+public function testValidateUnknownType(): void {
+$unknownXml = '
+<?xml version="1.0"?>
+<Unknown xmlns="urn:unknown"></Unknown>';
+
+$result = CamtValidator::validate($unknownXml);
+
+$this->assertFalse($result->isValid());
+$this->assertStringContainsString('Unknown document type', $result->getFirstError());
+}
+
+public function testValidateFileNotFound(): void {
+$result = CamtValidator::validateFile('/nonexistent/path/file.xml');
+
+$this->assertFalse($result->isValid());
+$this->assertStringContainsString('Datei nicht gefunden', $result->getFirstError());
+}
+
+public function testValidationResultMethods(): void {
+$result = new XsdValidationResult(
+valid: false,
+errors: ['Error 1', 'Error 2', 'Error 3'],
+type: CamtType::CAMT053,
+version: '02',
+xsdFile: '/path/to/schema.xsd'
+);
+
+$this->assertFalse($result->isValid());
+$this->assertEquals(3, $result->countErrors());
+$this->assertEquals('Error 1', $result->getFirstError());
+$this->assertStringContainsString('Error 2', $result->getErrorsAsString());
+$this->assertEquals(CamtType::CAMT053, $result->type);
+$this->assertEquals('02', $result->version);
+$this->assertEquals('/path/to/schema.xsd', $result->xsdFile);
+}
+
+public function testValidateWithExplicitType(): void {
+$file = $this->samplesPath . '01_EBICS_camt.052_Bareinzahlung_auf_Dot.xml';
+if (!file_exists($file)) {
+$this->markTestSkipped('Sample file not found');
+}
+
+$result = CamtValidator::validateFile($file, CamtType::CAMT052);
+
+$this->assertEquals(CamtType::CAMT052, $result->type);
+}
+
+public function testValidateWithExplicitVersion(): void {
+$file = $this->samplesPath . '01_EBICS_camt.052_Bareinzahlung_auf_Dot.xml';
+if (!file_exists($file)) {
+$this->markTestSkipped('Sample file not found');
+}
+
+$result = CamtValidator::validateFile($file, null, '02');
+
+$this->assertEquals('02', $result->version);
+}
+
+#[DataProvider('xsdFilesProvider')]
+public function testXsdFileExists(string $filename): void {
+$file = $this->xsdPath . $filename;
+$this->assertFileExists($file, "XSD-Datei $filename sollte existieren");
+}
+
+/**
+* @return array<string, array{string}>
+    */
+    public static function xsdFilesProvider(): array {
+    return [
+    'camt.052.001.02' => ['camt.052.001.02.xsd'],
+    'camt.052.001.06' => ['camt.052.001.06.xsd'],
+    'camt.052.001.08' => ['camt.052.001.08.xsd'],
+    'camt.052.001.10' => ['camt.052.001.10.xsd'],
+    'camt.052.001.12' => ['camt.052.001.12.xsd'],
+    'camt.052.001.13' => ['camt.052.001.13.xsd'],
+    'camt.053.001.02' => ['camt.053.001.02.xsd'],
+    'camt.053.001.04' => ['camt.053.001.04.xsd'],
+    'camt.053.001.08' => ['camt.053.001.08.xsd'],
+    'camt.053.001.10' => ['camt.053.001.10.xsd'],
+    'camt.053.001.12' => ['camt.053.001.12.xsd'],
+    'camt.053.001.13' => ['camt.053.001.13.xsd'],
+    'camt.054.001.13' => ['camt.054.001.13.xsd'],
+    ];
+    }
+    }

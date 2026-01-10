@@ -3,7 +3,7 @@
  * Created on   : Thu Jan 09 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : Mt2GeneratorAbstract.php
+ * Filename     : GeneratorAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -22,7 +22,7 @@ use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
  * 
  * @package CommonToolkit\Contracts\Abstracts\Common\Banking\Mt2
  */
-abstract class Mt2GeneratorAbstract {
+abstract class GeneratorAbstract {
     /**
      * Line separator for SWIFT messages.
      */

@@ -3,7 +3,7 @@
  * Created on   : Wed Jan 01 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : PainGeneratorAbstract.php
+ * Filename     : GeneratorAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -12,12 +12,10 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Iso20022GeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\GeneratorAbstract as ISO20022GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\FinancialInstitution;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PaymentIdentification;
-use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PostalAddress;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
 
 /**
@@ -27,11 +25,11 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\RemittanceInformation;
  * - DOM-Dokument Initialisierung via ExtendedDOMDocumentBuilder
  * - Gemeinsame Strukturen (PartyIdentification, PostalAddress, etc.)
  * 
- * Extends Iso20022GeneratorAbstract for common ISO 20022 functionality.
+ * Extends GeneratorAbstract for common ISO 20022 functionality.
  * 
  * @package CommonToolkit\Contracts\Abstracts\ISO20022\Pain
  */
-abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
+abstract class GeneratorAbstract extends ISO20022GeneratorAbstract {
     protected string $painNamespace;
 
     public function __construct(string $namespace) {
@@ -39,12 +37,22 @@ abstract class PainGeneratorAbstract extends Iso20022GeneratorAbstract {
     }
 
     /**
+     * Derives the XSD filename from the namespace.
+     * e.g. 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.12' → 'pain.001.001.12.xsd'
+     */
+    protected function deriveSchemaFilename(): string {
+        // Extract the last part after the last colon
+        $parts = explode(':', $this->painNamespace);
+        return end($parts) . '.xsd';
+    }
+
+    /**
      * Initialisiert das Pain-Dokument mit dem ExtendedDOMDocumentBuilder.
      * 
      * @param string $rootChildElement Name des Kind-Elements unter Document (z.B. 'CstmrCdtTrfInitn')
-     * @param string|null $schemaLocation Optionale Schema-Location
      */
-    protected function initPainDocument(string $rootChildElement, ?string $schemaLocation = null): void {
+    protected function initPainDocument(string $rootChildElement): void {
+        $schemaLocation = $this->includeSchemaLocation ? $this->deriveSchemaFilename() : null;
         $this->initDocument($rootChildElement, $this->painNamespace, $schemaLocation);
     }
 

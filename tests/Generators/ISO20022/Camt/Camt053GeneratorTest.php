@@ -133,7 +133,7 @@ class Camt053GeneratorTest extends BaseTestCase {
     public function testGenerateThrowsExceptionForWrongDocumentType(): void {
         $this->expectException(\InvalidArgumentException::class);
 
-        $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract::class);
+        $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\DocumentAbstract::class);
 
         $this->generator->generate($wrongDocument);
     }

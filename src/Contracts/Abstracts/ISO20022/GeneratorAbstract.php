@@ -3,7 +3,7 @@
  * Created on   : Thu Jan 02 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : Iso20022GeneratorAbstract.php
+ * Filename     : GeneratorAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -14,7 +14,6 @@ namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022;
 
 use CommonToolkit\Builders\ExtendedDOMDocumentBuilder;
 use CommonToolkit\Entities\XML\ExtendedDOMDocument;
-use CommonToolkit\Enums\CountryCode;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\AccountIdentification;
@@ -37,11 +36,25 @@ use DateTimeInterface;
  * 
  * @package CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022
  */
-abstract class Iso20022GeneratorAbstract {
+abstract class GeneratorAbstract {
     protected const XSI_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
 
     protected ExtendedDOMDocumentBuilder $builder;
     protected string $namespace;
+
+    /**
+     * Whether to include xsi:schemaLocation in the generated XML.
+     * Enabled by default for ISO 20022 compliance.
+     */
+    protected bool $includeSchemaLocation = true;
+
+    /**
+     * Sets whether to include xsi:schemaLocation attribute.
+     */
+    public function setIncludeSchemaLocation(bool $include): static {
+        $this->includeSchemaLocation = $include;
+        return $this;
+    }
 
     // =========================================================================
     // INITIALISIERUNG

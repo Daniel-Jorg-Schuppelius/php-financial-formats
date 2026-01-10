@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type950;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\TransactionAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\Enums\CreditDebit;
 use CommonToolkit\Enums\CurrencyCode;
@@ -28,7 +28,7 @@ use RuntimeException;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type950
  */
-class Transaction extends MtTransactionAbstract {
+class Transaction extends TransactionAbstract {
     private Reference $reference;
     private ?string $supplementaryDetails;
 

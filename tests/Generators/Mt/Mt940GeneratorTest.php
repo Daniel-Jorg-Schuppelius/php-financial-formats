@@ -167,8 +167,8 @@ class Mt940GeneratorTest extends BaseTestCase {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected Mt9\Type940\Document');
 
-        // Erstelle ein Mock-Objekt, das MtDocumentAbstract erweitert aber nicht Document ist
-        $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract::class);
+        // Erstelle ein Mock-Objekt, das DocumentAbstract erweitert aber nicht Document ist
+        $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\DocumentAbstract::class);
 
         $this->generator->generate($wrongDocument);
     }

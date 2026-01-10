@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type940;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
 use CommonToolkit\FinancialFormats\Enums\Mt\MtType;
 use CommonToolkit\FinancialFormats\Generators\Mt\Mt940Generator;
@@ -28,7 +28,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type940
  */
-class Document extends MtDocumentAbstract {
+class Document extends DocumentAbstract {
     private Balance $openingBalance;
     private Balance $closingBalance;
     private ?Balance $closingAvailableBalance;

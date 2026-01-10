@@ -3,7 +3,7 @@
  * Created on   : Wed Jan 01 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : Mt9GeneratorAbstract.php
+ * Filename     : GeneratorAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -21,7 +21,7 @@ use CommonToolkit\FinancialFormats\Entities\Mt9\Balance;
  * 
  * @package CommonToolkit\Contracts\Abstracts\Common\Banking\Mt9
  */
-abstract class Mt9GeneratorAbstract {
+abstract class GeneratorAbstract {
     /**
      * Line separator for SWIFT messages.
      */
@@ -30,7 +30,7 @@ abstract class Mt9GeneratorAbstract {
     /**
      * Generates the document as a SWIFT MT string.
      */
-    abstract public function generate(MtDocumentAbstract $document): string;
+    abstract public function generate(DocumentAbstract $document): string;
 
     /**
      * Formatiert einen Balance im SWIFT-Format.
@@ -46,9 +46,9 @@ abstract class Mt9GeneratorAbstract {
      * Adds the standard header fields.
      * 
      * @param string[] $lines Referenz auf das Array der Zeilen
-     * @param MtDocumentAbstract $document Das Dokument
+     * @param DocumentAbstract $document Das Dokument
      */
-    protected function appendHeaderFields(array &$lines, MtDocumentAbstract $document): void {
+    protected function appendHeaderFields(array &$lines, DocumentAbstract $document): void {
         $lines[] = ':20:' . $document->getReferenceId();
 
         // :21: Related Reference - optional

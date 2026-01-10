@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type54;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\TransactionAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\FinancialInstitutionIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReturnReason;
@@ -36,7 +36,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt054
  */
-final class Transaction extends CamtTransactionAbstract {
+final class Transaction extends TransactionAbstract {
     private ?string $instructionId;
     private ?string $endToEndId;
     private ?string $remittanceInfo;

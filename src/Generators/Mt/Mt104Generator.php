@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\Mt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\Mt1GeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Type104\Document;
 use InvalidArgumentException;
 
@@ -23,7 +23,7 @@ use InvalidArgumentException;
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
-class Mt104Generator extends Mt1GeneratorAbstract {
+class Mt104Generator extends GeneratorAbstract {
     /**
      * Generates the MT104 SWIFT message.
      * 

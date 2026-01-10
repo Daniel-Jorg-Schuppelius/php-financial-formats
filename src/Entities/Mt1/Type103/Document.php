@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\Mt1\Type103;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\MtDocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt1\DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt1\Party;
 use CommonToolkit\FinancialFormats\Entities\Mt1\TransferDetails;
 use CommonToolkit\FinancialFormats\Enums\Mt\BankOperationCode;
@@ -48,7 +48,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt1\Type103
  */
-class Document extends MtDocumentAbstract {
+class Document extends DocumentAbstract {
     private BankOperationCode $bankOperationCode;
     private ?Party $orderingInstitution;
     private ?Party $sendersCorrespondent;

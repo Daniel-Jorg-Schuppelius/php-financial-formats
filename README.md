@@ -27,7 +27,7 @@ The library follows a layered architecture with shared abstractions:
 ```
 src/
 ├── Builders/           # Fluent document builders (CAMT, MT, Pain, DATEV)
-├── Contracts/          # Abstract base classes (Iso20022ParserAbstract, XmlParserAbstract)
+├── Contracts/          # Abstract base classes (ParserAbstract, XmlParserAbstract)
 ├── Converters/         # Format converters (Camt053ToMt940, DATEV↔BankTransaction)
 ├── Entities/           # Immutable domain models
 ├── Enums/              # Typed enums with factory methods
@@ -44,7 +44,7 @@ All ISO 20022 parsers share a common base:
 
 ```
 XmlParserAbstract (php-common-toolkit)
-    └── Iso20022ParserAbstract
+    └── ParserAbstract
             ├── CamtParser
             └── PainParser
 ```

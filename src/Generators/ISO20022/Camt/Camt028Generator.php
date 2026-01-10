@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type28\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type28\AdditionalPaymentInformation;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
@@ -26,7 +26,7 @@ use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
-class Camt028Generator extends CamtGeneratorAbstract {
+class Camt028Generator extends GeneratorAbstract {
     public function getCamtType(): CamtType {
         return CamtType::CAMT028;
     }

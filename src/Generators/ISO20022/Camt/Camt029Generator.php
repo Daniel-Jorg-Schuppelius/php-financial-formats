@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\CancellationDetails;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type29\TransactionInformationAndStatus;
@@ -27,7 +27,7 @@ use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
-class Camt029Generator extends CamtGeneratorAbstract {
+class Camt029Generator extends GeneratorAbstract {
     public function getCamtType(): CamtType {
         return CamtType::CAMT029;
     }

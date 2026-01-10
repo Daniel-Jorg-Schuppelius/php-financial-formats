@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type8;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\PainDocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
 use CommonToolkit\FinancialFormats\Generators\ISO20022\Pain\Pain008Generator;
@@ -30,7 +30,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Pain\Type8
  */
-final class Document extends PainDocumentAbstract {
+final class Document extends DocumentAbstract {
     /** @var PaymentInstruction[] */
     private array $paymentInstructions = [];
 

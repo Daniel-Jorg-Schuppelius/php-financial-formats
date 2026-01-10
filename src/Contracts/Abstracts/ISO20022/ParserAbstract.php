@@ -3,14 +3,14 @@
  * Created on   : Thu Jan 01 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : Iso20022ParserAbstract.php
+ * Filename     : ParserAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
 
 declare(strict_types=1);
 
-namespace CommonToolkit\FinancialFormats\Contracts\Abstracts;
+namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022;
 
 use CommonToolkit\Contracts\Abstracts\XML\XmlParserAbstract;
 use CommonToolkit\Entities\XML\ExtendedDOMDocument;
@@ -41,7 +41,7 @@ use RuntimeException;
  * 
  * Provides both instance and static methods for flexibility.
  */
-abstract class Iso20022ParserAbstract extends XmlParserAbstract {
+abstract class ParserAbstract extends XmlParserAbstract {
     // =========================================================================
     // KONSTANTEN
     // =========================================================================
@@ -64,7 +64,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @return array{doc: ExtendedDOMDocument, prefix: string}
      * @throws RuntimeException On invalid XML
      */
-    protected static function createIso20022Document(
+    protected static function createISO20022Document(
         string $xmlContent,
         string $formatType,
         array $knownNamespaces = []
@@ -72,7 +72,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
         $doc = ExtendedDOMDocumentParser::fromString($xmlContent);
 
         // Namespace erkennen und registrieren
-        $namespace = static::detectIso20022Namespace($doc, $formatType, $knownNamespaces);
+        $namespace = static::detectISO20022Namespace($doc, $formatType, $knownNamespaces);
         $prefix = '';
 
         if (!empty($namespace)) {
@@ -94,15 +94,15 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @param array<string> $knownNamespaces Optional: List of known namespaces for this type
      * @return array{dom: DOMDocument, xpath: DOMXPath, namespace: ?string, prefix: string}
      * @throws RuntimeException On invalid XML
-     * @deprecated Use createIso20022Document() for ExtendedDOMDocument
+     * @deprecated Use createISO20022Document() for ExtendedDOMDocument
      */
-    protected static function createIso20022XPath(
+    protected static function createISO20022XPath(
         string $xmlContent,
         string $formatType,
         array $knownNamespaces = []
     ): array {
         $doc = ExtendedDOMDocumentParser::fromString($xmlContent);
-        $namespace = static::detectIso20022Namespace($doc, $formatType, $knownNamespaces);
+        $namespace = static::detectISO20022Namespace($doc, $formatType, $knownNamespaces);
         $prefix = '';
 
         if (!empty($namespace)) {
@@ -126,7 +126,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @param array<string> $knownNamespaces Known namespaces for this type
      * @return string|null Der erkannte Namespace oder null
      */
-    protected static function detectIso20022Namespace(
+    protected static function detectISO20022Namespace(
         DOMDocument $dom,
         string $formatType,
         array $knownNamespaces = []
@@ -185,12 +185,12 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
      * @param DOMDocument $dom Das DOM-Dokument (oder ExtendedDOMDocument)
      * @param string $formatType Der Format-Typ (z.B. 'camt.053', 'pain.001')
      * @return array{0: DOMXPath, 1: string} [XPath object, namespace prefix]
-     * @deprecated Use createIso20022Document() for ExtendedDOMDocument
+     * @deprecated Use createISO20022Document() for ExtendedDOMDocument
      */
     protected static function initializeXPath(DOMDocument $dom, string $formatType = ''): array {
         // Wenn bereits ein ExtendedDOMDocument, nutze dessen XPath
         if ($dom instanceof ExtendedDOMDocument) {
-            $namespace = static::detectIso20022Namespace($dom, $formatType);
+            $namespace = static::detectISO20022Namespace($dom, $formatType);
             $prefix = '';
 
             if (!empty($namespace)) {
@@ -202,7 +202,7 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
         }
 
         $xpath = new DOMXPath($dom);
-        $namespace = static::detectIso20022Namespace($dom, $formatType);
+        $namespace = static::detectISO20022Namespace($dom, $formatType);
 
         if (!empty($namespace)) {
             $xpath->registerNamespace('ns', $namespace);
@@ -645,12 +645,12 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     // =========================================================================
 
     /**
-     * Alias for createIso20022Document - Pain compatibility.
+     * Alias for createISO20022Document - Pain compatibility.
      * 
-     * @deprecated Verwende createIso20022Document
+     * @deprecated Verwende createISO20022Document
      */
     protected static function createDomXPath(string $xmlContent, string $painType, array $knownNamespaces = []): array {
-        $result = static::createIso20022Document($xmlContent, $painType, $knownNamespaces);
+        $result = static::createISO20022Document($xmlContent, $painType, $knownNamespaces);
         // Pain erwartet 'dom', 'xpath', 'prefix' - namespace nicht enthalten im alten Interface
         return [
             'dom' => $result['doc'],
@@ -660,12 +660,12 @@ abstract class Iso20022ParserAbstract extends XmlParserAbstract {
     }
 
     /**
-     * Alias for detectIso20022Namespace - Pain compatibility.
+     * Alias for detectISO20022Namespace - Pain compatibility.
      * 
-     * @deprecated Verwende detectIso20022Namespace
+     * @deprecated Verwende detectISO20022Namespace
      */
     protected static function detectPainNamespace(DOMDocument $dom, string $painType, array $knownNamespaces = []): ?string {
-        return static::detectIso20022Namespace($dom, $painType, $knownNamespaces);
+        return static::detectISO20022Namespace($dom, $painType, $knownNamespaces);
     }
 
     /**

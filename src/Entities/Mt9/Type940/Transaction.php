@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\Mt9\Type940;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\TransactionAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Purpose;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Reference;
 use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
@@ -30,7 +30,7 @@ use RuntimeException;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Mt9\Type940
  */
-class Transaction extends MtTransactionAbstract {
+class Transaction extends TransactionAbstract {
     private Reference $reference;
     private ?Purpose $purpose;
     private ?string $purposeRaw;

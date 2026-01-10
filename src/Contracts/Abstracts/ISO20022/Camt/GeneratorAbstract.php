@@ -3,7 +3,7 @@
  * Created on   : Wed Jan 01 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : CamtGeneratorAbstract.php
+ * Filename     : GeneratorAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Iso20022GeneratorAbstract;
-use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\GeneratorAbstract as ISO20022GenratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
@@ -23,7 +22,7 @@ use DOMElement;
 /**
  * Abstract base class for CAMT XML generators.
  * 
- * Extends Iso20022GeneratorAbstract and provides CAMT-specific functionality:
+ * Extends GeneratorAbstract and provides CAMT-specific functionality:
  * - CAMT-Namespace und Version-Handling
  * - Gemeinsame Strukturen (Balance, Account, Entry, etc.)
  * 
@@ -31,24 +30,11 @@ use DOMElement;
  * 
  * @package CommonToolkit\Contracts\Abstracts\ISO20022\Camt
  */
-abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
-    /**
-     * Whether to include xsi:schemaLocation in the generated XML.
-     */
-    protected bool $includeSchemaLocation = false;
-
+abstract class GeneratorAbstract extends ISO20022GenratorAbstract {
     /**
      * Returns the CAMT type of this generator.
      */
     abstract public function getCamtType(): CamtType;
-
-    /**
-     * Sets whether to include xsi:schemaLocation attribute.
-     */
-    public function setIncludeSchemaLocation(bool $include): static {
-        $this->includeSchemaLocation = $include;
-        return $this;
-    }
 
     /**
      * Initialisiert das CAMT-Dokument mit Root-Element.
@@ -65,7 +51,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
      * Adds the group header.
      */
-    protected function addGroupHeader(CamtDocumentAbstract $document, string $messageIdPrefix): self {
+    protected function addGroupHeader(DocumentAbstract $document, string $messageIdPrefix): self {
         $this->builder->addElement('GrpHdr');
 
         $msgId = $document->getMessageId() ?? $messageIdPrefix . $document->getCreationDateTime()->format('YmdHis');
@@ -85,7 +71,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
      * - PgNb (Page Number): The current page number
      * - LastPgInd (Last Page Indicator): true if this is the last page
      */
-    protected function addStatementPagination(CamtDocumentAbstract $document): self {
+    protected function addStatementPagination(DocumentAbstract $document): self {
         $pageNumber = $document->getPageNumber();
         $lastPageIndicator = $document->isLastPage();
 
@@ -111,7 +97,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
      * Adds an account structure for CAMT.
      */
-    protected function addCamtAccount(CamtDocumentAbstract $document, bool $includeCurrency = true): self {
+    protected function addCamtAccount(DocumentAbstract $document, bool $includeCurrency = true): self {
         $this->addAccountIdentificationFromString('Acct', $document->getAccountIdentifier(), $includeCurrency, $document->getCurrency());
 
         // Innerhalb des Acct-Elements Owner und Servicer hinzufügen
@@ -125,7 +111,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
      * Adds a complete CAMT account structure (with owner and servicer).
      */
-    protected function addCamtAccountFull(CamtDocumentAbstract $document, bool $includeCurrency = true): self {
+    protected function addCamtAccountFull(DocumentAbstract $document, bool $includeCurrency = true): self {
         $this->builder->addElement('Acct');
 
         // Account ID
@@ -202,7 +188,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
      * Creates the basic entry structure (opens Ntry element).
      */
-    protected function beginEntry(CamtTransactionAbstract $entry): self {
+    protected function beginEntry(TransactionAbstract $entry): self {
         $this->builder->addElement('Ntry');
 
         // NtryRef
@@ -231,7 +217,7 @@ abstract class CamtGeneratorAbstract extends Iso20022GeneratorAbstract {
     /**
      * Adds booking and value date to an entry.
      */
-    protected function addEntryDates(CamtTransactionAbstract $entry, bool $useDateTimeForBooking = false): self {
+    protected function addEntryDates(TransactionAbstract $entry, bool $useDateTimeForBooking = false): self {
         // BookgDt
         $this->builder->addElement('BookgDt');
         if ($useDateTimeForBooking) {

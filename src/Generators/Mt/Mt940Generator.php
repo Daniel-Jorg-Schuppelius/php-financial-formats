@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\Mt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\Mt9GeneratorAbstract;
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\GeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type940\Document;
 use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
 
@@ -24,15 +24,15 @@ use CommonToolkit\FinancialFormats\Enums\Mt\Mt940OutputFormat;
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
-class Mt940Generator extends Mt9GeneratorAbstract {
+class Mt940Generator extends GeneratorAbstract {
     /**
      * Generates the MT940 SWIFT message.
      *
-     * @param MtDocumentAbstract $document Das MT940-Dokument
+     * @param DocumentAbstract $document Das MT940-Dokument
      * @param Mt940OutputFormat $format Output format (SWIFT or DATEV)
      * @return string Die formatierte SWIFT-Nachricht
      */
-    public function generate(MtDocumentAbstract $document, Mt940OutputFormat $format = Mt940OutputFormat::SWIFT): string {
+    public function generate(DocumentAbstract $document, Mt940OutputFormat $format = Mt940OutputFormat::SWIFT): string {
         if (!$document instanceof Document) {
             throw new \InvalidArgumentException('Expected Mt9\Type940\Document');
         }

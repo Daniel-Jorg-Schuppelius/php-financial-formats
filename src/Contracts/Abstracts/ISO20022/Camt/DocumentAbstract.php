@@ -3,7 +3,7 @@
  * Created on   : Sun Jul 27 2025
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : CamtDocumentAbstract.php
+ * Filename     : DocumentAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -34,7 +34,7 @@ use InvalidArgumentException;
  * 
  * @package CommonToolkit\Entities\Common\Banking
  */
-abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements CamtDocumentInterface {
+abstract class DocumentAbstract extends DomainXmlDocumentAbstract implements CamtDocumentInterface {
     protected string $id;
     protected DateTimeImmutable $creationDateTime;
     protected string $accountIdentifier;
@@ -49,7 +49,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     protected ?int $pageNumber = null;
     protected ?bool $lastPageIndicator = null;
 
-    /** @var CamtTransactionAbstract[] */
+    /** @var TransactionAbstract[] */
     protected array $entries = [];
 
     /**
@@ -170,7 +170,7 @@ abstract class CamtDocumentAbstract extends DomainXmlDocumentAbstract implements
     }
 
     /**
-     * @return CamtTransactionAbstract[]
+     * @return TransactionAbstract[]
      */
     public function getEntries(): array {
         return $this->entries;

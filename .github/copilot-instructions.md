@@ -23,7 +23,7 @@ src/
 │   ├── Mt9*Builder     # MT940/941/942 builders
 │   └── Pain*Builder    # Pain.001/002/008 builders
 ├── Contracts/          # Abstract base classes and Interfaces
-│   ├── Abstracts/      # Base classes (CamtDocumentAbstract, DATEV/Document, etc.)
+│   ├── Abstracts/      # Base classes (DocumentAbstract, DATEV/Document, etc.)
 │   └── Interfaces/     # Interface definitions (DATEV/FieldHeaderInterface, etc.)
 ├── Converters/         # Format converters
 │   ├── Banking/        # Camt053ToMt940Converter
@@ -39,7 +39,7 @@ src/
 │   ├── Camt/           # CAMT-specific enums (Camt052Code, Camt053Code, etc.)
 │   └── DATEV/          # DATEV enums (HeaderFields, MetaFields, LockFlags)
 ├── Helper/             # Utility classes
-│   ├── Data/           # CamtValidator
+│   ├── Data/           # CamtValidator, PainValidator (XSD validation)
 │   └── FileSystem/     # Mt940File handler
 ├── Parsers/            # Document parsers
 │   ├── CamtParser      # CAMT 052/053/054 parsing

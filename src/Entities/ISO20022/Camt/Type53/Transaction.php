@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtTransactionAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\TransactionAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\FinancialInstitutionIdentification;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\PartyIdentification;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReturnReason;
@@ -36,7 +36,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt053
  */
-final class Transaction extends CamtTransactionAbstract {
+final class Transaction extends TransactionAbstract {
     private Reference $reference;
     private ?string $purpose;
     private ?TransactionPurpose $purposeCode;
@@ -50,7 +50,7 @@ final class Transaction extends CamtTransactionAbstract {
     private ?string $counterpartyName;
     private ?string $counterpartyIban;
     private ?string $counterpartyBic;
-    
+
     // Extended party identification
     private ?PartyIdentification $debtor;
     private ?PartyIdentification $creditor;

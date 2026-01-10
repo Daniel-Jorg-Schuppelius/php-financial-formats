@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Camt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtGeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\DocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\GeneratorAbstract;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Reference;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type53\Transaction;
@@ -29,7 +29,7 @@ use InvalidArgumentException;
  * 
  * @package CommonToolkit\Generators\ISO20022\Camt
  */
-class Camt053Generator extends CamtGeneratorAbstract {
+class Camt053Generator extends GeneratorAbstract {
     public function getCamtType(): CamtType {
         return CamtType::CAMT053;
     }
@@ -37,7 +37,7 @@ class Camt053Generator extends CamtGeneratorAbstract {
     /**
      * @param Document $document
      */
-    public function generate(CamtDocumentAbstract $document, CamtVersion $version = CamtVersion::V02): string {
+    public function generate(DocumentAbstract $document, CamtVersion $version = CamtVersion::V02): string {
         if (!$document instanceof Document) {
             throw new InvalidArgumentException('Camt053Generator erwartet ein Camt.053 Document.');
         }

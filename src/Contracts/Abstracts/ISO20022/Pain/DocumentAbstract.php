@@ -3,7 +3,7 @@
  * Created on   : Wed Jan 01 2026
  * Author       : Daniel Jörg Schuppelius
  * Author Uri   : https://schuppelius.org
- * Filename     : PainDocumentAbstract.php
+ * Filename     : DocumentAbstract.php
  * License      : AGPL-3.0-or-later
  * License Uri  : https://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -31,7 +31,7 @@ use CommonToolkit\FinancialFormats\Enums\ISO20022\Pain\PainType;
  * 
  * @package CommonToolkit\Contracts\Abstracts\ISO20022\Pain
  */
-abstract class PainDocumentAbstract extends DomainXmlDocumentAbstract implements PainDocumentInterface {
+abstract class DocumentAbstract extends DomainXmlDocumentAbstract implements PainDocumentInterface {
     /**
      * Returns the Pain type of this document.
      */

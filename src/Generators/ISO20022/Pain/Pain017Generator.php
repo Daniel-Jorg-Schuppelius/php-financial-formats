@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\ISO20022\Pain;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\PainGeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Pain\GeneratorAbstract;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\Document;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\MandateCopyRequest;
@@ -25,7 +25,7 @@ use CommonToolkit\FinancialFormats\Entities\ISO20022\Pain\Type17\MandateCopyRequ
  * 
  * @package CommonToolkit\Generators\ISO20022\Pain
  */
-class Pain017Generator extends PainGeneratorAbstract {
+class Pain017Generator extends GeneratorAbstract {
     private const DEFAULT_NAMESPACE = 'urn:iso:std:iso:20022:tech:xsd:pain.017.001.04';
 
     public function __construct(string $namespace = self::DEFAULT_NAMESPACE) {

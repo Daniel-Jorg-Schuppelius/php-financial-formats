@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Generators\Mt;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\Mt9GeneratorAbstract;
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\GeneratorAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\DocumentAbstract;
 use CommonToolkit\FinancialFormats\Entities\Mt9\Type941\Document;
 
 /**
@@ -23,14 +23,14 @@ use CommonToolkit\FinancialFormats\Entities\Mt9\Type941\Document;
  * 
  * @package CommonToolkit\Generators\Common\Banking\Mt
  */
-class Mt941Generator extends Mt9GeneratorAbstract {
+class Mt941Generator extends GeneratorAbstract {
     /**
      * Generates the MT941 SWIFT message.
      * 
-     * @param MtDocumentAbstract $document Das MT941-Dokument
+     * @param DocumentAbstract $document Das MT941-Dokument
      * @return string Die formatierte SWIFT-Nachricht
      */
-    public function generate(MtDocumentAbstract $document): string {
+    public function generate(DocumentAbstract $document): string {
         if (!$document instanceof Document) {
             throw new \InvalidArgumentException('Expected Mt9\Type941\Document');
         }

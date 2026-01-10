@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Type52;
 
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance;
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\CamtDocumentAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\Camt\DocumentAbstract;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtType;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\CamtVersion;
 use CommonToolkit\FinancialFormats\Enums\ISO20022\Camt\ReportingSource;
@@ -31,7 +31,7 @@ use DateTimeImmutable;
  * 
  * @package CommonToolkit\Entities\Common\Banking\Camt052
  */
-class Document extends CamtDocumentAbstract {
+class Document extends DocumentAbstract {
     private ?Balance $openingBalance = null;
     private ?Balance $closingBalance = null;
 

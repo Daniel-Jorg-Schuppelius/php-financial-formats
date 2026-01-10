@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace CommonToolkit\FinancialFormats\Parsers\ISO20022;
 
-use CommonToolkit\FinancialFormats\Contracts\Abstracts\Iso20022ParserAbstract;
+use CommonToolkit\FinancialFormats\Contracts\Abstracts\ISO20022\ParserAbstract;
 use CommonToolkit\FinancialFormats\Contracts\Interfaces\CamtDocumentInterface;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\Balance as CamtBalance;
 use CommonToolkit\FinancialFormats\Entities\ISO20022\Camt\FinancialInstitutionIdentification;
@@ -58,7 +58,7 @@ use RuntimeException;
  * 
  * @package CommonToolkit\Parsers
  */
-class CamtParser extends Iso20022ParserAbstract {
+class CamtParser extends ParserAbstract {
 
     /**
      * Parst ein beliebiges CAMT-Dokument.
@@ -117,7 +117,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.053 Dokument.
      */
     public static function parseCamt053(string $xmlContent): Camt053Document {
-        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.053');
+        ['doc' => $doc, 'prefix' => $p] = static::createISO20022Document($xmlContent, 'camt.053');
         $xpath = $doc->getXPath();
 
         // Statement-Block finden
@@ -183,7 +183,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.052 Dokument.
      */
     public static function parseCamt052(string $xmlContent): Camt052Document {
-        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.052');
+        ['doc' => $doc, 'prefix' => $p] = static::createISO20022Document($xmlContent, 'camt.052');
         $xpath = $doc->getXPath();
 
         // Report-Block finden
@@ -248,7 +248,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.054 Dokument.
      */
     public static function parseCamt054(string $xmlContent): Camt054Document {
-        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.054');
+        ['doc' => $doc, 'prefix' => $p] = static::createISO20022Document($xmlContent, 'camt.054');
         $xpath = $doc->getXPath();
 
         // Notification-Block finden
@@ -809,7 +809,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.029 Dokument (Resolution of Investigation).
      */
     public static function parseCamt029(string $xmlContent): Camt029Document {
-        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.029');
+        ['doc' => $doc, 'prefix' => $p] = static::createISO20022Document($xmlContent, 'camt.029');
         $xpath = $doc->getXPath();
 
         // Assignment parsen
@@ -922,7 +922,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.055 Dokument (Customer Payment Cancellation Request).
      */
     public static function parseCamt055(string $xmlContent): Camt055Document {
-        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.055');
+        ['doc' => $doc, 'prefix' => $p] = static::createISO20022Document($xmlContent, 'camt.055');
         $xpath = $doc->getXPath();
 
         // Assignment (enthält messageId und creationDateTime)
@@ -1019,7 +1019,7 @@ class CamtParser extends Iso20022ParserAbstract {
      * Parst ein CAMT.056 Dokument (FI To FI Payment Cancellation Request).
      */
     public static function parseCamt056(string $xmlContent): Camt056Document {
-        ['doc' => $doc, 'prefix' => $p] = static::createIso20022Document($xmlContent, 'camt.056');
+        ['doc' => $doc, 'prefix' => $p] = static::createISO20022Document($xmlContent, 'camt.056');
         $xpath = $doc->getXPath();
 
         // Assignment (enthält messageId und creationDateTime)

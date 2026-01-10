@@ -84,7 +84,7 @@ class Mt942GeneratorTest extends BaseTestCase {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected Mt9\Type942\Document');
 
-        $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\MtDocumentAbstract::class);
+        $wrongDocument = $this->createMock(\CommonToolkit\FinancialFormats\Contracts\Abstracts\Mt9\DocumentAbstract::class);
 
         $this->generator->generate($wrongDocument);
     }
